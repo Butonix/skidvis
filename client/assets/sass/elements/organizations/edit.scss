@@ -1,0 +1,10 @@
+.organizations-edit{
+  &__editor{
+    .ql-editor.ql-blank::before{
+      text-align: center;
+    }
+    .ql-editor{
+      text-align: center;
+    }
+  }
+}

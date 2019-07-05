@@ -1,7 +1,9 @@
 <template>
   <footer class="footer">
     <div>
-      <img class="img-fluid" src="/img/footer/logo.svg" alt="Footer logo">
+      <a href="/">
+        <img draggable="false" class="img-fluid" src="/img/footer/logo.svg" alt="Footer logo">
+      </a>
     </div>
   </footer>
 </template>
