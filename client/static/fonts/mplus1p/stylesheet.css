@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Black.eot');
+    src: url('mplus1p-Black.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Black.woff2') format('woff2'),
+        url('mplus1p-Black.woff') format('woff'),
+        url('mplus1p-Black.ttf') format('truetype'),
+        url('mplus1p-Black.svg#mplus1p-Black') format('svg');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Regular.eot');
+    src: url('mplus1p-Regular.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Regular.woff2') format('woff2'),
+        url('mplus1p-Regular.woff') format('woff'),
+        url('mplus1p-Regular.ttf') format('truetype'),
+        url('mplus1p-Regular.svg#mplus1p-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Bold.eot');
+    src: url('mplus1p-Bold.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Bold.woff2') format('woff2'),
+        url('mplus1p-Bold.woff') format('woff'),
+        url('mplus1p-Bold.ttf') format('truetype'),
+        url('mplus1p-Bold.svg#mplus1p-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Medium.eot');
+    src: url('mplus1p-Medium.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Medium.woff2') format('woff2'),
+        url('mplus1p-Medium.woff') format('woff'),
+        url('mplus1p-Medium.ttf') format('truetype'),
+        url('mplus1p-Medium.svg#mplus1p-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Thin.eot');
+    src: url('mplus1p-Thin.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Thin.woff2') format('woff2'),
+        url('mplus1p-Thin.woff') format('woff'),
+        url('mplus1p-Thin.ttf') format('truetype'),
+        url('mplus1p-Thin.svg#mplus1p-Thin') format('svg');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-Light.eot');
+    src: url('mplus1p-Light.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-Light.woff2') format('woff2'),
+        url('mplus1p-Light.woff') format('woff'),
+        url('mplus1p-Light.ttf') format('truetype'),
+        url('mplus1p-Light.svg#mplus1p-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mplus 1p';
+    src: url('mplus1p-ExtraBold.eot');
+    src: url('mplus1p-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('mplus1p-ExtraBold.woff2') format('woff2'),
+        url('mplus1p-ExtraBold.woff') format('woff'),
+        url('mplus1p-ExtraBold.ttf') format('truetype'),
+        url('mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
+    font-weight: 800;
+    font-style: normal;
+}
+

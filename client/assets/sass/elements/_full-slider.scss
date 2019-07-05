@@ -1,0 +1,31 @@
+.full-slider{
+  position: relative;
+  &__slider{
+    height: 425px;
+  }
+  &__slide{
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+  }
+  &__placeholder{
+    background: #8C8C8C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__preloader{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+  }
+}

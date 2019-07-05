@@ -15,7 +15,10 @@ const polyfills = [
 module.exports = {
   // mode: 'spa',
   srcDir: __dirname,
-
+  // server: {
+  //   port: 8000, // default: 3000
+  //   host: '0.0.0.0', // default: localhost
+  // },
   env: {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',

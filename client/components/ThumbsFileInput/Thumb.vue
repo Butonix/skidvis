@@ -1,5 +1,6 @@
 <template>
   <div class="thumbs-file-input__thumb">
+
   </div>
 </template>
 

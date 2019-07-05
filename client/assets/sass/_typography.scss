@@ -1,6 +1,6 @@
 html {
   font-size: 16px;
-  font-family: 'Roboto', #{$font-family-sans-serif};
+  font-family: 'mplus-1p','Montserrat', #{$font-family-sans-serif};
   position: relative;
 }
 
@@ -24,9 +24,14 @@ html {
     font-size: 16px;
   }
 }
-
 body {
-  font-family: 'IBMPlexSans','AlegreyaSans', #{$font-family-sans-serif};
+  font-family: 'mplus-1p','Montserrat', #{$font-family-sans-serif};
+}
+.ff-montserrat{
+  font-family: 'Montserrat', #{$font-family-sans-serif};
+}
+.ff-mplus-1p{
+  font-family: 'mplus-1p', #{$font-family-sans-serif};
 }
 .bg-cover{
   background-repeat: no-repeat;
@@ -82,9 +87,6 @@ body {
   max-width: 1440px;
   margin-left: auto;
   margin-right: auto;
-}
-label{
-  margin-bottom: .1rem;
 }
 .no-vis{
   opacity: 0;
@@ -165,33 +167,17 @@ label{
 .cursor-pointer{
   cursor: pointer!important;
 }
-@each $key, $value in $grid-breakpoints{
-  .br--#{$key}{
-    br{
-      display: none;
-      @include media-breakpoint-up($key)
-      {
-        display: block;
-      }
-    }
-  }
-}
-.border-radius-main{
-  border-radius: 15px;
-  @include media-breakpoint-down(sm)
-  {
-    border-radius: 8px;
-  }
-}
-.border-radius-top{
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  @include media-breakpoint-down(sm)
-  {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-}
+//@each $key, $value in $grid-breakpoints{
+//  .br--#{$key}{
+//    br{
+//      display: none;
+//      @include media-breakpoint-up($key)
+//      {
+//        display: block;
+//      }
+//    }
+//  }
+//}
 
 .text-black{
   color: black!important;

@@ -1,4 +1,4 @@
-@import "@webwingscz/googlefont-montserrat/montserrat.scss";
+@import "fonts/index";
 @import 'variables';
 @import './bootstrap/index';
 //@import 'swiper/dist/css/swiper.min.css';
@@ -7,11 +7,14 @@
 @import '~sweetalert2/src/sweetalert2';
 @import '@fortawesome/fontawesome/styles.css';
 
+@import 'typography';
+
 @import 'elements/card';
 @import 'elements/navbar';
 @import 'elements/buttons';
 @import 'elements/transitions';
 @import 'elements/thumbs-file-input';
+@import 'elements/full-slider';
 
 
 @import 'elements/organizations/index';
