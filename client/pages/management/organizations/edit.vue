@@ -1,42 +1,25 @@
 <template>
-  <div class="">
-      <full-slider></full-slider>
-    123
+  <div>
+    <full-slider></full-slider>
+    <div class="container">
+      <thumbs-file-input></thumbs-file-input>
+    </div>
   </div>
 </template>
 
 <script>
     import FullSlider from '~/components/FullSlider'
+    import ThumbsFileInput from '~/components/ThumbsFileInput'
 
     export default {
         middleware: 'auth',
         components:{
-            FullSlider
+            FullSlider,
+            ThumbsFileInput,
         },
-        computed: {
-            tabs () {
-                return [
-                    {
-                        icon: 'user',
-                        name: this.$t('profile'),
-                        route: 'settings.profile'
-                    },
-                    {
-                        icon: 'lock',
-                        name: this.$t('password'),
-                        route: 'settings.password'
-                    }
-                ]
-            }
-        },
-        mounted() {
-
-        }
     }
 </script>
 
 <style>
-  .settings-card .card-body {
-    padding: 0;
-  }
+
 </style>

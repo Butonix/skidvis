@@ -1,19 +1,23 @@
 <template>
   <div class="layout">
-    <navbar/>
-
-    <div class="container mt-4">
-      <nuxt/>
+    <div class="d-none1">
+      <navbar/>
     </div>
+
+    <nuxt/>
+
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
 import Navbar from '~/components/Navbar'
+import AppFooter from '~/components/Footer'
 
 export default {
   components: {
-    Navbar
+    Navbar,
+      AppFooter,
   }
 }
 </script>

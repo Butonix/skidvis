@@ -1,49 +1,20 @@
 <template>
-  <div class="full-slider">
-<!--    <swiper>-->
-<!--      &lt;!&ndash; slides &ndash;&gt;-->
-<!--      <swiper-slide class="full-slider__slide">-->
-<!--        <div class="w-100 h-100 bg-secondary">-->
-<!--          Slide-->
-<!--        </div>-->
-<!--      </swiper-slide>-->
-<!--      <swiper-slide class="full-slider__slide">-->
-<!--        <div class="w-100 h-100 bg-secondary">-->
-<!--          Slide-->
-<!--        </div>-->
-<!--      </swiper-slide>-->
-<!--      <swiper-slide class="full-slider__slide">-->
-<!--        <div class="w-100 h-100 bg-secondary">-->
-<!--          Slide-->
-<!--        </div>-->
-<!--      </swiper-slide>-->
-<!--      <swiper-slide class="full-slider__slide">-->
-<!--        <div class="w-100 h-100 bg-secondary">-->
-<!--          Slide-->
-<!--        </div>-->
-<!--      </swiper-slide>-->
-<!--    </swiper>-->
-<!--    <vue-glide-->
-<!--      type="carousel"-->
-<!--      :perView="1"-->
-<!--      class="">-->
-<!--      <vue-glide-slide class="full-slider__slide" v-for="i in 10" :key="i">-->
-<!--        <div class="w-100 h-100 bg-secondary">-->
-<!--          Slide {{ i }}-->
-<!--        </div>-->
-<!--      </vue-glide-slide>-->
-<!--    </vue-glide>-->
-  </div>
+  <hooper class="full-slider"
+          :wheelControl="false">
+    <slide class="full-slider__placeholder full-slider__slide">
+      Загрузите фотографии своей компании
+    </slide>
+  </hooper>
 </template>
 
 <script>
-    import { Glide, GlideSlide } from 'vue-glide-js'
+    import { Hooper, Slide } from 'hooper';
 
 
     export default {
         components: {
-            [Glide.name]: Glide,
-            [GlideSlide.name]: GlideSlide
+            Hooper,
+            Slide
         },
 
         data: () => ({
@@ -61,10 +32,16 @@
 </script>
 
 <style scoped lang="scss">
-
   .full-slider{
+    height: 425px;
     &__slide{
-      height: 425px;
+      height: 100%;
+    }
+    &__placeholder{
+      background: #8C8C8C;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 </style>

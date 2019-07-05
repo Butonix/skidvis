@@ -1,0 +1,30 @@
+html{
+  position: relative;
+  min-height: 100%;
+}
+$height-footer-sm: 400;
+$height-footer: 400;
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: #{$height-footer}px;
+  @include media-breakpoint-up(sm)
+  {
+    margin-bottom: rem($height-footer-sm);
+  }
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: #{$height-footer}px;
+  padding: 2rem 4rem;
+  @include media-breakpoint-up(sm)
+  {
+    height: rem($height-footer-sm);
+    padding: 0;
+  }
+}

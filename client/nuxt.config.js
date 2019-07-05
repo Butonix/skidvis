@@ -55,7 +55,7 @@ module.exports = {
     '~plugins/vform',
     '~plugins/axios',
     '~plugins/fontawesome',
-    { src: '~plugins/swiper', ssr: false }
+    // { src: '~plugins/swiper', ssr: true }
     // '~plugins/nuxt-client-init',
     // { src: '~plugins/bootstrap', ssr: false }
   ],
