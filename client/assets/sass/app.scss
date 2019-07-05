@@ -1,0 +1,11 @@
+@import 'variables';
+@import './bootstrap/index';
+@import 'swiper/dist/css/swiper.min.css';
+@import 'vue-glide-js/dist/vue-glide.css';
+@import '~sweetalert2/src/sweetalert2';
+@import '@fortawesome/fontawesome/styles.css';
+
+@import 'elements/card';
+@import 'elements/navbar';
+@import 'elements/buttons';
+@import 'elements/transitions';

@@ -1,0 +1,210 @@
+html {
+  font-size: 16px;
+  font-family: 'Roboto', #{$font-family-sans-serif};
+  position: relative;
+}
+
+@include media-breakpoint-up(sm)
+{
+  html {
+    font-size: 16px;
+  }
+}
+
+@include media-breakpoint-up(md)
+{
+  html {
+    font-size: 16px;
+  }
+}
+
+@include media-breakpoint-up(lg)
+{
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  font-family: 'IBMPlexSans','AlegreyaSans', #{$font-family-sans-serif};
+}
+.bg-cover{
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-background-size: cover!important;
+  background-size: cover!important;
+}
+.bg-contain{
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-background-size: contain!important;
+  background-size: contain!important;
+  &--left{
+    background-position-x: left;
+  }
+}
+.no-resize{
+  resize: none!important;
+}
+.text-underline{
+  text-decoration: underline!important;
+}
+@for $i from 1 through 6{
+  .z-index-#{$i}{
+    z-index: #{$i};
+  }
+}
+.text-black-50{
+  color: $body-color!important;
+}
+.text-muted{
+  color: #9299A2!important;
+}
+.img-cover{
+  object-fit: cover;
+  &--bottom{
+    object-fit: cover;
+    object-position: center bottom;
+  }
+  &--top{
+    object-fit: cover;
+    object-position: center top;
+  }
+}
+.img-contain{
+  object-fit: contain;
+  &--bottom{
+    object-fit: contain;
+    object-position: center bottom;
+  }
+}
+.container-fluid-1440{
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+label{
+  margin-bottom: .1rem;
+}
+.no-vis{
+  opacity: 0;
+  visibility: hidden;
+}
+.max-w-100{
+  max-width: 100%;
+}
+.link-dashed{
+  text-decoration: none!important;
+  border-bottom: 1px dashed;
+  &-on-span{
+    text-decoration: none!important;
+    >span{
+      border-bottom: 1px dashed;
+    }
+  }
+  &.link-black, .link-white{
+    &:hover{
+      border-color: transparent;
+    }
+  }
+}
+.link-dotted{
+  text-decoration: none!important;
+  border-bottom: 1px dotted;
+  &-on-span{
+    text-decoration: none!important;
+    >span{
+      border-bottom: 1px dotted;
+    }
+  }
+  &.link-black, .link-white{
+    &:hover{
+      border-color: transparent;
+    }
+  }
+}
+.link-solid{
+  text-decoration: none!important;
+  border-bottom: 1px solid;
+  &-on-span{
+    text-decoration: none!important;
+    >span{
+      border-bottom: 1px solid;
+    }
+  }
+  &.link-black, .link-white{
+    &:hover{
+      border-color: transparent;
+    }
+  }
+}
+.link-primary{
+  border-color: rgba($primary, .5);
+}
+.link-black{
+  color: $body-color!important;
+}
+.link-white{
+  color: white!important;
+}
+.hide{
+  position: absolute;
+  z-index: -9999;
+  width: 0;
+  height: 0;
+  max-width: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+.border-bottom-dashed{
+  border-bottom: 1px dashed;
+}
+.border-bottom-solid{
+   border-bottom: 1px solid;
+}
+.cursor-pointer{
+  cursor: pointer!important;
+}
+@each $key, $value in $grid-breakpoints{
+  .br--#{$key}{
+    br{
+      display: none;
+      @include media-breakpoint-up($key)
+      {
+        display: block;
+      }
+    }
+  }
+}
+.border-radius-main{
+  border-radius: 15px;
+  @include media-breakpoint-down(sm)
+  {
+    border-radius: 8px;
+  }
+}
+.border-radius-top{
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  @include media-breakpoint-down(sm)
+  {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+
+.text-black{
+  color: black!important;
+}
+.box-shadow-none{
+  box-shadow: none!important;
+}
+.border-radius-0{
+  border-radius: 0!important;
+}
+.text-italic{
+  font-style: italic!important;
+}
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5{
+  font-weight: 400;
+}
