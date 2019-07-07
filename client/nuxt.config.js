@@ -59,7 +59,7 @@ module.exports = {
     '~plugins/axios',
     '~plugins/fontawesome',
     { src: '~plugins/vue-quill-editor', ssr: false },
-    { src: '~plugins/fonts', ssr: false },
+    { src: '~plugins/vue-picture-input', ssr: false },
     // '~plugins/nuxt-client-init',
     // { src: '~plugins/bootstrap', ssr: false }
   ],
