@@ -1,0 +1,67 @@
+.logo-file-input{
+
+  cursor: pointer;
+  position: relative;
+
+  .preview-container {
+    position: relative !important;
+    border-radius: 5px !important;
+    z-index: 2;
+    &:hover {
+      .picture-preview{
+        border-style: solid !important;
+      }
+      .picture-inner {
+        &:before {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  .picture-preview{
+    &.dragging-over{
+      border-style: solid !important;
+    }
+    &.dragging-over~{
+      .picture-inner {
+        &:before {
+          opacity: 1;
+        }
+      }
+    }
+    &:not(.dragging-over){
+      &:hover {
+
+      }
+    }
+  }
+  .picture-preview{
+    border-radius: 5px !important;
+    border: 1px dashed #929292!important;
+  }
+  .picture-inner {
+    position: absolute !important;
+    margin: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    border: none!important;
+    border-radius: 5px !important;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: .2s;
+      background: center no-repeat url(data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgcm9sZT0iaW1nIiB3aWR0aD0iMzgiIGhlaWdodD0iMzEiIHZpZXdCb3g9IjAgMCAzOCAzMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTM0LjgzMzMgNC41NDI0MkgyNi42NzkyTDI0LjQ2MjUgMEgxMy41Mzc1TDExLjI0MTcgNC41NDI0MkgzLjE2NjY3QzEuNDI1IDQuNTQyNDIgMCA1Ljk3Njg2IDAgNy43MzAwOFYyNy43MzI2QzAgMjkuNDg1OSAxLjQyNSAzMC45MjAzIDMuMTY2NjcgMzAuOTIwM0gzNC44MzMzQzM2LjU3NSAzMC45MjAzIDM4IDI5LjQ4NTkgMzggMjcuNzMyNlY3LjczMDA4QzM4IDUuOTc2ODYgMzYuNTc1IDQuNTQyNDIgMzQuODMzMyA0LjU0MjQyWk0yNy4xNTQyIDIwLjQ4MDdIMjAuOTc5MlYyNi42OTY3SDE3LjAyMDhWMjAuNDgwN0gxMC44NDU4VjE2LjQ5NjFIMTcuMDIwOFYxMC4zNTk5SDIwLjk3OTJWMTYuNTc1OEgyNy4xNTQyVjIwLjQ4MDdaIiBmaWxsPSIjQjFCMUIxIj48L3BhdGg+PC9zdmc+);
+    }
+  }
+}

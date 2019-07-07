@@ -1,7 +1,8 @@
+import Vue from 'vue';
 import {cloneDeep} from 'lodash'
-import Image from "~/classes/Image";
 // state
 export const state = () => ({
+
 	saving: false,
 	item: null,
 });
@@ -26,7 +27,7 @@ export const mutations = {
 		/**
 		 * @var Image image
 		 */
-		state.item.temp.mainImages[index] = image
+		Vue.set(state.item.temp.mainImages, index, image)
 	},
 	ADD_TEMP_MAIN_IMAGE(state, {image}) {
 		/**
@@ -53,9 +54,9 @@ export const actions = {
 					shortDescription: '',
 					ordering: 1,
 					mainImages: [
-						{
-							src: '/demo/1920x600.jpg'
-						}
+						// {
+						// 	src: '/placeholders/1920x700.jpg'
+						// }
 					],
 					addresses: [
 						{
@@ -68,8 +69,11 @@ export const actions = {
 			}
 		})
 	},
-	setTempMainImage({commit}, {image, index}) {
-		if (index) {
+	setTempMainImage({commit, getters}, {image, index}) {
+		console.log(index);
+		console.log(getters.getTempMainImages);
+		console.log(getters.getTempMainImages[index]);
+		if (index !== undefined && getters.getTempMainImages[index]) {
 			commit('SET_TEMP_MAIN_IMAGE', {
 				image: {
 					src:image

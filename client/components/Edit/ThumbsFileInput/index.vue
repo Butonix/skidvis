@@ -2,6 +2,7 @@
 	<div class="thumbs-file-input">
 		<thumb-file-input
 			v-for="i in range"
+			v-if="i <= images.length"
 			:key="i"
 			@change="onChange($event.image, i)"
 			:image="images[i]"
@@ -35,7 +36,8 @@
 		methods: {
 			onChange(image, index) {
 				this.$emit('change', {
-					image, index
+					image,
+					index
 				});
 			}
 		}

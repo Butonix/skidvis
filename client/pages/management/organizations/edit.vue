@@ -1,12 +1,14 @@
 <template>
 	<div class="organizations-edit">
-		<full-slider></full-slider>
+		<full-slider
+			:images="mainImages"
+		></full-slider>
 		<div class="container">
 			<thumbs-file-input
 			:images="mainImages"
 			@change="setMainImage"></thumbs-file-input>
 
-
+			<logo-file-input></logo-file-input>
 			<div class="row justify-content-center">
 				<div class="col-lg-8 organizations-edit__editor">
 					<no-ssr>
@@ -27,12 +29,14 @@
 	import {mapActions, mapGetters} from 'vuex';
 	import FullSlider from '~/components/FullSlider'
 	import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
+	import LogoFileInput from '~/components/Edit/LogoFileInput'
 
 	export default {
 		middleware: 'auth',
 		components: {
 			FullSlider,
 			ThumbsFileInput,
+			LogoFileInput,
 		},
 		data: () => ({
 			editor: null,

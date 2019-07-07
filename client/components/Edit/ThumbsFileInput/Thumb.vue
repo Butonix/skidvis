@@ -3,8 +3,7 @@
 		<no-ssr>
 			<picture-input
 				width="1920"
-				height="698"
-				accept="image/jpeg,image/png"
+				height="700"
 				buttonClass="d-none"
 				:prefill="src"
 				:custom-strings="{
@@ -34,9 +33,6 @@
 		},
 		methods: {
 			onChange(image) {
-				console.log(this.image);
-				console.log(this.image.src);
-				console.log('New picture selected!')
 				if (image) {
 					this.$emit('change', {
 						image

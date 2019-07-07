@@ -2,9 +2,6 @@
   display: flex;
   padding-top: 21px;
   margin-right: 0;
-  @include media-breakpoint-up(xl) {
-    justify-content: space-between;
-  }
   @include media-breakpoint-down(lg) {
     flex-wrap: wrap;
   }
@@ -21,9 +18,7 @@
     min-width: $width;
     min-height: $height;
     margin-bottom: 21px;
-    @include media-breakpoint-down(lg) {
-      margin-right: 21px;
-    }
+    margin-right: 21px;
     @include media-breakpoint-down(xs) {
       margin-right: 10px;
       margin-bottom: 10px;
