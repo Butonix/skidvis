@@ -44,7 +44,7 @@ export const mutations = {
 		state.item.temp.mainImages.push(image);
 	},
 	DELETE_TEMP_MAIN_IMAGE(state, index) {
-		this.delete(state.item.temp.mainImages, index);
+		Vue.delete(state.item.temp.mainImages, index);
 	},
 }
 
@@ -101,13 +101,14 @@ export const actions = {
 			})
 		}
 	},
-	deleteTempMainImage({commit}, index) {
+	deleteTempMainImage({commit}, {index}) {
 		commit('DELETE_TEMP_MAIN_IMAGE', index)
 	},
 	setTempLink({commit}, value) {
 		commit('SET_TEMP_LINK', value)
 	},
 	setTempDescription({commit}, value) {
+		console.log(value.split(/\r?\n+/));
 		commit('SET_TEMP_DESCRIPTION', value)
 	},
 }

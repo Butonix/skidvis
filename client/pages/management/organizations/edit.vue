@@ -6,8 +6,9 @@
 		<div class="container">
 			<thumbs-file-input
 			:images="mainImages"
-			@change="setMainImage"></thumbs-file-input>
-			<textarea name="na" id="" cols="30" rows="10" oninput="console.log(this.value.split(/\r?\n+/))"></textarea>
+			@change="setMainImage"
+			@delete="deleteTempMainImage"
+			></thumbs-file-input>
 			<div class="row">
 				<div class="col mb-5 d-flex flex-column justify-content-center">
 					<material-input
@@ -20,6 +21,7 @@
 				</div>
 				<div class="col mb-5 d-flex flex-column justify-content-center">
 					<material-input
+						v-tooltip.top-center="'123131'"
 						name="link"
 						placeholder="Ссылка на ваш сайт"
 						:value="link"
@@ -36,13 +38,6 @@
 						:value="description"
 						@input="setTempDescription($event.target.value)"
 					></material-textarea>
-					<no-ssr>
-						<quill-editor
-							v-model='editorContent'
-							ref='textEditor'
-							:options='editorOption'
-						></quill-editor>
-					</no-ssr>
 				</div>
 			</div>
 
@@ -91,6 +86,7 @@
 				setMainImage:'organization/setTempMainImage',
 				setTempLink:'organization/setTempLink',
 				setTempDescription:'organization/setTempDescription',
+				deleteTempMainImage:'organization/deleteTempMainImage',
 			}),
 			onChange(image) {
 				console.log('New picture selected!')

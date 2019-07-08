@@ -1,6 +1,7 @@
 <template>
 	<div class="thumbs-file-input__thumb photo-input">
 		<no-ssr>
+			<div v-if="src" class="photo-input__remove" @click="$emit('delete', $event)"></div>
 			<picture-input
 				width="1920"
 				height="700"

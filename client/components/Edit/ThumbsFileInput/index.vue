@@ -4,6 +4,7 @@
 			v-for="i in range"
 			v-if="i <= images.length"
 			:key="i"
+			@delete="onDelete(i)"
 			@change="onChange($event.image, i)"
 			:image="images[i]"
 		></thumb-file-input>
@@ -39,7 +40,12 @@
 					image,
 					index
 				});
-			}
+			},
+			onDelete(index) {
+				this.$emit('delete', {
+					index
+				});
+			},
 		}
 	}
 </script>
