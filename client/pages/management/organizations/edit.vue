@@ -7,14 +7,13 @@
 			<thumbs-file-input
 			:images="mainImages"
 			@change="setMainImage"></thumbs-file-input>
-
+			<textarea name="na" id="" cols="30" rows="10" oninput="console.log(this.value.split(/\r?\n+/))"></textarea>
 			<div class="row">
 				<div class="col mb-5 d-flex flex-column justify-content-center">
 					<material-input
 						name="name"
 						placeholder="Название организации"
 					></material-input>
-
 				</div>
 				<div class="organizations-edit__logo custom-col mb-5">
 					<logo-file-input></logo-file-input>
@@ -22,12 +21,21 @@
 				<div class="col mb-5 d-flex flex-column justify-content-center">
 					<material-input
 						name="link"
-					placeholder="Ссылка на ваш сайт"
+						placeholder="Ссылка на ваш сайт"
+						:value="link"
+						@input="setTempLink($event.target.value)"
 					></material-input>
 				</div>
 			</div>
 			<div class="row justify-content-center">
 				<div class="col-lg-8 organizations-edit__editor">
+					<material-textarea
+						name="link"
+						placeholder="Почему к вам стоит прийти?"
+						dataAlign="center"
+						:value="description"
+						@input="setTempDescription($event.target.value)"
+					></material-textarea>
 					<no-ssr>
 						<quill-editor
 							v-model='editorContent'
@@ -47,11 +55,13 @@
 	import FullSlider from '~/components/FullSlider'
 	import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
 	import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
+	import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 	import LogoFileInput from '~/components/Edit/LogoFileInput'
 
 	export default {
 		middleware: 'auth',
 		components: {
+			MaterialTextarea,
 			FullSlider,
 			ThumbsFileInput,
 			LogoFileInput,
@@ -72,11 +82,15 @@
 			...mapGetters({
 				mainImages: 'organization/getTempMainImages',
 				item: 'organization/getItem',
+				link: 'organization/getTempLink',
+				description: 'organization/getTempDescription',
 			})
 		},
 		methods: {
 			...mapActions({
-				setMainImage:'organization/setTempMainImage'
+				setMainImage:'organization/setTempMainImage',
+				setTempLink:'organization/setTempLink',
+				setTempDescription:'organization/setTempDescription',
 			}),
 			onChange(image) {
 				console.log('New picture selected!')

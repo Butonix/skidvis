@@ -11,6 +11,8 @@ export const state = () => ({
 export const getters = {
 	getItem: (state) => state.item,
 	getTempMainImages: (state) => state.item.temp.mainImages,
+	getTempLink: (state) => state.item.temp.link,
+	getTempDescription: (state) => state.item.temp.description,
 	// locale: state => state.locale,
 	// locales: state => state.locales
 }
@@ -22,6 +24,12 @@ export const mutations = {
 			item.temp = cloneDeep(item.prod);
 		}
 		state.item = item;
+	},
+	SET_TEMP_LINK(state, value) {
+		Vue.set(state.item.temp, 'link', value)
+	},
+	SET_TEMP_DESCRIPTION(state, value) {
+		Vue.set(state.item.temp, 'description', value)
 	},
 	SET_TEMP_MAIN_IMAGE(state, {image, index}) {
 		/**
@@ -46,22 +54,12 @@ export const actions = {
 		commit('SET_ITEM', {
 			item: {
 				prod: {
-					name: {
-						value: '',
-						loading: false
-					},
-					link: {
-						value: '',
-						loading: false
-					},
+					name: '',
+					link: '',
 					logo: {
 						src: '',
-						loading: false
 					},
-					shortDescription: {
-						value: '',
-						loading: false
-					},
+					description: '',
 					ordering: 1,
 					mainImages: [
 						{
@@ -105,5 +103,11 @@ export const actions = {
 	},
 	deleteTempMainImage({commit}, index) {
 		commit('DELETE_TEMP_MAIN_IMAGE', index)
-	}
+	},
+	setTempLink({commit}, value) {
+		commit('SET_TEMP_LINK', value)
+	},
+	setTempDescription({commit}, value) {
+		commit('SET_TEMP_DESCRIPTION', value)
+	},
 }

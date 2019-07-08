@@ -1,19 +1,25 @@
 .material-input{
   position: relative;
   margin: 1.4rem 0;
-  input{
+  textarea, input{
     width: 100%;
-    border: 1px solid #929292;
+    border: 1px dashed #929292;
     border-radius: 5px;
-    padding: 5px 12px 7px 12px;
+    padding: 5px 12px 5px 12px;
     line-height: 1;
     outline: none!important;
     color: $body-color;
+    &:hover, &:focus{
+      border-style: solid;
+    }
     &:focus{
       border-color: $edit-color;
       box-shadow: 0 0 0 0.1rem rgba($edit-color, 0.5);
       ~{
         label{
+          color: $edit-color;
+        }
+        .material-input__icon{
           color: $edit-color;
         }
       }
@@ -29,15 +35,43 @@
       }
     }
   }
+  textarea{
+    padding: 20px;
+    line-height: $line-height-base;
+    ~{
+      label{
+        padding: 20px;
+      }
+    }
+  }
   label{
     position: absolute;
     left: 0;
     top: 0;
     margin: 0;
-    padding: 5px 12px 7px 12px;
+    padding: 5px 28px 5px 12px;
     color: $input-placeholder-color;
     pointer-events: none;
     transition: .2s ease;
     font-size: 1rem;
+    width: 100%;
+  }
+  &[data-align="left"]
+  {
+    textarea, input, label{
+      text-align: left;
+    }
+  }
+  &[data-align="right"]
+  {
+    textarea, input, label{
+      text-align: right;
+    }
+  }
+  &[data-align="center"]
+  {
+    textarea, input, label{
+      text-align: center;
+    }
   }
 }
