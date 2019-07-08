@@ -2,6 +2,7 @@
   &__editor{
     .ql-editor.ql-blank::before{
       text-align: center;
+      color: $input-placeholder-color;
     }
     .ql-editor{
       text-align: center;

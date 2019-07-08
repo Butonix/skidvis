@@ -9,14 +9,21 @@
 			@change="setMainImage"></thumbs-file-input>
 
 			<div class="row">
-				<div class="col">
+				<div class="col mb-5 d-flex flex-column justify-content-center">
+					<material-input
+						name="name"
+						placeholder="Название организации"
+					></material-input>
 
 				</div>
-				<div class="organizations-edit__logo custom-col">
+				<div class="organizations-edit__logo custom-col mb-5">
 					<logo-file-input></logo-file-input>
 				</div>
-				<div class="col">
-
+				<div class="col mb-5 d-flex flex-column justify-content-center">
+					<material-input
+						name="link"
+					placeholder="Ссылка на ваш сайт"
+					></material-input>
 				</div>
 			</div>
 			<div class="row justify-content-center">
@@ -39,6 +46,7 @@
 	import {mapActions, mapGetters} from 'vuex';
 	import FullSlider from '~/components/FullSlider'
 	import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
+	import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 	import LogoFileInput from '~/components/Edit/LogoFileInput'
 
 	export default {
@@ -47,6 +55,7 @@
 			FullSlider,
 			ThumbsFileInput,
 			LogoFileInput,
+			MaterialInput,
 		},
 		data: () => ({
 			editor: null,

@@ -5,9 +5,20 @@ $font-size-base: 1rem;
 
 $line-height-base: 1.5;
 
-$body-color: #333333;
+$body-color: #272727;
 
+$headings-font-weight: 400;
 
+$border-radius:    5px;
+$border-radius-lg: $border-radius;
+$border-radius-sm: $border-radius;
+
+$input-border-radius:                   $border-radius;
+$input-border-radius-lg:                $border-radius;
+$input-border-radius-sm:                $border-radius;
+
+$edit-color: #7F00FF;
+$input-placeholder-color: #4D4D4D;
 
 // // Body
 $body-bg: #FBFBFB;
@@ -25,5 +36,4 @@ $border-radius-sm: .15rem;
 
 // Nav Pills
 $nav-pills-border-radius: 0;
-
 

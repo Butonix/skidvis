@@ -1,0 +1,43 @@
+.material-input{
+  position: relative;
+  margin: 1.4rem 0;
+  input{
+    width: 100%;
+    border: 1px solid #929292;
+    border-radius: 5px;
+    padding: 5px 12px 7px 12px;
+    line-height: 1;
+    outline: none!important;
+    color: $body-color;
+    &:focus{
+      border-color: $edit-color;
+      box-shadow: 0 0 0 0.1rem rgba($edit-color, 0.5);
+      ~{
+        label{
+          color: $edit-color;
+        }
+      }
+    }
+    &:focus, &:valid{
+      ~{
+        label{
+          top: -1.6rem;
+          padding: 4px;
+          font-size: 80%;
+
+        }
+      }
+    }
+  }
+  label{
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 5px 12px 7px 12px;
+    color: $input-placeholder-color;
+    pointer-events: none;
+    transition: .2s ease;
+    font-size: 1rem;
+  }
+}

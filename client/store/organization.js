@@ -46,12 +46,22 @@ export const actions = {
 		commit('SET_ITEM', {
 			item: {
 				prod: {
-					name: '',
-					logo: {
-						link: '',
-						src: '',
+					name: {
+						value: '',
+						loading: false
 					},
-					shortDescription: '',
+					link: {
+						value: '',
+						loading: false
+					},
+					logo: {
+						src: '',
+						loading: false
+					},
+					shortDescription: {
+						value: '',
+						loading: false
+					},
 					ordering: 1,
 					mainImages: [
 						{
@@ -64,6 +74,7 @@ export const actions = {
 							src: '/placeholders/1920x700.jpg', //максимальное, в данный момент 1920, иначе оригинальные
 							alt: '',
 							title: '',
+							loading: false
 						}
 					],
 					addresses: [
@@ -78,9 +89,6 @@ export const actions = {
 		})
 	},
 	setTempMainImage({commit, getters}, {image, index}) {
-		console.log(index);
-		console.log(getters.getTempMainImages);
-		console.log(getters.getTempMainImages[index]);
 		if (index !== undefined && getters.getTempMainImages[index]) {
 			commit('SET_TEMP_MAIN_IMAGE', {
 				image: {
