@@ -1,5 +1,5 @@
 <template>
-	<div class="thumbs-file-input__thumb">
+	<div class="thumbs-file-input__thumb photo-input">
 		<no-ssr>
 			<picture-input
 				width="1920"

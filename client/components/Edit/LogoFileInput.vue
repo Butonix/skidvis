@@ -1,5 +1,5 @@
 <template>
-	<div class="logo-file-input mb-5">
+	<div class="photo-input mb-5">
 		<no-ssr>
 			<picture-input
 				width="306"

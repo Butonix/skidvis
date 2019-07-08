@@ -8,7 +8,17 @@
 			:images="mainImages"
 			@change="setMainImage"></thumbs-file-input>
 
-			<logo-file-input></logo-file-input>
+			<div class="row">
+				<div class="col">
+
+				</div>
+				<div class="organizations-edit__logo custom-col">
+					<logo-file-input></logo-file-input>
+				</div>
+				<div class="col">
+
+				</div>
+			</div>
 			<div class="row justify-content-center">
 				<div class="col-lg-8 organizations-edit__editor">
 					<no-ssr>

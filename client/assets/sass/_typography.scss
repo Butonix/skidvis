@@ -194,3 +194,9 @@ body {
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5{
   font-weight: 400;
 }
+.custom-col{
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}

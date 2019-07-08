@@ -54,9 +54,17 @@ export const actions = {
 					shortDescription: '',
 					ordering: 1,
 					mainImages: [
-						// {
-						// 	src: '/placeholders/1920x700.jpg'
-						// }
+						{
+							480: '/placeholders/1920x700.jpg',
+							640: '/placeholders/1920x700.jpg',
+							800: '/placeholders/1920x700.jpg',
+							1024: '/placeholders/1920x700.jpg',
+							1440: '/placeholders/1920x700.jpg',
+							1920: '/placeholders/1920x700.jpg',
+							src: '/placeholders/1920x700.jpg', //максимальное, в данный момент 1920, иначе оригинальные
+							alt: '',
+							title: '',
+						}
 					],
 					addresses: [
 						{
