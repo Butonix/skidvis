@@ -65,11 +65,19 @@
           />
         </div>
       </div>
-      <div class="text-center">
+      <div class="text-center mb-4">
         Из 39 точек в 19 действуют акции
-        <div class="btn btn-primary">
+        <div class="btn btn-primary btn-sm px-5 ml-3">
           <fa icon="map-marker-alt" />
           На карте
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-8">
+          <addresses
+            :addresses="addresses"
+            label="Все адреса компании"
+          />
         </div>
       </div>
     </div>
@@ -83,6 +91,7 @@ import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
+import Addresses from '~/components/Addresses'
 
 export default {
   layout: 'edit',
@@ -92,6 +101,7 @@ export default {
     FullSlider,
     ThumbsFileInput,
     LogoFileInput,
+    Addresses,
     MaterialInput
   },
   data: () => ({}),
@@ -102,7 +112,8 @@ export default {
       link: 'organization/getTempLink',
       name: 'organization/getTempName',
       description: 'organization/getTempDescription',
-      logo: 'organization/getTempLogo'
+      logo: 'organization/getTempLogo',
+      addresses: 'organization/getTempAddresses',
     })
   },
   methods: {
@@ -113,7 +124,7 @@ export default {
       setTempDescription: 'organization/setTempDescription',
       deleteTempMainImage: 'organization/deleteTempMainImage',
       setTempLogo: 'organization/setTempLogo',
-      deleteTempLogo: 'organization/deleteTempLogo',
+      deleteTempLogo: 'organization/deleteTempLogo'
     }),
     onChange (image) {
       console.log('New picture selected!')

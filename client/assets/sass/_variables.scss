@@ -1,13 +1,29 @@
 @import "./functions";
 
 // Bootstrap
+$font-family-sans-serif:      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+
 $font-size-base: 1rem;
 
 $line-height-base: 1.5;
 
 $body-color: #272727;
 
-$headings-font-weight: 400;
+$headings-font-family:        'Montserrat', #{$font-family-sans-serif};
+$headings-font-weight:        600;
+$headings-color:              #000;
+
+$btn-font-size-sm: 1rem;
+
+$btn-padding-y: 0.782rem;
+$btn-padding-x: 1.94rem;
+$btn-padding-y-sm: 0.282rem;
+$btn-padding-x-sm: 1.38rem;
+
+
+$btn-border-radius: 3rem;
+$btn-border-radius-lg: $btn-border-radius;
+$btn-border-radius-sm: $btn-border-radius;
 
 $border-radius: 5px;
 $border-radius-lg: $border-radius;

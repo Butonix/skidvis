@@ -10,6 +10,7 @@
       @input="$emit('input', $event)"
     >
     <label :for="id" v-html="placeholder"/>
+    <div class="material-input__line"/>
   </div>
 </template>
 

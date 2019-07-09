@@ -14,7 +14,8 @@ export const getters = {
   getTempLogo: (state) => state.item.temp.logo,
   getTempLink: (state) => state.item.temp.link,
   getTempName: (state) => state.item.temp.name,
-  getTempDescription: (state) => state.item.temp.description
+  getTempDescription: (state) => state.item.temp.description,
+  getTempAddresses: (state) => state.item.temp.addresses
   // locale: state => state.locale,
   // locales: state => state.locales
 }
@@ -94,8 +95,9 @@ export const actions = {
           ],
           addresses: [
             {
-              text: 'Беговая, Приморский пр-т, 72, этаж 3 (ТРЦ «Питерленд»)'
-
+              address: 'Беговая, Приморский пр-т, 72, этаж 3 (ТРЦ «Питерленд»)',
+              latitude: 123213,
+              longitude: 123123123
             }
           ]
         },

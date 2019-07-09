@@ -74,5 +74,31 @@
       text-align: center;
     }
   }
+  &__line{
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: #BBBBBB;
+    &:before{
+      content: '';
+      position: absolute;
+      top: -0.5px;
+      left: 50%;
+      right: 50%;
+      height: 2px;
+      background: $edit-color;
+    }
+  }
+  &__inline{
+    .material-input__line{
+      display: block;
+    }
+    textarea, input{
+      border-style: solid;
+      border-color: transparent;
+    }
+
+  }
 }
 
