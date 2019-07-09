@@ -1,6 +1,9 @@
 <template>
 	<div class="photo-input">
 		<no-ssr>
+			<div v-if="src" class="photo-input__remove"
+				 @click="$emit('delete', $event)"
+			></div>
 			<picture-input
 				width="306"
 				height="117"
@@ -8,9 +11,17 @@
 				buttonClass="d-none"
 				:prefill="src"
 				:custom-strings="{
-        upload: '',
-        drag: ''
-      }"
+  upload: '',
+  drag: '',
+  tap: '',
+  change: '',
+  remove: '',
+  select: '',
+  selected: '',
+  fileSize: '',
+  fileType: '',
+  aspect: '',
+}"
 				@change="onChange">
 			</picture-input>
 		</no-ssr>
@@ -34,9 +45,8 @@
 		},
 		methods: {
 			onChange(image) {
-				console.log('New picture selected!')
 				if (image) {
-					console.log(image)
+					this.$emit('change', image)
 				} else {
 					console.log('FileReader API not supported: use the , Luke!')
 				}

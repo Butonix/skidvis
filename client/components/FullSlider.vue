@@ -46,7 +46,6 @@
         methods: {
             initSlider()
             {
-                console.log(this.placeholder);
                 this.sliderReady = true;
 
             }

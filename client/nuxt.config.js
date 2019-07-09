@@ -1,3 +1,5 @@
+// import path from 'path'
+// import fs from 'fs'
 require('dotenv').config()
 
 const polyfills = [
@@ -15,15 +17,20 @@ const polyfills = [
 module.exports = {
   // mode: 'spa',
   srcDir: __dirname,
-  // server: {
-  //   port: 8000, // default: 3000
-  //   host: '0.0.0.0', // default: localhost
-  // },
+  server: {
+    // https: {
+    //   key: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/privkey.pem', 'utf8'),
+    //   cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
+    //   ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
+    // },
+    port: 3000, // default: 3000
+    host: 'skidvis.ru' // default: localhost
+  },
   env: {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
     appLocale: process.env.APP_LOCALE || 'en',
-    githubAuth: !!process.env.GITHUB_CLIENT_ID,
+    githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
 
   head: {
@@ -60,13 +67,14 @@ module.exports = {
     '~plugins/fontawesome',
     '~plugins/tooltip',
     { src: '~plugins/vue-quill-editor', ssr: false },
-    { src: '~plugins/vue-picture-input', ssr: false },
+    { src: '~plugins/vue-picture-input', ssr: false }
     // '~plugins/nuxt-client-init',
     // { src: '~plugins/bootstrap', ssr: false }
   ],
 
   modules: [
     '@nuxtjs/router',
+    'vue-sweetalert2/nuxt',
     '~/modules/spa'
   ],
 

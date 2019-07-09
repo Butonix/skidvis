@@ -1,5 +1,5 @@
 <template>
-	<div :class="'material-input '+inputClass"
+	<div :class="'material-input '+formClass"
 		 :data-align="dataAlign">
 		<textarea
 			required

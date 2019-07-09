@@ -1,0 +1,49 @@
+
+
+@each $theme, $themeValue in $themes {
+  $theme-colors_: map_get($themeValue, "theme-colors");
+  @if($theme-colors_){
+    .theme-#{$theme}{
+
+
+
+      @each $color, $value in $theme-colors_ {
+        .btn-#{$color} {
+          @include button-variant($value, $value);
+        }
+      }
+
+      @each $color, $value in $theme-colors_ {
+        .btn-outline-#{$color} {
+          @include button-outline-variant($value);
+        }
+      }
+
+      $primary_: map_get($theme-colors_, "primary");
+      @if($primary_){
+
+        .material-input{
+          textarea, input{
+            &:focus{
+              border-color: $primary_;
+              box-shadow: 0 0 0 0.1rem rgba($primary_, 0.5);
+              ~{
+                label{
+                  color: $primary_;
+                }
+                .material-input__icon{
+                  color: $primary_;
+                }
+              }
+            }
+          }
+        }
+
+      }
+
+
+
+
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="layout theme-default">
+  <div class="layout theme-edit">
     <div class="d-none1">
       <navbar/>
     </div>

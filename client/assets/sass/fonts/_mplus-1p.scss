@@ -2,72 +2,72 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Black.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Black.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.svg#mplus1p-Black') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Light.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Light.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Light.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Light.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Light.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Light.svg#mplus1p-Light') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Light.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Light.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Light.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Light.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Light.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Light.svg#mplus1p-Light') format('svg');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Regular.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Regular.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Regular.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Regular.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Regular.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Regular.svg#mplus1p-Regular') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.svg#mplus1p-Regular') format('svg');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Bold.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Bold.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Bold.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Bold.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Bold.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Bold.svg#mplus1p-Bold') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.svg#mplus1p-Bold') format('svg');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
   font-weight: 800;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Black.eot');
-  src: url('#{$ww-mplus1p-font-path}/mplus1p-Black.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/mplus1p-Black.svg#mplus1p-Black') format('svg');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot');
+  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot?#iefix') format('embedded-opentype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff2') format('woff2'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff') format('woff'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.ttf') format('truetype'),
+  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
   font-weight: 900;
   font-style: normal;
 }

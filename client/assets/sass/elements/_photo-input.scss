@@ -16,6 +16,13 @@
         }
       }
     }
+    @media (hover: none) {
+      .picture-inner {
+        &:before {
+          opacity: 1;
+        }
+      }
+    }
   }
   .picture-preview{
     &.dragging-over{
@@ -26,11 +33,6 @@
         &:before {
           opacity: 1;
         }
-      }
-    }
-    &:not(.dragging-over){
-      &:hover {
-
       }
     }
   }

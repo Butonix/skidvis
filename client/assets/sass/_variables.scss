@@ -9,16 +9,30 @@ $body-color: #272727;
 
 $headings-font-weight: 400;
 
-$border-radius:    5px;
+$border-radius: 5px;
 $border-radius-lg: $border-radius;
 $border-radius-sm: $border-radius;
 
-$input-border-radius:                   $border-radius;
-$input-border-radius-lg:                $border-radius;
-$input-border-radius-sm:                $border-radius;
+$input-border-radius: $border-radius;
+$input-border-radius-lg: $border-radius;
+$input-border-radius-sm: $border-radius;
 
 $edit-color: #7F00FF;
+$primary: #00C2FF;
 $input-placeholder-color: #4D4D4D;
+
+$themes: (
+    "default": (
+        "theme-colors": (
+            "primary": $primary,
+        )
+    ),
+    "edit": (
+        "theme-colors": (
+            "primary": $edit-color,
+        )
+    )
+);
 
 // // Body
 $body-bg: #FBFBFB;

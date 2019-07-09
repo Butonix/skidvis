@@ -9,5 +9,3 @@ requireContext.keys().forEach(file => {
     Vue.component(Component.name, Component)
   }
 })
-
-
