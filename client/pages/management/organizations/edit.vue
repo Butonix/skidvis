@@ -17,7 +17,7 @@
             @delete="deleteTempLogo"
           />
         </div>
-        <div class="col-md col-lg-6 col-xl mb-4">
+        <div class="col-md col-lg-6 col-xl-8 mb-4">
           <material-input
             :value="link"
             name="link"

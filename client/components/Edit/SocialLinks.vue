@@ -1,7 +1,30 @@
 <template>
-  <div>
-    <div v-for="(link, index) in links" :key="index">
-      {{ link.link }}
+  <div class="social-links-edit">
+    <div
+      v-for="(link, index) in links"
+      :key="index"
+      class="social-links-edit__item"
+    >
+      <social
+        :type="link.type"
+        class-box="mr-2"
+      />
+      <a :href="link.link" target="_blank" class="social-links-edit__item__link">
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+        {{ link.link }}
+      </a>
     </div>
     <div class="d-flex align-items-start">
       <material-input
@@ -19,10 +42,12 @@
 
 <script>
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
+import Social from '~/components/Icons/Social'
 
 export default {
   components: {
-    MaterialInput
+    MaterialInput,
+    Social
   },
   props: {
     links: {

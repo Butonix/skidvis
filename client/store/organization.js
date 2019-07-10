@@ -105,6 +105,18 @@ export const actions = {
             {
               type: 'vk',
               link: 'https://vk.com/skidvis'
+            },
+            {
+              type: 'odnoklassniki',
+              link: 'https://vk.com/skidvis'
+            },
+            {
+              type: 'facebook',
+              link: 'https://vk.com/skidvis'
+            },
+            {
+              type: 'instagram',
+              link: 'https://vk.com/skidvis'
             }
           ]
         },

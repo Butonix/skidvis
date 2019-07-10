@@ -1,0 +1,32 @@
+.social-icon{
+  display: inline-block;
+  $height: rem(40);
+  $height-lg: rem(68);
+  line-height: $height;
+  height: $height;
+  width: $height;
+  min-width: $height;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  &-lg{
+    line-height: $height-lg;
+    height: $height-lg;
+    width: $height-lg;
+    min-width: $height-lg;
+  }
+  &[data-type='vk']{
+    background: #5181B8;
+  }
+  &[data-type='odnoklassniki']{
+    background: #F7931E;
+  }
+  &[data-type='facebook']{
+    background: #0075FB;
+  }
+  &[data-type='instagram']{
+    background: radial-gradient(41.86px at 39.76% 0%, #2F4DF0 0%, #DE3391 35.18%, #EF4740 58.82%, #EE8728 83.77%, #EACD77 100%);
+  }
+
+}

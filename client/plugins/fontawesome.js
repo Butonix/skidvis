@@ -10,11 +10,12 @@ import {
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 import {
-  faGithub, faVk
+  faGithub, faVk, faOdnoklassniki, faFacebookF, faInstagram
 } from '@fortawesome/fontawesome-free-brands/shakable.es'
 
 library.add(
   faUser, faLock, faSignOutAlt, faCog, faGithub, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faVk
+  , faOdnoklassniki, faFacebookF, faInstagram
 )
 
 fontawesome.config.autoAddCss = false

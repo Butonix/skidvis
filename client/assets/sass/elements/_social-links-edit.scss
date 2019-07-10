@@ -1,0 +1,27 @@
+.social-links-edit{
+  .social-links-edit{
+    &__item{
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 9px;
+      &__link{
+        display: block;
+        color: #4D4D4D;
+        max-width: calc(100% - .5rem - #{rem(40)});
+        white-space: nowrap;
+        overflow: hidden;
+        position: relative;
+        &:before{
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 0;
+          height: 100%;
+          width: 20px;
+          background: linear-gradient(90deg, transparent, white);
+        }
+      }
+    }
+  }
+}
