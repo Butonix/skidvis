@@ -16,7 +16,10 @@ const Settings = () => import('~/pages/settings/index').then(m => m.default || m
 const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.default || m)
 const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
 
-// const Management = () => import('~/pages/management/index').then(m => m.default || m)
+const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
+const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
+
+const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
 const ManagementOrganizationsIndex = () => import('~/pages/management/organizations/index').then(m => m.default || m)
 const ManagementOrganizationsShow = () => import('~/pages/management/organizations/show').then(m => m.default || m)
 const ManagementOrganizationsEdit = () => import('~/pages/management/organizations/edit').then(m => m.default || m)
@@ -39,9 +42,38 @@ const routes = [
     ]
   },
 
-  { path: '/management/organizations', name: 'management.organizations.index', component: ManagementOrganizationsIndex },
-  { path: '/management/organizations/:id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
-  { path: '/management/organizations/:id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
+  { path: '/management',
+    component: ManagementHome,
+    children: [
+      { path: '',
+        name: 'management.index',
+        component: ManagementIndex
+      },
+      { path: 'organizations',
+        component: ManagementOrganizationsHome,
+        children: [
+          { path: '',
+            name: 'management.organizations.index',
+            component: ManagementOrganizationsIndex
+          },
+          { path: ':id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
+          { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
+        ]
+      }
+    ]
+  }
+
+  // { path: '/management/organizations',
+  //   component: ManagementOrganizationsHome,
+  //   children: [
+  //     { path: '', name: 'management.organizations.index', component: ManagementOrganizationsIndex },
+  //     { path: ':id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
+  //     { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
+  //   ]
+  // },
+  // { path: '/management/organizations', name: 'management.organizations.index', component: ManagementOrganizationsIndex },
+  // { path: '/management/organizations/:id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
+  // { path: '/management/organizations/:id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
 ]
 
 export function createRouter () {
