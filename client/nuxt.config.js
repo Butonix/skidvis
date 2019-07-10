@@ -1,5 +1,5 @@
-// import path from 'path'
-// import fs from 'fs'
+import fs from 'fs'
+
 require('dotenv').config()
 
 const polyfills = [
@@ -18,11 +18,11 @@ module.exports = {
   // mode: 'spa',
   srcDir: __dirname,
   server: {
-    // https: {
-    //   key: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/privkey.pem', 'utf8'),
-    //   cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
-    //   ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
-    // },
+    https: {
+      key: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/privkey.pem', 'utf8'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
+      ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
+    },
     port: 3000, // default: 3000
     host: 'skidvis.ru' // default: localhost
   },

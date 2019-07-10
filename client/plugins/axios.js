@@ -1,7 +1,7 @@
 import axios from 'axios'
 import swal from 'sweetalert2'
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 export default ({ app, store, redirect }) => {
   axios.defaults.baseURL = process.env.apiUrl
