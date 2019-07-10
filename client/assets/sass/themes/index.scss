@@ -43,9 +43,11 @@
         $link-color:                              $primary_;
         $link-hover-color:                        darken($link-color, 15%);
         a {
-          color: $link-color;
-          @include hover {
-            color: $link-hover-color;
+          &:not(.btn){
+            color: $link-color;
+            @include hover {
+              color: $link-hover-color;
+            }
           }
         }
       }

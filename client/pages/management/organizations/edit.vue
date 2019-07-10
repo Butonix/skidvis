@@ -21,11 +21,13 @@
           <material-input
             :value="link"
             name="link"
+            form-class="mb-4"
             placeholder="Ссылка на ваш сайт"
-            @input="setTempLink($event.target.value)"
+            @input="setTempLink"
           />
           <social-links
             :links="socials"
+            @add="addTempSocialsLink"
           />
         </div>
       </div>
@@ -35,7 +37,7 @@
             :value="name"
             name="name"
             placeholder="Введите название компании"
-            @input="setTempName($event.target.value)"
+            @input="setTempName"
           />
           <material-textarea
             :value="description"
@@ -43,15 +45,17 @@
             placeholder="Почему к вам стоит прийти?"
             data-align="center"
             form-class="my-5"
-            @input="setTempDescription($event.target.value)"
+            @input="setTempDescription"
           />
           <material-input
             :value="name"
             name="inn"
             placeholder="ИНН"
-            @input="setTempName($event.target.value)"
+            form-class="mb-4"
+            @input="setTempName"
           />
         </div>
+
       </div>
       <div class="text-center mt-4">
         <div class="btn btn-outline-secondary">
@@ -62,6 +66,11 @@
         </div>
         <div class="btn btn-outline-primary">
           Сохранить
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <div class="btn btn-outline-danger">
+          Удалить
         </div>
       </div>
     </div>
@@ -79,7 +88,14 @@ import LogoFileInput from '~/components/Edit/LogoFileInput'
 import Addresses from '~/components/Addresses'
 
 export default {
-  layout: 'edit',
+  head () {
+    return {
+      title: 'Редактирование организации',
+      bodyAttrs: {
+        class: 'theme-edit'
+      }
+    }
+  },
   middleware: 'auth',
   components: {
     MaterialTextarea,
@@ -90,7 +106,8 @@ export default {
     MaterialInput,
     SocialLinks
   },
-  data: () => ({}),
+  data: () => ({
+  }),
   computed: {
     ...mapGetters({
       mainImages: 'organization/getTempMainImages',
@@ -111,7 +128,8 @@ export default {
       setTempDescription: 'organization/setTempDescription',
       deleteTempMainImage: 'organization/deleteTempMainImage',
       setTempLogo: 'organization/setTempLogo',
-      deleteTempLogo: 'organization/deleteTempLogo'
+      deleteTempLogo: 'organization/deleteTempLogo',
+      addTempSocialsLink: 'organization/addTempSocialsLink'
     }),
     onChange (image) {
       console.log('New picture selected!')

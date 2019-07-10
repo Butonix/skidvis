@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import { } from '@fortawesome/fontawesome-free-regular/shakable.es'
 
 import {
-  faUser, faLock, faSignOutAlt, faCog, faPencilAlt, faSync, faMapMarkerAlt, faPlus
+  faUser, faLock, faSignOutAlt, faCog, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faSearch
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 import {

@@ -23,6 +23,7 @@ export default {
   data: () => ({
     icons: {
       'vk': 'vk',
+      'ok': 'odnoklassniki',
       'odnoklassniki': 'odnoklassniki',
       'facebook': 'facebook-f',
       'instagram': 'instagram'

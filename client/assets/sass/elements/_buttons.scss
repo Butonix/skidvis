@@ -3,6 +3,35 @@
 }
 
 
+.btn-gray{
+  border: 1px solid #E4E4E4;
+  background: #E4E4E4;
+  position: relative;
+  color: $body-color;
+  transition: 0.2s ease;
+  @include hover {
+    color: $body-color;
+    background: #C6C6C6;
+    border-color: #C6C6C6;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 0.1rem rgba(#C6C6C6, 0.5);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: white;
+    background: #484848;
+    border-color: #484848;
+    &:focus,
+    &.focus {
+      box-shadow: 0 0 0 0.1rem rgba(#484848, 0.5);
+    }
+  }
+}
 
 .btn-loading {
   position: relative;

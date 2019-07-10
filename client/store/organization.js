@@ -9,16 +9,14 @@ export const state = () => ({
 
 // getters
 export const getters = {
-  getItem: (state) => state.item,
-  getTempMainImages: (state) => state.item.temp.mainImages,
-  getTempLogo: (state) => state.item.temp.logo,
-  getTempLink: (state) => state.item.temp.link,
-  getTempName: (state) => state.item.temp.name,
-  getTempDescription: (state) => state.item.temp.description,
-  getTempAddresses: (state) => state.item.temp.addresses,
-  getTempSocials: (state) => state.item.temp.socials
-  // locale: state => state.locale,
-  // locales: state => state.locales
+  getItem: (state) => (state.item) ? state.item : undefined,
+  getTempMainImages: (state) => (state.item) ? state.item.temp.mainImages : undefined,
+  getTempLogo: (state) => (state.item) ? state.item.temp.logo : undefined,
+  getTempLink: (state) => (state.item) ? state.item.temp.link : undefined,
+  getTempName: (state) => (state.item) ? state.item.temp.name : undefined,
+  getTempDescription: (state) => (state.item) ? state.item.temp.description : undefined,
+  getTempAddresses: (state) => (state.item) ? state.item.temp.addresses : undefined,
+  getTempSocials: (state) => (state.item) ? state.item.temp.socials : undefined
 }
 
 // mutations
@@ -52,6 +50,9 @@ export const mutations = {
 		 * @var Image image
 		 */
     state.item.temp.mainImages.push(image)
+  },
+  ADD_TEMP_SOCIALS_LINK (state, link) {
+    state.item.temp.socials.push(link)
   },
   DELETE_TEMP_MAIN_IMAGE (state, index) {
     Vue.delete(state.item.temp.mainImages, index)
@@ -105,18 +106,6 @@ export const actions = {
             {
               type: 'vk',
               link: 'https://vk.com/skidvis'
-            },
-            {
-              type: 'odnoklassniki',
-              link: 'https://vk.com/skidvis'
-            },
-            {
-              type: 'facebook',
-              link: 'https://vk.com/skidvis'
-            },
-            {
-              type: 'instagram',
-              link: 'https://vk.com/skidvis'
             }
           ]
         },
@@ -139,6 +128,9 @@ export const actions = {
         }
       })
     }
+  },
+  addTempSocialsLink ({ commit }, link) {
+    commit('ADD_TEMP_SOCIALS_LINK', link)
   },
   setTempLogo ({ commit }, logo) {
     commit('SET_TEMP_LOGO', {

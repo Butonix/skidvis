@@ -1,0 +1,46 @@
+.search-input{
+  position: relative;
+  display: block;
+  input{
+    background: transparent;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: .4rem 1.5rem .3rem 0;
+    outline: none!important;
+    color: $body-color;
+    &:focus{
+      ~{
+        .search-input__line{
+          &:before{
+            left: 0;
+            right: 0;
+          }
+        }
+      }
+    }
+  }
+  &__line{
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: #BBBBBB;
+    &:before{
+      content: '';
+      position: absolute;
+      top: -0.5px;
+      left: 50%;
+      right: 50%;
+      height: 2px;
+      background: $edit-color;
+      transition: .2s ease;
+    }
+  }
+  &__lupe{
+    position: absolute;
+    right: 1px;
+    top: .1rem;
+    font-size: 1.4rem;
+  }
+}
+

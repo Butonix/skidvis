@@ -15,9 +15,11 @@
       <div id="navbarToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav">
           <locale-dropdown/>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li> -->
+          <li class="nav-item">
+            <router-link :to="{ name: 'management.organizations.index' }" class="nav-link">
+              Все компании
+            </router-link>
+          </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">

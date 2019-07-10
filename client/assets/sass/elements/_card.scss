@@ -1,3 +1,15 @@
 .card {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+  background: #FFFFFF;
+  box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+  .card-img-top{
+    overflow: hidden;
+    .embed-responsive{
+      &:before{
+        display: block;
+        content: "";
+        padding-top: percentageRate(324,131);
+      }
+    }
+  }
 }

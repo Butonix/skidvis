@@ -1,0 +1,13 @@
+.container--long-offset{
+  @include media-breakpoint-up(lg)
+  {
+    @include make-container-categories();
+  }
+  .row {
+    @include media-breakpoint-up(lg)
+    {
+      @include make-row-categories();
+    }
+  }
+  @include make-grid-columns-categories();
+}

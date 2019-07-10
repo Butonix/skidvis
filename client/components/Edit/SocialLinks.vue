@@ -11,31 +11,21 @@
       />
       <a :href="link.link" target="_blank" class="social-links-edit__item__link">
         {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
-        {{ link.link }}
       </a>
     </div>
     <div class="d-flex align-items-start">
       <material-input
+        v-model="value"
         form-class="flex-grow-1"
         name="li1nk"
         placeholder="Ссылка на социальную сеть"
-        @input="$emit(input, $event)"
       />
-      <div class="btn btn-outline-primary btn-sm material-input__btn ml-3">
+      <div class="btn btn-outline-primary btn-sm material-input__btn ml-3" @click="add">
         Добавить
       </div>
+    </div>
+    <div v-if="error" class="text-danger small">
+      {{ errors[error] }}
     </div>
   </div>
 </template>
@@ -53,6 +43,37 @@ export default {
     links: {
       type: Array,
       default: () => ([])
+    }
+  },
+  data: () => ({
+    value: '',
+    errors: {
+      empty: 'Поле не может быть пустым',
+      noParsed: 'Соц сеть не опознана'
+    },
+    error: undefined
+  }),
+  watch: {
+    value () {
+      this.error = undefined
+    }
+  },
+  methods: {
+    add () {
+      if (this.value.isEmpty()) {
+        this.error = 'empty'
+        return
+      }
+      let value = this.value.parseSocial()
+      if (value.length === 0) {
+        this.error = 'noParsed'
+        return
+      }
+      this.$emit('add', {
+        link: this.value,
+        type: value[0].type
+      })
+      this.value = ''
     }
   }
 }

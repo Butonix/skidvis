@@ -1,22 +1,28 @@
 <template>
-  <div :class="'material-input '+formClass">
+  <label :class="'search-input '+formClass">
     <input
-      :id="id"
       :type="type"
       :class="inputClass"
       :value="value"
+      :placeholder="placeholder"
       :name="name"
-      required
+      autofocus
       @input="$emit('input', $event.target.value)"
     >
-    <label :for="id" v-html="placeholder"/>
-    <div class="material-input__line"/>
-  </div>
+    <div class="search-input__line"/>
+    <div class="search-input__lupe">
+      <lupe/>
+    </div>
+  </label>
 </template>
 
 <script>
+import Lupe from '~/components/Icons/Lupe'
 
 export default {
+  components: {
+    Lupe
+  },
   props: {
     formClass: {
       type: String,
@@ -42,13 +48,7 @@ export default {
       type: String,
       default: ''
     }
-  },
-  computed: {
-    id () {
-      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
-    }
-  },
-  methods: {}
+  }
 }
 </script>
 

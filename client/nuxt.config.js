@@ -30,12 +30,16 @@ module.exports = {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
     appLocale: process.env.APP_LOCALE || 'ru',
+    daDataApi: process.env.DADATA_API || '',
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
 
   head: {
     title: process.env.APP_NAME,
     titleTemplate: '%s - ' + process.env.APP_NAME,
+    bodyAttrs: {
+      class: 'theme-default'
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -60,6 +64,7 @@ module.exports = {
   ],
 
   plugins: [
+    '~plugins/modifiedUtils',
     '~components/global',
     '~plugins/i18n',
     '~plugins/vform',
