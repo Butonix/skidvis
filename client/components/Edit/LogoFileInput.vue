@@ -1,58 +1,64 @@
 <template>
-	<div class="photo-input">
-		<no-ssr>
-			<div v-if="src" class="photo-input__remove"
-				 @click="$emit('delete', $event)"
-			></div>
-			<picture-input
-				width="306"
-				height="117"
-				:crop="false"
-				buttonClass="d-none"
-				:prefill="src"
-				:custom-strings="{
-  upload: '',
-  drag: '',
-  tap: '',
-  change: '',
-  remove: '',
-  select: '',
-  selected: '',
-  fileSize: '',
-  fileType: '',
-  aspect: '',
-}"
-				@change="onChange">
-			</picture-input>
-		</no-ssr>
-	</div>
+  <div class="photo-input">
+    <no-ssr>
+      <div v-if="src" class="photo-input__remove"
+           @click="onDelete"
+      />
+      <picture-input
+        :crop="false"
+        :prefill="src"
+        :custom-strings="{
+          upload: '',
+          drag: '',
+          tap: '',
+          change: '',
+          remove: '',
+          select: '',
+          selected: '',
+          fileSize: '',
+          fileType: '',
+          aspect: '',
+        }"
+        width="306"
+        height="117"
+        button-class="d-none"
+        @change="onChange"/>
+    </no-ssr>
+  </div>
 </template>
 
 <script>
+import mixinSwal from '~/mixins/sweetalert2'
 
-	export default {
-		props: {
-			image: {
-				type: Object,
-				default: () => ({})
-			}
-		},
-		computed:{
-			src()
-			{
-				return (this.image.src)?this.image.src:'';
-			}
-		},
-		methods: {
-			onChange(image) {
-				if (image) {
-					this.$emit('change', image)
-				} else {
-					console.log('FileReader API not supported: use the , Luke!')
-				}
-			}
-		}
-	}
+export default {
+  mixins: [mixinSwal],
+  props: {
+    image: {
+      type: Object,
+      default: () => ({})
+    }
+  },
+  computed: {
+    src () {
+      return (this.image.src) ? this.image.src : ''
+    }
+  },
+  methods: {
+    async onDelete (event) {
+      let res = await this.$swal(this.configSwal().confirm)
+      if (res.value) {
+        this.$emit('delete', event)
+      }
+    },
+    onChange (image) {
+      if (image) {
+        this.$emit('change', image)
+      } else {
+        console.log('FileReader API not supported: use the , Luke!')
+      }
+    }
+  }
+}
 </script>
 
 <style>

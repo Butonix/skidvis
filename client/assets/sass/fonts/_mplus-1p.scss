@@ -10,6 +10,7 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -22,6 +23,7 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-Light.svg#mplus1p-Light') format('svg');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -34,6 +36,7 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-Regular.svg#mplus1p-Regular') format('svg');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -46,6 +49,7 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-Bold.svg#mplus1p-Bold') format('svg');
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -58,6 +62,7 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
   font-weight: 800;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -70,4 +75,5 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
   font-weight: 900;
   font-style: normal;
+  font-display: swap;
 }

@@ -10,34 +10,22 @@
         @delete="deleteTempMainImage"
       />
       <div class="row mt-xl-3">
-        <div class="col mb-4 pt-3 d-none d-xl-block">
-          <material-input
-            :value="link"
-            name="link"
-            placeholder="Ссылка на ваш сайт"
-            @input="setTempLink($event.target.value)"
-          />
-        </div>
-        <div class="organizations-edit__logo custom-col mb-4 pt-3 pt-xl-0">
+        <div class="organizations-edit__logo custom-col mb-4 pt-3">
           <logo-file-input
             :image="logo"
             @change="setTempLogo"
             @delete="deleteTempLogo"
           />
         </div>
-        <div class="col-md col-lg-6 col-xl mb-4 pt-xl-3">
+        <div class="col-md col-lg-6 col-xl mb-4">
           <material-input
             :value="link"
             name="link"
             placeholder="Ссылка на ваш сайт"
-            form-class="d-block d-xl-none"
             @input="setTempLink($event.target.value)"
           />
-          <material-input
-            :value="link"
-            name="link"
-            placeholder="Ссылка на ваш сайт"
-            @input="setTempLink($event.target.value)"
+          <social-links
+            :links="socials"
           />
         </div>
       </div>
@@ -65,19 +53,15 @@
           />
         </div>
       </div>
-      <div class="text-center mb-4">
-        Из 39 точек в 19 действуют акции
-        <div class="btn btn-primary btn-sm px-5 ml-3">
-          <fa icon="map-marker-alt" />
-          На карте
+      <div class="text-center mt-4">
+        <div class="btn btn-outline-secondary">
+          Отменить изменения
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-8">
-          <addresses
-            :addresses="addresses"
-            label="Все адреса компании"
-          />
+        <div class="btn btn-outline-secondary mx-2">
+          Предпросмотр
+        </div>
+        <div class="btn btn-outline-primary">
+          Сохранить
         </div>
       </div>
     </div>
@@ -88,6 +72,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import FullSlider from '~/components/FullSlider'
 import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
+import SocialLinks from '~/components/Edit/SocialLinks'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
@@ -102,7 +87,8 @@ export default {
     ThumbsFileInput,
     LogoFileInput,
     Addresses,
-    MaterialInput
+    MaterialInput,
+    SocialLinks
   },
   data: () => ({}),
   computed: {
@@ -114,6 +100,7 @@ export default {
       description: 'organization/getTempDescription',
       logo: 'organization/getTempLogo',
       addresses: 'organization/getTempAddresses',
+      socials: 'organization/getTempSocials'
     })
   },
   methods: {

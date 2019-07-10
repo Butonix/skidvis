@@ -4,6 +4,7 @@
     "dev": "nuxt -c client/nuxt.config.js",
     "build": "nuxt build -c client/nuxt.config.js",
     "start": "nuxt start -c client/nuxt.config.js",
+    "generate": "nuxt generate -c client/nuxt.config.js",
     "lint": "vue-cli-service lint client/"
   },
   "dependencies": {

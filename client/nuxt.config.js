@@ -1,4 +1,4 @@
-import fs from 'fs'
+// import fs from 'fs'
 
 require('dotenv').config()
 
@@ -18,18 +18,18 @@ module.exports = {
   // mode: 'spa',
   srcDir: __dirname,
   server: {
-    https: {
-      key: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/privkey.pem', 'utf8'),
-      cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
-      ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
-    },
+    // https: {
+    //   key: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/privkey.pem', 'utf8'),
+    //   cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
+    //   ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
+    // },
     port: 3000, // default: 3000
-    host: 'skidvis.ru' // default: localhost
+    host: '5.45.80.118' // default: localhost
   },
   env: {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
-    appLocale: process.env.APP_LOCALE || 'en',
+    appLocale: process.env.APP_LOCALE || 'ru',
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
 

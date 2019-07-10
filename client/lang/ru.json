@@ -1,7 +1,7 @@
 {
-  "delete": "Delete",
-  "yes": "Yes",
-  "no": "No",
+  "delete": "Удалить",
+  "yes": "Да",
+  "no": "Нет",
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

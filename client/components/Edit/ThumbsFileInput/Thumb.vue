@@ -26,8 +26,10 @@
 </template>
 
 <script>
+import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
+  mixins: [mixinSwal],
   props: {
     image: {
       type: Object,
@@ -44,12 +46,7 @@ export default {
   },
   methods: {
     async onDelete (event) {
-      let res = await this.$swal({
-        text: 'Удалить?',
-        confirmButtonText: 'Да',
-        cancelButtonText: 'Нет',
-        showCancelButton: true
-      })
+      let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
         this.$emit('delete', event)
       }

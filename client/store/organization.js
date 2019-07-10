@@ -15,7 +15,8 @@ export const getters = {
   getTempLink: (state) => state.item.temp.link,
   getTempName: (state) => state.item.temp.name,
   getTempDescription: (state) => state.item.temp.description,
-  getTempAddresses: (state) => state.item.temp.addresses
+  getTempAddresses: (state) => state.item.temp.addresses,
+  getTempSocials: (state) => state.item.temp.socials
   // locale: state => state.locale,
   // locales: state => state.locales
 }
@@ -98,6 +99,12 @@ export const actions = {
               address: 'Беговая, Приморский пр-т, 72, этаж 3 (ТРЦ «Питерленд»)',
               latitude: 123213,
               longitude: 123123123
+            }
+          ],
+          socials: [
+            {
+              type: 'vk',
+              link: 'https://vk.com/skidvis'
             }
           ]
         },
