@@ -1,11 +1,12 @@
 <template>
-  <div :class="'material-input '+formClass"
-       :data-align="dataAlign">
+  <div :class="formClass_" :data-align="dataAlign">
     <textarea
+      ref="materialInput"
       :id="id"
-      :type="type"
-      :class="inputClass"
+      :class="inputClass_"
       :name="name"
+      :type="type"
+      :readonly="readonly"
       :rows="rows"
       :cols="cols"
       required
@@ -13,6 +14,9 @@
       v-html="value"
     />
     <label :for="id" v-html="placeholder"/>
+    <div class="material-input__line"/>
+    <has-error v-if="form" :form="form" :field="field"/>
+    <slot/>
   </div>
 </template>
 
@@ -20,6 +24,22 @@
 
 export default {
   props: {
+    autofocus: {
+      type: Boolean,
+      default: false
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    },
+    form: {
+      type: Object,
+      default: undefined
+    },
+    field: {
+      type: String,
+      default: ''
+    },
     formClass: {
       type: String,
       default: ''
@@ -30,7 +50,17 @@ export default {
     },
     type: {
       type: String,
-      default: 'text'
+      default: 'text',
+      validator: function (value) {
+        return ['text', 'password'].indexOf(value) !== -1
+      }
+    },
+    typeInput: {
+      type: String,
+      default: '',
+      validator: function (value) {
+        return ['', 'inline'].indexOf(value) !== -1
+      }
     },
     name: {
       type: String,
@@ -57,15 +87,44 @@ export default {
       default: '4'
     }
   },
+  data: () => ({
+    typesInput: {
+      '': '',
+      'inline': 'material-input--inline'
+    }
+  }),
   computed: {
     id () {
       return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
+    },
+    formClass_ () {
+      let typeClass = this.typesInput[this.typeInput]
+      let formClass = this.formClass
+      if (!typeClass.isEmpty()) { typeClass = ' ' + typeClass }
+      if (!formClass.isEmpty()) { formClass = ' ' + formClass }
+      return 'material-input' + typeClass + formClass
+    },
+    inputClass_ () {
+      let res = {
+        'ff-montserrat': true
+      }
+      if (this.inputClass) {
+        res = { ...res, [this.inputClass]: true }
+      }
+      if (this.form) {
+        res = { ...res, 'is-invalid': this.form.errors.has(this.field) }
+      }
+      return res
     }
   },
-  methods: {
+  mounted () {
+    if (this.autofocus && this.$refs.materialInput) {
+      this.$refs.materialInput.focus()
+    }
   }
 }
 </script>
 
 <style>
 </style>
+

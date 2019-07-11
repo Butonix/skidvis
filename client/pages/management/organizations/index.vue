@@ -13,6 +13,11 @@
     <div class="container container--long-offset">
       <div class="row">
         <div
+          class="col-lg-4 mb-5"
+        >
+          <div class="card--empty"/>
+        </div>
+        <div
           v-for="(item, index) in items"
           :key="index"
           class="col-lg-4 mb-5"
@@ -25,12 +30,23 @@
                 </div>
               </div>
             </router-link>
+            <p class="card-header">
+              Название 123213
+            </p>
             <div class="card-body">
               <div class="d-flex justify-content-around mb-4">
-                <a href="#" class="btn btn-gray btn-sm px-4">Точки</a>
-                <a href="#" class="btn btn-gray btn-sm px-4">Акции</a>
+                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Точки</span></a>
+                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Акции</span></a>
               </div>
               <p class="card-text pt-3" v-text="item.description"/>
+            </div>
+            <div class="card-buttons">
+              <a href="/" class="card-btn card-btn--left text-muted btn btn-outline-secondary">
+                Редактировать
+              </a>
+              <a href="/" class="card-btn card-btn--right btn btn-outline-danger">
+                Удалить
+              </a>
             </div>
           </div>
         </div>
@@ -45,6 +61,14 @@ import SearchInput from '~/components/SearchInput'
 
 export default {
   middleware: 'auth',
+  head () {
+    return {
+      title: 'Мои организации',
+      bodyAttrs: {
+        class: 'theme-edit'
+      }
+    }
+  },
   components: {
     SearchInput
   },

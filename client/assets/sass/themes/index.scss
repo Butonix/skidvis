@@ -57,6 +57,26 @@
             }
           }
         }
+
+        //Search Input
+        .search-input{
+          input{
+            &:focus{
+              ~{
+                .search-input__line{
+                  color: $primary_;
+                }
+              }
+            }
+          }
+          &__line{
+            &:before{
+              background: $primary_;
+            }
+          }
+        }
+
+
       }
 
 

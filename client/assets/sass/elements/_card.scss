@@ -12,4 +12,52 @@
       }
     }
   }
+  .card-buttons{
+    display: flex;
+    background-color: $card-cap-bg;
+    @include border-radius(0 0 $card-inner-border-radius $card-inner-border-radius);
+    overflow: hidden;
+  }
+  .card-btn{
+    display: block;
+    padding: $card-spacer-y $card-spacer-x!important;
+    height: auto!important;
+    line-height: $line-height-base!important;
+    border-radius: 0!important;
+    text-align: left!important;
+    border: none!important;
+    box-shadow: none!important;
+    outline: none!important;
+    &--left{
+      flex: 0 0 60%;
+      max-width: 60%;
+    }
+    &--right{
+      flex: 0 0 40%;
+      max-width: 40%;
+    }
+  }
+  &--empty{
+    cursor: pointer;
+    height: 100%;
+    border: 1px dashed #929292;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:before, &:after{
+      content: '';
+      display: block;
+      width: 97px;
+      margin-left: -48px;
+      margin-right: -48px;
+      height: 2px;
+      background: #929292;
+    }
+    &:after{
+      margin-left: -49px;
+      transform-origin: center;
+      transform: rotate(90deg);
+    }
+  }
 }

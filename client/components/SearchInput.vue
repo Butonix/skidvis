@@ -6,6 +6,7 @@
       :value="value"
       :placeholder="placeholder"
       :name="name"
+      class="ff-montserrat"
       autofocus
       @input="$emit('input', $event.target.value)"
     >

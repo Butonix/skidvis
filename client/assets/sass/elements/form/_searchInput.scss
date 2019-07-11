@@ -3,6 +3,7 @@
   display: block;
   input{
     background: transparent;
+    font-weight: 600;
     width: 100%;
     border: none;
     border-radius: 5px;
@@ -17,6 +18,9 @@
             left: 0;
             right: 0;
           }
+        }
+        .search-input__lupe{
+          color: $edit-color;
         }
       }
     }

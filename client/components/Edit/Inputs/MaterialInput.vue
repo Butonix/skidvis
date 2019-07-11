@@ -91,7 +91,9 @@ export default {
       return 'material-input' + typeClass + formClass
     },
     inputClass_ () {
-      let res = {}
+      let res = {
+        'ff-montserrat': true
+      }
       if (this.inputClass) {
         res = { ...res, [this.inputClass]: true }
       }
