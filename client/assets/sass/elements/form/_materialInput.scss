@@ -1,6 +1,6 @@
 .material-input{
   position: relative;
-  margin: 1.3rem 0 .5rem 0;
+  margin: 2rem 0 .5rem 0;
   textarea, input{
     width: 100%;
     border: 1px dashed #929292;
@@ -102,6 +102,8 @@
     }
   }
   &--inline{
+    margin: 1.3rem 0 .5rem 0;
+
     .material-input__line{
       display: block;
     }
@@ -148,9 +150,6 @@
       padding-left: 0;
       padding-right: 0;
     }
-  }
-  &__btn{
-    margin-top: 1.3rem;
   }
 }
 

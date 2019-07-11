@@ -13,15 +13,17 @@
         {{ link.link }}
       </a>
     </div>
-    <div class="d-flex align-items-start">
+    <div class="d-flex flex-column flex-sm-row align-items-start">
       <material-input
         v-model="value"
-        form-class="flex-grow-1"
+        form-class="flex-grow-1 w-100 w-sm-auto"
         name="li1nk"
         placeholder="Ссылка на социальную сеть"
       />
-      <div class="btn btn-outline-primary btn-sm material-input__btn ml-3" @click="add">
-        Добавить
+      <div class="pt-sm-4 ml-auto ml-sm-3">
+        <div class="btn btn-outline-primary btn-sm material-input__btn mt-sm-2" @click="add">
+          Добавить
+        </div>
       </div>
     </div>
     <div v-if="error" class="text-danger small">

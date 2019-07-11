@@ -1,73 +1,98 @@
 import Vue from 'vue'
-import { cloneDeep } from 'lodash'
 // state
 export const state = () => ({
 
   saving: false,
-  item: null
+  item: {
+    name: '',
+    link: '',
+    inn: '',
+    logo: {
+      src: ''
+    },
+    description: '',
+    ordering: 1,
+    mainImages: [
+      // {
+      //   480: '/placeholders/1920x700.jpg',
+      //   640: '/placeholders/1920x700.jpg',
+      //   800: '/placeholders/1920x700.jpg',
+      //   1024: '/placeholders/1920x700.jpg',
+      //   1440: '/placeholders/1920x700.jpg',
+      //   1920: '/placeholders/1920x700.jpg',
+      //   src: '/placeholders/1920x700.jpg', // максимальное, в данный момент 1920, иначе оригинальные
+      //   alt: '',
+      //   title: '',
+      //   loading: false
+      // }
+    ],
+    socials: []
+
+  }
 })
 
 // getters
 export const getters = {
   getItem: (state) => (state.item) ? state.item : undefined,
-  getTempMainImages: (state) => (state.item) ? state.item.temp.mainImages : undefined,
-  getTempLogo: (state) => (state.item) ? state.item.temp.logo : undefined,
-  getTempLink: (state) => (state.item) ? state.item.temp.link : undefined,
-  getTempName: (state) => (state.item) ? state.item.temp.name : undefined,
-  getTempDescription: (state) => (state.item) ? state.item.temp.description : undefined,
-  getTempAddresses: (state) => (state.item) ? state.item.temp.addresses : undefined,
-  getTempSocials: (state) => (state.item) ? state.item.temp.socials : undefined
+  getItemMainImages: (state) => (state.item) ? state.item.mainImages : undefined,
+  getItemLogo: (state) => (state.item) ? state.item.logo : undefined,
+  getItemLink: (state) => (state.item) ? state.item.link : undefined,
+  getItemName: (state) => (state.item) ? state.item.name : undefined,
+  getItemInn: (state) => (state.item) ? state.item.inn : undefined,
+  getItemDescription: (state) => (state.item) ? state.item.description : undefined,
+  getItemAddresses: (state) => (state.item) ? state.item.addresses : undefined,
+  getItemSocials: (state) => (state.item) ? state.item.socials : undefined
 }
 
 // mutations
 export const mutations = {
   SET_ITEM (state, { item }) {
-    if (!item.temp) {
-      item.temp = cloneDeep(item.prod)
-    }
     state.item = item
   },
-  SET_TEMP_LINK (state, value) {
-    Vue.set(state.item.temp, 'link', value)
+  SET_ITEM_LINK (state, value) {
+    Vue.set(state.item, 'link', value)
   },
-  SET_TEMP_NAME (state, value) {
-    Vue.set(state.item.temp, 'name', value)
+  SET_ITEM_NAME (state, value) {
+    Vue.set(state.item, 'name', value)
   },
-  SET_TEMP_DESCRIPTION (state, value) {
-    Vue.set(state.item.temp, 'description', value)
+  SET_ITEM_INN (state, value) {
+    Vue.set(state.item, 'inn', value)
   },
-  SET_TEMP_LOGO (state, logo) {
-    Vue.set(state.item.temp, 'logo', logo)
+  SET_ITEM_DESCRIPTION (state, value) {
+    Vue.set(state.item, 'description', value)
   },
-  SET_TEMP_MAIN_IMAGE (state, { image, index }) {
+  SET_ITEM_LOGO (state, logo) {
+    Vue.set(state.item, 'logo', logo)
+  },
+  SET_ITEM_MAIN_IMAGE (state, { image, index }) {
     /**
 		 * @var Image image
 		 */
-    Vue.set(state.item.temp.mainImages, index, image)
+    Vue.set(state.item.mainImages, index, image)
   },
-  ADD_TEMP_MAIN_IMAGE (state, { image }) {
+  ADD_ITEM_MAIN_IMAGE (state, { image }) {
     /**
 		 * @var Image image
 		 */
-    state.item.temp.mainImages.push(image)
+    state.item.mainImages.push(image)
   },
-  ADD_TEMP_SOCIALS_LINK (state, link) {
-    state.item.temp.socials.push(link)
+  ADD_ITEM_SOCIALS_LINK (state, link) {
+    state.item.socials.push(link)
   },
-  DELETE_TEMP_MAIN_IMAGE (state, index) {
-    Vue.delete(state.item.temp.mainImages, index)
+  DELETE_ITEM_MAIN_IMAGE (state, index) {
+    Vue.delete(state.item.mainImages, index)
   },
-  DELETE_TEMP_LOGO (state) {
-    Vue.set(state.item.temp, 'logo', { src: '' })
+  DELETE_ITEM_LOGO (state) {
+    Vue.set(state.item, 'logo', { src: '' })
   }
 }
 
 // actions
 export const actions = {
   setItem ({ commit }, id) {
-    commit('SET_ITEM', {
-      item: {
-        prod: {
+    if (id) {
+      commit('SET_ITEM', {
+        item: {
           name: '',
           link: '',
           inn: '',
@@ -108,49 +133,52 @@ export const actions = {
               link: 'https://vk.com/skidvis'
             }
           ]
-        },
-        temp: null
-      }
-    })
+
+        }
+      })
+    }
   },
-  setTempMainImage ({ commit, getters }, { image, index }) {
-    if (index !== undefined && getters.getTempMainImages[index]) {
-      commit('SET_TEMP_MAIN_IMAGE', {
+  setItemMainImage ({ commit, getters }, { image, index }) {
+    if (index !== undefined && getters.getItemMainImages[index]) {
+      commit('SET_ITEM_MAIN_IMAGE', {
         image: {
           src: image
         },
         index
       })
     } else {
-      commit('ADD_TEMP_MAIN_IMAGE', {
+      commit('ADD_ITEM_MAIN_IMAGE', {
         image: {
           src: image
         }
       })
     }
   },
-  addTempSocialsLink ({ commit }, link) {
-    commit('ADD_TEMP_SOCIALS_LINK', link)
+  addItemSocialsLink ({ commit }, link) {
+    commit('ADD_ITEM_SOCIALS_LINK', link)
   },
-  setTempLogo ({ commit }, logo) {
-    commit('SET_TEMP_LOGO', {
+  setItemLogo ({ commit }, logo) {
+    commit('SET_ITEM_LOGO', {
       src: logo
     })
   },
-  deleteTempMainImage ({ commit }, { index }) {
-    commit('DELETE_TEMP_MAIN_IMAGE', index)
+  deleteItemMainImage ({ commit }, { index }) {
+    commit('DELETE_ITEM_MAIN_IMAGE', index)
   },
-  deleteTempLogo ({ commit }) {
-    commit('DELETE_TEMP_LOGO')
+  deleteItemLogo ({ commit }) {
+    commit('DELETE_ITEM_LOGO')
   },
-  setTempLink ({ commit }, value) {
-    commit('SET_TEMP_LINK', value)
+  setItemLink ({ commit }, value) {
+    commit('SET_ITEM_LINK', value)
   },
-  setTempName ({ commit }, value) {
-    commit('SET_TEMP_NAME', value)
+  setItemName ({ commit }, value) {
+    commit('SET_ITEM_NAME', value)
   },
-  setTempDescription ({ commit }, value) {
+  setItemInn ({ commit }, value) {
+    commit('SET_ITEM_INN', value)
+  },
+  setItemDescription ({ commit }, value) {
     console.log(value.split(/\r?\n+/))
-    commit('SET_TEMP_DESCRIPTION', value)
+    commit('SET_ITEM_DESCRIPTION', value)
   }
 }

@@ -7,27 +7,17 @@
       <thumbs-file-input
         :images="mainImages"
         @change="setMainImage"
-        @delete="deleteTempMainImage"
+        @delete="deleteItemMainImage"
       />
       <div class="row mt-xl-3">
-        <div class="organizations-edit__logo custom-col mb-4 pt-3">
+        <div class="organizations-edit__logo custom-col mx-auto">
+          <div class="text-center small pb-2">
+            Логотип организации
+          </div>
           <logo-file-input
             :image="logo"
-            @change="setTempLogo"
-            @delete="deleteTempLogo"
-          />
-        </div>
-        <div class="col-md col-lg-6 col-xl-8 mb-4">
-          <material-input
-            :value="link"
-            name="link"
-            form-class="mb-4"
-            placeholder="Ссылка на ваш сайт"
-            @input="setTempLink"
-          />
-          <social-links
-            :links="socials"
-            @add="addTempSocialsLink"
+            @change="setItemLogo"
+            @delete="deleteItemLogo"
           />
         </div>
       </div>
@@ -35,9 +25,19 @@
         <div class="col-lg-8 organizations-edit__editor">
           <material-input
             :value="name"
-            name="name"
             placeholder="Введите название компании"
-            @input="setTempName"
+            @input="setItemName"
+          />
+          <material-input
+            :value="inn"
+            placeholder="ИНН"
+            @input="setItemInn"
+          />
+          <material-input
+            :value="link"
+            form-class="mb-4"
+            placeholder="Ссылка на ваш сайт"
+            @input="setItemLink"
           />
           <material-textarea
             :value="description"
@@ -45,31 +45,27 @@
             placeholder="Почему к вам стоит прийти?"
             data-align="center"
             form-class="my-5"
-            @input="setTempDescription"
+            @input="setItemDescription"
           />
-          <material-input
-            :value="name"
-            name="inn"
-            placeholder="ИНН"
-            form-class="mb-4"
-            @input="setTempName"
+          <social-links
+            :links="socials"
+            @add="addItemSocialsLink"
           />
         </div>
 
       </div>
       <div class="text-center mt-4">
-        <div class="btn btn-outline-secondary">
-          Отменить изменения
-        </div>
-        <div class="btn btn-outline-secondary mx-2">
-          Предпросмотр
-        </div>
-        <div class="btn btn-outline-primary">
+        <div
+          class="btn btn-outline-primary"
+          @click="onSave"
+        >
           Сохранить
         </div>
-      </div>
-      <div class="text-center mt-4">
-        <div class="btn btn-outline-danger">
+        <div
+          v-if="item.id"
+          class="btn btn-outline-danger ml-2"
+          @click="onDelete"
+        >
           Удалить
         </div>
       </div>
@@ -86,17 +82,9 @@ import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
 import Addresses from '~/components/Addresses'
+import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
-  head () {
-    return {
-      title: 'Редактирование организации',
-      bodyAttrs: {
-        class: 'theme-edit'
-      }
-    }
-  },
-  middleware: 'auth',
   components: {
     MaterialTextarea,
     FullSlider,
@@ -106,30 +94,42 @@ export default {
     MaterialInput,
     SocialLinks
   },
+  mixins: [mixinSwal],
+  head () {
+    return {
+      title: 'Редактирование организации',
+      bodyAttrs: {
+        class: 'theme-edit'
+      }
+    }
+  },
+  middleware: 'auth',
   data: () => ({
   }),
   computed: {
     ...mapGetters({
-      mainImages: 'organization/getTempMainImages',
+      mainImages: 'organization/getItemMainImages',
       item: 'organization/getItem',
-      link: 'organization/getTempLink',
-      name: 'organization/getTempName',
-      description: 'organization/getTempDescription',
-      logo: 'organization/getTempLogo',
-      addresses: 'organization/getTempAddresses',
-      socials: 'organization/getTempSocials'
+      link: 'organization/getItemLink',
+      name: 'organization/getItemName',
+      inn: 'organization/getItemInn',
+      description: 'organization/getItemDescription',
+      logo: 'organization/getItemLogo',
+      addresses: 'organization/getItemAddresses',
+      socials: 'organization/getItemSocials'
     })
   },
   methods: {
     ...mapActions({
-      setMainImage: 'organization/setTempMainImage',
-      setTempLink: 'organization/setTempLink',
-      setTempName: 'organization/setTempName',
-      setTempDescription: 'organization/setTempDescription',
-      deleteTempMainImage: 'organization/deleteTempMainImage',
-      setTempLogo: 'organization/setTempLogo',
-      deleteTempLogo: 'organization/deleteTempLogo',
-      addTempSocialsLink: 'organization/addTempSocialsLink'
+      setMainImage: 'organization/setItemMainImage',
+      setItemLink: 'organization/setItemLink',
+      setItemName: 'organization/setItemName',
+      setItemInn: 'organization/setItemInn',
+      setItemDescription: 'organization/setItemDescription',
+      deleteItemMainImage: 'organization/deleteItemMainImage',
+      setItemLogo: 'organization/setItemLogo',
+      deleteItemLogo: 'organization/deleteItemLogo',
+      addItemSocialsLink: 'organization/addItemSocialsLink'
     }),
     onChange (image) {
       console.log('New picture selected!')
@@ -139,6 +139,15 @@ export default {
       } else {
         console.log('FileReader API not supported: use the form, Luke!')
       }
+    },
+    async onDelete () {
+      let res = await this.$swal(this.configSwal().confirm)
+      if (res.value) {
+        console.log(123)
+      }
+    },
+    async onSave () {
+      console.log(123)
     }
   },
   // eslint-disable-next-line vue/order-in-components

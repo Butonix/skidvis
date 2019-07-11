@@ -15,7 +15,7 @@
         <div
           class="col-lg-4 mb-5"
         >
-          <div class="card--empty"/>
+          <router-link :to="{ name: 'management.organizations.create' }" class="card--empty"/>
         </div>
         <div
           v-for="(item, index) in items"
@@ -30,13 +30,13 @@
                 </div>
               </div>
             </router-link>
-            <p class="card-header">
-              Название 123213
-            </p>
             <div class="card-body">
               <div class="d-flex justify-content-around mb-4">
                 <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Точки</span></a>
                 <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Акции</span></a>
+              </div>
+              <div class="text-dark text-center">
+                Название 123213
               </div>
               <p class="card-text pt-3" v-text="item.description"/>
             </div>

@@ -92,7 +92,7 @@ export default {
     },
     inputClass_ () {
       let res = {
-        'ff-montserrat': true
+        'ff-montserrat': (this.typeInput === 'inline')
       }
       if (this.inputClass) {
         res = { ...res, [this.inputClass]: true }

@@ -56,6 +56,7 @@ const routes = [
             name: 'management.organizations.index',
             component: ManagementOrganizationsIndex
           },
+          { path: 'create', name: 'management.organizations.create', component: ManagementOrganizationsEdit },
           { path: ':id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
           { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
         ]
