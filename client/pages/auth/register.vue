@@ -4,13 +4,40 @@
       <div class="col-lg-8 m-auto">
         <card :title="$t('register')">
           <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-            <!-- Name -->
+            <!-- l_name -->
             <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('name') }}</label>
+              <label class="col-md-3 col-form-label text-md-right">Фамилия</label>
               <div class="col-md-7">
-                <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" type="text" name="name"
+                <input v-model="form.l_name" :class="{ 'is-invalid': form.errors.has('l_name') }" type="text" name="l_name"
                        class="form-control">
-                <has-error :form="form" field="name"/>
+                <has-error :form="form" field="l_name"/>
+              </div>
+            </div>
+            <!-- f_name -->
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-md-right">Имя</label>
+              <div class="col-md-7">
+                <input v-model="form.f_name" :class="{ 'is-invalid': form.errors.has('f_name') }" type="text" name="f_name"
+                       class="form-control">
+                <has-error :form="form" field="f_name"/>
+              </div>
+            </div>
+            <!-- m_name -->
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-md-right">Отчество</label>
+              <div class="col-md-7">
+                <input v-model="form.m_name" :class="{ 'is-invalid': form.errors.has('m_name') }" type="text" name="m_name"
+                       class="form-control">
+                <has-error :form="form" field="m_name"/>
+              </div>
+            </div>
+            <!-- phone -->
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label text-md-right">Телефон</label>
+              <div class="col-md-7">
+                <input v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" type="text" name="phone"
+                       class="form-control">
+                <has-error :form="form" field="phone"/>
               </div>
             </div>
 
@@ -72,7 +99,10 @@ export default {
 
   data: () => ({
     form: new Form({
-      name: '',
+      l_name: '',
+      f_name: '',
+      m_name: '',
+      phone: '',
       email: '',
       password: '',
       password_confirmation: ''

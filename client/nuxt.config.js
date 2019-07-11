@@ -23,7 +23,7 @@ module.exports = {
     //   cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
     //   ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
     // },
-    port: 3000, // default: 3000
+    port: 4000, // default: 3000
     host: '5.45.80.118' // default: localhost
   },
   env: {

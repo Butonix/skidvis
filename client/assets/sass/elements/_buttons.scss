@@ -33,6 +33,32 @@
   }
 }
 
+.btn-link {
+  padding: 0!important;
+  border-radius: 0!important;
+  margin: 0.782rem 1.94rem;
+  color: $body-color;
+  text-decoration: none!important;
+  box-shadow: none!important;
+  border-bottom: 1px dashed $body-color;
+  @include hover {
+    color: $body-color;
+    border-bottom-color: transparent;
+  }
+
+  &:focus,
+  &.focus {
+    border-bottom-color: transparent;
+    color: #000000;
+  }
+
+  &:disabled,
+  &.disabled {
+    color: $btn-link-disabled-color;
+    pointer-events: none;
+  }
+}
+
 .btn-loading {
   position: relative;
   pointer-events: none;

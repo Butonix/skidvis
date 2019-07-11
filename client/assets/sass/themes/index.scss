@@ -22,8 +22,10 @@
       $primary_: map_get($theme-colors_, "primary");
       @if($primary_){
 
+        //Form
         .material-input{
           textarea, input{
+            caret-color: $primary_;
             &:focus{
               border-color: $primary_;
               box-shadow: 0 0 0 0.1rem rgba($primary_, 0.5);
@@ -37,11 +39,16 @@
               }
             }
           }
+          &__line{
+            &:before{
+              background: $primary_;
+            }
+          }
         }
 
-
-        $link-color:                              $primary_;
-        $link-hover-color:                        darken($link-color, 15%);
+        //Links
+        $link-color: $primary_;
+        $link-hover-color: darken($link-color, 15%);
         a {
           &:not(.btn){
             color: $link-color;

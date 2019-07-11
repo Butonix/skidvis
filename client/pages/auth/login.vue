@@ -1,69 +1,88 @@
 <template>
-  <div class="container">
+  <div class="container pt-3">
     <div class="row">
-      <div class="col-lg-8 m-auto">
-        <card :title="$t('login')">
-          <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-            <!-- Email -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                       class="form-control">
-                <has-error :form="form" field="email"/>
-              </div>
-            </div>
+      <form class="custom-col login-col mx-auto"
+            @submit.prevent="login" @keydown="form.onKeydown($event)">
+        <h5 class="text-center">
+          Вход
+        </h5>
+        <div class="text-center font-weight-light mb-3">
+          Через социальные сети
+        </div>
+        <div class="text-center mb-5">
+          <social
+            type="vk"
+            class-box="social-icon-lg"
+          />
+          <social
+            type="ok"
+            class-box="social-icon-lg mx-2"
+          />
+          <social
+            type="facebook"
+            class-box="social-icon-lg"
+          />
+        </div>
+        <div class="text-center font-weight-light mb-4">
+          С паролем
+        </div>
 
-            <!-- Password -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password"
-                       class="form-control">
-                <has-error :form="form" field="password"/>
-              </div>
-            </div>
+        <div class="mb-3">
+          <material-input
+            v-model="form.email"
+            :form="form"
+            field="email"
+            type-input="inline"
+            placeholder="Эл. почта"
+            form-class="mb-4"
+          />
 
-            <!-- Remember Me -->
-            <div class="form-group row">
-              <div class="col-md-3"/>
-              <div class="col-md-7 d-flex">
-                <checkbox v-model="remember" name="remember">
-                  {{ $t('remember_me') }}
-                </checkbox>
+          <material-input
+            v-model="form.password"
+            :form="form"
+            type="password"
+            field="password"
+            type-input="inline"
+            placeholder="Пароль"
+            form-class="mb-4"
+          />
+        </div>
 
-                <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
-                  {{ $t('forgot_password') }}
-                </router-link>
-              </div>
-            </div>
+        <div class="text-center">
+          <v-button
+            :block="true"
+            :loading="form.busy"
+            type="outline-primary">
+            Войти
+          </v-button>
+          <br>
+          <button class="btn btn-link">
+            Забыл пароль
+          </button>
+          <br>
+          <button class="btn btn-link">
+            Зарегистрироваться
+          </button>
+        </div>
 
-            <div class="form-group row">
-              <div class="col-md-7 offset-md-3 d-flex">
-                <!-- Submit Button -->
-                <v-button :loading="form.busy">
-                  {{ $t('login') }}
-                </v-button>
-
-                <!-- GitHub Login Button -->
-                <login-with-github/>
-              </div>
-            </div>
-          </form>
-        </card>
-      </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import Form from 'vform'
+import Social from '~/components/Icons/Social'
+import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 
 export default {
   head () {
     return { title: this.$t('login') }
   },
-
+  components: {
+    Social,
+    MaterialInput
+  },
   data: () => ({
     form: new Form({
       email: '',
