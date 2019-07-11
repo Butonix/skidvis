@@ -24,18 +24,20 @@
 
         <ul class="navbar-nav ml-auto">
           <!-- Authenticated -->
-          <li v-if="user" class="nav-item dropdown">
-            <router-link :to="{ name: 'settings.profile' }" class="dropdown-item pl-3">
-              <fa icon="cog" fixed-width/>
-              {{ $t('settings') }}
-            </router-link>
-
-            <div class="dropdown-divider"/>
-            <a class="dropdown-item pl-3" href="#" @click.prevent="logout">
-              <fa icon="sign-out-alt" fixed-width/>
-              {{ $t('logout') }}
-            </a>
-          </li>
+          <template v-if="user">
+            <li class="nav-item">
+              <router-link :to="{ name: 'settings.profile' }" class="nav-link pl-3">
+                <fa icon="cog" fixed-width/>
+                {{ $t('settings') }}
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link pl-3" href="#" @click.prevent="logout">
+                <fa icon="sign-out-alt" fixed-width/>
+                {{ $t('logout') }}
+              </a>
+            </li>
+          </template>
           <!-- Guest -->
           <template v-else>
             <li class="nav-item">
