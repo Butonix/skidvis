@@ -11,6 +11,17 @@
         padding-top: percentageRate(324,131);
       }
     }
+    .embed-responsive-item{
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img{
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+    }
   }
   .card-buttons{
     display: flex;
@@ -20,7 +31,7 @@
   }
   .card-btn{
     display: block;
-    padding: $card-spacer-y $card-spacer-x!important;
+    padding: rem(28) $card-spacer-x!important;
     height: auto!important;
     line-height: $line-height-base!important;
     border-radius: 0!important;
@@ -45,6 +56,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 350px;
     &:before, &:after{
       content: '';
       display: block;
