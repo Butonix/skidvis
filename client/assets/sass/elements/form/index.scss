@@ -4,3 +4,18 @@
   flex: 0 0 100%;
   max-width: #{291 + 30}px;
 }
+.custom-control{
+  padding-left: #{1.5 + 0.75}rem;
+  min-height: #{1.5 + 0.75}rem;
+}
+.custom-checkbox .custom-control-label::before{
+  border-radius: 5px;
+}
+.custom-checkbox .custom-control-label{
+  &::before, &::after{
+    width: 1.75rem;
+    height: 1.75rem;
+    top: -0.15rem;
+    left: -2.25rem;
+  }
+}

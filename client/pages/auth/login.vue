@@ -2,7 +2,7 @@
   <div class="container pt-3">
     <div class="row">
       <form class="custom-col login-col mx-auto"
-            @submit.prevent="login" @keydown="form.onKeydown($event)">
+            @submit.prevent @keydown="form.onKeydown($event)">
         <h5 class="text-center">
           Вход
         </h5>
@@ -26,9 +26,9 @@
         <div class="text-center font-weight-light mb-4">
           С паролем
         </div>
-
-        <div class="mb-3">
+        <div class="mb-4">
           <material-input
+            :autofocus="true"
             v-model="form.email"
             :form="form"
             field="email"
@@ -46,23 +46,29 @@
             placeholder="Пароль"
             form-class="mb-4"
           />
+
+          <checkbox v-model="remember" name="remember">
+            Запомни меня
+          </checkbox>
         </div>
 
         <div class="text-center">
           <v-button
             :block="true"
             :loading="form.busy"
-            type="outline-primary">
+            type="outline-primary"
+            @click="login"
+          >
             Войти
           </v-button>
           <br>
-          <button class="btn btn-link">
+          <router-link :to="{ name: 'password.request' }" class="btn btn-link">
             Забыл пароль
-          </button>
+          </router-link>
           <br>
-          <button class="btn btn-link">
+          <router-link :to="{ name: 'register' }" class="btn btn-link">
             Зарегистрироваться
-          </button>
+          </router-link>
         </div>
 
       </form>
@@ -93,20 +99,24 @@ export default {
 
   methods: {
     async login () {
-      // Submit the form.
-      const { data } = await this.form.post('/login')
+      try {
+        // Submit the form.
+        const { data } = await this.form.post('/login')
 
-      // Save the token.
-      this.$store.dispatch('auth/saveToken', {
-        token: data.token,
-        remember: this.remember
-      })
+        // Save the token.
+        this.$store.dispatch('auth/saveToken', {
+          token: data.token,
+          remember: this.remember
+        })
 
-      // Fetch the user.
-      await this.$store.dispatch('auth/fetchUser')
+        // Fetch the user.
+        await this.$store.dispatch('auth/fetchUser')
 
-      // Redirect home.
-      this.$router.push({ name: 'home' })
+        // Redirect home.
+        this.$router.push({ name: 'home' })
+      } catch (e) {
+
+      }
     }
   }
 }

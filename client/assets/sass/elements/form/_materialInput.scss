@@ -16,7 +16,7 @@
     &:focus{
       border-color: $edit-color;
       box-shadow: 0 0 0 0.1rem rgba($edit-color, 0.5);
-      &~{
+      ~{
         label{
           color: $edit-color;
         }
@@ -26,12 +26,20 @@
       }
     }
     &:focus, &:valid{
-      &~{
+      ~{
         label{
           top: -1.6rem;
           padding: 4px;
           font-size: 80%;
 
+        }
+      }
+    }
+    &.is-invalid{
+      border-color: $danger!important;
+      ~ {
+        .invalid-feedback{
+          display: block;
         }
       }
     }
@@ -98,12 +106,15 @@
       display: block;
     }
     textarea, input{
+      font-family: 'Montserrat', #{$font-family-sans-serif};
+      border-radius: 0;
       background: transparent;
-      border-style: solid;
+      border: none!important;
       padding-left: 0;
       padding-right: 0;
-      border-color: transparent!important;
       box-shadow: none!important;
+      font-weight: 600;
+      font-size: 20px;
       &:focus{
         ~{
           label{
@@ -119,10 +130,17 @@
         }
       }
       &:focus, &:valid{
-        &~{
+        ~{
           label{
             top: -1rem;
             padding: 0 2px 0 2px;
+          }
+        }
+      }
+      &.is-invalid{
+        ~ {
+          .material-input__line{
+            background: $danger!important;
           }
         }
       }

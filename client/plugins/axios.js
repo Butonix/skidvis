@@ -42,7 +42,7 @@ export default ({ app, store, redirect }) => {
         cancelButtonText: app.i18n.t('cancel')
       })
     }
-
+    console.log(status)
     if (status === 401 && store.getters['auth/check']) {
       swal({
         type: 'warning',

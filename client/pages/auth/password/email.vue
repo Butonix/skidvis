@@ -1,42 +1,60 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 m-auto">
-        <card :title="$t('reset_password')">
-          <form @submit.prevent="send" @keydown="form.onKeydown($event)">
-            <alert-success :form="form" :message="status"/>
-
-            <!-- Email -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                       class="form-control">
-                <has-error :form="form" field="email"/>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group row">
-              <div class="col-md-9 ml-md-auto">
-                <v-button :loading="form.busy">{{ $t('send_password_reset_link') }}</v-button>
-              </div>
-            </div>
-          </form>
-        </card>
+  <div class="container pt-3">
+    <form class="row"
+          @submit.prevent @keydown="form.onKeydown($event)">
+      <div class="col-12 text-center">
+        <h5>
+          Восстановление пароля
+        </h5>
+        <div class="font-weight-light mb-3">
+          Впишите адрес эл. почты, указанный при регистрации
+          <br class="d-none d-md-block">
+          и мы отправим новый пароль
+        </div>
       </div>
-    </div>
+      <div class="custom-col login-col mx-auto">
+        <div class="mb-5">
+          <material-input
+            :autofocus="true"
+            v-model="form.email"
+            :form="form"
+            field="email"
+            type-input="inline"
+            placeholder="Эл. почта"
+            form-class="mb-4"
+          />
+        </div>
+
+        <div class="text-center">
+          <v-button
+            :block="true"
+            :loading="form.busy"
+            type="outline-primary"
+            @click="send"
+          >
+            Восстановить пароль
+          </v-button>
+          <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
+            <&nbsp;Назад
+          </router-link>
+        </div>
+
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
 import Form from 'vform'
+import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 
 export default {
   head () {
     return { title: this.$t('reset_password') }
   },
-
+  components: {
+    MaterialInput
+  },
   data: () => ({
     status: '',
     form: new Form({
@@ -46,11 +64,15 @@ export default {
 
   methods: {
     async send () {
-      const { data } = await this.form.post('/password/email')
+      try {
+        const { data } = await this.form.post('/password/email')
 
-      this.status = data.status
+        this.status = data.status
 
-      this.form.reset()
+        this.form.reset()
+      } catch (e) {
+
+      }
     }
   }
 }

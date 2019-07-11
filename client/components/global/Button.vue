@@ -5,7 +5,8 @@
     'btn-lg': large,
     'btn-sm': small,
     'btn-loading': loading
-  }" class="btn">
+  }" class="btn"
+  @click="$emit('click', $event)">
     <slot/>
   </button>
 </template>

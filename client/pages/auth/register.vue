@@ -1,102 +1,127 @@
 <template>
-  <div class="container">
+  <div class="container pt-3">
     <div class="row">
-      <div class="col-lg-8 m-auto">
-        <card :title="$t('register')">
-          <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-            <!-- l_name -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">Фамилия</label>
-              <div class="col-md-7">
-                <input v-model="form.l_name" :class="{ 'is-invalid': form.errors.has('l_name') }" type="text" name="l_name"
-                       class="form-control">
-                <has-error :form="form" field="l_name"/>
-              </div>
-            </div>
-            <!-- f_name -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">Имя</label>
-              <div class="col-md-7">
-                <input v-model="form.f_name" :class="{ 'is-invalid': form.errors.has('f_name') }" type="text" name="f_name"
-                       class="form-control">
-                <has-error :form="form" field="f_name"/>
-              </div>
-            </div>
-            <!-- m_name -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">Отчество</label>
-              <div class="col-md-7">
-                <input v-model="form.m_name" :class="{ 'is-invalid': form.errors.has('m_name') }" type="text" name="m_name"
-                       class="form-control">
-                <has-error :form="form" field="m_name"/>
-              </div>
-            </div>
-            <!-- phone -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">Телефон</label>
-              <div class="col-md-7">
-                <input v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" type="text" name="phone"
-                       class="form-control">
-                <has-error :form="form" field="phone"/>
-              </div>
-            </div>
+      <form class="custom-col login-col mx-auto"
+            @submit.prevent @keydown="form.onKeydown($event)">
+        <h5 class="text-center">
+          Регистрация
+        </h5>
+        <div class="text-center font-weight-light mb-3">
+          Через социальные сети
+        </div>
+        <div class="text-center mb-5">
+          <social
+            type="vk"
+            class-box="social-icon-lg"
+          />
+          <social
+            type="ok"
+            class-box="social-icon-lg mx-2"
+          />
+          <social
+            type="facebook"
+            class-box="social-icon-lg"
+          />
+        </div>
+        <div class="text-center font-weight-light mb-4">
+          Или заполните форму
+        </div>
+        <div class="mb-5">
+          <material-input
+            :autofocus="true"
+            v-model="form.l_name"
+            :form="form"
+            field="l_name"
+            type-input="inline"
+            placeholder="Фамилия"
+            form-class="mb-4"
+          />
+          <material-input
+            v-model="form.f_name"
+            :form="form"
+            field="f_name"
+            type-input="inline"
+            placeholder="Имя"
+            form-class="mb-4"
+          />
+          <material-input
+            v-model="form.m_name"
+            :form="form"
+            field="m_name"
+            type-input="inline"
+            placeholder="Отчество"
+            form-class="mb-4"
+          />
+          <material-input
+            v-model="form.phone"
+            :form="form"
+            field="phone"
+            type-input="inline"
+            placeholder="Телефон"
+            form-class="mb-4"
+          />
+          <material-input
+            v-model="form.email"
+            :form="form"
+            field="email"
+            type-input="inline"
+            placeholder="Эл. почта"
+            form-class="mb-4"
+          />
 
-            <!-- Email -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email" name="email"
-                       class="form-control">
-                <has-error :form="form" field="email"/>
-              </div>
-            </div>
+          <material-input
+            v-model="form.password"
+            :form="form"
+            type="password"
+            field="password"
+            type-input="inline"
+            placeholder="Пароль"
+            form-class="mb-4"
+          />
 
-            <!-- Password -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('password') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password" name="password"
-                       class="form-control">
-                <has-error :form="form" field="password"/>
-              </div>
-            </div>
+          <material-input
+            v-model="form.password_confirmation"
+            :form="form"
+            type="password"
+            field="password_confirmation"
+            type-input="inline"
+            placeholder="Повторите пароль"
+            form-class="mb-4"
+          />
+        </div>
+        <div class="mb-4">
+          <v-button
+            :block="true"
+            :loading="form.busy"
+            type="outline-primary"
+            @click="register">
+            Войти
+          </v-button>
+        </div>
+        <div class="text-center">
+          <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm">
+            <&nbsp;Назад
+          </router-link>
+        </div>
 
-            <!-- Password Confirmation -->
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label text-md-right">{{ $t('confirm_password') }}</label>
-              <div class="col-md-7">
-                <input v-model="form.password_confirmation" :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password" name="password_confirmation"
-                       class="form-control">
-                <has-error :form="form" field="password_confirmation"/>
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div class="col-md-7 offset-md-3 d-flex">
-                <!-- Submit Button -->
-                <v-button :loading="form.busy">
-                  {{ $t('register') }}
-                </v-button>
-
-                <!-- GitHub Login Button -->
-                <login-with-github/>
-              </div>
-            </div>
-          </form>
-        </card>
-      </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import Form from 'vform'
+import Social from '~/components/Icons/Social'
+import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 
 export default {
   head () {
     return { title: this.$t('register') }
   },
-
+  components: {
+    MaterialInput,
+    Social
+  },
   data: () => ({
     form: new Form({
       l_name: '',
@@ -111,20 +136,25 @@ export default {
 
   methods: {
     async register () {
-      // Register the user.
-      const { data } = await this.form.post('/register')
+      try {
 
-      // Log in the user.
-      const { data: { token } } = await this.form.post('/login')
+        // Register the user.
+        const { data } = await this.form.post('/register')
 
-      // Save the token.
-      this.$store.dispatch('auth/saveToken', { token })
+        // Log in the user.
+        const { data: { token } } = await this.form.post('/login')
 
-      // Update the user.
-      await this.$store.dispatch('auth/updateUser', { user: data })
+        // Save the token.
+        this.$store.dispatch('auth/saveToken', { token })
 
-      // Redirect home.
-      this.$router.push({ name: 'home' })
+        // Update the user.
+        await this.$store.dispatch('auth/updateUser', { user: data })
+
+        // Redirect home.
+        this.$router.push({ name: 'home' })
+      }catch (e) {
+
+      }
     }
   }
 }
