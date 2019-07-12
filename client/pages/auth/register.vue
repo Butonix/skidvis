@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-3">
     <div class="row">
-      <form class="custom-col login-col mx-auto"
+      <form class="custom-col login-col mx-auto" autocomplete="on"
             @submit.prevent @keydown="form.onKeydown($event)">
         <h5 class="text-center">
           Регистрация

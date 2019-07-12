@@ -8,6 +8,7 @@
       :name="name"
       :type="type"
       :readonly="readonly"
+      :autocomplete="autocomplete"
       required
       @input="$emit('input', $event.target.value)"
     >
@@ -36,7 +37,7 @@ export default {
     },
     field: {
       type: String,
-      default: ''
+      default: undefined
     },
     formClass: {
       type: String,
@@ -80,6 +81,9 @@ export default {
     }
   }),
   computed: {
+    autocomplete () {
+      return (this.type === 'password')?'new-password':'off'
+    },
     id () {
       return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     },
@@ -88,7 +92,9 @@ export default {
       let formClass = this.formClass
       if (!typeClass.isEmpty()) { typeClass = ' ' + typeClass }
       if (!formClass.isEmpty()) { formClass = ' ' + formClass }
-      return 'material-input' + typeClass + formClass
+      return {
+        ['material-input' + typeClass + formClass]: true
+      }
     },
     inputClass_ () {
       let res = {

@@ -11,7 +11,7 @@ export const state = () => ({
       description: 'Создал модератор Константин Константинопольский 29 июня 2019',
       logo: {
         src: '/placeholders/1920x700.jpg'
-      },
+      }
     },
     {
       id: 2,
@@ -19,7 +19,7 @@ export const state = () => ({
       description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
       logo: {
         src: '/placeholders/demo.jpg'
-      },
+      }
     },
     {
       id: 3,
@@ -27,8 +27,8 @@ export const state = () => ({
       description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
       logo: {
         src: '/placeholders/logo.svg'
-      },
-    },
+      }
+    }
   ]
 })
 
@@ -36,7 +36,7 @@ export const state = () => ({
 export const getters = {
   getSearch: (state) => state.search,
   getItems: (state) => sortBy(state.items, ['name']),
-  getSortBy: (state) => state.sortBy,
+  getSortBy: (state) => state.sortBy
 }
 
 // mutations
@@ -49,7 +49,7 @@ export const mutations = {
   },
   SET_ITEMS (state, value) {
     Vue.set(state, 'items', value)
-  },
+  }
 }
 
 // actions
