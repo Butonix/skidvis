@@ -14,20 +14,33 @@
 
           <div class="row mt-xl-3">
             <div class="col">
-              <div class="organizations-edit__logo">
-                <div class="text-center small pb-2">
-                  Логотип организации
+              <div class="row">
+                <div class="col-sm">
+                  <div class="organizations-edit__logo">
+                    <div class="text-center small pb-2">
+                      Логотип организации
+                    </div>
+                    <div
+                      :style="{color:logoColor}"
+                      class="organizations-edit__logo-file-input">
+                      <logo-file-input
+                        :src="logoSrc"
+                        @change="setItemLogoSrc"
+                        @delete="deleteItemLogo"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div
-                  :style="{color:logoColor}"
-                  class="organizations-edit__logo-file-input">
-                  <logo-file-input
-                    :src="logoSrc"
-                    @change="setItemLogoSrc"
-                    @delete="deleteItemLogo"
-                  />
+                <div class="col-sm-auto d-block d-md-none">
+                  <div class="text-center small pb-2 pt-4 pt-sm-0">
+                    Цвет заливки логотипа
+                  </div>
+                  <no-ssr>
+                    <sketch-picker class="mx-auto" :value="logoColor" @input="setItemLogoColor" />
+                  </no-ssr>
                 </div>
               </div>
+
               <material-input
                 :value="link"
                 form-class="mb-4"
@@ -45,7 +58,7 @@
                 @input="setItemInn"
               />
             </div>
-            <div class="col-auto">
+            <div class="col-auto d-none d-md-block">
               <div class="text-center small pb-2">
                 Цвет заливки логотипа
               </div>
@@ -69,6 +82,18 @@
         </div>
 
       </div>
+
+      <modal name="example">
+        <div class="basic-modal">
+          <div class="text-center pb-2">
+            Цвет заливки логотипа
+          </div>
+          <no-ssr>
+            <sketch-picker :value="logoColor" @input="setItemLogoColor" />
+          </no-ssr>
+        </div>
+      </modal>
+
       <div class="text-center mt-4">
         <div
           class="btn btn-outline-primary"
@@ -148,18 +173,6 @@ export default {
       addItemSocialsLink: 'organization/addItemSocialsLink',
       setItemLogoColor: 'organization/setItemLogoColor'
     }),
-    onChange (image) {
-      console.log('New picture selected!')
-      if (image) {
-        console.log('Picture loaded.')
-        this.image = image
-      } else {
-        console.log('FileReader API not supported: use the form, Luke!')
-      }
-    },
-    onInput (hue) {
-
-    },
     async onDelete () {
       let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
@@ -167,13 +180,9 @@ export default {
       }
     },
     async onSave () {
-      console.log(123)
+      this.$modal.push('example')
     }
   },
-  // eslint-disable-next-line vue/order-in-components
-  created () {
-    this.$store.dispatch('organization/setItem', this.$route.params.id)
-  }
 }
 </script>
 

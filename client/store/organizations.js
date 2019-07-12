@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import axios from 'axios'
-import { sortBy } from 'lodash'
 
 // state
 export const state = () => ({
@@ -9,34 +8,34 @@ export const state = () => ({
   currentPage: 1,
   perPage: 11,
   items: {
-    data: [
-      // {
-      //   id: 1,
-      //   name: 'Формула кино',
-      //   description: 'Создал модератор Константин Константинопольский 29 июня 2019',
-      //   link: 'http://',
-      //   logo: {
-      //     color: '#000000',
-      //     src: '/placeholders/1920x700.jpg'
-      //   }
-      // },
-      // {
-      //   id: 2,
-      //   name: 'Формула кино Формула кино Формула кино Формула кино ',
-      //   description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
-      //   logo: {
-      //     src: '/placeholders/demo.jpg'
-      //   }
-      // },
-      // {
-      //   id: 3,
-      //   name: 'Формула кино Формула кино Формула кино Формула кино ',
-      //   description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
-      //   logo: {
-      //     src: '/placeholders/logo.svg'
-      //   }
-      // }
-    ]
+    // data: [
+    //   {
+    //     id: 1,
+    //     name: 'Формула кино',
+    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019',
+    //     link: 'http://',
+    //     logo: {
+    //       color: '#000000',
+    //       src: '/placeholders/1920x700.jpg'
+    //     }
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'Формула кино Формула кино Формула кино Формула кино ',
+    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
+    //     logo: {
+    //       src: '/placeholders/demo.jpg'
+    //     }
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'Формула кино Формула кино Формула кино Формула кино ',
+    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
+    //     logo: {
+    //       src: '/placeholders/logo.svg'
+    //     }
+    //   }
+    // ]
   }
 })
 
@@ -44,8 +43,8 @@ export const state = () => ({
 export const getters = {
   getSearch: (state) => state.search,
   getItemsLength: (state) => state.items.data ? state.items.data.length : 0,
-  getData: (state) => state.items ? state.items : {},
-  getItems: (state) => state.items.data ? sortBy(state.items.data, ['name']) : [],
+  getItemsData: (state) => (state.items) ? state.items : {},
+  getItems: (state) => state.items.data ? state.items.data : [],
   getSortBy: (state) => state.sortBy
 }
 
@@ -64,7 +63,6 @@ export const mutations = {
     Vue.set(state, 'currentPage', Number(value))
   },
   FETCH_DATA_SUCCESS (state, value) {
-    console.log(value)
     Vue.set(state, 'items', value)
   }
 }
@@ -84,13 +82,13 @@ export const actions = {
           search: state.search,
         }
       })
+      console.log(data)
       commit('FETCH_DATA_SUCCESS', data)
     } catch (e) {
       console.log('FETCH_USER_FAILURE')
 
       // commit('FETCH_USER_FAILURE')
     }
-    console.log('organizations/fetchItems')
   },
   setSortBy ({ commit }, value) {
     commit('SET_SORT_BY', value)

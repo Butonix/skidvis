@@ -19,8 +19,8 @@
     max-width: 306px;
     @include media-breakpoint-down(xs)
     {
-      flex: 0 0 100%;
-      max-width: 100%;
+      max-width: 321px;
+      padding-right: 15px;
     }
   }
 }

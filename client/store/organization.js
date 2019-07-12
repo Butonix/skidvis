@@ -92,53 +92,6 @@ export const mutations = {
 // actions
 export const actions = {
   setItem ({ commit }, id) {
-    if (id) {
-      commit('SET_ITEM', {
-        item: {
-          name: '',
-          link: '',
-          inn: '',
-          orgnip: '',
-          okved: '',
-          address: '',
-          latitude: '',
-          longitude: '',
-          logo: {
-            src: '/placeholders/1920x700.jpg'
-          },
-          description: '',
-          ordering: 1,
-          mainImages: [
-            {
-              480: '/placeholders/1920x700.jpg',
-              640: '/placeholders/1920x700.jpg',
-              800: '/placeholders/1920x700.jpg',
-              1024: '/placeholders/1920x700.jpg',
-              1440: '/placeholders/1920x700.jpg',
-              1920: '/placeholders/1920x700.jpg',
-              src: '/placeholders/1920x700.jpg', // максимальное, в данный момент 1920, иначе оригинальные
-              alt: '',
-              title: '',
-              loading: false
-            }
-          ],
-          addresses: [
-            {
-              address: 'Беговая, Приморский пр-т, 72, этаж 3 (ТРЦ «Питерленд»)',
-              latitude: 123213,
-              longitude: 123123123
-            }
-          ],
-          socials: [
-            {
-              type: 'vk',
-              link: 'https://vk.com/skidvis'
-            }
-          ]
-
-        }
-      })
-    }
   },
   setItemMainImage ({ commit, getters }, { image, index }) {
     if (index !== undefined && getters.getItemMainImages[index]) {

@@ -56,7 +56,19 @@
           </div>
         </div>
       </div>
-      <!--      <pagination :data="data" @pagination-change-page="setCurrentPage"></pagination>-->
+
+      <paginate
+        v-model="page"
+        :page-count="20"
+        :page-range="3"
+        :margin-pages="1"
+        :hide-prev-next="true"
+        :click-handler="changePage"
+        :prev-text="'Prev'"
+        :next-text="'Next'"
+        :container-class="'pagination'"
+        :page-class="'page-item'"/>
+
     </div>
   </div>
 </template>
@@ -64,7 +76,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
-// import Paginate from 'laravel-vue-pagination'
+import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 export default {
   middleware: ['auth', 'management/organizations'],
@@ -77,23 +89,31 @@ export default {
     }
   },
   components: {
-    SearchInput
-    // Paginate
+    SearchInput,
+    Paginate
   },
+  data: () => ({
+    page: 1
+  }),
   computed: {
     ...mapGetters({
       search: 'organizations/getSearch',
       items: 'organizations/getItems',
-      data: 'organizations/getData'
+      data: 'organizations/getItemsData'
     })
   },
   methods: {
     ...mapActions({
       setSearch: 'organizations/setSearch',
       setCurrentPage: 'organizations/setCurrentPage'
-    })
+    }),
+    changePage (pagination) {
+      console.log(pagination)
+    }
+
   },
   mounted () {
+    console.log('mounted', this.data)
   }
 
 }

@@ -71,6 +71,7 @@ module.exports = {
     '~plugins/axios',
     '~plugins/fontawesome',
     '~plugins/tooltip',
+    '~plugins/modal',
     { src: '~plugins/color-picker', ssr: false },
     { src: '~plugins/vue-quill-editor', ssr: false },
     { src: '~plugins/vue-picture-input', ssr: false }
