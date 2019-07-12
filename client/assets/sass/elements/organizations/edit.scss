@@ -16,9 +16,7 @@
     }
   }
   &__logo{
-    -webkit-box-flex: 0;
-    flex: 0 0 #{306 + 30}px;
-    max-width: #{306 + 30}px;
+    max-width: 306px;
     @include media-breakpoint-down(xs)
     {
       flex: 0 0 100%;

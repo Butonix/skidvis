@@ -6,39 +6,54 @@
     <div class="container">
       <thumbs-file-input
         :images="mainImages"
-        @change="setMainImage"
+        @change="setItemMainImage"
         @delete="deleteItemMainImage"
       />
-      <div class="row mt-xl-3">
-        <div class="organizations-edit__logo custom-col mx-auto">
-          <div class="text-center small pb-2">
-            Логотип организации
-          </div>
-          <logo-file-input
-            :image="logo"
-            @change="setItemLogo"
-            @delete="deleteItemLogo"
-          />
-        </div>
-      </div>
       <div class="row justify-content-center">
         <div class="col-lg-8 organizations-edit__editor">
-          <material-input
-            :value="name"
-            placeholder="Введите название компании"
-            @input="setItemName"
-          />
-          <material-input
-            :value="inn"
-            placeholder="ИНН"
-            @input="setItemInn"
-          />
-          <material-input
-            :value="link"
-            form-class="mb-4"
-            placeholder="Ссылка на ваш сайт"
-            @input="setItemLink"
-          />
+
+          <div class="row mt-xl-3">
+            <div class="col">
+              <div class="organizations-edit__logo">
+                <div class="text-center small pb-2">
+                  Логотип организации
+                </div>
+                <div
+                  :style="{color:logoColor}"
+                  class="organizations-edit__logo-file-input">
+                  <logo-file-input
+                    :src="logoSrc"
+                    @change="setItemLogoSrc"
+                    @delete="deleteItemLogo"
+                  />
+                </div>
+              </div>
+              <material-input
+                :value="link"
+                form-class="mb-4"
+                placeholder="Ссылка на ваш сайт"
+                @input="setItemLink"
+              />
+              <material-input
+                :value="name"
+                placeholder="Введите название компании"
+                @input="setItemName"
+              />
+              <material-input
+                :value="inn"
+                placeholder="ИНН"
+                @input="setItemInn"
+              />
+            </div>
+            <div class="col-auto">
+              <div class="text-center small pb-2">
+                Цвет заливки логотипа
+              </div>
+              <no-ssr>
+                <sketch-picker :value="logoColor" @input="setItemLogoColor" />
+              </no-ssr>
+            </div>
+          </div>
           <material-textarea
             :value="description"
             name="link"
@@ -114,22 +129,24 @@ export default {
       name: 'organization/getItemName',
       inn: 'organization/getItemInn',
       description: 'organization/getItemDescription',
-      logo: 'organization/getItemLogo',
+      logoSrc: 'organization/getItemLogoSrc',
       addresses: 'organization/getItemAddresses',
-      socials: 'organization/getItemSocials'
+      socials: 'organization/getItemSocials',
+      logoColor: 'organization/getItemLogoColor'
     })
   },
   methods: {
     ...mapActions({
-      setMainImage: 'organization/setItemMainImage',
+      setItemMainImage: 'organization/setItemMainImage',
       setItemLink: 'organization/setItemLink',
       setItemName: 'organization/setItemName',
       setItemInn: 'organization/setItemInn',
       setItemDescription: 'organization/setItemDescription',
       deleteItemMainImage: 'organization/deleteItemMainImage',
-      setItemLogo: 'organization/setItemLogo',
+      setItemLogoSrc: 'organization/setItemLogoSrc',
       deleteItemLogo: 'organization/deleteItemLogo',
-      addItemSocialsLink: 'organization/addItemSocialsLink'
+      addItemSocialsLink: 'organization/addItemSocialsLink',
+      setItemLogoColor: 'organization/setItemLogoColor'
     }),
     onChange (image) {
       console.log('New picture selected!')
@@ -139,6 +156,9 @@ export default {
       } else {
         console.log('FileReader API not supported: use the form, Luke!')
       }
+    },
+    onInput (hue) {
+
     },
     async onDelete () {
       let res = await this.$swal(this.configSwal().confirm)
@@ -158,4 +178,7 @@ export default {
 </script>
 
 <style>
+  .organizations-edit__logo-file-input .picture-preview{
+    background-color: currentColor!important;
+  }
 </style>

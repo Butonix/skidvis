@@ -8,6 +8,7 @@ export const state = () => ({
     link: '',
     inn: '',
     logo: {
+      color: '#FFFFFF',
       src: ''
     },
     description: '',
@@ -20,10 +21,7 @@ export const state = () => ({
       //   1024: '/placeholders/1920x700.jpg',
       //   1440: '/placeholders/1920x700.jpg',
       //   1920: '/placeholders/1920x700.jpg',
-      //   src: '/placeholders/1920x700.jpg', // максимальное, в данный момент 1920, иначе оригинальные
-      //   alt: '',
-      //   title: '',
-      //   loading: false
+      //   src: '/placeholders/1920x700.jpg', // максимальное, в данный момент 1920
       // }
     ],
     socials: []
@@ -35,7 +33,8 @@ export const state = () => ({
 export const getters = {
   getItem: (state) => (state.item) ? state.item : undefined,
   getItemMainImages: (state) => (state.item) ? state.item.mainImages : undefined,
-  getItemLogo: (state) => (state.item) ? state.item.logo : undefined,
+  getItemLogoColor: (state) => (state.item && state.item.logo && state.item.logo.color) ? state.item.logo.color : '#FFFFFF',
+  getItemLogoSrc: (state) => (state.item && state.item.logo && state.item.logo.src) ? state.item.logo.src : '',
   getItemLink: (state) => (state.item) ? state.item.link : undefined,
   getItemName: (state) => (state.item) ? state.item.name : undefined,
   getItemInn: (state) => (state.item) ? state.item.inn : undefined,
@@ -61,8 +60,11 @@ export const mutations = {
   SET_ITEM_DESCRIPTION (state, value) {
     Vue.set(state.item, 'description', value)
   },
-  SET_ITEM_LOGO (state, logo) {
-    Vue.set(state.item, 'logo', logo)
+  SET_ITEM_LOGO_SRC (state, src) {
+    Vue.set(state.item.logo, 'src', src)
+  },
+  SET_ITEM_LOGO_COLOR (state, color) {
+    Vue.set(state.item.logo, 'color', color)
   },
   SET_ITEM_MAIN_IMAGE (state, { image, index }) {
     /**
@@ -83,7 +85,7 @@ export const mutations = {
     Vue.delete(state.item.mainImages, index)
   },
   DELETE_ITEM_LOGO (state) {
-    Vue.set(state.item, 'logo', { src: '' })
+    Vue.set(state.item.logo, 'src', '')
   }
 }
 
@@ -157,10 +159,8 @@ export const actions = {
   addItemSocialsLink ({ commit }, link) {
     commit('ADD_ITEM_SOCIALS_LINK', link)
   },
-  setItemLogo ({ commit }, logo) {
-    commit('SET_ITEM_LOGO', {
-      src: logo
-    })
+  setItemLogoSrc ({ commit }, src) {
+    commit('SET_ITEM_LOGO_SRC', src)
   },
   deleteItemMainImage ({ commit }, { index }) {
     commit('DELETE_ITEM_MAIN_IMAGE', index)
@@ -180,5 +180,8 @@ export const actions = {
   setItemDescription ({ commit }, value) {
     console.log(value.split(/\r?\n+/))
     commit('SET_ITEM_DESCRIPTION', value)
+  },
+  setItemLogoColor ({ commit }, value) {
+    commit('SET_ITEM_LOGO_COLOR', `rgba(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${value.rgba.a})`)
   }
 }

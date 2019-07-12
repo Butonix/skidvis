@@ -28,8 +28,10 @@
           <div class="card w-100 h-100">
             <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block">
               <div class="embed-responsive embed-responsive-1by1">
-                <div class="embed-responsive-item" style="background-color: yellowgreen;">
-                  <img :src="item.logo.src" :alt="item.name" :title="item.name">
+                <div
+                  :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
+                  class="embed-responsive-item">
+                  <img v-if="item.logo && item.logo.src" :src="item.logo.src" :alt="item.name" :title="item.name">
                 </div>
               </div>
             </router-link>
@@ -54,6 +56,7 @@
           </div>
         </div>
       </div>
+      <!--      <pagination :data="data" @pagination-change-page="setCurrentPage"></pagination>-->
     </div>
   </div>
 </template>
@@ -61,9 +64,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
+// import Paginate from 'laravel-vue-pagination'
 
 export default {
-  middleware: 'auth',
+  middleware: ['auth', 'management/organizations'],
   head () {
     return {
       title: 'Мои организации',
@@ -74,17 +78,22 @@ export default {
   },
   components: {
     SearchInput
+    // Paginate
   },
   computed: {
     ...mapGetters({
       search: 'organizations/getSearch',
-      items: 'organizations/getItems'
+      items: 'organizations/getItems',
+      data: 'organizations/getData'
     })
   },
   methods: {
     ...mapActions({
-      setSearch: 'organizations/setSearch'
+      setSearch: 'organizations/setSearch',
+      setCurrentPage: 'organizations/setCurrentPage'
     })
+  },
+  mounted () {
   }
 
 }

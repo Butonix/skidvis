@@ -72,7 +72,7 @@ export default {
   components: {
     MaterialInput
   },
-
+  middleware: 'authRoutes',
   data: () => ({
     status: '',
     form: new Form({

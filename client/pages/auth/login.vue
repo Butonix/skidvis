@@ -86,6 +86,7 @@ export default {
   head () {
     return { title: this.$t('login') }
   },
+  middleware: 'authRoutes',
   components: {
     Social,
     MaterialInput

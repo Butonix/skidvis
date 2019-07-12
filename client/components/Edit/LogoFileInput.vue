@@ -33,15 +33,12 @@ import mixinSwal from '~/mixins/sweetalert2'
 export default {
   mixins: [mixinSwal],
   props: {
-    image: {
-      type: Object,
-      default: () => ({})
+    src: {
+      type: String,
+      default: ''
     }
   },
   computed: {
-    src () {
-      return (this.image.src) ? this.image.src : ''
-    }
   },
   methods: {
     async onDelete (event) {

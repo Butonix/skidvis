@@ -118,6 +118,7 @@ export default {
   head () {
     return { title: this.$t('register') }
   },
+  middleware: 'authRoutes',
   components: {
     MaterialInput,
     Social
