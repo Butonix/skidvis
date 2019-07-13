@@ -40,6 +40,20 @@ export const mutations = {
   },
   FETCH_DATA_SUCCESS (state, value) {
     Vue.set(state, 'items', value)
+  },
+  SET_QUERY_DATA (state, query) {
+    if (query.page) {
+      Vue.set(state, 'page', Number(query.page))
+    }
+    if (query.perPage) {
+      Vue.set(state, 'perPage', Number(query.perPage))
+    }
+    if (query.search) {
+      Vue.set(state, 'search', query.search)
+    }
+    if (query.sortBy) {
+      Vue.set(state, 'sortBy', query.sortBy)
+    }
   }
 }
 
@@ -47,18 +61,22 @@ export const mutations = {
 export const actions = {
   setSearch ({ commit, dispatch }, value) {
     commit('SET_SEARCH', value)
+    dispatch('setRouterParams')
     dispatch('fetchItems')
   },
-  async fetchItems ({ commit, state }) {
+  async fetchItems ({ commit, state }, query) {
+    if (query) {
+      commit('SET_QUERY_DATA', query)
+    }
     try {
       const { data } = await axios.get('/1/management/organizations', {
         params: {
           perPage: state.perPage,
           page: state.page,
-          search: state.search,
+          search: state.search
         }
       })
-      console.log(data);
+      console.log(data)
       commit('FETCH_DATA_SUCCESS', data)
     } catch (e) {
       console.log('FETCH_USER_FAILURE')
@@ -69,8 +87,18 @@ export const actions = {
   setSortBy ({ commit }, value) {
     commit('SET_SORT_BY', value)
   },
-  setPage ({ commit, dispatch }, value) {
+  setRouterParams ({ state }) {
+    this.$router.push({ name: 'management.organizations.index',
+      query: {
+        perPage: state.perPage,
+        page: state.page,
+        search: state.search
+      }
+    })
+  },
+  setPage ({ commit, dispatch, state }, value) {
     commit('SET_PAGE', value)
+    dispatch('setRouterParams')
     dispatch('fetchItems')
   }
 }
