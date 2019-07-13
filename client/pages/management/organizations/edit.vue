@@ -7,8 +7,8 @@
     <div class="container">
       <thumbs-file-input
         :images="images"
-        @change="setItemMainImage"
-        @delete="deleteItemMainImage"
+        @change="setMainImage"
+        @delete="deleteMainImage"
       />
       <div class="row justify-content-center">
         <div class="col-lg-8 organizations-edit__editor">
@@ -26,8 +26,8 @@
                       class="organizations-edit__logo-file-input">
                       <logo-file-input
                         :src="logo"
-                        @change="setItemLogoSrc"
-                        @delete="deleteItemLogo"
+                        @change="setLogoSrc"
+                        @delete="deleteLogo"
                       />
                     </div>
                   </div>
@@ -44,7 +44,7 @@
                     />
                     <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
                     <no-ssr>
-                      <sketch-picker :value="form.logo.color" class="mx-auto" @input="setItemLogoColor" />
+                      <sketch-picker :value="form.logo.color" class="mx-auto" @input="setLogoColor" />
                     </no-ssr>
                   </div>
                 </div>
@@ -69,7 +69,7 @@
                 Цвет заливки логотипа
               </div>
               <no-ssr>
-                <sketch-picker :value="form.logo.color" @input="setItemLogoColor" />
+                <sketch-picker :value="form.logo.color" @input="setLogoColor" />
               </no-ssr>
             </div>
           </div>
@@ -82,7 +82,8 @@
           />
           <social-links
             :links="form.socials"
-            @add="addItemSocialsLink"
+            @add="addSocialsLink"
+            @delete="deleteSocialsLink"
           />
         </div>
 
@@ -141,13 +142,17 @@ export default {
     isActiveClassColorBox: false,
     images: [],
     logo: '',
+    id: undefined,
     form: new Form({
-      id: '',
       images: [
         // {
         //   src: '',
         //   id: ''
-        // }
+        // },
+        // {
+        //   src: '',
+        //   id: ''
+        // },
       ],
       link: '',
       name: '',
@@ -155,20 +160,29 @@ export default {
       description: '',
       logo: {
         color: '#FFFFFF',
-        src: ''
+        src: '',
         // id: 1
       },
-      socials: []
+      socials: [
+        // {
+        //   link: '',
+        //   type: ''
+        // },
+        // {
+        //   link: '',
+        //   type: ''
+        // }
+      ]
     })
   }),
   methods: {
-    addItemSocialsLink (link) {
+    addSocialsLink (link) {
       this.form.socials.push(link)
     },
-    setItemLogoColor (value) {
+    setLogoColor (value) {
       this.form.logo.color = `rgba(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${value.rgba.a})`
     },
-    async setItemLogoSrc (image) {
+    async setLogoSrc (image) {
       this.logo = image
       try {
         let { data } = await axios.post('/1/organization/image', {
@@ -182,7 +196,7 @@ export default {
 
       }
     },
-    async setItemMainImage ({ image, index }) {
+    async setMainImage ({ image, index }) {
       if (index !== undefined && this.images[index]) {
         this.$set(this.images, index, {
           src: image
@@ -207,23 +221,26 @@ export default {
 
       }
     },
-    deleteItemLogo () {
+    deleteLogo () {
       this.form.logo.src = ''
       this.$delete(this.form.logo, 'id')
       this.logo = ''
     },
-    deleteItemMainImage ({ index }) {
+    deleteMainImage ({ index }) {
       this.$delete(this.images, index)
       this.$delete(this.form.images, index)
     },
+    deleteSocialsLink ({ index }) {
+      this.$delete(this.form.socials, index)
+    },
     async onDelete () {
-      if (!this.form.id) {
+      if (!this.id) {
         return
       }
       let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
         try {
-          let { data } = await axios.delete('/1/organization/' + this.form.id)
+          let { data } = await axios.delete('/1/organization/' + this.id)
         } catch (e) {
 
         }
