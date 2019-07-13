@@ -1,5 +1,5 @@
 <template>
-  <div class="organizations-edit">
+  <div class="organizations-edit overflow-hidden">
     <full-slider
       :images="mainImages"
     />
@@ -31,13 +31,21 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-auto d-block d-md-none">
+                <div class="col-sm-auto d-flex d-md-none flex-column">
                   <div class="text-center small pb-2 pt-4 pt-sm-0">
                     Цвет заливки логотипа
                   </div>
-                  <no-ssr>
-                    <sketch-picker class="mx-auto" :value="logoColor" @input="setItemLogoColor" />
-                  </no-ssr>
+                  <div class="color-box__wrapper">
+                    <div
+                      :style="{backgroundColor: logoColor}"
+                      :class="{'active':isActiveClassColorBox}"
+                      class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
+                    />
+                    <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
+                    <no-ssr>
+                      <sketch-picker :value="logoColor" class="mx-auto" @input="setItemLogoColor" />
+                    </no-ssr>
+                  </div>
                 </div>
               </div>
 
@@ -84,7 +92,7 @@
       </div>
 
       <modal name="example">
-        <div class="basic-modal">
+        <div class="basic-modal color-modal">
           <div class="text-center pb-2">
             Цвет заливки логотипа
           </div>
@@ -145,6 +153,7 @@ export default {
   },
   middleware: 'auth',
   data: () => ({
+    isActiveClassColorBox: false
   }),
   computed: {
     ...mapGetters({
@@ -182,7 +191,7 @@ export default {
     async onSave () {
       this.$modal.push('example')
     }
-  },
+  }
 }
 </script>
 

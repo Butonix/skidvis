@@ -5,45 +5,18 @@ import axios from 'axios'
 export const state = () => ({
   search: '',
   sortBy: 'name',
-  currentPage: 1,
+  page: 1,
   perPage: 11,
   items: {
-    // data: [
-    //   {
-    //     id: 1,
-    //     name: 'Формула кино',
-    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019',
-    //     link: 'http://',
-    //     logo: {
-    //       color: '#000000',
-    //       src: '/placeholders/1920x700.jpg'
-    //     }
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Формула кино Формула кино Формула кино Формула кино ',
-    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
-    //     logo: {
-    //       src: '/placeholders/demo.jpg'
-    //     }
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'Формула кино Формула кино Формула кино Формула кино ',
-    //     description: 'Создал модератор Константин Константинопольский 29 июня 2019 Создал модератор Константин Константинопольский 29 июня 2019',
-    //     logo: {
-    //       src: '/placeholders/logo.svg'
-    //     }
-    //   }
-    // ]
   }
 })
 
 // getters
 export const getters = {
   getSearch: (state) => state.search,
+  getPage: (state) => state.page,
+  getPageCount: (state) => (state.items.total) ? Math.ceil(state.items.total / state.perPage) : 0,
   getItemsLength: (state) => state.items.data ? state.items.data.length : 0,
-  getItemsData: (state) => (state.items) ? state.items : {},
   getItems: (state) => state.items.data ? state.items.data : [],
   getSortBy: (state) => state.sortBy
 }
@@ -58,6 +31,9 @@ export const mutations = {
   },
   SET_ITEMS (state, value) {
     Vue.set(state, 'items', value)
+  },
+  SET_PAGE (state, value) {
+    Vue.set(state, 'page', value)
   },
   SET_CURRENT_PAGE (state, value) {
     Vue.set(state, 'currentPage', Number(value))
@@ -78,11 +54,11 @@ export const actions = {
       const { data } = await axios.get('/1/management/organizations', {
         params: {
           perPage: state.perPage,
-          page: state.currentPage,
+          page: state.page,
           search: state.search,
         }
       })
-      console.log(data)
+      console.log(data);
       commit('FETCH_DATA_SUCCESS', data)
     } catch (e) {
       console.log('FETCH_USER_FAILURE')
@@ -93,9 +69,8 @@ export const actions = {
   setSortBy ({ commit }, value) {
     commit('SET_SORT_BY', value)
   },
-  setCurrentPage ({ commit, dispatch }, value) {
-    console.log(value)
-    // commit('SET_CURRENT_PAGE', value)
-    // dispatch('fetchItems')
+  setPage ({ commit, dispatch }, value) {
+    commit('SET_PAGE', value)
+    dispatch('fetchItems')
   }
 }

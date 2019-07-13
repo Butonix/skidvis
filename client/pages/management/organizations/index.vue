@@ -43,7 +43,7 @@
                 <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Точки</span></a>
                 <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Акции</span></a>
               </div>
-              <p class="card-text pt-3" v-text="item.description"/>
+              <p v-if="item.description" class="card-text pt-3" v-text="item.description"/>
             </div>
             <div class="card-buttons mt-auto text-nowrap">
               <a href="/" class="card-btn card-btn--left text-muted btn btn-outline-secondary">
@@ -58,16 +58,16 @@
       </div>
 
       <paginate
-        v-model="page"
-        :page-count="20"
+        :value="page"
+        :page-count="pageCount"
         :page-range="3"
         :margin-pages="1"
         :hide-prev-next="true"
-        :click-handler="changePage"
-        :prev-text="'Prev'"
-        :next-text="'Next'"
         :container-class="'pagination'"
-        :page-class="'page-item'"/>
+        :page-class="'page-item'"
+        prev-class="d-none"
+        next-class="d-none"
+        @input="setPage"/>
 
     </div>
   </div>
@@ -93,23 +93,20 @@ export default {
     Paginate
   },
   data: () => ({
-    page: 1
   }),
   computed: {
     ...mapGetters({
       search: 'organizations/getSearch',
       items: 'organizations/getItems',
-      data: 'organizations/getItemsData'
+      pageCount: 'organizations/getPageCount',
+      page: 'organizations/getPage'
     })
   },
   methods: {
     ...mapActions({
       setSearch: 'organizations/setSearch',
-      setCurrentPage: 'organizations/setCurrentPage'
-    }),
-    changePage (pagination) {
-      console.log(pagination)
-    }
+      setPage: 'organizations/setPage'
+    })
 
   },
   mounted () {

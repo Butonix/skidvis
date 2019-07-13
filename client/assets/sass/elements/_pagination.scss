@@ -1,3 +1,61 @@
-.pagination{
+.pagination {
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+  .page-item {
+    text-align: center;
+    vertical-align: middle;
+    margin: 0 2px;
+
+    a {
+      user-select: none;
+      display: inline-block;
+      color: #8C8C8C !important;
+      transition: .2s ease;
+      text-decoration: none !important;
+      outline: none !important;
+    }
+
+    &:not(.disabled) {
+      a {
+        $width: rem(35);
+        width: $width;
+        min-width: $width;
+        height: $width;
+        line-height: $width;
+        border-radius: 50%;
+
+        &:hover {
+          background: #E4E4E4;
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 0.1rem rgba(#484848, 0.5);
+        }
+      }
+
+      &.active {
+        a {
+          background: #484848;
+          color: white !important;
+        }
+      }
+    }
+
+    &.disabled {
+      margin: 0 5px;
+
+      a {
+        $width: rem(35);
+        width: $width;
+        min-width: $width;
+        height: $width;
+        line-height: rem(26);
+        padding-top: rem(9);
+      }
+    }
+  }
 }

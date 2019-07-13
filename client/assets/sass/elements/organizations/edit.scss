@@ -14,6 +14,13 @@
       border: 1px solid #929292;
       border-radius: 5px;
     }
+    .vc-sketch{
+      box-shadow: none;
+      border: 1px dashed #929292;
+      &:hover{
+        border-style: solid;
+      }
+    }
   }
   &__logo{
     max-width: 306px;
@@ -21,6 +28,8 @@
     {
       max-width: 321px;
       padding-right: 15px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
