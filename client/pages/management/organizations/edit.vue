@@ -1,5 +1,6 @@
 <template>
-  <div class="organizations-edit overflow-hidden">
+  <form class="organizations-edit overflow-hidden"
+        @submit.prevent @keydown="form.onKeydown($event)">
     <full-slider
       :images="mainImages"
     />
@@ -118,10 +119,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
+import Form from 'vform'
 import { mapActions, mapGetters } from 'vuex'
 import FullSlider from '~/components/FullSlider'
 import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
@@ -153,7 +155,10 @@ export default {
   },
   middleware: 'auth',
   data: () => ({
-    isActiveClassColorBox: false
+    isActiveClassColorBox: false,
+    form: new Form({
+      email: ''
+    })
   }),
   computed: {
     ...mapGetters({
@@ -189,7 +194,14 @@ export default {
       }
     },
     async onSave () {
-      this.$modal.push('example')
+      try {
+        const { data } = await this.form.post('/password/email')
+
+        console.log(data);
+      } catch (e) {
+
+      }
+      // this.$modal.push('example')
     }
   }
 }

@@ -1,6 +1,14 @@
 <template>
   <div class="container pt-3">
-    <form class="row"
+    <div v-if="status === 'ok'" class="text-center">
+      <div class="alert-success py-4 mb-3">
+        На ваш электронный адрес отправлено ссобщение с подверждением.
+      </div>
+      <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
+        <&nbsp;Назад
+      </router-link>
+    </div>
+    <form v-else class="row"
           @submit.prevent @keydown="form.onKeydown($event)">
       <div class="col-12 text-center">
         <h5>
@@ -24,7 +32,6 @@
             form-class="mb-4"
           />
         </div>
-
         <div class="text-center">
           <v-button
             :block="true"
@@ -68,7 +75,7 @@ export default {
       try {
         const { data } = await this.form.post('/password/email')
 
-        this.status = data.status
+        this.status = String(data.status).toLowerCase()
 
         this.form.reset()
       } catch (e) {

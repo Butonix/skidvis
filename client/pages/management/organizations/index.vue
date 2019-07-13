@@ -26,16 +26,16 @@
           class="col-md-6 col-lg-4 mb-5"
         >
           <div class="card w-100 h-100">
-            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block">
+            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block p-3">
               <div class="embed-responsive embed-responsive-1by1">
                 <div
                   :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
                   class="embed-responsive-item">
-                  <img v-if="item.logo && item.logo.src" :src="item.logo.src" :alt="item.name" :title="item.name">
+                  <img v-if="item.logo && item.logo.src" v-lazy="item.logo.src" src="/placeholders/loading_spinner.gif" :alt="item.name" :title="item.name">
                 </div>
               </div>
             </router-link>
-            <div class="card-header border-0 pb-0">
+            <div class="card-header border-0 py-0">
               <div class="text-dark text-center" v-text="item.name"/>
             </div>
             <div class="card-body pb-3">
