@@ -2,11 +2,11 @@
   <form class="organizations-edit overflow-hidden"
         @submit.prevent @keydown="form.onKeydown($event)">
     <full-slider
-      :images="mainImages"
+      :images="images"
     />
     <div class="container">
       <thumbs-file-input
-        :images="mainImages"
+        :images="images"
         @change="setItemMainImage"
         @delete="deleteItemMainImage"
       />
@@ -22,10 +22,10 @@
                       Логотип организации
                     </div>
                     <div
-                      :style="{color:logoColor}"
+                      :style="{color:form.logo.color}"
                       class="organizations-edit__logo-file-input">
                       <logo-file-input
-                        :src="logoSrc"
+                        :src="logo"
                         @change="setItemLogoSrc"
                         @delete="deleteItemLogo"
                       />
@@ -38,33 +38,30 @@
                   </div>
                   <div class="color-box__wrapper">
                     <div
-                      :style="{backgroundColor: logoColor}"
+                      :style="{backgroundColor: form.logo.color}"
                       :class="{'active':isActiveClassColorBox}"
                       class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
                     />
                     <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
                     <no-ssr>
-                      <sketch-picker :value="logoColor" class="mx-auto" @input="setItemLogoColor" />
+                      <sketch-picker :value="form.logo.color" class="mx-auto" @input="setItemLogoColor" />
                     </no-ssr>
                   </div>
                 </div>
               </div>
 
               <material-input
-                :value="link"
+                v-model="form.link"
                 form-class="mb-4"
                 placeholder="Ссылка на ваш сайт"
-                @input="setItemLink"
               />
               <material-input
-                :value="name"
+                v-model="form.name"
                 placeholder="Введите название компании"
-                @input="setItemName"
               />
               <material-input
-                :value="inn"
+                v-model="form.inn"
                 placeholder="ИНН"
-                @input="setItemInn"
               />
             </div>
             <div class="col-auto d-none d-md-block">
@@ -72,36 +69,24 @@
                 Цвет заливки логотипа
               </div>
               <no-ssr>
-                <sketch-picker :value="logoColor" @input="setItemLogoColor" />
+                <sketch-picker :value="form.logo.color" @input="setItemLogoColor" />
               </no-ssr>
             </div>
           </div>
           <material-textarea
-            :value="description"
+            v-model="form.description"
             name="link"
             placeholder="Почему к вам стоит прийти?"
             data-align="center"
             form-class="my-5"
-            @input="setItemDescription"
           />
           <social-links
-            :links="socials"
+            :links="form.socials"
             @add="addItemSocialsLink"
           />
         </div>
 
       </div>
-
-      <modal name="example">
-        <div class="basic-modal color-modal">
-          <div class="text-center pb-2">
-            Цвет заливки логотипа
-          </div>
-          <no-ssr>
-            <sketch-picker :value="logoColor" @input="setItemLogoColor" />
-          </no-ssr>
-        </div>
-      </modal>
 
       <div class="text-center mt-4">
         <div
@@ -111,7 +96,7 @@
           Сохранить
         </div>
         <div
-          v-if="item.id"
+          v-if="form.id"
           class="btn btn-outline-danger ml-2"
           @click="onDelete"
         >
@@ -124,15 +109,14 @@
 
 <script>
 import Form from 'vform'
-import { mapActions, mapGetters } from 'vuex'
 import FullSlider from '~/components/FullSlider'
 import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
 import SocialLinks from '~/components/Edit/SocialLinks'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
-import Addresses from '~/components/Addresses'
 import mixinSwal from '~/mixins/sweetalert2'
+import axios from 'axios'
 
 export default {
   components: {
@@ -140,7 +124,6 @@ export default {
     FullSlider,
     ThumbsFileInput,
     LogoFileInput,
-    Addresses,
     MaterialInput,
     SocialLinks
   },
@@ -156,48 +139,101 @@ export default {
   middleware: 'auth',
   data: () => ({
     isActiveClassColorBox: false,
+    images: [],
+    logo: '',
     form: new Form({
-      email: ''
+      id: '',
+      images: [
+        // {
+        //   src: '',
+        //   id: ''
+        // }
+      ],
+      link: '',
+      name: '',
+      inn: '',
+      description: '',
+      logo: {
+        color: '#FFFFFF',
+        src: ''
+        // id: 1
+      },
+      socials: []
     })
   }),
-  computed: {
-    ...mapGetters({
-      mainImages: 'organization/getItemMainImages',
-      item: 'organization/getItem',
-      link: 'organization/getItemLink',
-      name: 'organization/getItemName',
-      inn: 'organization/getItemInn',
-      description: 'organization/getItemDescription',
-      logoSrc: 'organization/getItemLogoSrc',
-      addresses: 'organization/getItemAddresses',
-      socials: 'organization/getItemSocials',
-      logoColor: 'organization/getItemLogoColor'
-    })
-  },
   methods: {
-    ...mapActions({
-      setItemMainImage: 'organization/setItemMainImage',
-      setItemLink: 'organization/setItemLink',
-      setItemName: 'organization/setItemName',
-      setItemInn: 'organization/setItemInn',
-      setItemDescription: 'organization/setItemDescription',
-      deleteItemMainImage: 'organization/deleteItemMainImage',
-      setItemLogoSrc: 'organization/setItemLogoSrc',
-      deleteItemLogo: 'organization/deleteItemLogo',
-      addItemSocialsLink: 'organization/addItemSocialsLink',
-      setItemLogoColor: 'organization/setItemLogoColor'
-    }),
+    addItemSocialsLink (link) {
+      this.form.socials.push(link)
+    },
+    setItemLogoColor (value) {
+      this.form.logo.color = `rgba(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${value.rgba.a})`
+    },
+    async setItemLogoSrc (image) {
+      this.logo = image
+      try {
+        let { data } = await axios.post('/1/organization/image', {
+          data: {
+            image
+          }
+        })
+        this.form.logo.src = data.src
+        this.form.logo.id = data.id
+      } catch (e) {
+
+      }
+    },
+    async setItemMainImage ({ image, index }) {
+      if (index !== undefined && this.images[index]) {
+        this.$set(this.images, index, {
+          src: image
+        })
+      } else {
+        this.images.push({
+          src: image
+        })
+      }
+      try {
+        let { data } = await axios.post('/1/organization/logo', {
+          data: {
+            image
+          }
+        })
+        if (index !== undefined && this.form.images[index]) {
+          this.$set(this.form.images, index, data)
+        } else {
+          this.form.images.push(data)
+        }
+      } catch (e) {
+
+      }
+    },
+    deleteItemLogo () {
+      this.form.logo.src = ''
+      this.$delete(this.form.logo, 'id')
+      this.logo = ''
+    },
+    deleteItemMainImage ({ index }) {
+      this.$delete(this.images, index)
+      this.$delete(this.form.images, index)
+    },
     async onDelete () {
+      if (!this.form.id) {
+        return
+      }
       let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
-        console.log(123)
+        try {
+          let { data } = await axios.delete('/1/organization/' + this.form.id)
+        } catch (e) {
+
+        }
       }
     },
     async onSave () {
       try {
-        const { data } = await this.form.post('/password/email')
+        const { data } = await this.form.post('/1/management/organizations')
 
-        console.log(data);
+        console.log(data)
       } catch (e) {
 
       }
