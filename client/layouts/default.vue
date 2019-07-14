@@ -3,7 +3,7 @@
     <div class="d-none1">
       <navbar/>
     </div>
-
+    <breadcrumbs/>
     <nuxt/>
 
     <app-footer/>

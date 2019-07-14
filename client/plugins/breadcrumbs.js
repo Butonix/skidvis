@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import VueBreadcrumbs from 'vue-breadcrumbs'
+import Breadcrumbs from '~/components/breadcrumb'
 
-Vue.use(VueBreadcrumbs)
+Vue.use(Breadcrumbs)

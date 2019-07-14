@@ -47,6 +47,9 @@ const routes = [
 
   { path: '/management',
     component: ManagementHome,
+    meta: {
+      breadcrumb: 'management'
+    },
     children: [
       { path: '',
         name: 'management.index',
@@ -54,24 +57,54 @@ const routes = [
       },
       { path: 'organizations',
         component: ManagementOrganizationsHome,
+        meta: {
+          breadcrumb: 'organizations'
+        },
         children: [
           { path: '',
             name: 'management.organizations.index',
             component: ManagementOrganizationsIndex
           },
-          { path: 'create', name: 'management.organizations.create', component: ManagementOrganizationsEdit },
+          { path: 'create',
+            name: 'management.organizations.create',
+            meta: {
+              breadcrumb: 'create'
+            },
+            component: ManagementOrganizationsEdit
+          },
           { path: 'products',
             component: ManagementOrganizationsProductsHome,
+            meta: {
+              breadcrumb: 'products'
+            },
             children: [
               { path: '',
                 name: 'management.organizations.products.index',
                 component: ManagementOrganizationsProductsIndex
               },
-              { path: 'create', name: 'management.organizations.products.create', component: ManagementOrganizationsProductsEdit },
-              { path: ':id/edit', name: 'management.organizations.products.edit', component: ManagementOrganizationsProductsEdit }
+              { path: 'create',
+                name: 'management.organizations.products.create',
+                meta: {
+                  breadcrumb: 'create'
+                },
+                component: ManagementOrganizationsProductsEdit
+              },
+              { path: ':id/edit',
+                name: 'management.organizations.products.edit',
+                meta: {
+                  breadcrumb: 'edit'
+                },
+                component: ManagementOrganizationsProductsEdit
+              }
             ]
           },
-          { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
+          { path: ':id/edit',
+            name: 'management.organizations.edit',
+            meta: {
+              breadcrumb: 'edit'
+            },
+            component: ManagementOrganizationsEdit
+          }
         ]
       }
     ]
