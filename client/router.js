@@ -4,6 +4,8 @@ import { scrollBehavior } from '~/utils'
 
 Vue.use(Router)
 
+
+
 const Home = () => import('~/pages/home').then(m => m.default || m)
 const Welcome = () => import('~/pages/welcome').then(m => m.default || m)
 

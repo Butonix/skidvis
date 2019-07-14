@@ -16,7 +16,7 @@
         <ul class="navbar-nav">
           <locale-dropdown/>
           <li class="nav-item">
-            <router-link :to="{ name: 'management.organizations.index' }" class="nav-link">
+            <router-link :to="{ name: 'management.organizations.index' }" class="nav-link" active-class="active">
               Все компании
             </router-link>
           </li>

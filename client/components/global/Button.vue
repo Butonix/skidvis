@@ -1,12 +1,12 @@
 <template>
   <button :type="nativeType" :disabled="loading" :class="{
-    [`btn-${type}`]: true,
-    'btn-block': block,
-    'btn-lg': large,
-    'btn-sm': small,
-    'btn-loading': loading
-  }" class="btn"
-  @click="$emit('click', $event)">
+            [`btn-${type}`]: true,
+            'btn-block': block,
+            'btn-lg': large,
+            'btn-sm': small,
+            'btn-loading': loading
+          }" class="btn"
+          @click="$emit('click', $event)">
     <slot/>
   </button>
 </template>

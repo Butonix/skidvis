@@ -72,7 +72,6 @@ module.exports = {
     '~plugins/fontawesome',
     '~plugins/tooltip',
     '~plugins/modal',
-    '~plugins/breadcrumbs',
     { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },
     { src: '~plugins/vue-quill-editor', ssr: false },
