@@ -2,25 +2,53 @@
   .social-links-edit{
     &__item{
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: flex-start;
       margin-bottom: 9px;
       position: relative;
-      &:before{
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
-        width: 20px;
-        background: linear-gradient(90deg, transparent, white);
-      }
       &__link{
-        display: block;
+        max-width: calc(100% - 3rem);
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        flex-grow: 1;
         color: #4D4D4D;
-        max-width: calc(100% - .5rem - #{rem(40)});
-        white-space: nowrap;
-        overflow: hidden;
+        a{
+          color: #4D4D4D!important;
+        }
+        &__input{
+          display: block;
+          flex-grow: 1;
+        }
+        input{
+          width: 100%;
+          color: #4D4D4D;
+        }
+        &__change, &__save, &__cancel, &__delete{
+          cursor: pointer;
+          padding: .5rem;
+        }
+        &__change{
+          &:hover{
+            color: $info;
+          }
+        }
+        &__save{
+          &:hover{
+            color: $success;
+          }
+        }
+        &__cancel{
+          &:hover{
+            color: $danger;
+          }
+        }
+        &__delete{
+          &:hover{
+            color: $danger;
+          }
+        }
       }
     }
   }

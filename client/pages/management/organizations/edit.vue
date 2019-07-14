@@ -82,6 +82,7 @@
           />
           <social-links
             :links="form.socials"
+            @change="changeSocialsLink"
             @add="addSocialsLink"
             @delete="deleteSocialsLink"
           />
@@ -145,10 +146,14 @@ export default {
     id: undefined,
     form: new Form({
       images: [
-        // {
-        //   src: '',
-        //   id: ''
-        // },
+        {
+          1200: {
+            src: '',
+            id: ''
+          },
+          src: '',
+          id: ''
+        },
         // {
         //   src: '',
         //   id: ''
@@ -165,13 +170,9 @@ export default {
       },
       socials: [
         // {
-        //   link: '',
-        //   type: ''
+        //   link: 'https://vk.com/123131213123',
+        //   type: 'vk'
         // },
-        // {
-        //   link: '',
-        //   type: ''
-        // }
       ]
     })
   }),
@@ -230,8 +231,12 @@ export default {
       this.$delete(this.images, index)
       this.$delete(this.form.images, index)
     },
-    deleteSocialsLink ({ index }) {
+    deleteSocialsLink (index) {
+      console.log(index);
       this.$delete(this.form.socials, index)
+    },
+    changeSocialsLink ({ index, value }) {
+      this.$set(this.form.socials, index, value)
     },
     async onDelete () {
       if (!this.id) {

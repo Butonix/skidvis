@@ -15,9 +15,9 @@
         <div
           class="col-md-6 col-lg-4 mb-4 mb-sm-5 text-right"
         >
-          <div class="btn btn-outline-primary btn-block btn-sm d-md-none">
+          <router-link :to="{ name: 'management.organizations.create' }" class="btn btn-outline-primary btn-block btn-sm d-md-none" >
             + Добавить организацию
-          </div>
+          </router-link>
           <router-link :to="{ name: 'management.organizations.create' }" class="card--empty d-none d-md-flex"/>
         </div>
         <div
@@ -31,7 +31,7 @@
                 <div
                   :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
                   class="embed-responsive-item">
-                  <img v-if="item.logo && item.logo.src" v-lazy="item.logo.src" src="/placeholders/loading_spinner.gif" :alt="item.name" :title="item.name">
+                  <img v-lazy="item.logo.src" v-if="item.logo && item.logo.src" :alt="item.name" :title="item.name" src="/placeholders/loading_spinner.gif">
                 </div>
               </div>
             </router-link>
@@ -46,12 +46,15 @@
               <p v-if="item.description" class="card-text pt-3" v-text="item.description"/>
             </div>
             <div class="card-buttons mt-auto text-nowrap">
-              <a href="/" class="card-btn card-btn--left text-muted btn btn-outline-secondary">
+              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-btn card-btn--left text-muted btn btn-outline-secondary" >
                 <fa icon="pencil-alt" class="mr-2"/>Редактировать
-              </a>
-              <a href="/" class="card-btn card-btn--right btn btn-outline-danger">
+              </router-link>
+              <div
+                class="card-btn card-btn--right btn btn-outline-danger"
+                @click="deleteHandle(item.id)"
+              >
                 Удалить
-              </a>
+              </div>
             </div>
           </div>
         </div>
@@ -74,11 +77,16 @@
 </template>
 
 <script>
+import mixinSwal from '~/mixins/sweetalert2'
+import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 export default {
+  mixins: [
+    mixinSwal
+  ],
   middleware: ['auth', 'management/organizations'],
   head () {
     return {
@@ -105,9 +113,20 @@ export default {
   methods: {
     ...mapActions({
       setSearch: 'organizations/setSearch',
-      setPage: 'organizations/setPage'
-    })
-
+      setPage: 'organizations/setPage',
+      fetchItems: 'organizations/fetchItems'
+    }),
+    async deleteHandle (id) {
+      let res = await this.$swal(this.configSwal().confirm)
+      if (res.value) {
+        try {
+          let { data } = await axios.delete('/1/organization/' + id)
+          this.fetchItems()
+        } catch (e) {
+          this.fetchItems()
+        }
+      }
+    }
   },
   mounted () {
     console.log('mounted', this.data)
