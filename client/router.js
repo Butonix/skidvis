@@ -21,8 +21,11 @@ const ManagementIndex = () => import('~/pages/management/index').then(m => m.def
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
 const ManagementOrganizationsIndex = () => import('~/pages/management/organizations/index').then(m => m.default || m)
-const ManagementOrganizationsShow = () => import('~/pages/management/organizations/show').then(m => m.default || m)
 const ManagementOrganizationsEdit = () => import('~/pages/management/organizations/edit').then(m => m.default || m)
+
+const ManagementOrganizationsProductsHome = () => import('~/pages/management/organizations/products/home').then(m => m.default || m)
+const ManagementOrganizationsProductsIndex = () => import('~/pages/management/organizations/products/index').then(m => m.default || m)
+const ManagementOrganizationsProductsEdit = () => import('~/pages/management/organizations/products/edit').then(m => m.default || m)
 
 const routes = [
   { path: '/', name: 'welcome', component: Welcome },
@@ -57,24 +60,23 @@ const routes = [
             component: ManagementOrganizationsIndex
           },
           { path: 'create', name: 'management.organizations.create', component: ManagementOrganizationsEdit },
-          { path: ':id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
+          { path: 'products',
+            component: ManagementOrganizationsProductsHome,
+            children: [
+              { path: '',
+                name: 'management.organizations.products.index',
+                component: ManagementOrganizationsProductsIndex
+              },
+              { path: 'create', name: 'management.organizations.products.create', component: ManagementOrganizationsProductsEdit },
+              { path: ':id/edit', name: 'management.organizations.products.edit', component: ManagementOrganizationsProductsEdit }
+            ]
+          },
           { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
         ]
       }
     ]
   }
 
-  // { path: '/management/organizations',
-  //   component: ManagementOrganizationsHome,
-  //   children: [
-  //     { path: '', name: 'management.organizations.index', component: ManagementOrganizationsIndex },
-  //     { path: ':id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
-  //     { path: ':id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
-  //   ]
-  // },
-  // { path: '/management/organizations', name: 'management.organizations.index', component: ManagementOrganizationsIndex },
-  // { path: '/management/organizations/:id', name: 'management.organizations.show', component: ManagementOrganizationsShow },
-  // { path: '/management/organizations/:id/edit', name: 'management.organizations.edit', component: ManagementOrganizationsEdit }
 ]
 
 export function createRouter () {
