@@ -35,7 +35,6 @@
                   </div>
                 </div>
               </router-link>
-              <div class="card-img-top__delete"><fa :icon="['far', 'trash-alt']"/> Удалить изображение</div>
             </div>
             <label class="card-body pb-2 pt-4">
               <textarea cols="30" rows="4" placeholder="Короткое описание">123123213</textarea>

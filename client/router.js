@@ -95,7 +95,7 @@ const routes = [
                 },
                 component: ManagementOrganizationsProductsEdit
               },
-              { path: ':id/edit',
+              { path: ':productId/edit',
                 name: 'management.organizations.products.edit',
                 meta: {
                   breadcrumb: 'Редактирование'
@@ -121,7 +121,7 @@ const routes = [
                 },
                 component: ManagementOrganizationsPointsEdit
               },
-              { path: ':id/edit',
+              { path: ':pintId/edit',
                 name: 'management.organizations.points.edit',
                 meta: {
                   breadcrumb: 'Редактирование'

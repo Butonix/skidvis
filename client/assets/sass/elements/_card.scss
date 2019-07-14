@@ -4,17 +4,6 @@
   box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
   .card-img-top{
     position: relative;
-    &__delete{
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      text-align: right;
-      font-size: 80%;
-      color: $danger;
-      cursor: pointer;
-      padding-right: 1rem;
-    }
     .embed-responsive{
       &:before{
         display: block;
