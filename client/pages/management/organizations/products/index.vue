@@ -2,7 +2,7 @@
   <div>
     <div class="container mb-5">
       <h5 class="mb-2">
-        Мои организации
+        Акции организации
       </h5>
       <search-input
         :value="search"
@@ -25,35 +25,32 @@
           :key="index"
           class="col-md-6 col-lg-4 mb-5"
         >
-          <div class="card w-100 h-100">
-            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block p-3">
-              <div class="embed-responsive embed-responsive-1by1">
-                <div
-                  :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
-                  class="embed-responsive-item">
-                  <img v-lazy="item.logo.src" v-if="item.logo && item.logo.src" :alt="item.name" :title="item.name" src="/placeholders/loading_spinner.gif">
+          <div class="card card--product w-100 h-100">
+            <div class="card-img-top">
+              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="d-block">
+                <div class="embed-responsive embed-responsive-1by1">
+                  <div
+                    class="embed-responsive-item">
+                    <img v-lazy="item.logo.src" v-if="item.logo && item.logo.src" :alt="item.name" :title="item.name" src="/placeholders/loading_spinner.gif">
+                  </div>
                 </div>
-              </div>
-            </router-link>
-            <div class="card-header border-0 py-0">
-              <div class="text-dark text-center" v-text="item.name"/>
-            </div>
-            <div class="card-body pb-3">
-              <div class="d-flex justify-content-around mb-4">
-                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Точки</span></a>
-                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Акции</span></a>
-              </div>
-              <p v-if="item.description" class="card-text pt-3" v-text="item.description"/>
-            </div>
-            <div class="card-buttons mt-auto text-nowrap">
-              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-btn card-btn--left text-muted btn btn-outline-secondary" >
-                <fa icon="pencil-alt" class="mr-2"/>Редактировать
               </router-link>
-              <div
-                class="card-btn card-btn--right btn btn-outline-danger"
-                @click="deleteHandle(item.id)"
-              >
-                Удалить
+              <div class="card-img-top__delete"><fa :icon="['far', 'trash-alt']"/> Удалить изображение</div>
+            </div>
+            <label class="card-body pb-2 pt-4">
+              <textarea cols="30" rows="4" placeholder="Короткое описание">123123213</textarea>
+            </label>
+            <div class="card-buttons mt-auto text-nowrap">
+              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
+                <fa icon="pencil-alt" class="mr-2"/>Редактировать страницу
+              </router-link>
+              <div class="card-buttons__controls">
+                <div class="card-buttons__controls__left"><fa :icon="['fas', 'chevron-left']"/></div>
+                <div class="card-buttons__controls__delete">
+                  <div class="card-buttons__controls__chevron"/>
+                  <fa :icon="['far', 'trash-alt']"/> Удалить акцию
+                </div>
+                <div class="card-buttons__controls__right"><fa :icon="['fas', 'chevron-right']"/></div>
               </div>
             </div>
           </div>
@@ -92,7 +89,7 @@ export default {
     return {
       title: 'Мои организации',
       bodyAttrs: {
-        class: 'theme-edit'
+        class: 'theme-default'
       }
     }
   },

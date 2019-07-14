@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // import { } from '@fortawesome/fontawesome-free-regular/shakable.es'
 
 import {
-  faUser, faLock, faSignOutAlt, faCog, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faCheck, faTimes
+  faUser, faLock, faSignOutAlt, faCog, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faCheck, faTimes,
+  faChevronLeft, faChevronRight
 } from '@fortawesome/fontawesome-free-solid/shakable.es'
 
 import {
@@ -18,8 +19,8 @@ import {
 } from '@fortawesome/fontawesome-free-brands/shakable.es'
 
 library.add(
-  faUser, faLock, faSignOutAlt, faCog, faGithub, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faVk
-  , faOdnoklassniki, faFacebookF, faInstagram, faCheck, faTimes, faTrashAlt
+  faUser, faLock, faSignOutAlt, faCog, faGithub, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faVk,
+  faOdnoklassniki, faFacebookF, faInstagram, faCheck, faTimes, faTrashAlt, faChevronLeft, faChevronRight
 )
 
 fontawesome.config.autoAddCss = false

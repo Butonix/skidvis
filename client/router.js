@@ -54,7 +54,7 @@ const routes = [
   { path: '/management',
     component: ManagementHome,
     meta: {
-      breadcrumb: 'management'
+      breadcrumb: 'Управление'
     },
     children: [
       { path: '',
@@ -64,7 +64,7 @@ const routes = [
       { path: 'organizations',
         component: ManagementOrganizationsHome,
         meta: {
-          breadcrumb: 'organizations'
+          breadcrumb: 'Организации'
         },
         children: [
           { path: '',
@@ -74,14 +74,14 @@ const routes = [
           { path: 'create',
             name: 'management.organizations.create',
             meta: {
-              breadcrumb: 'create'
+              breadcrumb: 'Создание'
             },
             component: ManagementOrganizationsEdit
           },
           { path: ':id/products',
             component: ManagementOrganizationsProductsHome,
             meta: {
-              breadcrumb: 'products'
+              breadcrumb: 'Акции'
             },
             children: [
               { path: '',
@@ -91,14 +91,14 @@ const routes = [
               { path: 'create',
                 name: 'management.organizations.products.create',
                 meta: {
-                  breadcrumb: 'create'
+                  breadcrumb: 'Создание'
                 },
                 component: ManagementOrganizationsProductsEdit
               },
               { path: ':id/edit',
                 name: 'management.organizations.products.edit',
                 meta: {
-                  breadcrumb: 'edit'
+                  breadcrumb: 'Редактирование'
                 },
                 component: ManagementOrganizationsProductsEdit
               }
@@ -107,7 +107,7 @@ const routes = [
           { path: ':id/points',
             component: ManagementOrganizationsPointsHome,
             meta: {
-              breadcrumb: 'points'
+              breadcrumb: 'Точки'
             },
             children: [
               { path: '',
@@ -117,14 +117,14 @@ const routes = [
               { path: 'create',
                 name: 'management.organizations.points.create',
                 meta: {
-                  breadcrumb: 'create'
+                  breadcrumb: 'Создание'
                 },
                 component: ManagementOrganizationsPointsEdit
               },
               { path: ':id/edit',
                 name: 'management.organizations.points.edit',
                 meta: {
-                  breadcrumb: 'edit'
+                  breadcrumb: 'Редактирование'
                 },
                 component: ManagementOrganizationsPointsEdit
               }
@@ -133,7 +133,7 @@ const routes = [
           { path: ':id/edit',
             name: 'management.organizations.edit',
             meta: {
-              breadcrumb: 'edit'
+              breadcrumb: 'Редактирование'
             },
             component: ManagementOrganizationsEdit
           }
