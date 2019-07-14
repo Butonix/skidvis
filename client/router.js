@@ -29,6 +29,10 @@ const ManagementOrganizationsProductsHome = () => import('~/pages/management/org
 const ManagementOrganizationsProductsIndex = () => import('~/pages/management/organizations/products/index').then(m => m.default || m)
 const ManagementOrganizationsProductsEdit = () => import('~/pages/management/organizations/products/edit').then(m => m.default || m)
 
+const ManagementOrganizationsPointsHome = () => import('~/pages/management/organizations/points/home').then(m => m.default || m)
+const ManagementOrganizationsPointsIndex = () => import('~/pages/management/organizations/points/index').then(m => m.default || m)
+const ManagementOrganizationsPointsEdit = () => import('~/pages/management/organizations/points/edit').then(m => m.default || m)
+
 const routes = [
   { path: '/', name: 'welcome', component: Welcome },
   { path: '/home', name: 'home', component: Home },
@@ -74,7 +78,7 @@ const routes = [
             },
             component: ManagementOrganizationsEdit
           },
-          { path: 'products',
+          { path: ':id/products',
             component: ManagementOrganizationsProductsHome,
             meta: {
               breadcrumb: 'products'
@@ -97,6 +101,32 @@ const routes = [
                   breadcrumb: 'edit'
                 },
                 component: ManagementOrganizationsProductsEdit
+              }
+            ]
+          },
+          { path: ':id/points',
+            component: ManagementOrganizationsPointsHome,
+            meta: {
+              breadcrumb: 'points'
+            },
+            children: [
+              { path: '',
+                name: 'management.organizations.points.index',
+                component: ManagementOrganizationsPointsIndex
+              },
+              { path: 'create',
+                name: 'management.organizations.points.create',
+                meta: {
+                  breadcrumb: 'create'
+                },
+                component: ManagementOrganizationsPointsEdit
+              },
+              { path: ':id/edit',
+                name: 'management.organizations.points.edit',
+                meta: {
+                  breadcrumb: 'edit'
+                },
+                component: ManagementOrganizationsPointsEdit
               }
             ]
           },

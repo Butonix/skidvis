@@ -40,12 +40,8 @@
             </div>
             <div class="card-body pb-3">
               <div class="d-flex justify-content-around mb-4">
-                <router-link :to="{ name: 'management.organizations.points.index', params: { id: item.id } }" class="btn btn-gray btn-sm px-4" >
-                  <span class="px-2">Точки</span>
-                </router-link>
-                <router-link :to="{ name: 'management.organizations.products.index', params: { id: item.id } }" class="btn btn-gray btn-sm px-4" >
-                  <span class="px-2">Акции</span>
-                </router-link>
+                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Точки</span></a>
+                <a href="#" class="btn btn-gray btn-sm px-4"><span class="px-2">Акции</span></a>
               </div>
               <p v-if="item.description" class="card-text pt-3" v-text="item.description"/>
             </div>
