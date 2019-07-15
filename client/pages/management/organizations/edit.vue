@@ -4,75 +4,83 @@
     <full-slider
       :images="images"
     />
-    <div class="container">
-      <thumbs-file-input
-        :images="images"
-        @change="setMainImage"
-        @delete="deleteMainImage"
-      />
-      <div class="row justify-content-center">
-        <div class="col-lg-8 organizations-edit__editor">
+    <div class="overflow-hidden">
+      <div class="container">
+        <thumbs-file-input
+          :images="images"
+          @change="setMainImage"
+          @delete="deleteMainImage"
+        />
+        <div class="row justify-content-center">
+          <div class="col-lg-8 organizations-edit__editor">
 
-          <div class="row mt-xl-3">
-            <div class="col">
-              <div class="row">
-                <div class="col-sm">
-                  <div class="organizations-edit__logo">
-                    <div class="text-center small pb-2">
-                      Логотип организации
+            <div class="row mt-xl-3">
+              <div class="col">
+
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="organizations-edit__logo">
+                      <div class="text-center small pb-2">
+                        Логотип организации
+                      </div>
+                      <div
+                        :style="{color:form.logo.color}"
+                        class="organizations-edit__logo-file-input">
+                        <logo-file-input
+                          :src="logo"
+                          @change="setLogoSrc"
+                          @delete="deleteLogo"
+                        />
+                      </div>
                     </div>
-                    <div
-                      :style="{color:form.logo.color}"
-                      class="organizations-edit__logo-file-input">
-                      <logo-file-input
-                        :src="logo"
-                        @change="setLogoSrc"
-                        @delete="deleteLogo"
+                  </div>
+                  <div class="col-sm-auto d-flex d-md-none flex-column">
+                    <div class="text-center small pb-2 pt-4 pt-sm-0">
+                      Цвет заливки логотипа
+                    </div>
+                    <div class="color-box__wrapper">
+                      <div
+                        :style="{backgroundColor: form.logo.color}"
+                        :class="{'active':isActiveClassColorBox}"
+                        class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
                       />
+                      <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
+                      <no-ssr>
+                        <sketch-picker :value="form.logo.color" class="mx-auto" @input="setLogoColor" />
+                      </no-ssr>
                     </div>
                   </div>
                 </div>
-                <div class="col-sm-auto d-flex d-md-none flex-column">
-                  <div class="text-center small pb-2 pt-4 pt-sm-0">
-                    Цвет заливки логотипа
-                  </div>
-                  <div class="color-box__wrapper">
-                    <div
-                      :style="{backgroundColor: form.logo.color}"
-                      :class="{'active':isActiveClassColorBox}"
-                      class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
-                    />
-                    <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
-                    <no-ssr>
-                      <sketch-picker :value="form.logo.color" class="mx-auto" @input="setLogoColor" />
-                    </no-ssr>
-                  </div>
+                <material-input
+                  v-model="form.link"
+                  form-class="mb-4"
+                  placeholder="Ссылка на ваш сайт"
+                />
+                <material-input
+                  v-model="form.name"
+                  placeholder="Введите название компании"
+                />
+                <material-input
+                  v-model="form.inn"
+                  placeholder="ИНН"
+                />
+              </div>
+              <div class="col-auto d-none d-md-block">
+                <div class="text-center small pb-2">
+                  Цвет заливки логотипа
                 </div>
+                <no-ssr>
+                  <sketch-picker :value="form.logo.color" @input="setLogoColor" />
+                </no-ssr>
               </div>
-
-              <material-input
-                v-model="form.link"
-                form-class="mb-4"
-                placeholder="Ссылка на ваш сайт"
-              />
-              <material-input
-                v-model="form.name"
-                placeholder="Введите название компании"
-              />
-              <material-input
-                v-model="form.inn"
-                placeholder="ИНН"
-              />
-            </div>
-            <div class="col-auto d-none d-md-block">
-              <div class="text-center small pb-2">
-                Цвет заливки логотипа
-              </div>
-              <no-ssr>
-                <sketch-picker :value="form.logo.color" @input="setLogoColor" />
-              </no-ssr>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 organizations-edit__editor">
           <material-textarea
             v-model="form.description"
             name="link"
@@ -91,10 +99,10 @@
       <div class="row">
         <div class="col-lg-6 mx-auto">
           <div class="row mt-5 mb-4">
-            <div class="col-lg-4 col-xl-3">
+            <div class="col-4 col-lg-4 col-xl-3">
               Часовой пояс
             </div>
-            <div class="col-lg-6 col-xl-6">
+            <div class="col-6 col-lg-6 col-xl-6">
               <v-select :clearable="false" v-model="selected" :options="[{label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1'}, {label: '13:23, Москва, Санкт-Петерб123у', value: '2'}, {label: '13:23, Москва, Санкт-Петербу', value: '3'}]"/>
             </div>
           </div>

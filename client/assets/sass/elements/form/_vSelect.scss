@@ -27,7 +27,9 @@
     }
   }
   .vs__dropdown-menu{
+    min-width: 110px;
     &__wrapper{
+      min-width: 110px;
       overflow: hidden;
       padding: 3px 0;
       background: #FFFFFF;
