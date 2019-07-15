@@ -25,32 +25,24 @@
     }
     &__label{
       position: absolute;
-      z-index: 1;
-      top: 0;
-      left: 0;
+      z-index: 10;
       height: rem(37);
-      border-radius: 15px 0;
+      border-radius: 0 0 15px 0;
       background: #FF2E00;
-      color: transparent;
       padding: 0 17px;
-      min-width: 50px;
+      min-width: 65px;
       &__input{
-        position: absolute;
         left: 15px;
         right: 15px;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         input{
           color: white;
-          width: 100%;
-          line-height: 1;
-          border: 0;
-          padding: 0;
           background: transparent;
-          outline: none!important;
+          $color: white;
+          &::-moz-placeholder { color: $color; }
+          &::-webkit-input-placeholder { color: $color; }
+          &:-ms-input-placeholder { color: $color; }
+          &::-ms-input-placeholder { color: $color; }
+          &::placeholder { color: $color; }
         }
       }
     }

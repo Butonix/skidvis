@@ -16,7 +16,7 @@
           class="col-md-6 col-lg-4 mb-4 mb-sm-5 text-right"
         >
           <router-link :to="{ name: 'management.organizations.create' }" class="btn btn-outline-primary btn-block btn-sm d-md-none" >
-            + Добавить организацию
+            + Добавить акцию
           </router-link>
           <router-link :to="{ name: 'management.organizations.create' }" class="card--empty d-none d-md-flex"/>
         </div>
@@ -28,15 +28,14 @@
           <div class="card card--product w-100 h-100">
             <div class="card-img-top">
               <dynamic-label-input
+                placeholder="1%"
+                class-wrapper="card-img-top__label"
+                class-box="card-img-top__label__input"
+                class-input="ff-mplus-1p"
               />
-              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="d-block">
-                <div class="embed-responsive embed-responsive-1by1">
-                  <div
-                    class="embed-responsive-item">
-                    <img v-lazy="item.logo.src" v-if="item.logo && item.logo.src" :alt="item.name" :title="item.name" src="/placeholders/loading_spinner.gif">
-                  </div>
-                </div>
-              </router-link>
+              <thumb-product
+
+              />
             </div>
             <label class="card-body pb-2 pt-4">
               <textarea cols="30" rows="4" placeholder="Короткое описание">123123213</textarea>
@@ -81,10 +80,12 @@ import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
+import ThumbProduct from '~/components/Edit/ThumbProduct.vue'
 
 export default {
   components: {
     SearchInput,
+    ThumbProduct,
     DynamicLabelInput,
     Paginate
   },

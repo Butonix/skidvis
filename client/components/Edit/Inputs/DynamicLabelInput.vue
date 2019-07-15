@@ -1,14 +1,20 @@
 <template>
   <div
-    class="card-img-top__label"
+    :class="classWrapper"
+    class="dynamic-input"
   >
     {{ value }}
-    <div class="card-img-top__label__input">
+    <div
+      :class="classBox"
+      class="dynamic-input__box"
+    >
       <input
         :name="name"
+        :value="value"
+        :class="classInput"
         :placeholder="placeholder"
-        v-model="value"
         type="text"
+        @input="$emit('input', $event.target.value)"
       >
     </div>
   </div>
@@ -29,8 +35,20 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    classWrapper: {
+      type: String,
+      default: ''
+    },
+    classBox: {
+      type: String,
+      default: ''
+    },
+    classInput: {
+      type: String,
+      default: ''
     }
-  },
+  }
 }
 </script>
 

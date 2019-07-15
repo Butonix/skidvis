@@ -3,22 +3,22 @@
     <div class="top-right links">
       <template v-if="authenticated">
         <router-link :to="{ name: 'home' }">
-          {{ $t('home') }}
+          Главная
         </router-link>
       </template>
       <template v-else>
         <router-link :to="{ name: 'login' }">
-          {{ $t('login') }}
+          Вход
         </router-link>
         <router-link :to="{ name: 'register' }">
-          {{ $t('register') }}
+          Регистрация
         </router-link>
       </template>
     </div>
 
     <div class="text-center">
       <div class="title mb-4">
-        {{ title }}
+        <img src="/img/logo.svg" alt="logo">
       </div>
     </div>
   </div>
