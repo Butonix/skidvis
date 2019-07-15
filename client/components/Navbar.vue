@@ -5,16 +5,8 @@
         {{ appName }}
       </router-link>
 
-      <button :aria-label="$t('toggle_navigation')" class="navbar-toggler" type="button"
-              data-toggle="collapse" data-target="#navbarToggler"
-              aria-controls="navbarToggler" aria-expanded="false"
-      >
-        <span class="navbar-toggler-icon"/>
-      </button>
-
       <div id="navbarToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav">
-          <locale-dropdown/>
           <li class="nav-item">
             <router-link :to="{ name: 'management.organizations.index' }" class="nav-link" active-class="active">
               Все компании
@@ -34,7 +26,7 @@
             <li class="nav-item">
               <a class="nav-link pl-3" href="#" @click.prevent="logout">
                 <fa icon="sign-out-alt" fixed-width/>
-                {{ $t('logout') }}
+                Выход
               </a>
             </li>
           </template>
@@ -42,12 +34,12 @@
           <template v-else>
             <li class="nav-item">
               <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">
-                {{ $t('login') }}
+                Вход
               </router-link>
             </li>
             <li class="nav-item">
               <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">
-                {{ $t('register') }}
+                Регистрация
               </router-link>
             </li>
           </template>

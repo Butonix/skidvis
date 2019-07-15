@@ -27,6 +27,8 @@
         >
           <div class="card card--product w-100 h-100">
             <div class="card-img-top">
+              <dynamic-label-input
+              />
               <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="d-block">
                 <div class="embed-responsive embed-responsive-1by1">
                   <div
@@ -77,9 +79,15 @@ import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
+import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 export default {
+  components: {
+    SearchInput,
+    DynamicLabelInput,
+    Paginate
+  },
   mixins: [
     mixinSwal
   ],
@@ -91,10 +99,6 @@ export default {
         class: 'theme-default'
       }
     }
-  },
-  components: {
-    SearchInput,
-    Paginate
   },
   data: () => ({
   }),
