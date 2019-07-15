@@ -1,5 +1,6 @@
 @import "materialInput";
 @import "dynamicInput";
+@import "vSelect";
 
 .login-col{
   flex: 0 0 100%;
@@ -13,6 +14,7 @@
   border-radius: 5px;
 }
 .custom-checkbox .custom-control-label{
+  min-height: 1.2rem;
   &::before, &::after{
     width: 1.75rem;
     height: 1.75rem;

@@ -25,7 +25,7 @@
         }
       }
     }
-    &:focus, &:valid{
+    &:focus, &:valid, &[readonly]{
       ~{
         label{
           top: -1.6rem;
@@ -130,7 +130,7 @@
           }
         }
       }
-      &:focus, &:valid{
+      &:focus, &:valid, &[readonly]{
         ~{
           label{
             top: -1rem;

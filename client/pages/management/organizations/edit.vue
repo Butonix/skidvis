@@ -1,5 +1,5 @@
 <template>
-  <form class="organizations-edit overflow-hidden"
+  <form class="organizations-edit"
         @submit.prevent @keydown="form.onKeydown($event)">
     <full-slider
       :images="images"
@@ -87,10 +87,42 @@
             @delete="deleteSocialsLink"
           />
         </div>
-
       </div>
-
-      <div class="text-center mt-4">
+      <div class="row">
+        <div class="col-lg-6 mx-auto">
+          <div class="row mt-5 mb-4">
+            <div class="col-lg-4 col-xl-3">
+              Часовой пояс
+            </div>
+            <div class="col-lg-6 col-xl-6">
+              <v-select :clearable="false" v-model="selected" :options="[{label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1'}, {label: '13:23, Москва, Санкт-Петерб123у', value: '2'}, {label: '13:23, Москва, Санкт-Петербу', value: '3'}]"/>
+            </div>
+          </div>
+          <div v-for="(value, index) in form.operationMode" class="row">
+            <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
+              {{ operationMode.data[index].label }}
+            </div>
+            <div class="col-lg-6 col-xl-7 py-1">
+              <v-select
+                :clearable="false"
+                v-model="value.start"
+                :options="operationMode.interval"
+                class="v-select--time mr-2"
+              />
+              <v-select
+                :clearable="false"
+                v-model="value.end"
+                :options="operationMode.interval"
+                class="v-select--time mr-5"
+              />
+              <div class="d-inline-block">
+                <checkbox v-model="value.active" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-5">
         <div
           class="btn btn-outline-primary"
           @click="onSave"
@@ -119,6 +151,7 @@ import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
 import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
+import vSelect from 'vue-select'
 
 export default {
   components: {
@@ -127,6 +160,7 @@ export default {
     ThumbsFileInput,
     LogoFileInput,
     MaterialInput,
+    vSelect,
     SocialLinks
   },
   mixins: [mixinSwal],
@@ -140,11 +174,53 @@ export default {
   },
   middleware: 'auth',
   data: () => ({
+    selected: { label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1' },
+    yourValue: '',
     isActiveClassColorBox: false,
+    operationMode: {
+      interval: [],
+      default: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      data: {
+        mon: {
+          label: 'Понедельник'
+        },
+        tue: {
+          label: 'Вторник'
+        },
+        web: {
+          label: 'Среда'
+        },
+        thu: {
+          label: 'Четверг'
+        },
+        fri: {
+          label: 'Пятница'
+        },
+        sat: {
+          label: 'Суббота'
+        },
+        sun: {
+          label: 'Воскресенье'
+        }
+      }
+    },
     images: [],
     logo: '',
     id: undefined,
     form: new Form({
+      operationMode: {
+        mon: null,
+        tue: null,
+        web: null,
+        thu: null,
+        fri: null,
+        sat: null,
+        sun: null
+      },
       images: [
         {
           1200: {
@@ -153,7 +229,7 @@ export default {
           },
           src: '',
           id: ''
-        },
+        }
         // {
         //   src: '',
         //   id: ''
@@ -165,7 +241,7 @@ export default {
       description: '',
       logo: {
         color: '#FFFFFF',
-        src: '',
+        src: ''
         // id: 1
       },
       socials: [
@@ -176,6 +252,23 @@ export default {
       ]
     })
   }),
+
+  created () {
+    for (let i = 0; i < 24; i++) {
+      let t = (i < 10) ? '0' + i : i
+      this.operationMode.interval.push(t + ':00')
+      this.operationMode.interval.push(t + ':10')
+      this.operationMode.interval.push(t + ':20')
+      this.operationMode.interval.push(t + ':30')
+      this.operationMode.interval.push(t + ':40')
+      this.operationMode.interval.push(t + ':50')
+    }
+    for (let i in this.form.operationMode) {
+      if (!this.form.operationMode[i]) {
+        this.form.operationMode[i] = { ...this.operationMode.default }
+      }
+    }
+  },
   methods: {
     addSocialsLink (link) {
       this.form.socials.push(link)
@@ -232,7 +325,7 @@ export default {
       this.$delete(this.form.images, index)
     },
     deleteSocialsLink (index) {
-      console.log(index);
+      console.log(index)
       this.$delete(this.form.socials, index)
     },
     changeSocialsLink ({ index, value }) {

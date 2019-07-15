@@ -1,22 +1,22 @@
-html{
-  position: relative;
-  min-height: 100%;
-}
 $height-footer-sm: 400;
 $height-footer: 400;
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: #{$height-footer}px;
-  @include media-breakpoint-up(sm)
-  {
-    margin-bottom: rem($height-footer-sm);
-  }
+footer, header, nav{
+  flex-shrink: 0;
+}
+main{
+  flex: 1 0 auto;
+}
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */

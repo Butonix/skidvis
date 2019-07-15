@@ -14,6 +14,7 @@
         :class="classInput"
         :placeholder="placeholder"
         type="text"
+        required
         @input="$emit('input', $event.target.value)"
       >
     </div>

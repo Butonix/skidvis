@@ -75,6 +75,7 @@ export default {
     }
   },
   data: () => ({
+    id: '',
     typesInput: {
       '': '',
       'inline': 'material-input--inline'
@@ -82,10 +83,7 @@ export default {
   }),
   computed: {
     autocomplete () {
-      return (this.type === 'password')?'new-password':'off'
-    },
-    id () {
-      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
+      return (this.type === 'password') ? 'new-password' : 'off'
     },
     formClass_ () {
       let typeClass = this.typesInput[this.typeInput]
@@ -110,6 +108,7 @@ export default {
     }
   },
   mounted () {
+    this.id = ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     if (this.autofocus && this.$refs.materialInput) {
       this.$refs.materialInput.focus()
     }

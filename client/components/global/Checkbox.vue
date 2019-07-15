@@ -3,11 +3,11 @@
     <input
       :name="name"
       :checked="internalValue"
-      :id="id || name"
+      :id="id"
       type="checkbox"
       class="custom-control-input"
       @click="handleClick">
-    <label :for="id || name" class="custom-control-label my-auto">
+    <label :for="id" class="custom-control-label my-auto">
       <slot/>
     </label>
   </div>
@@ -18,13 +18,13 @@ export default {
   name: 'Checkbox',
 
   props: {
-    id: { type: String, default: null },
     name: { type: String, default: 'checkbox' },
     value: { type: Boolean, default: false },
     checked: { type: Boolean, default: false }
   },
 
   data: () => ({
+    id: 1,
     internalValue: false
   }),
 
@@ -43,13 +43,15 @@ export default {
       }
     }
   },
-
   created () {
     this.internalValue = this.value
 
     if ('checked' in this.$options.propsData) {
       this.internalValue = this.checked
     }
+  },
+  mounted () {
+    this.id = ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
   },
 
   methods: {

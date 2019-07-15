@@ -70,11 +70,11 @@ module.exports = {
     '~plugins/vform',
     '~plugins/axios',
     '~plugins/fontawesome',
-    '~plugins/tooltip',
+    // '~plugins/tooltip',
     '~plugins/modal',
     { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },
-    { src: '~plugins/vue-quill-editor', ssr: false },
+    // { src: '~plugins/vue-quill-editor', ssr: false },
     { src: '~plugins/vue-picture-input', ssr: false }
     // '~plugins/nuxt-client-init',
     // { src: '~plugins/bootstrap', ssr: false }

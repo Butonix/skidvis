@@ -1,3 +1,14 @@
+@keyframes blk{
+  50%{
+    border-left-color: transparent;
+  }
+  51%{
+    border-left-color: white;
+  }
+  100%{
+    border-left-color: white;
+  }
+}
 .dynamic-input{
   position: relative;
   z-index: 1;
@@ -10,7 +21,7 @@
   min-width: 65px;
   &__box{
     position: absolute;
-    left: 15px;
+    left: 13px;
     right: 15px;
     top: 0;
     bottom: 0;
@@ -25,6 +36,11 @@
       padding: 0;
       background: transparent;
       outline: none!important;
+      border-left: 2px solid transparent;
+      &:not(:focus):invalid{
+        animation: blk 1s linear infinite;
+      }
+
     }
   }
 }

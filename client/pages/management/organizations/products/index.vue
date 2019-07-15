@@ -28,7 +28,6 @@
           <div class="card card--product w-100 h-100">
             <div class="card-img-top">
               <dynamic-label-input
-                placeholder="1%"
                 class-wrapper="card-img-top__label"
                 class-box="card-img-top__label__input"
                 class-input="ff-mplus-1p"
@@ -74,6 +73,7 @@
 </template>
 
 <script>
+
 import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'

@@ -88,15 +88,13 @@ export default {
     }
   },
   data: () => ({
+    id: '',
     typesInput: {
       '': '',
       'inline': 'material-input--inline'
     }
   }),
   computed: {
-    id () {
-      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
-    },
     formClass_ () {
       let typeClass = this.typesInput[this.typeInput]
       let formClass = this.formClass
@@ -118,6 +116,7 @@ export default {
     }
   },
   mounted () {
+    this.id = ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     if (this.autofocus && this.$refs.materialInput) {
       this.$refs.materialInput.focus()
     }
@@ -127,4 +126,3 @@ export default {
 
 <style>
 </style>
-

@@ -1,10 +1,10 @@
 <template>
   <div class="layout">
-    <div class="d-none1">
+    <main>
       <navbar/>
-    </div>
-    <breadcrumbs/>
-    <nuxt/>
+      <breadcrumbs/>
+      <nuxt/>
+    </main>
 
     <app-footer/>
   </div>

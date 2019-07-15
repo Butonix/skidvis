@@ -1,15 +1,21 @@
 <template>
   <div class="container pt-3">
-    <form class="row"
+    <div v-if="status === 'ok'" class="text-center">
+      <div class="alert-success py-4 mb-3">
+        Пароль успешно изменен
+      </div>
+      <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
+        <&nbsp;Вход
+      </router-link>
+    </div>
+    <form v-else class="row"
           @submit.prevent @keydown="form.onKeydown($event)">
       <div class="col-12 text-center">
         <h5>
           Восстановление пароля
         </h5>
         <div class="font-weight-light mb-3">
-          Впишите адрес эл. почты, указанный при регистрации
-          <br class="d-none d-md-block">
-          и мы отправим новый пароль
+          Укажите новый пароль
         </div>
       </div>
       <div class="custom-col login-col mx-auto">
@@ -28,14 +34,16 @@
             v-model="form.password"
             :form="form"
             field="password"
+            type="password"
             type-input="inline"
             placeholder="Пароль"
             form-class="mb-4"
           />
           <material-input
-            v-model="form.confirm_password"
+            v-model="form.password_confirmation"
             :form="form"
             field="confirm_password"
+            type="password"
             type-input="inline"
             placeholder="Повторите пароль"
             form-class="mb-4"
@@ -90,11 +98,15 @@ export default {
 
   methods: {
     async reset () {
-      const { data } = await this.form.post('/password/reset')
+      try {
+        const { data } = await this.form.post('/password/reset')
 
-      this.status = data.status
+        this.status = String(data.status).toLowerCase()
 
-      this.form.reset()
+        this.form.reset()
+      } catch (e) {
+
+      }
     }
   }
 }

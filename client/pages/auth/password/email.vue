@@ -17,7 +17,7 @@
         <div class="font-weight-light mb-3">
           Впишите адрес эл. почты, указанный при регистрации
           <br class="d-none d-md-block">
-          и мы отправим новый пароль
+          и мы отправим ссылку на изменение пароля
         </div>
       </div>
       <div class="custom-col login-col mx-auto">
