@@ -124,7 +124,7 @@ export default {
       let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
         try {
-          let { data } = await axios.delete('/1/organization/' + id)
+          let { data } = await axios.delete('organization/' + id)
           this.fetchItems()
         } catch (e) {
           this.fetchItems()

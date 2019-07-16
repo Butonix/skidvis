@@ -186,7 +186,7 @@ export default {
     async setLogoSrc (image) {
       this.logo = image
       try {
-        let { data } = await axios.post('/1/organization/image', {
+        let { data } = await axios.post('organization/image', {
           data: {
             image
           }
@@ -208,7 +208,7 @@ export default {
         })
       }
       try {
-        let { data } = await axios.post('/1/organization/logo', {
+        let { data } = await axios.post('organization/logo', {
           data: {
             image
           }
@@ -245,7 +245,7 @@ export default {
       let res = await this.$swal(this.configSwal().confirm)
       if (res.value) {
         try {
-          let { data } = await axios.delete('/1/organization/' + this.id)
+          let { data } = await axios.delete('organization/' + this.id)
         } catch (e) {
 
         }
@@ -253,7 +253,7 @@ export default {
     },
     async onSave () {
       try {
-        const { data } = await this.form.post('/1/management/organizations')
+        const { data } = await this.form.post('management/organizations')
 
         console.log(data)
       } catch (e) {

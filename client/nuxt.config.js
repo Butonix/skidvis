@@ -23,8 +23,8 @@ module.exports = {
     //   cert: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/cert.pem', 'utf8'),
     //   ca: fs.readFileSync('/etc/letsencrypt/live/skidvis.ru/chain.pem', 'utf8')
     // },
-    port: 3000, // default: 3000
-    host: '5.45.80.118' // default: localhost
+    port: process.env.APP_PORT || process.env.APP_PORT_DEV || 3000, // default: 3000
+    host: process.env.APP_HOST || process.env.APP_HOST_DEV || 'localhost' // default: localhost
   },
   env: {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
@@ -32,6 +32,7 @@ module.exports = {
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
     appLocale: process.env.APP_LOCALE || 'ru',
     daDataApi: process.env.DADATA_API || '',
+    apiVerId: process.env.API_VER_ID || 1,
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
 

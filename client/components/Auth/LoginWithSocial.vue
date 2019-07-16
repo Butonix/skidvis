@@ -2,17 +2,17 @@
   <div class="text-center mb-5">
     <social
       type="vk"
-      class-box="social-icon-lg mx-2"
+      class-box="social-icon-lg mx-2 cursor-pointer"
       @click="login('vkontakte')"
     />
     <social
       type="google"
-      class-box="social-icon-lg mx-2"
+      class-box="social-icon-lg mx-2 cursor-pointer"
       @click="login('google')"
     />
     <social
       type="facebook"
-      class-box="social-icon-lg mx-2"
+      class-box="social-icon-lg mx-2 cursor-pointer"
       @click="login('facebook')"
     />
   </div>
@@ -63,7 +63,6 @@ export default {
         const url = await this.$store.dispatch('auth/fetchOauthUrl', {
           provider: type
         })
-        console.log('login url', url)
 
         newWindow.location.href = url
       } catch (e) {
@@ -75,9 +74,6 @@ export default {
      * @param {MessageEvent} e
      */
     onMessage (e) {
-      console.log('onMessage', e.data.token)
-      console.log('onMessage', e.origin)
-      console.log('onMessage', process.env.apiOrigin)
       if (e.origin !== process.env.apiOrigin) {
         return
       }

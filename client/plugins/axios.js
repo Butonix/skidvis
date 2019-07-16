@@ -4,7 +4,7 @@ import swal from 'sweetalert2'
 // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 export default ({ app, store, redirect }) => {
-  axios.defaults.baseURL = process.env.apiUrl
+  axios.defaults.baseURL = process.env.apiUrl + '/' + process.env.apiVerId
 
   if (process.server) {
     return
@@ -12,7 +12,7 @@ export default ({ app, store, redirect }) => {
 
   // Request interceptor
   axios.interceptors.request.use(request => {
-    request.baseURL = process.env.apiUrl
+    request.baseURL = process.env.apiUrl + '/' + (request.apiVerId || process.env.apiVerId)
 
     const token = store.getters['auth/token']
 

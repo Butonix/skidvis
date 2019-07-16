@@ -69,7 +69,7 @@ export const actions = {
       commit('SET_QUERY_DATA', query)
     }
     try {
-      const { data } = await axios.get('/1/management/organizations', {
+      const { data } = await axios.get('management/organizations', {
         params: {
           perPage: state.perPage,
           page: state.page,
@@ -100,5 +100,25 @@ export const actions = {
     commit('SET_PAGE', value)
     dispatch('setRouterParams')
     dispatch('fetchItems')
-  }
+  },
+  async fetchCover ({ commit, state }, imageBase64) {
+    if (!imageBase64) {
+      return
+    }
+    try {
+      const { data } = await axios.get('management/organizations', {
+        params: {
+          perPage: state.perPage,
+          page: state.page,
+          search: state.search
+        }
+      })
+      console.log(data)
+      commit('FETCH_DATA_SUCCESS', data)
+    } catch (e) {
+      console.log('FETCH_USER_FAILURE')
+
+      // commit('FETCH_USER_FAILURE')
+    }
+  },
 }
