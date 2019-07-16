@@ -29,9 +29,7 @@ const ManagementOrganizationsProductsHome = () => import('~/pages/management/org
 const ManagementOrganizationsProductsIndex = () => import('~/pages/management/organizations/products/index').then(m => m.default || m)
 const ManagementOrganizationsProductsEdit = () => import('~/pages/management/organizations/products/edit').then(m => m.default || m)
 
-const ManagementOrganizationsPointsHome = () => import('~/pages/management/organizations/points/home').then(m => m.default || m)
 const ManagementOrganizationsPointsIndex = () => import('~/pages/management/organizations/points/index').then(m => m.default || m)
-const ManagementOrganizationsPointsEdit = () => import('~/pages/management/organizations/points/edit').then(m => m.default || m)
 
 const routes = [
   { path: '/', name: 'welcome', component: Welcome },
@@ -105,30 +103,11 @@ const routes = [
             ]
           },
           { path: ':id/points',
-            component: ManagementOrganizationsPointsHome,
+            component: ManagementOrganizationsPointsIndex,
+            name: 'management.organizations.points.index',
             meta: {
               breadcrumb: 'Точки'
-            },
-            children: [
-              { path: '',
-                name: 'management.organizations.points.index',
-                component: ManagementOrganizationsPointsIndex
-              },
-              { path: 'create',
-                name: 'management.organizations.points.create',
-                meta: {
-                  breadcrumb: 'Создание'
-                },
-                component: ManagementOrganizationsPointsEdit
-              },
-              { path: ':pintId/edit',
-                name: 'management.organizations.points.edit',
-                meta: {
-                  breadcrumb: 'Редактирование'
-                },
-                component: ManagementOrganizationsPointsEdit
-              }
-            ]
+            }
           },
           { path: ':id/edit',
             name: 'management.organizations.edit',

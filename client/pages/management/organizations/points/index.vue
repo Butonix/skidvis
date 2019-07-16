@@ -17,9 +17,9 @@
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <router-link :to="{ name: 'management.organizations.create' }" class="btn btn-outline-primary btn-sm" >
-            + Добавить организацию
-          </router-link>
+          <div class="btn btn-outline-primary btn-sm" @click="addPoint">
+            + Добавить адрес
+          </div>
         </div>
       </div>
     </div>
@@ -63,19 +63,83 @@
         @input="setPage"/>
 
     </div>
+    <modal name="example">
+      <div class="basic-modal">
+
+        <material-input
+          type-input="inline"
+          placeholder="Название точки"
+          form-class="mb-4"
+        />
+
+        <material-input
+          type-input="inline"
+          placeholder="Эл. почта"
+          form-class="mb-4"
+        />
+
+        <material-input
+          type-input="inline"
+          placeholder="Телефон"
+          form-class="mb-5"
+        />
+
+        <div class="">
+          Режим работы по адресу
+        </div>
+        <div class="row my-4">
+          <div class="col-4 col-lg-4 col-xl-3">
+            Часовой пояс
+          </div>
+          <div class="col-6 col-lg-6 col-xl-6">
+            <v-select :clearable="false" v-model="selected" :options="[{label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1'}, {label: '13:23, Москва, Санкт-Петерб123у', value: '2'}, {label: '13:23, Москва, Санкт-Петербу', value: '3'}]"/>
+          </div>
+        </div>
+        <div
+          v-for="(value, index) in form.operationMode"
+          class="row"
+        >
+          <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
+            {{ operationMode.data[index].label }}
+          </div>
+          <div class="col-lg-6 col-xl-7 py-1">
+            <v-select
+              :clearable="false"
+              v-model="value.start"
+              :options="operationMode.interval"
+              class="v-select--time mr-2"
+            />
+            <v-select
+              :clearable="false"
+              v-model="value.end"
+              :options="operationMode.interval"
+              class="v-select--time mr-5"
+            />
+            <div class="d-inline-block">
+              <checkbox v-model="value.active" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
+import Form from 'vform'
+import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
+import vSelect from 'vue-select'
 
 export default {
   components: {
     SearchInput,
+    MaterialInput,
+    vSelect,
     Paginate
   },
   mixins: [
@@ -91,6 +155,7 @@ export default {
     }
   },
   data: () => ({
+    selected: { label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1' },
     points: [
       {
         name: 'ТРЦ «Питерленд»',
@@ -162,8 +227,70 @@ export default {
         email: 'info@sdk.jfhlksdhjfg.com',
         phone: '8 9122 938-00-33'
       }
-    ]
+    ],
+    operationMode: {
+      interval: [],
+      default: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      data: {
+        mon: {
+          label: 'Понедельник'
+        },
+        tue: {
+          label: 'Вторник'
+        },
+        web: {
+          label: 'Среда'
+        },
+        thu: {
+          label: 'Четверг'
+        },
+        fri: {
+          label: 'Пятница'
+        },
+        sat: {
+          label: 'Суббота'
+        },
+        sun: {
+          label: 'Воскресенье'
+        }
+      }
+    },
+    form: new Form({
+      operationMode: {
+        mon: null,
+        tue: null,
+        web: null,
+        thu: null,
+        fri: null,
+        sat: null,
+        sun: null
+      },
+      name: '',
+      email: '',
+      phone: ''
+    })
   }),
+
+  created () {
+    for (let i = 0; i < 24; i++) {
+      let t = (i < 10) ? '0' + i : i
+      this.operationMode.interval.push(t + ':00')
+      this.operationMode.interval.push(t + ':10')
+      this.operationMode.interval.push(t + ':20')
+      this.operationMode.interval.push(t + ':30')
+      this.operationMode.interval.push(t + ':40')
+      this.operationMode.interval.push(t + ':50')
+    }
+    for (let i in this.form.operationMode) {
+      if (!this.form.operationMode[i]) {
+        this.form.operationMode[i] = { ...this.operationMode.default }
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       search: 'organizations/getSearch',
@@ -188,6 +315,13 @@ export default {
           this.fetchItems()
         }
       }
+    },
+    addPoint () {
+      this.$modal.push('example')
+    },
+
+    close () {
+      this.$modal.pop()
     }
   },
   mounted () {

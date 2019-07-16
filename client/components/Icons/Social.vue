@@ -2,6 +2,7 @@
   <div
     :data-type="type"
     :class="'social-icon' + ((classBox !== '') ? ' ' + classBox : '')"
+    @click="$emit('click', $event)"
   >
     <fa :icon="icon" />
   </div>
@@ -26,6 +27,7 @@ export default {
       'ok': 'odnoklassniki',
       'odnoklassniki': 'odnoklassniki',
       'facebook': 'facebook-f',
+      'google': 'google',
       'instagram': 'instagram'
     }
   }),

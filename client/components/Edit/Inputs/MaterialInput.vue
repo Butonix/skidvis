@@ -75,13 +75,15 @@ export default {
     }
   },
   data: () => ({
-    id: '',
     typesInput: {
       '': '',
       'inline': 'material-input--inline'
     }
   }),
   computed: {
+    id(){
+      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000);
+    },
     autocomplete () {
       return (this.type === 'password') ? 'new-password' : 'off'
     },
@@ -108,7 +110,6 @@ export default {
     }
   },
   mounted () {
-    this.id = ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     if (this.autofocus && this.$refs.materialInput) {
       this.$refs.materialInput.focus()
     }

@@ -28,6 +28,7 @@ module.exports = {
   },
   env: {
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
+    apiOrigin: process.env.APP_ORIGIN || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
     appLocale: process.env.APP_LOCALE || 'ru',
     daDataApi: process.env.DADATA_API || '',

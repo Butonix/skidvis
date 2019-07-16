@@ -9,20 +9,7 @@
         <div class="text-center font-weight-light mb-3">
           Через социальные сети
         </div>
-        <div class="text-center mb-5">
-          <social
-            type="vk"
-            class-box="social-icon-lg"
-          />
-          <social
-            type="ok"
-            class-box="social-icon-lg mx-2"
-          />
-          <social
-            type="facebook"
-            class-box="social-icon-lg"
-          />
-        </div>
+        <login-with-social />
         <div class="text-center font-weight-light mb-4">
           С паролем
         </div>
@@ -81,6 +68,8 @@
 import Form from 'vform'
 import Social from '~/components/Icons/Social'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
+import LoginWithSocial from '~/components/Auth/LoginWithSocial'
+import axios from "axios";
 
 export default {
   head () {
@@ -88,6 +77,7 @@ export default {
   },
   middleware: 'authRoutes',
   components: {
+    LoginWithSocial,
     Social,
     MaterialInput
   },
@@ -119,7 +109,17 @@ export default {
       } catch (e) {
 
       }
-    }
+    },
+    async loginGoogle () {
+      try {
+        // Submit the form.
+        const { data } = await axios.get('auth/google')
+        console.log(data);
+      } catch (e) {
+
+      }
+    },
+
   }
 }
 </script>
