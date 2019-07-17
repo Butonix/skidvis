@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div v-if="true">
     <div class="container mb-5">
       <h5 class="mb-2">
         Мои организации
       </h5>
       <search-input
-        :value="search"
-        @input="setSearch"
+        v-model="params.search"
       />
     </div>
 
@@ -65,7 +64,7 @@
       </div>
 
       <paginate
-        :value="page"
+        v-model="params.page"
         :page-count="pageCount"
         :page-range="3"
         :margin-pages="1"
@@ -73,25 +72,30 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none"
-        @input="setPage"/>
+        next-class="d-none"/>
 
     </div>
   </div>
 </template>
 
 <script>
+import { getQueryData, watchList } from '~/utils'
 import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
-import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
+let listWatchInstance = watchList(axios, 'management/organizations')
+
 export default {
+  components: {
+    SearchInput,
+    Paginate
+  },
   mixins: [
     mixinSwal
   ],
-  middleware: ['auth', 'management/organizations'],
+  middleware: ['auth'],
   head () {
     return {
       title: 'Мои организации',
@@ -100,41 +104,44 @@ export default {
       }
     }
   },
-  components: {
-    SearchInput,
-    Paginate
+  asyncData: async ({ app, query }) => {
+    let list = {}
+    let params = getQueryData({ query })
+
+    try {
+      const { data } = await axios.get('management/organizations', { params })
+      list = data
+    } catch (e) {
+    }
+    return {
+      params,
+      list
+    }
   },
-  data: () => ({
-  }),
   computed: {
-    ...mapGetters({
-      search: 'organizations/getSearch',
-      items: 'organizations/getItems',
-      pageCount: 'organizations/getPageCount',
-      page: 'organizations/getPage'
-    })
+    items () {
+      return (this.list && this.list.data) ? this.list.data : []
+    },
+    pageCount () {
+      return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
+    }
+  },
+  watch: {
+    'params.search': listWatchInstance,
+    'params.page': listWatchInstance,
   },
   methods: {
-    ...mapActions({
-      setSearch: 'organizations/setSearch',
-      setPage: 'organizations/setPage',
-      runPreviousRoute: 'variables/runPreviousRoute',
-      fetchItems: 'organizations/fetchItems'
-    }),
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('organization/' + id)
-          this.fetchItems()
+          let { data } = await axios.delete('management/organizations/' + id)
+          listWatchInstance.call(this)
         } catch (e) {
-          this.fetchItems()
+          listWatchInstance.call(this)
         }
       }
     }
-  },
-  mounted () {
-    this.runPreviousRoute()
   }
 
 }

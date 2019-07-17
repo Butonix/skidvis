@@ -141,7 +141,7 @@
           Сохранить
         </div>
         <div
-          v-if="form.id"
+          v-if="id"
           class="btn btn-outline-danger ml-2"
           @click="onDelete"
         >
@@ -257,13 +257,9 @@ export default {
     }
     this.fetchTimezones()
   },
-  mounted () {
-    this.runPreviousRoute()
-  },
   methods: {
     ...mapActions({
-      fetchTimezones: 'variables/fetchTimezones',
-      runPreviousRoute: 'variables/runPreviousRoute'
+      fetchTimezones: 'variables/fetchTimezones'
     }),
     addSocialsLink (link) {
       this.form.socials.push(link)
@@ -338,14 +334,14 @@ export default {
       if (res.value) {
         try {
           let { data } = await axios.delete('management/organizations/' + this.id)
-          console.log(data)
+          // await this.$callToast({
+          //   type: 'success',
+          //   text: 'Организация успешно удалена',
+          //   timer: 1000
+          // })
           this.$router.push({ name: 'management.organizations.index' })
-          await this.$toast({
-            type: 'success',
-            text: 'Организация успешно удалена'
-          })
         } catch (e) {
-          await this.$toast({
+          await this.$callToast({
             type: 'error',
             text: 'Удалить не удалось'
           })
@@ -363,12 +359,12 @@ export default {
           this.id = data.organization.id
           this.$router.push({ name: 'management.organizations.edit', params: { organizationId: data.organization.id } })
         }
-        await this.$toast({
+        await this.$callToast({
           type: 'success',
           text: 'Данные успешно сохранены'
         })
       } catch (e) {
-        await this.$toast({
+        await this.$callToast({
           type: 'error',
           text: 'Сохранить не удалось'
         })

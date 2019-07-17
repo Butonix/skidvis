@@ -54,7 +54,9 @@ export default ({ app, store, redirect }) => {
     //     url: '/'
     //   }
     // }
-    console.log(status)
+    if(status){
+      console.log(status)
+    }
     if (status === 401 && store.getters['auth/check']) {
       swal({
         type: 'warning',
