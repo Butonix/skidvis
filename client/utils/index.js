@@ -68,12 +68,17 @@ export function getQueryData ({ query, defaultData }) {
   return res
 }
 
-export function watchList (axios, indexApiUrl) {
+export function watchList (axios, indexApiUrl, type) {
   const CancelToken = axios.CancelToken
   let cancelRequest
   return function () {
     if (cancelRequest) {
       cancelRequest()
+    }
+    switch (type) {
+      case 'search':
+        this.params.page = 1
+        break
     }
     let params = getQueryData({ query: this.params })
     this.$router.push({ name: this.$route.name,
@@ -86,8 +91,25 @@ export function watchList (axios, indexApiUrl) {
         cancelRequest = c
       })
     }).then(({ data }) => {
+      switch (type) {
+        case 'delete':
+          if (data.data.length === 0 && this.params.page > 1) {
+            this.params.page++
+            return
+          }
+          if (data.data.length === 0 && this.params.search !== '') {
+            this.params.search = ''
+            return
+          }
+          break
+        case 'page':
+          if (data.data.length === 0 && this.params.search !== '') {
+            this.params.search = ''
+            return
+          }
+          break
+      }
       this.$set(this, 'list', data)
-      console.log(params, data)
     }).catch((e) => {
     })
   }

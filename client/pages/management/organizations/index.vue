@@ -84,7 +84,9 @@ import axios from 'axios'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
-let listWatchInstance = watchList(axios, 'management/organizations')
+let listWatchInstancePage = watchList(axios, 'management/organizations', 'page')
+let listWatchInstanceSearch = watchList(axios, 'management/organizations', 'search')
+let listWatchInstanceDelete = watchList(axios, 'management/organizations', 'delete')
 
 export default {
   components: {
@@ -123,18 +125,18 @@ export default {
     }
   },
   watch: {
-    'params.search': listWatchInstance,
-    'params.page': listWatchInstance,
+    'params.search': listWatchInstanceSearch,
+    'params.page': listWatchInstancePage
   },
   methods: {
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('management/organizations/' + id)
-          listWatchInstance.call(this)
+          await axios.delete('management/organizations/' + id)
+          listWatchInstanceDelete.call(this)
         } catch (e) {
-          listWatchInstance.call(this)
+          listWatchInstanceDelete.call(this)
         }
       }
     }

@@ -204,7 +204,6 @@ export default {
         if (data.organization.operationMode) {
           operationMode = data.organization.operationMode
         }
-        console.log(data.organization)
         if (data.organization.timezone) {
           timezone = data.organization.timezone
         }
