@@ -1,12 +1,14 @@
 <template>
-  <form class="organizations-edit"
+  <form v-if="form" class="organizations-edit"
         @submit.prevent @keydown="form.onKeydown($event)">
     <full-slider
+      v-if="images"
       :images="images"
     />
     <div class="overflow-hidden">
       <div class="container">
         <thumbs-file-input
+          v-if="images"
           :images="images"
           @change="setMainImage"
           @delete="deleteMainImage"
@@ -17,14 +19,15 @@
             <div class="row mt-xl-3">
               <div class="col">
 
-                <div class="row">
+                <div
+                  class="row">
                   <div class="col-sm">
                     <div class="organizations-edit__logo">
                       <div class="text-center small pb-2">
                         Логотип организации
                       </div>
                       <div
-                        :style="{color:form.logo.color}"
+                        :style="{color:form.logo.color || '#ffffff'}"
                         class="organizations-edit__logo-file-input">
                         <logo-file-input
                           :src="logo"
@@ -40,13 +43,13 @@
                     </div>
                     <div class="color-box__wrapper">
                       <div
-                        :style="{backgroundColor: form.logo.color}"
+                        :style="{backgroundColor: form.logo.color || '#ffffff'}"
                         :class="{'active':isActiveClassColorBox}"
                         class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
                       />
                       <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
                       <no-ssr>
-                        <sketch-picker :value="form.logo.color" class="mx-auto" @input="setLogoColor" />
+                        <sketch-picker :value="form.logo.color || '#ffffff'" class="mx-auto" @input="setLogoColor" />
                       </no-ssr>
                     </div>
                   </div>
@@ -70,7 +73,7 @@
                   Цвет заливки логотипа
                 </div>
                 <no-ssr>
-                  <sketch-picker :value="form.logo.color" @input="setLogoColor" />
+                  <sketch-picker :value="form.logo.color || '#ffffff'" @input="setLogoColor" />
                 </no-ssr>
               </div>
             </div>
@@ -103,7 +106,7 @@
               Часовой пояс
             </div>
             <div class="col-6 col-lg-6 col-xl-6">
-              <v-select :clearable="false" v-model="selected" :options="[{label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1'}, {label: '13:23, Москва, Санкт-Петерб123у', value: '2'}, {label: '13:23, Москва, Санкт-Петербу', value: '3'}]"/>
+              <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
             </div>
           </div>
           <div v-for="(value, index) in form.operationMode" class="row">
@@ -150,6 +153,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 import Form from 'vform'
 import FullSlider from '~/components/FullSlider'
 import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
@@ -181,103 +185,86 @@ export default {
     }
   },
   middleware: 'auth',
-  data: () => ({
-    selected: { label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1' },
-    yourValue: '',
-    isActiveClassColorBox: false,
-    operationMode: {
-      interval: [],
-      default: {
-        start: '07:00',
-        end: '20:00',
-        active: true
-      },
-      data: {
-        mon: {
-          label: 'Понедельник'
-        },
-        tue: {
-          label: 'Вторник'
-        },
-        web: {
-          label: 'Среда'
-        },
-        thu: {
-          label: 'Четверг'
-        },
-        fri: {
-          label: 'Пятница'
-        },
-        sat: {
-          label: 'Суббота'
-        },
-        sun: {
-          label: 'Воскресенье'
-        }
-      }
-    },
-    images: [],
-    logo: '',
-    id: undefined,
-    form: new Form({
-      operationMode: {
-        mon: null,
-        tue: null,
-        web: null,
-        thu: null,
-        fri: null,
-        sat: null,
-        sun: null
-      },
-      images: [
-        {
-          1200: {
-            src: '',
-            id: ''
-          },
-          src: '',
-          id: ''
-        }
-        // {
-        //   src: '',
-        //   id: ''
-        // },
-      ],
-      link: '',
-      name: '',
-      inn: '',
-      description: '',
-      logo: {
-        color: '#FFFFFF',
-        src: ''
-        // id: 1
-      },
-      socials: [
-        // {
-        //   link: 'https://vk.com/123131213123',
-        //   type: 'vk'
-        // },
-      ]
-    })
-  }),
+  asyncData: async ({ params, error, app }) => {
+    let operationMode = {}
+    let form, logo
+    let images = []
 
-  created () {
-    for (let i = 0; i < 24; i++) {
-      let t = (i < 10) ? '0' + i : i
-      this.operationMode.interval.push(t + ':00')
-      this.operationMode.interval.push(t + ':10')
-      this.operationMode.interval.push(t + ':20')
-      this.operationMode.interval.push(t + ':30')
-      this.operationMode.interval.push(t + ':40')
-      this.operationMode.interval.push(t + ':50')
-    }
-    for (let i in this.form.operationMode) {
-      if (!this.form.operationMode[i]) {
-        this.form.operationMode[i] = { ...this.operationMode.default }
+    await app.store.dispatch('variables/fetchTimezones')
+
+    let timezone = app.store.getters['variables/getDefaultTimezone']
+    let organizationId = params.organizationId
+
+    app.store.getters['variables/getDaysOfTheWeek'].forEach((value) => {
+      operationMode[value] = { ...app.store.getters['variables/getDefaultTimeSelect'] }
+    })
+    if (organizationId) {
+      try {
+        let { data } = await axios.get('management/organizations/' + organizationId)
+        logo = data.organization.logo.src
+        images = data.organization.images
+        if (data.organization.operationMode) {
+          operationMode = data.organization.operationMode
+        }
+        console.log(data.organization)
+        if (data.organization.timezone) {
+          timezone = data.organization.timezone
+        }
+        form = { ...data.organization, operationMode, timezone }
+      } catch (e) {
+        error({ statusCode: 404, message: 'Organization not found' })
       }
+    }
+
+    if (!form) {
+      form = {
+        operationMode,
+        images: [],
+        timezone,
+        link: '',
+        name: '',
+        inn: '',
+        description: '',
+        logo: {
+          color: '#FFFFFF',
+          src: ''
+        },
+        socials: []
+      }
+    }
+
+    return {
+      id: organizationId,
+      selected: '1',
+      yourValue: '',
+      isActiveClassColorBox: false,
+      operationMode: { ...app.store.getters['variables/getOperationMode'] },
+      images,
+      logo,
+      form
     }
   },
+
+  computed: {
+    ...mapGetters({
+      getTimezones: 'variables/getTimezones'
+    })
+  },
+
+  async beforeMount () {
+    if (!(this.form instanceof Form)) {
+      this.form = new Form(this.form)
+    }
+    this.fetchTimezones()
+  },
+  mounted () {
+    this.runPreviousRoute()
+  },
   methods: {
+    ...mapActions({
+      fetchTimezones: 'variables/fetchTimezones',
+      runPreviousRoute: 'variables/runPreviousRoute'
+    }),
     addSocialsLink (link) {
       this.form.socials.push(link)
     },
@@ -294,7 +281,7 @@ export default {
         this.form.logo.src = data.logo.src
         this.form.logo.id = data.logo.id
       } catch (e) {
-
+        this.logo = null
       }
     },
     async setMainImage ({ image, index }) {
@@ -308,18 +295,23 @@ export default {
         })
       }
       try {
-        let { data } = await axios.post('organization/logo', {
-          data: {
-            image
-          }
+        let { data } = await axios.post('management/organizations/image', {
+          cover: image
         })
+        image = data.mainImages
+
         if (index !== undefined && this.form.images[index]) {
-          this.$set(this.form.images, index, data)
+          this.$set(this.form.images, index, image)
         } else {
-          this.form.images.push(data)
+          this.form.images.push(image)
         }
       } catch (e) {
-
+        console.log('catch')
+        if (index !== undefined && this.images[index]) {
+          this.$delete(this.images, index)
+        } else {
+          this.$delete(this.images, this.images.length - 1)
+        }
       }
     },
     deleteLogo () {
@@ -342,31 +334,44 @@ export default {
       if (!this.id) {
         return
       }
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('organization/' + this.id)
+          let { data } = await axios.delete('management/organizations/' + this.id)
+          console.log(data)
+          this.$router.push({ name: 'management.organizations.index' })
+          await this.$toast({
+            type: 'success',
+            text: 'Организация успешно удалена'
+          })
         } catch (e) {
-
+          await this.$toast({
+            type: 'error',
+            text: 'Удалить не удалось'
+          })
         }
       }
     },
     async onSave () {
       try {
-        // let res = await this.$toast({
-        //   type: 'error',
-        //   title: 'Заполните поля:',
-        //   text: 'название акции, описание, адрес'
-        // })
-        let res = await this.$toast({
+        if (this.id) {
+          const { data } = await this.form.patch('management/organizations/' + this.id)
+          console.log('onSave', data)
+        } else {
+          const { data } = await this.form.post('management/organizations')
+          console.log('onSave', data)
+          this.id = data.organization.id
+          this.$router.push({ name: 'management.organizations.edit', params: { organizationId: data.organization.id } })
+        }
+        await this.$toast({
           type: 'success',
-          text: 'На вашу эл. почту отправили сообщение с подтверждением'
+          text: 'Данные успешно сохранены'
         })
-        // const { data } = await this.form.post('management/organizations')
-
-        console.log(res)
       } catch (e) {
-
+        await this.$toast({
+          type: 'error',
+          text: 'Сохранить не удалось'
+        })
       }
       // this.$modal.push('example')
     }

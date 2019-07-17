@@ -41,12 +41,12 @@ export default {
   }),
   computed: {
     src () {
-      return (this.image.src) ? this.image.src : ''
+      return (this.image[480] && this.image[480].src) ? this.image[480].src : ((this.image.src) ? this.image.src : '')
     }
   },
   methods: {
     async onDelete (event) {
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         this.$emit('delete', event)
       }

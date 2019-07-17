@@ -19,7 +19,7 @@ export default {
 
   props: {
     name: { type: String, default: 'checkbox' },
-    value: { type: Boolean, default: false },
+    value: { type: Boolean | Number, default: false },
     checked: { type: Boolean, default: false }
   },
 

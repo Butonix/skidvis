@@ -118,7 +118,7 @@ export default {
       fetchItems: 'organizations/fetchItems'
     }),
     async deleteHandle (id) {
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         try {
           let { data } = await axios.delete('organization/' + id)
@@ -128,9 +128,6 @@ export default {
         }
       }
     }
-  },
-  mounted () {
-    console.log('mounted', this.data)
   }
 
 }

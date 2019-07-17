@@ -42,6 +42,18 @@ export default ({ app, store, redirect }) => {
         cancelButtonText: app.i18n.t('cancel')
       })
     }
+    // let adw = {
+    //   status: 'aaawuydgua',
+    //   alert: {
+    //     type: 'success|warning|error',
+    //     title: 'Восстановление пароля', // Не обязательно, если нет text то обязательно
+    //     text: 'Ссылка уже недействительна' // Если нет title обязательно, если есть title то не обязательно
+    //   },
+    //   action: {
+    //     type: 'redirect',
+    //     url: '/'
+    //   }
+    // }
     console.log(status)
     if (status === 401 && store.getters['auth/check']) {
       swal({

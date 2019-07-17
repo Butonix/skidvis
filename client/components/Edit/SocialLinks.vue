@@ -124,7 +124,7 @@ export default {
       this.edit.error = undefined
     },
     async deleteHandle (index) {
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         this.$emit('delete', index)
       }

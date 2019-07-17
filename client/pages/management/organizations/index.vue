@@ -26,7 +26,7 @@
           class="col-md-6 col-lg-4 mb-5"
         >
           <div class="card w-100 h-100">
-            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block p-3">
+            <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }" class="card-img-top d-block p-3">
               <div class="embed-responsive embed-responsive-1by1">
                 <div
                   :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
@@ -40,17 +40,17 @@
             </div>
             <div class="card-body pb-3">
               <div class="d-flex justify-content-around mb-4">
-                <router-link :to="{ name: 'management.organizations.points.index', params: { id: item.id } }" class="btn btn-gray btn-sm px-4" >
+                <router-link :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }" class="btn btn-gray btn-sm px-4" >
                   <span class="px-2">Точки</span>
                 </router-link>
-                <router-link :to="{ name: 'management.organizations.products.index', params: { id: item.id } }" class="btn btn-gray btn-sm px-4" >
+                <router-link :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }" class="btn btn-gray btn-sm px-4" >
                   <span class="px-2">Акции</span>
                 </router-link>
               </div>
-              <p v-if="item.description" class="card-text pt-3" v-text="item.description"/>
+              <p v-if="item.description" class="card-text pt-3" v-html="(item.description)?item.description.replaceAll('\n', '<br>'):item.description"/>
             </div>
             <div class="card-buttons mt-auto text-nowrap">
-              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-btn card-btn--left text-muted btn btn-outline-secondary" >
+              <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }" class="card-btn card-btn--left text-muted btn btn-outline-secondary" >
                 <fa icon="pencil-alt" class="mr-2"/>Редактировать
               </router-link>
               <div
@@ -118,10 +118,11 @@ export default {
     ...mapActions({
       setSearch: 'organizations/setSearch',
       setPage: 'organizations/setPage',
+      runPreviousRoute: 'variables/runPreviousRoute',
       fetchItems: 'organizations/fetchItems'
     }),
     async deleteHandle (id) {
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         try {
           let { data } = await axios.delete('organization/' + id)
@@ -133,7 +134,7 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted', this.data)
+    this.runPreviousRoute()
   }
 
 }

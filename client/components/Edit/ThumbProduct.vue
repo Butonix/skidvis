@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     async onDelete (event) {
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         this.$emit('delete', event)
       }

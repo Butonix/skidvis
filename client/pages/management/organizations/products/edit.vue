@@ -242,7 +242,7 @@ export default {
       if (!this.id) {
         return
       }
-      let res = await this.$swal(this.configSwal().confirm)
+      let res = await this.$confirmDelete()
       if (res.value) {
         try {
           let { data } = await axios.delete('organization/' + this.id)

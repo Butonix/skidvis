@@ -1,14 +1,6 @@
 <template>
   <div class="container pt-3">
-    <div v-if="status === 'ok'" class="text-center">
-      <div class="alert-success py-4 mb-3">
-        Пароль успешно изменен
-      </div>
-      <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
-        <&nbsp;Вход
-      </router-link>
-    </div>
-    <form v-else class="row"
+    <form class="row"
           @submit.prevent @keydown="form.onKeydown($event)">
       <div class="col-12 text-center">
         <h5>
@@ -59,8 +51,11 @@
           >
             Восстановить пароль
           </v-button>
-          <router-link :to="{ name: 'password.request' }" class="btn btn-gray btn-sm mt-4">
+          <router-link v-if="status === ''" :to="{ name: 'password.request' }" class="btn btn-gray btn-sm mt-4">
             <&nbsp;Назад
+          </router-link>
+          <router-link v-else :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
+            <&nbsp;Вход
           </router-link>
         </div>
 
@@ -72,13 +67,17 @@
 <script>
 import Form from 'vform'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
+import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
-  head () {
-    return { title: this.$t('reset_password') }
-  },
   components: {
     MaterialInput
+  },
+  mixins: [
+    mixinSwal
+  ],
+  head () {
+    return { title: this.$t('reset_password') }
   },
   middleware: 'authRoutes',
   data: () => ({
@@ -101,11 +100,16 @@ export default {
       try {
         const { data } = await this.form.post('/password/reset')
 
-        this.status = String(data.status).toLowerCase()
+        this.status = data.status
 
         this.form.reset()
-      } catch (e) {
 
+        await this.$toast({
+          type: 'success',
+          text: 'Вы успешно сбросили пароль'
+        })
+      } catch (e) {
+        console.log(this.form);
       }
     }
   }

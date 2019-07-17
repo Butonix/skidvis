@@ -5,7 +5,6 @@ import { scrollBehavior } from '~/utils'
 Vue.use(Router)
 
 
-
 const Home = () => import('~/pages/home').then(m => m.default || m)
 const Welcome = () => import('~/pages/welcome').then(m => m.default || m)
 
@@ -76,7 +75,7 @@ const routes = [
             },
             component: ManagementOrganizationsEdit
           },
-          { path: ':id/products',
+          { path: ':organizationId/products',
             component: ManagementOrganizationsProductsHome,
             meta: {
               breadcrumb: 'Акции'
@@ -102,14 +101,14 @@ const routes = [
               }
             ]
           },
-          { path: ':id/points',
+          { path: ':organizationId/points',
             component: ManagementOrganizationsPointsIndex,
             name: 'management.organizations.points.index',
             meta: {
               breadcrumb: 'Точки'
             }
           },
-          { path: ':id/edit',
+          { path: ':organizationId/edit',
             name: 'management.organizations.edit',
             meta: {
               breadcrumb: 'Редактирование'
@@ -122,6 +121,7 @@ const routes = [
   }
 
 ]
+
 
 export function createRouter () {
   return new Router({

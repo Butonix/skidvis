@@ -1,14 +1,6 @@
 <template>
   <div class="container pt-3">
-    <div v-if="status === 'ok'" class="text-center">
-      <div class="alert-success py-4 mb-3">
-        На ваш электронный адрес отправлено ссобщение с подверждением.
-      </div>
-      <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
-        <&nbsp;Назад
-      </router-link>
-    </div>
-    <form v-else class="row"
+    <form class="row"
           @submit.prevent @keydown="form.onKeydown($event)">
       <div class="col-12 text-center">
         <h5>
@@ -54,8 +46,12 @@
 <script>
 import Form from 'vform'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
+import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
+  mixins: [
+    mixinSwal
+  ],
   head () {
     return { title: this.$t('reset_password') }
   },
@@ -75,9 +71,14 @@ export default {
       try {
         const { data } = await this.form.post('/password/email')
 
-        this.status = String(data.status).toLowerCase()
+        this.status = data.status
 
         this.form.reset()
+
+        await this.$toast({
+          type: 'success',
+          text: 'На вашу эл. почту отправили сообщение с подтверждением'
+        })
       } catch (e) {
 
       }
