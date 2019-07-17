@@ -80,7 +80,6 @@
 
 <script>
 import { getQueryData, watchList } from '~/utils'
-import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
@@ -92,9 +91,6 @@ export default {
     SearchInput,
     Paginate
   },
-  mixins: [
-    mixinSwal
-  ],
   middleware: ['auth'],
   head () {
     return {

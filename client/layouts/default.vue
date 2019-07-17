@@ -6,6 +6,7 @@
       <nuxt/>
     </main>
 
+
     <app-footer/>
   </div>
 </template>

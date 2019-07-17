@@ -28,10 +28,8 @@
 </template>
 
 <script>
-import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
-  mixins: [mixinSwal],
   props: {
     src: {
       type: String,

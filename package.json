@@ -45,7 +45,6 @@
     "vue-select": "git+https://github.com/cvaize/vue-select.git",
     "vue-sweetalert2": "^2.1.1",
     "vue-thin-modal": "^1.3.0",
-    "vue-toasted": "^1.1.27",
     "vuejs-paginate": "^2.1.0"
   },
   "devDependencies": {

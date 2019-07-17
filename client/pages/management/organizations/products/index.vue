@@ -73,8 +73,6 @@
 </template>
 
 <script>
-
-import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
@@ -89,9 +87,6 @@ export default {
     DynamicLabelInput,
     Paginate
   },
-  mixins: [
-    mixinSwal
-  ],
   middleware: ['auth', 'management/organizations'],
   head () {
     return {

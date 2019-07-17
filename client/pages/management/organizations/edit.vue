@@ -161,7 +161,6 @@ import SocialLinks from '~/components/Edit/SocialLinks'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
-import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import vSelect from 'vue-select'
 
@@ -175,7 +174,6 @@ export default {
     vSelect,
     SocialLinks
   },
-  mixins: [mixinSwal],
   head () {
     return {
       title: 'Редактирование организации',
@@ -320,7 +318,6 @@ export default {
       this.$delete(this.form.images, index)
     },
     deleteSocialsLink (index) {
-      console.log(index)
       this.$delete(this.form.socials, index)
     },
     changeSocialsLink ({ index, value }) {
@@ -333,12 +330,11 @@ export default {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('management/organizations/' + this.id)
-          // await this.$callToast({
-          //   type: 'success',
-          //   text: 'Организация успешно удалена',
-          //   timer: 1000
-          // })
+          await axios.delete('management/organizations/' + this.id)
+          await this.$callToast({
+            type: 'success',
+            text: 'Организация успешно удалена'
+          })
           this.$router.push({ name: 'management.organizations.index' })
         } catch (e) {
           await this.$callToast({
@@ -351,11 +347,9 @@ export default {
     async onSave () {
       try {
         if (this.id) {
-          const { data } = await this.form.patch('management/organizations/' + this.id)
-          console.log('onSave', data)
+          await this.form.patch('management/organizations/' + this.id)
         } else {
           const { data } = await this.form.post('management/organizations')
-          console.log('onSave', data)
           this.id = data.organization.id
           this.$router.push({ name: 'management.organizations.edit', params: { organizationId: data.organization.id } })
         }
@@ -369,7 +363,6 @@ export default {
           text: 'Сохранить не удалось'
         })
       }
-      // this.$modal.push('example')
     }
   }
 }

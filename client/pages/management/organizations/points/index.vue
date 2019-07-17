@@ -128,7 +128,6 @@
 <script>
 import Form from 'vform'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
-import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 import SearchInput from '~/components/SearchInput'
@@ -142,9 +141,6 @@ export default {
     vSelect,
     Paginate
   },
-  mixins: [
-    mixinSwal
-  ],
   middleware: ['auth', 'management/organizations'],
   head () {
     return {

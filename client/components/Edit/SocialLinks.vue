@@ -57,7 +57,6 @@
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import Social from '~/components/Icons/Social'
 import Pain from '~/components/Icons/Pain'
-import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
   components: {
@@ -65,7 +64,6 @@ export default {
     Social,
     Pain
   },
-  mixins: [mixinSwal],
   props: {
     links: {
       type: Array,

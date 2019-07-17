@@ -117,7 +117,6 @@ import SocialLinks from '~/components/Edit/SocialLinks'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
 import LogoFileInput from '~/components/Edit/LogoFileInput'
-import mixinSwal from '~/mixins/sweetalert2'
 import axios from 'axios'
 
 export default {
@@ -129,7 +128,6 @@ export default {
     MaterialInput,
     SocialLinks
   },
-  mixins: [mixinSwal],
   head () {
     return {
       title: 'Редактирование организации',

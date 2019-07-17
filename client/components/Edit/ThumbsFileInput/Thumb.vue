@@ -26,10 +26,8 @@
 </template>
 
 <script>
-import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
-  mixins: [mixinSwal],
   props: {
     image: {
       type: Object,

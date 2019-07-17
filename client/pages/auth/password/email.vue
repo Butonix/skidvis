@@ -46,12 +46,8 @@
 <script>
 import Form from 'vform'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
-import mixinSwal from '~/mixins/sweetalert2'
 
 export default {
-  mixins: [
-    mixinSwal
-  ],
   head () {
     return { title: this.$t('reset_password') }
   },
@@ -75,7 +71,7 @@ export default {
 
         this.form.reset()
 
-        await this.$toast({
+        await this.$callToast({
           type: 'success',
           text: 'На вашу эл. почту отправили сообщение с подтверждением'
         })
