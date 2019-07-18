@@ -5,6 +5,7 @@
       v-if="i <= images.length"
       :key="i"
       :image="images[i]"
+      :loading="!!imagesLoading[i]"
       @delete="onDelete(i)"
       @change="onChange($event.image, i)"
     />
@@ -27,6 +28,10 @@ export default {
     images: {
       type: Array,
       default: () => []
+    },
+    imagesLoading: {
+      type: Object,
+      default: () => ({})
     }
   },
   computed: {

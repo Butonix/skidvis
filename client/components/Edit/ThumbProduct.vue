@@ -1,8 +1,9 @@
 <template>
-  <div class="photo-input--product">
+  <div :class="{'loading':loading}" class="photo-input--product">
     <no-ssr>
       <picture-input
         :prefill="src"
+        :alert-on-error="false"
         :custom-strings="{
           upload: '',
           drag: '',
@@ -27,6 +28,10 @@
 
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     image: {
       type: Object,
       default: () => ({})

@@ -64,6 +64,7 @@
       </div>
 
       <paginate
+        v-if="pageCount && pageCount > 1"
         v-model="params.page"
         :page-count="pageCount"
         :page-range="3"
@@ -84,9 +85,9 @@ import axios from 'axios'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
-let listWatchInstancePage = watchList(axios, 'management/organizations', 'page')
-let listWatchInstanceSearch = watchList(axios, 'management/organizations', 'search')
-let listWatchInstanceDelete = watchList(axios, 'management/organizations', 'delete')
+let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
+let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 
 export default {
   components: {
@@ -103,15 +104,17 @@ export default {
     }
   },
   asyncData: async ({ query }) => {
+    let indexApiUrl = 'management/organizations'
     let list = {}
     let params = getQueryData({ query })
 
     try {
-      const { data } = await axios.get('management/organizations', { params })
+      const { data } = await axios.get(indexApiUrl, { params })
       list = data
     } catch (e) {
     }
     return {
+      indexApiUrl,
       params,
       list
     }

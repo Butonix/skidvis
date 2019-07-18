@@ -10,6 +10,7 @@
         <thumbs-file-input
           v-if="images"
           :images="images"
+          :imagesLoading="imagesLoading"
           @change="setMainImage"
           @delete="deleteMainImage"
         />
@@ -31,6 +32,7 @@
                         class="organizations-edit__logo-file-input">
                         <logo-file-input
                           :src="logo"
+                          :loading="logoLoading"
                           @change="setLogoSrc"
                           @delete="deleteLogo"
                         />
@@ -229,13 +231,18 @@ export default {
 
     return {
       id: organizationId,
-      isActiveClassColorBox: false,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       images,
       logo,
       form
     }
   },
+
+  data: () => ({
+    isActiveClassColorBox: false,
+    logoLoading: false,
+    imagesLoading: {},
+  }),
 
   computed: {
     ...mapGetters({
@@ -261,15 +268,17 @@ export default {
     },
     async setLogoSrc (logo) {
       this.logo = logo
+      this.logoLoading = true
       try {
         let { data } = await axios.post('management/organizations/logo', {
           logo
         })
-        console.log(data)
         this.form.logo.src = data.logo.src
         this.form.logo.id = data.logo.id
+        this.logoLoading = false
       } catch (e) {
         this.logo = null
+        this.logoLoading = false
       }
     },
     async setMainImage ({ image, index }) {
@@ -282,6 +291,7 @@ export default {
           src: image
         })
       }
+      this.imagesLoading[index] = true
       try {
         let { data } = await axios.post('management/organizations/image', {
           cover: image
@@ -293,6 +303,7 @@ export default {
         } else {
           this.form.images.push(image)
         }
+        this.imagesLoading[index] = false
       } catch (e) {
         console.log('catch')
         if (index !== undefined && this.images[index]) {
@@ -300,6 +311,7 @@ export default {
         } else {
           this.$delete(this.images, this.images.length - 1)
         }
+        this.imagesLoading[index] = false
       }
     },
     deleteLogo () {

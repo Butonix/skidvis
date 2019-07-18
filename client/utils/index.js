@@ -68,7 +68,7 @@ export function getQueryData ({ query, defaultData }) {
   return res
 }
 
-export function watchList (axios, indexApiUrl, type) {
+export function watchList (axios, keyApiUrl, type) {
   const CancelToken = axios.CancelToken
   let cancelRequest
   return function () {
@@ -84,7 +84,11 @@ export function watchList (axios, indexApiUrl, type) {
     this.$router.push({ name: this.$route.name,
       query: params
     })
-    axios.get(indexApiUrl, {
+    if (!this[keyApiUrl]) {
+      this.$route.back()
+      return
+    }
+    axios.get(this[keyApiUrl], {
       params,
       cancelToken: new CancelToken(function executor (c) {
         // An executor function receives a cancel function as a parameter

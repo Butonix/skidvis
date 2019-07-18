@@ -12,18 +12,18 @@
       <div class="row mb-4">
         <div class="col-12 col-md mb-2">
           <h5>
-            Все адреса организации (39):
+            Все адреса организации ({{ items.length }}):
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <div class="btn btn-outline-primary btn-sm" @click="addPoint">
+          <div class="btn btn-outline-primary btn-sm" @click="showModalAddPoint">
             + Добавить адрес
           </div>
         </div>
       </div>
     </div>
-    <div class="container" style="min-height: 500px">
-      <div v-for="item in items" class="row mb-4">
+    <div v-if="items.length" class="container" style="min-height: 400px">
+      <div v-for="(item, key) in items" :key="key" class="row mb-4">
         <div class="col-auto text-primary pr-0">
           <fa icon="map-marker-alt" />
         </div>
@@ -47,9 +47,15 @@
         </div>
       </div>
     </div>
+    <div v-else style="min-height: 300px" class="container d-flex align-items-center justify-content-center">
+      <div class="mb-4">
+        Адреса еще не добавлены
+      </div>
+    </div>
     <div class="container mt-5">
 
       <paginate
+        v-if="pageCount && pageCount > 1"
         v-model="params.page"
         :page-count="pageCount"
         :page-range="3"
@@ -61,22 +67,32 @@
         next-class="d-none"/>
 
     </div>
-    <modal name="add-point">
+    <modal name="add-point" @closed="closedModalAddPoint">
       <div class="basic-modal">
 
         <material-input
+          v-model="form.full_street"
+          type-input="inline"
+          placeholder="Адрес точки"
+          form-class="mb-4"
+        />
+
+        <material-input
+          v-model="form.name"
           type-input="inline"
           placeholder="Название точки"
           form-class="mb-4"
         />
 
         <material-input
+          v-model="form.email"
           type-input="inline"
           placeholder="Эл. почта"
           form-class="mb-4"
         />
 
         <material-input
+          v-model="form.phone"
           type-input="inline"
           placeholder="Телефон"
           form-class="mb-5"
@@ -115,6 +131,18 @@
             </div>
           </div>
         </div>
+        <div class="text-center mt-5">
+          <button class="btn btn-outline-primary mr-2"
+                  @click="addPoint"
+          >
+            Добавить адрес
+          </button>
+          <button class="btn btn-outline-danger ml-2"
+                  @click="$modal.pop()"
+          >
+            Отменить
+          </button>
+        </div>
       </div>
     </modal>
   </div>
@@ -130,9 +158,9 @@ import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 import vSelect from 'vue-select'
 
-let listWatchInstancePage = watchList(axios, 'management/organizations', 'page')
-let listWatchInstanceSearch = watchList(axios, 'management/organizations', 'search')
-let listWatchInstanceDelete = watchList(axios, 'management/organizations', 'delete')
+let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
+let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 
 export default {
   components: {
@@ -151,7 +179,9 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
+    let indexApiUrl
     let list = {}
+    let dataOrg = {}
     let params_ = getQueryData({ query })
 
     await app.store.dispatch('variables/fetchTimezones')
@@ -161,11 +191,25 @@ export default {
     let organizationId = params.organizationId
 
     if (organizationId) {
+      indexApiUrl = 'management/organizations/' + organizationId + '/points'
       try {
-        let { data } = await axios.get('management/organizations/' + organizationId + '/points', {
+        let req = await axios.get('management/organizations/' + organizationId)
+        dataOrg = req.data
+
+        if (dataOrg.organization.operationMode) {
+          operationMode = dataOrg.organization.operationMode
+        } else if (dataOrg.organization) {
+          dataOrg.organization['operationMode'] = operationMode
+        }
+        if (dataOrg.organization.timezone) {
+          timezone = dataOrg.organization.timezone
+        } else if (dataOrg.organization) {
+          dataOrg.organization['timezone'] = timezone
+        }
+
+        let { data } = await axios.get(indexApiUrl, {
           params: params_
         })
-        console.log(data)
         list = data
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
@@ -174,26 +218,21 @@ export default {
 
     return {
       list,
+      data: dataOrg,
       params: params_,
       organizationId: organizationId,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
+      indexApiUrl,
       form: {
         operationMode,
-        timezone
+        timezone,
+        name: '',
+        full_street: '',
+        email: '',
+        phone: ''
       }
     }
   },
-  data: () => ({
-    points: [
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      }
-    ]
-  }),
   watch: {
     'params.search': listWatchInstanceSearch,
     'params.page': listWatchInstancePage
@@ -219,19 +258,48 @@ export default {
     ...mapActions({
       fetchTimezones: 'variables/fetchTimezones'
     }),
+    setDefaultFormData () {
+      this.form.name = ''
+      this.form.full_street = ''
+      this.form.email = ''
+      this.form.phone = ''
+      this.form.timezone = this.data.organization.timezone
+      this.form.operationMode = this.data.organization.operationMode
+    },
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('management/organizations/' + this.organizationId + '/points/' + id)
+          await axios.delete('management/organizations/' + this.organizationId + '/points/' + id)
           listWatchInstanceDelete.call(this)
         } catch (e) {
           listWatchInstanceDelete.call(this)
         }
       }
     },
-    addPoint () {
+    closedModalAddPoint () {
+      this.setDefaultFormData()
+    },
+    showModalAddPoint () {
       this.$modal.push('add-point')
+    },
+    reloadList () {
+      listWatchInstanceDelete.call(this)
+    },
+    async addPoint () {
+      try {
+        await this.form.post(`management/organizations/${this.organizationId}/points`)
+        this.reloadList()
+        await this.$callToast({
+          type: 'success',
+          text: 'Данные успешно сохранены'
+        })
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Сохранить не удалось'
+        })
+      }
     },
 
     close () {

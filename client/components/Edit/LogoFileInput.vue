@@ -1,5 +1,5 @@
 <template>
-  <div class="photo-input">
+  <div :class="{'loading':loading}" class="photo-input">
     <no-ssr>
       <div v-if="src" class="photo-input__remove"
            @click="onDelete"
@@ -7,6 +7,7 @@
       <picture-input
         :crop="false"
         :prefill="src"
+        :alert-on-error="false"
         :custom-strings="{
           upload: '',
           drag: '',
@@ -31,6 +32,10 @@
 
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     src: {
       type: String,
       default: ''

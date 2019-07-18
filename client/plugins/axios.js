@@ -57,19 +57,23 @@ export default ({ app, store, redirect }) => {
     if(status){
       console.log(status)
     }
-    if (status === 401 && store.getters['auth/check']) {
-      swal({
-        type: 'warning',
-        title: app.i18n.t('token_expired_alert_title'),
-        text: app.i18n.t('token_expired_alert_text'),
-        reverseButtons: true,
-        confirmButtonText: app.i18n.t('ok'),
-        cancelButtonText: app.i18n.t('cancel')
-      }).then(() => {
-        store.commit('auth/LOGOUT')
+    // if (status === 401 && store.getters['auth/check']) {
+    if (status === 401) {
+      store.commit('auth/LOGOUT')
 
-        redirect({ name: 'login' })
-      })
+      redirect({ name: 'login' })
+      // swal({
+      //   type: 'warning',
+      //   title: app.i18n.t('token_expired_alert_title'),
+      //   text: app.i18n.t('token_expired_alert_text'),
+      //   reverseButtons: true,
+      //   confirmButtonText: app.i18n.t('ok'),
+      //   cancelButtonText: app.i18n.t('cancel')
+      // }).then(() => {
+      //   store.commit('auth/LOGOUT')
+      //
+      //   redirect({ name: 'login' })
+      // })
     }
 
     return Promise.reject(error)
