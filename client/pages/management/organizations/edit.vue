@@ -184,18 +184,15 @@ export default {
   },
   middleware: 'auth',
   asyncData: async ({ params, error, app }) => {
-    let operationMode = {}
     let form, logo
     let images = []
 
     await app.store.dispatch('variables/fetchTimezones')
 
+    let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
     let timezone = app.store.getters['variables/getDefaultTimezone']
     let organizationId = params.organizationId
 
-    app.store.getters['variables/getDaysOfTheWeek'].forEach((value) => {
-      operationMode[value] = { ...app.store.getters['variables/getDefaultTimeSelect'] }
-    })
     if (organizationId) {
       try {
         let { data } = await axios.get('management/organizations/' + organizationId)
@@ -232,8 +229,6 @@ export default {
 
     return {
       id: organizationId,
-      selected: '1',
-      yourValue: '',
       isActiveClassColorBox: false,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       images,

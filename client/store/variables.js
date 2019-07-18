@@ -14,6 +14,43 @@ export const state = () => {
     daysOfTheWeek: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
     timezones: [],
     defaultTimezone: 2,
+    defaultOperationModeSelected: {
+      mon: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      tue: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      wed: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      thu: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      fri: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      sat: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      },
+      sun: {
+        start: '07:00',
+        end: '20:00',
+        active: true
+      }
+    },
     operationMode: {
       interval: interval,
       default: {
@@ -54,6 +91,7 @@ export const getters = {
   getPreviousRoute: state => state.previousRoute,
   getDaysOfTheWeek: state => state.daysOfTheWeek,
   getOperationMode: state => state.operationMode,
+  getDefaultOperationModeSelected: state => state.defaultOperationModeSelected,
   getTimezones: state => state.timezones,
   getDefaultTimezone: state => state.defaultTimezone,
   getDefaultTimeSelect: state => state.operationMode.default,

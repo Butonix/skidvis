@@ -102,7 +102,7 @@ export default {
       }
     }
   },
-  asyncData: async ({ app, query }) => {
+  asyncData: async ({ query }) => {
     let list = {}
     let params = getQueryData({ query })
 

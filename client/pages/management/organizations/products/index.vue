@@ -87,7 +87,7 @@ export default {
     DynamicLabelInput,
     Paginate
   },
-  middleware: ['auth', 'management/organizations'],
+  middleware: ['auth'],
   head () {
     return {
       title: 'Мои организации',

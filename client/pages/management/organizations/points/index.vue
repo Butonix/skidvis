@@ -5,8 +5,7 @@
         Мои организации
       </h5>
       <search-input
-        :value="search"
-        @input="setSearch"
+        v-model="params.search"
       />
     </div>
     <div class="container">
@@ -24,34 +23,34 @@
       </div>
     </div>
     <div class="container" style="min-height: 500px">
-      <div v-for="point in points" class="row mb-4">
+      <div v-for="item in items" class="row mb-4">
         <div class="col-auto text-primary pr-0">
           <fa icon="map-marker-alt" />
         </div>
         <div class="col pl-2">
           <div class="text-primary">
-            {{ point.address }} {{ (point.name)?`(${point.name})`:'' }}
+            {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
           </div>
-          {{ point.time }}
+          {{ item.time }}
           <div class="font-weight-bolder d-block d-md-none">
             <div>
-              {{ point.email }}
+              {{ item.email }}
             </div>
-            {{ point.phone }}
+            {{ item.phone }}
           </div>
         </div>
         <div class="col-4 font-weight-bolder d-none d-md-block">
           <div>
-            {{ point.email }}
+            {{ item.email }}
           </div>
-          {{ point.phone }}
+          {{ item.phone }}
         </div>
       </div>
     </div>
     <div class="container mt-5">
 
       <paginate
-        :value="page"
+        v-model="params.page"
         :page-count="pageCount"
         :page-range="3"
         :margin-pages="1"
@@ -59,11 +58,10 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none"
-        @input="setPage"/>
+        next-class="d-none"/>
 
     </div>
-    <modal name="example">
+    <modal name="add-point">
       <div class="basic-modal">
 
         <material-input
@@ -92,13 +90,10 @@
             Часовой пояс
           </div>
           <div class="col-6 col-lg-6 col-xl-6">
-            <v-select :clearable="false" v-model="selected" :options="[{label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1'}, {label: '13:23, Москва, Санкт-Петерб123у', value: '2'}, {label: '13:23, Москва, Санкт-Петербу', value: '3'}]"/>
+            <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
           </div>
         </div>
-        <div
-          v-for="(value, index) in form.operationMode"
-          class="row"
-        >
+        <div v-for="(value, index) in form.operationMode" class="row">
           <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
             {{ operationMode.data[index].label }}
           </div>
@@ -126,6 +121,7 @@
 </template>
 
 <script>
+import { getQueryData, watchList } from '~/utils'
 import Form from 'vform'
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import axios from 'axios'
@@ -134,6 +130,10 @@ import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 import vSelect from 'vue-select'
 
+let listWatchInstancePage = watchList(axios, 'management/organizations', 'page')
+let listWatchInstanceSearch = watchList(axios, 'management/organizations', 'search')
+let listWatchInstanceDelete = watchList(axios, 'management/organizations', 'delete')
+
 export default {
   components: {
     SearchInput,
@@ -141,17 +141,49 @@ export default {
     vSelect,
     Paginate
   },
-  middleware: ['auth', 'management/organizations'],
+  middleware: ['auth'],
   head () {
     return {
-      title: 'Мои организации',
+      title: 'Мои точки',
       bodyAttrs: {
         class: 'theme-edit'
       }
     }
   },
+  asyncData: async ({ params, error, app, query }) => {
+    let list = {}
+    let params_ = getQueryData({ query })
+
+    await app.store.dispatch('variables/fetchTimezones')
+
+    let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
+    let timezone = app.store.getters['variables/getDefaultTimezone']
+    let organizationId = params.organizationId
+
+    if (organizationId) {
+      try {
+        let { data } = await axios.get('management/organizations/' + organizationId + '/points', {
+          params: params_
+        })
+        console.log(data)
+        list = data
+      } catch (e) {
+        error({ statusCode: 404, message: 'Organization not found' })
+      }
+    }
+
+    return {
+      list,
+      params: params_,
+      organizationId: organizationId,
+      operationMode: { ...app.store.getters['variables/getOperationMode'] },
+      form: {
+        operationMode,
+        timezone
+      }
+    }
+  },
   data: () => ({
-    selected: { label: '13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу 13:23, Москва, Санкт-Петербу', value: '1' },
     points: [
       {
         name: 'ТРЦ «Питерленд»',
@@ -159,161 +191,47 @@ export default {
         time: '10:00-21:00',
         email: 'info@sdk.jfhlksdhjfg.com',
         phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
-      },
-      {
-        name: 'ТРЦ «Питерленд»',
-        address: 'Беговая, Приморский пр-т, 72, этаж 3',
-        time: '10:00-21:00',
-        email: 'info@sdk.jfhlksdhjfg.com',
-        phone: '8 9122 938-00-33'
       }
-    ],
-    operationMode: {
-      interval: [],
-      default: {
-        start: '07:00',
-        end: '20:00',
-        active: true
-      },
-      data: {
-        mon: {
-          label: 'Понедельник'
-        },
-        tue: {
-          label: 'Вторник'
-        },
-        web: {
-          label: 'Среда'
-        },
-        thu: {
-          label: 'Четверг'
-        },
-        fri: {
-          label: 'Пятница'
-        },
-        sat: {
-          label: 'Суббота'
-        },
-        sun: {
-          label: 'Воскресенье'
-        }
-      }
-    },
-    form: new Form({
-      operationMode: {
-        mon: null,
-        tue: null,
-        web: null,
-        thu: null,
-        fri: null,
-        sat: null,
-        sun: null
-      },
-      name: '',
-      email: '',
-      phone: ''
-    })
+    ]
   }),
-
-  created () {
-    for (let i = 0; i < 24; i++) {
-      let t = (i < 10) ? '0' + i : i
-      this.operationMode.interval.push(t + ':00')
-      this.operationMode.interval.push(t + ':10')
-      this.operationMode.interval.push(t + ':20')
-      this.operationMode.interval.push(t + ':30')
-      this.operationMode.interval.push(t + ':40')
-      this.operationMode.interval.push(t + ':50')
+  watch: {
+    'params.search': listWatchInstanceSearch,
+    'params.page': listWatchInstancePage
+  },
+  async beforeMount () {
+    if (!(this.form instanceof Form)) {
+      this.form = new Form(this.form)
     }
-    for (let i in this.form.operationMode) {
-      if (!this.form.operationMode[i]) {
-        this.form.operationMode[i] = { ...this.operationMode.default }
-      }
-    }
+    this.fetchTimezones()
   },
   computed: {
     ...mapGetters({
-      search: 'organizations/getSearch',
-      items: 'organizations/getItems',
-      pageCount: 'organizations/getPageCount',
-      page: 'organizations/getPage'
-    })
+      getTimezones: 'variables/getTimezones'
+    }),
+    items () {
+      return (this.list && this.list.data) ? this.list.data : []
+    },
+    pageCount () {
+      return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
+    }
   },
   methods: {
     ...mapActions({
-      setSearch: 'organizations/setSearch',
-      setPage: 'organizations/setPage',
-      fetchItems: 'organizations/fetchItems'
+      fetchTimezones: 'variables/fetchTimezones'
     }),
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          let { data } = await axios.delete('organization/' + id)
-          this.fetchItems()
+          let { data } = await axios.delete('management/organizations/' + this.organizationId + '/points/' + id)
+          listWatchInstanceDelete.call(this)
         } catch (e) {
-          this.fetchItems()
+          listWatchInstanceDelete.call(this)
         }
       }
     },
     addPoint () {
-      this.$modal.push('example')
+      this.$modal.push('add-point')
     },
 
     close () {
