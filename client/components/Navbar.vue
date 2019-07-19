@@ -1,18 +1,48 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <nav class="navbar">
     <div class="container">
-      <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar-brand">
-        {{ appName }}
+      <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar__brand">
+        <full-logo/>
       </router-link>
 
-      <div id="navbarToggler" class="collapse navbar-collapse">
-        <ul class="navbar-nav">
+      <div class="">
+        <div class=""/>
+        <ul class="navbar__nav list-unstyled">
           <li class="nav-item">
             <router-link :to="{ name: 'management.organizations.index' }" class="nav-link" active-class="active">
+              Управление организациями
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'products' }" class="nav-link" active-class="active">
+              Все акции
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'organizations' }" class="nav-link" active-class="active">
               Все компании
             </router-link>
           </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'business' }" class="nav-link" active-class="active">
+              Бизнесу
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'blog' }" class="nav-link" active-class="active">
+              Блог
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'contacts' }" class="nav-link" active-class="active">
+              Контакты
+            </router-link>
+          </li>
+
         </ul>
+      </div>
+
+      <div id="navbarToggler" class="collapse navbar-collapse">
 
         <ul class="navbar-nav ml-auto">
           <!-- Authenticated -->
@@ -52,10 +82,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import LocaleDropdown from './LocaleDropdown'
+import FullLogo from '~/components/Navbar/FullLogo'
 
 export default {
   components: {
-    LocaleDropdown
+    LocaleDropdown,
+    FullLogo
   },
 
   data: () => ({

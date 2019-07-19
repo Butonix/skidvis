@@ -23,7 +23,8 @@
         width="306"
         height="117"
         button-class="d-none"
-        @change="onChange"/>
+        @change="onChange"
+      />
     </no-ssr>
   </div>
 </template>
@@ -31,6 +32,9 @@
 <script>
 
 export default {
+  components: {
+    // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
+  },
   props: {
     loading: {
       type: Boolean,

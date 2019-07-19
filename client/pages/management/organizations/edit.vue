@@ -10,7 +10,7 @@
         <thumbs-file-input
           v-if="images"
           :images="images"
-          :imagesLoading="imagesLoading"
+          :images-loading="imagesLoading"
           @change="setMainImage"
           @delete="deleteMainImage"
         />
@@ -241,7 +241,7 @@ export default {
   data: () => ({
     isActiveClassColorBox: false,
     logoLoading: false,
-    imagesLoading: {},
+    imagesLoading: {}
   }),
 
   computed: {
@@ -273,12 +273,19 @@ export default {
         let { data } = await axios.post('management/organizations/logo', {
           logo
         })
+        if (!data.logo || !data.logo.src || !data.logo.id) {
+          throw new Error()
+        }
         this.form.logo.src = data.logo.src
         this.form.logo.id = data.logo.id
         this.logoLoading = false
       } catch (e) {
         this.logo = null
         this.logoLoading = false
+        await this.$callToast({
+          type: 'error',
+          text: 'Загрузить изображение не удалось'
+        })
       }
     },
     async setMainImage ({ image, index }) {
@@ -296,6 +303,11 @@ export default {
         let { data } = await axios.post('management/organizations/image', {
           cover: image
         })
+
+        if (!data.mainImages || !data.mainImages.src || !data.mainImages.id) {
+          throw new Error()
+        }
+
         image = data.mainImages
 
         if (index !== undefined && this.form.images[index]) {
@@ -305,13 +317,16 @@ export default {
         }
         this.imagesLoading[index] = false
       } catch (e) {
-        console.log('catch')
         if (index !== undefined && this.images[index]) {
           this.$delete(this.images, index)
         } else {
           this.$delete(this.images, this.images.length - 1)
         }
         this.imagesLoading[index] = false
+        await this.$callToast({
+          type: 'error',
+          text: 'Загрузить изображение не удалось'
+        })
       }
     },
     deleteLogo () {

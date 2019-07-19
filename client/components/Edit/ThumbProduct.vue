@@ -27,6 +27,9 @@
 <script>
 
 export default {
+  components: {
+    // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
+  },
   props: {
     loading: {
       type: Boolean,

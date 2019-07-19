@@ -1,19 +1,15 @@
-.navbar {
-  font-weight: 600;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-}
+.navbar{
+  &__brand{
 
-.nav-item {
-  .dropdown-menu {
-    border: none;
-    margin-top: .5rem;
-    border-top: 1px solid #f2f2f2 !important;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
   }
-}
+  &__full-logo{
+    width: 263px;
+    color: $primary;
 
-.nav-link {
-  .svg-inline--fa {
-    font-size: 1.4rem;
+  }
+  &__nav{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 }

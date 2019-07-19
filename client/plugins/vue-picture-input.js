@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import PictureInput from 'vue-picture-input'
+import PictureInput from '~/components/PictureInput'
 
 Vue.component('picture-input', PictureInput)
