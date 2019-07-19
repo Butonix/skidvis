@@ -57,12 +57,19 @@
             </ul>
           </div>
         </div>
-        <router-link v-else :to="{ name: 'login' }"
-                     class="btn btn-outline-primary btn-auth">
+        <button v-else
+                class="btn btn-outline-primary btn-auth"
+                @click="showModalLogin"
+        >
           Войти
-        </router-link>
+        </button>
+        <!--        <router-link v-else :to="{ name: 'login' }"-->
+        <!--                     class="btn btn-outline-primary btn-auth">-->
+        <!--          Войти-->
+        <!--        </router-link>-->
       </div>
     </div>
+    <modal-login v-if="!user"/>
   </nav>
 </template>
 
@@ -71,10 +78,12 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
+    'login': () => import('~/components/Auth/login'),
     'vSelect': () => import('vue-select'),
     'NavItem': () => import('~/components/Navbar/NavItem'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'Flag': () => import('~/components/Icons/Flag'),
+    'ModalLogin': () => import('~/components/ModalLogin'),
     'FullLogo': () => import('~/components/Navbar/FullLogo')
   },
 
@@ -94,6 +103,9 @@ export default {
     ...mapActions({
       setCity: 'auth/setCity'
     }),
+    showModalLogin () {
+      this.$modal.push('login')
+    },
     async logout () {
       // Log out the user.
       await this.$store.dispatch('auth/logout')

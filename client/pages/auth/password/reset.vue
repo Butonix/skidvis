@@ -104,7 +104,7 @@ export default {
           text: 'Вы успешно сбросили пароль'
         })
       } catch (e) {
-        console.log(this.form);
+        console.log(this.form)
       }
     }
   }

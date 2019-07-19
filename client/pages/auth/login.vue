@@ -105,16 +105,7 @@ export default {
       } catch (e) {
 
       }
-    },
-    async loginGoogle () {
-      try {
-        // Submit the form.
-        const { data } = await axios.get('auth/google')
-        console.log(data);
-      } catch (e) {
-
-      }
-    },
+    }
 
   }
 }

@@ -6,7 +6,8 @@
     "start": "APP_PORT=2999 APP_HOST=localhost nuxt start -c client/nuxt.config.js",
     "generate": "APP_PORT=2999 APP_HOST=localhost nuxt generate -c client/nuxt.config.js",
     "prod": "APP_PORT=2999 APP_HOST=localhost nuxt generate -c client/nuxt.config.js && APP_PORT=2999 APP_HOST=localhost nuxt start -c client/nuxt.config.js",
-    "lint": "vue-cli-service lint client/"
+    "lint": "vue-cli-service lint client/",
+    "lint-fix": "eslint --fix client/"
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",

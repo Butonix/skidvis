@@ -1,56 +1,48 @@
 <template>
-  <div class="container pt-3">
-    <form class="row"
-          @submit.prevent @keydown="form.onKeydown($event)">
-      <div class="col-12 text-center">
-        <h5>
-          Восстановление пароля
-        </h5>
-        <div class="font-weight-light mb-3">
-          Впишите адрес эл. почты, указанный при регистрации
-          <br class="d-none d-md-block">
-          и мы отправим ссылку на изменение пароля
-        </div>
+  <form
+    class="row"
+    @submit.prevent @keydown="form.onKeydown($event)">
+    <div class="col-12 text-center">
+      <h5>
+        Восстановление пароля
+      </h5>
+      <div class="font-weight-light mb-3">
+        Впишите адрес эл. почты, указанный при регистрации
+        <br class="d-none d-md-block">
+        и мы отправим ссылку на изменение пароля
       </div>
-      <div class="custom-col login-col mx-auto">
-        <div class="mb-5">
-          <material-input
-            :autofocus="true"
-            v-model="form.email"
-            :form="form"
-            field="email"
-            type-input="inline"
-            placeholder="Эл. почта"
-            form-class="mb-4"
-          />
-        </div>
-        <div class="text-center">
-          <v-button
-            :block="true"
-            :loading="form.busy"
-            type="outline-primary"
-            @click="send"
-          >
-            Восстановить пароль
-          </v-button>
-          <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm mt-4">
-            <&nbsp;Назад
-          </router-link>
-        </div>
+    </div>
+    <div class="custom-col login-col mx-auto">
+      <div class="mb-5">
+        <material-input
+          :autofocus="true"
+          v-model="form.email"
+          :form="form"
+          field="email"
+          type-input="inline"
+          placeholder="Эл. почта"
+          form-class="mb-4"
+        />
+      </div>
+      <div class="text-center">
+        <v-button
+          :block="true"
+          :loading="form.busy"
+          type="outline-primary"
+          @click="send"
+        >
+          Восстановить пароль
+        </v-button>
+      </div>
 
-      </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </template>
 
 <script>
 import Form from 'vform'
 
 export default {
-  head () {
-    return { title: this.$t('reset_password') }
-  },
-  middleware: 'authRoutes',
   components: {
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
@@ -74,6 +66,8 @@ export default {
           type: 'success',
           text: 'На вашу эл. почту отправили сообщение с подтверждением'
         })
+
+        this.$emit('success')
       } catch (e) {
 
       }

@@ -151,7 +151,7 @@ export default {
           },
           src: '',
           id: ''
-        },
+        }
         // {
         //   src: '',
         //   id: ''
@@ -163,7 +163,7 @@ export default {
       description: '',
       logo: {
         color: '#FFFFFF',
-        src: '',
+        src: ''
         // id: 1
       },
       socials: [
@@ -230,7 +230,7 @@ export default {
       this.$delete(this.form.images, index)
     },
     deleteSocialsLink (index) {
-      console.log(index);
+      console.log(index)
       this.$delete(this.form.socials, index)
     },
     changeSocialsLink ({ index, value }) {

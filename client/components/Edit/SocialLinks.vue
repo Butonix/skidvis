@@ -10,7 +10,7 @@
         class-box="mr-2"
       />
       <label class="social-links-edit__item__link">
-        <a v-if="edit.value === undefined" class="text-break" :href="link.link" target="_blank" v-text="link.link"/>
+        <a v-if="edit.value === undefined" :href="link.link" class="text-break" target="_blank" v-text="link.link"/>
         <material-input
           v-if="edit.value !== undefined"
           v-model="edit.value"
@@ -108,7 +108,7 @@ export default {
       this.$emit('change', {
         value: {
           link: this.edit.value,
-          type: value[0].type,
+          type: value[0].type
         },
         index: this.edit.index
       })

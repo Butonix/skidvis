@@ -1,29 +1,20 @@
 import Vue from 'vue'
 
 import Toast from 'vue-easy-toast'
+import { $callToast } from '~/utils'
 
 Vue.use(Toast)
 
-Vue.mixin({
-  methods: {
-    $callToast (data) {
-      let typeClass = 'toast-alert toast-alert--' + data.type
-      let message = ''
-      if (data.title) {
-        message += `<div class="toast-alert-title">${data.title}</div>`
-      }
-      if (data.text) {
-        message += `<div class="toast-alert-text">${data.text}</div>`
-      }
-      return this.$toast(message, {
-        transition: 'slide-down',
-        horizontalPosition: 'center',
-        className: typeClass,
-        duration: 2000,
-        ...data
-      })
-    },
-    $confirmDelete (data) {
+Vue.use({
+  /*
+  * install function
+  * @param  {Vue} Vue
+  * @param  {object} options  lazyload options
+  */
+  install (Vue, options = {}) {
+    Vue.prototype.$callToast = $callToast
+
+    Vue.prototype.$confirmDelete = function (data) {
       return this.$swal({
         customClass: {
           container: 'confirm-modal',
@@ -37,6 +28,11 @@ Vue.mixin({
         showCancelButton: true,
         ...data
       })
+    }
+
+    window.__VUE_GLOBAL_HOOK_TOAST__ = {
+      $callToast: Vue.prototype.$callToast,
+      $confirmDelete: Vue.prototype.$confirmDelete
     }
   }
 })

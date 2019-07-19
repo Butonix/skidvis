@@ -91,6 +91,7 @@ module.exports = {
   ],
 
   build: {
+    vendor: ['axios', 'vuex'],
     extractCSS: true
   }
 }

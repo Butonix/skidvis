@@ -118,3 +118,23 @@ export function watchList (axios, keyApiUrl, type) {
     })
   }
 }
+
+export function $callToast (data, toast) {
+  let typeClass = 'toast-alert toast-alert--' + data.type
+  let message = ''
+  if (data.title) {
+    message += `<div class="toast-alert-title">${data.title}</div>`
+  }
+  if (data.text) {
+    message += `<div class="toast-alert-text">${data.text}</div>`
+  }
+  const setup = {
+    transition: 'slide-down',
+    horizontalPosition: 'center',
+    className: typeClass,
+    duration: 2000,
+    ...data
+  }
+
+  return (toast) ? toast(message, setup) : this.$toast(message, setup)
+}

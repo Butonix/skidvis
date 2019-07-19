@@ -125,10 +125,6 @@ export default {
       indexApiUrl
     }
   },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage
-  },
   computed: {
     items () {
       return (this.list && this.list.data) ? this.list.data : []
@@ -136,6 +132,10 @@ export default {
     pageCount () {
       return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
     }
+  },
+  watch: {
+    'params.search': listWatchInstanceSearch,
+    'params.page': listWatchInstancePage
   },
   methods: {
     async deleteHandle (id) {

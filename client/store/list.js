@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 
 // state
 export const state = () => ({
@@ -14,7 +14,7 @@ export const mutations = {
 
 // actions
 export const actions = {
-  getQueryData (context, { query, defaultData }){
+  getQueryData (context, { query, defaultData }) {
     let res = {
       page: 1,
       perPage: 11,
@@ -41,6 +41,3 @@ export const actions = {
     return res
   }
 }
-
-
-

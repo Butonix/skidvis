@@ -1,0 +1,9 @@
+.modal{
+  &--login{
+    max-width: 331px;
+    box-shadow: 0px 3px 19px rgba(216, 216, 216, 0.7);
+    border-radius: 15px;
+    min-height: 400px;
+    padding: 30px 19px;
+  }
+}

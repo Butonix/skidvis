@@ -94,8 +94,8 @@ export default {
     }
   }),
   computed: {
-    id(){
-      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000);
+    id () {
+      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     },
     formClass_ () {
       let typeClass = this.typesInput[this.typeInput]

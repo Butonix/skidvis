@@ -1,11 +1,10 @@
 <template>
-  <div class="layout" :class="{'page-loaded': loaded}">
+  <div :class="{'page-loaded': loaded}" class="layout">
     <main>
       <navbar/>
       <breadcrumbs/>
       <nuxt/>
     </main>
-
 
     <app-footer/>
   </div>

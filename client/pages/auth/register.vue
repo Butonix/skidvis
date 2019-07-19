@@ -123,7 +123,6 @@ export default {
   methods: {
     async register () {
       try {
-
         // Register the user.
         const { data } = await this.form.post('/register')
 
@@ -138,7 +137,7 @@ export default {
 
         // Redirect home.
         this.$router.push({ name: 'home' })
-      }catch (e) {
+      } catch (e) {
 
       }
     }

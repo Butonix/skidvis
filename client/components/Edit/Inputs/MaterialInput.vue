@@ -81,8 +81,8 @@ export default {
     }
   }),
   computed: {
-    id(){
-      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000);
+    id () {
+      return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     },
     autocomplete () {
       return (this.type === 'password') ? 'new-password' : 'off'
