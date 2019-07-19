@@ -72,6 +72,8 @@
 
         <material-input
           v-model="form.full_street"
+          :form="form"
+          field="full_street"
           type-input="inline"
           placeholder="Адрес точки"
           form-class="mb-4"
@@ -79,6 +81,8 @@
 
         <material-input
           v-model="form.name"
+          :form="form"
+          field="name"
           type-input="inline"
           placeholder="Название точки"
           form-class="mb-4"
@@ -86,6 +90,8 @@
 
         <material-input
           v-model="form.email"
+          :form="form"
+          field="email"
           type-input="inline"
           placeholder="Эл. почта"
           form-class="mb-4"
@@ -93,6 +99,8 @@
 
         <material-input
           v-model="form.phone"
+          :form="form"
+          field="phone"
           type-input="inline"
           placeholder="Телефон"
           form-class="mb-5"
@@ -151,12 +159,8 @@
 <script>
 import { getQueryData, watchList } from '~/utils'
 import Form from 'vform'
-import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
-import SearchInput from '~/components/SearchInput'
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
-import vSelect from 'vue-select'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -164,10 +168,10 @@ let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 
 export default {
   components: {
-    SearchInput,
-    MaterialInput,
-    vSelect,
-    Paginate
+    'SearchInput': () => import('~/components/SearchInput'),
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
+    'vSelect': () => import('vue-select'),
+    'Paginate': () => import('vuejs-paginate/src/components/Paginate.vue')
   },
   middleware: ['auth'],
   head () {
@@ -292,8 +296,10 @@ export default {
         this.reloadList()
         await this.$callToast({
           type: 'success',
-          text: 'Данные успешно сохранены'
+          text: 'Данные успешно сохранены',
+          duration: 3000
         })
+        this.setDefaultFormData()
       } catch (e) {
         await this.$callToast({
           type: 'error',

@@ -157,24 +157,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Form from 'vform'
-import FullSlider from '~/components/FullSlider'
-import ThumbsFileInput from '~/components/Edit/ThumbsFileInput'
-import SocialLinks from '~/components/Edit/SocialLinks'
-import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
-import MaterialTextarea from '~/components/Edit/Inputs/MaterialTextarea'
-import LogoFileInput from '~/components/Edit/LogoFileInput'
 import axios from 'axios'
-import vSelect from 'vue-select'
 
 export default {
   components: {
-    MaterialTextarea,
-    FullSlider,
-    ThumbsFileInput,
-    LogoFileInput,
-    MaterialInput,
-    vSelect,
-    SocialLinks
+    'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
+    'FullSlider': () => import('~/components/FullSlider'),
+    'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
+    'LogoFileInput': () => import('~/components/Edit/LogoFileInput'),
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
+    'vSelect': () => import('vue-select'),
+    'SocialLinks': () => import('~/components/Edit/SocialLinks')
   },
   head () {
     return {

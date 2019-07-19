@@ -66,11 +66,10 @@
 
 <script>
 import Form from 'vform'
-import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 
 export default {
   components: {
-    MaterialInput
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
   head () {
     return { title: this.$t('reset_password') }

@@ -9,20 +9,7 @@
         <div class="text-center font-weight-light mb-3">
           Через социальные сети
         </div>
-        <div class="text-center mb-5">
-          <social
-            type="vk"
-            class-box="social-icon-lg"
-          />
-          <social
-            type="ok"
-            class-box="social-icon-lg mx-2"
-          />
-          <social
-            type="facebook"
-            class-box="social-icon-lg"
-          />
-        </div>
+        <login-with-social />
         <div class="text-center font-weight-light mb-4">
           Или заполните форму
         </div>
@@ -111,8 +98,6 @@
 
 <script>
 import Form from 'vform'
-import Social from '~/components/Icons/Social'
-import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
 
 export default {
   head () {
@@ -120,8 +105,8 @@ export default {
   },
   middleware: 'authRoutes',
   components: {
-    MaterialInput,
-    Social
+    'LoginWithSocial': () => import('~/components/Auth/LoginWithSocial'),
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
   data: () => ({
     form: new Form({

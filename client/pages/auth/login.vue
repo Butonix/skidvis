@@ -66,10 +66,7 @@
 
 <script>
 import Form from 'vform'
-import Social from '~/components/Icons/Social'
-import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
-import LoginWithSocial from '~/components/Auth/LoginWithSocial'
-import axios from "axios";
+import axios from 'axios'
 
 export default {
   head () {
@@ -77,9 +74,8 @@ export default {
   },
   middleware: 'authRoutes',
   components: {
-    LoginWithSocial,
-    Social,
-    MaterialInput
+    'LoginWithSocial': () => import('~/components/Auth/LoginWithSocial'),
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
   data: () => ({
     form: new Form({

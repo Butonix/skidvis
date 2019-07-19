@@ -6,88 +6,78 @@
       </router-link>
 
       <div class="">
-        <div class=""/>
-        <ul class="navbar__nav list-unstyled">
-          <li class="nav-item">
-            <router-link :to="{ name: 'management.organizations.index' }" class="nav-link" active-class="active">
-              Управление организациями
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'products' }" class="nav-link" active-class="active">
+        <div class="">
+
+        </div>
+        <div>
+          <ul class="navbar__nav list-unstyled">
+            <nav-item :to="{ name: 'products' }">
               Все акции
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'organizations' }" class="nav-link" active-class="active">
+            </nav-item>
+            <nav-item :to="{ name: 'organizations' }">
               Все компании
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'business' }" class="nav-link" active-class="active">
+            </nav-item>
+            <nav-item :to="{ name: 'business' }">
               Бизнесу
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'blog' }" class="nav-link" active-class="active">
+            </nav-item>
+            <nav-item :to="{ name: 'blog' }">
               Блог
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link :to="{ name: 'contacts' }" class="nav-link" active-class="active">
+            </nav-item>
+            <nav-item :to="{ name: 'contacts' }">
               Контакты
-            </router-link>
-          </li>
+            </nav-item>
 
-        </ul>
-      </div>
-
-      <div id="navbarToggler" class="collapse navbar-collapse">
-
-        <ul class="navbar-nav ml-auto">
-          <!-- Authenticated -->
-          <template v-if="user">
-            <li class="nav-item">
-              <router-link :to="{ name: 'settings.profile' }" class="nav-link pl-3">
-                <fa icon="cog" fixed-width/>
-                {{ $t('settings') }}
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link pl-3" href="#" @click.prevent="logout">
-                <fa icon="sign-out-alt" fixed-width/>
-                Выход
-              </a>
-            </li>
-          </template>
-          <!-- Guest -->
-          <template v-else>
-            <li class="nav-item">
-              <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">
-                Вход
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">
-                Регистрация
-              </router-link>
-            </li>
-          </template>
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
+
+
+    <!--<div id="navbarToggler" class="collapse navbar-collapse">-->
+
+    <!--  <ul class="navbar-nav ml-auto">-->
+    <!--    &lt;!&ndash; Authenticated &ndash;&gt;-->
+    <!--    <template v-if="user">-->
+    <!--      <li class="nav-item">-->
+    <!--        <router-link :to="{ name: 'settings.profile' }" class="nav-link pl-3">-->
+    <!--          <fa icon="cog" fixed-width/>-->
+    <!--          {{ $t('settings') }}-->
+    <!--        </router-link>-->
+    <!--      </li>-->
+    <!--      <li class="nav-item">-->
+    <!--        <a class="nav-link pl-3" href="#" @click.prevent="logout">-->
+    <!--          <fa icon="sign-out-alt" fixed-width/>-->
+    <!--          Выход-->
+    <!--        </a>-->
+    <!--      </li>-->
+    <!--    </template>-->
+    <!--    &lt;!&ndash; Guest &ndash;&gt;-->
+    <!--    <template v-else>-->
+    <!--      <li class="nav-item">-->
+    <!--        <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">-->
+    <!--          Вход-->
+    <!--        </router-link>-->
+    <!--      </li>-->
+    <!--      <li class="nav-item">-->
+    <!--        <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">-->
+    <!--          Регистрация-->
+    <!--        </router-link>-->
+    <!--      </li>-->
+    <!--    </template>-->
+    <!--  </ul>-->
+    <!--</div>-->
   </nav>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import LocaleDropdown from './LocaleDropdown'
-import FullLogo from '~/components/Navbar/FullLogo'
+// import NavItem from '~/components/Navbar/NavItem'
 
 export default {
   components: {
-    LocaleDropdown,
-    FullLogo
+    // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
+    'NavItem': () => import('~/components/Navbar/NavItem'),
+    'FullLogo': () => import('~/components/Navbar/FullLogo')
   },
 
   data: () => ({
