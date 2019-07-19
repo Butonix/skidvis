@@ -30,7 +30,7 @@
 
 export default {
   components: {
-    // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
+    // 'PictureInput': () => import('~/components/PictureInput')
   },
   props: {
     loading: {

@@ -47,7 +47,8 @@ $input-border-radius: $border-radius;
 $input-border-radius-lg: $border-radius;
 $input-border-radius-sm: $border-radius;
 
-$edit-color: #7F00FF;
+$business: #7F00FF;
+$blog: #FF2E00;
 $primary: #00C2FF;
 $secondary: #E4E4E4;
 $danger: #F41818;
@@ -58,9 +59,14 @@ $themes: (
             "primary": $primary,
         )
     ),
-    "edit": (
+    "business": (
         "theme-colors": (
-            "primary": $edit-color,
+            "primary": $business,
+        )
+    ),
+    "blog": (
+        "theme-colors": (
+            "primary": $blog,
         )
     )
 );
@@ -96,3 +102,7 @@ $breadcrumb-active-color:           $body-color;
 $breadcrumb-divider:                quote(">");
 
 $breadcrumb-border-radius:          0;
+
+
+$nav-link-padding-y:                .5rem;
+$nav-link-padding-x:                rem(14);

@@ -50,7 +50,7 @@
         $link-color: $primary_;
         $link-hover-color: darken($link-color, 15%);
         a {
-          &:not(.btn){
+          &:not(.btn):not(.nav-link){
             color: $link-color;
             @include hover {
               color: $link-hover-color;
@@ -81,6 +81,20 @@
 
 
 
+
+    }
+  }
+
+  @if($theme-colors_){
+
+    $primary_: map_get($theme-colors_, "primary");
+    @if($primary_){
+
+      .nav-link--#{$theme}{
+        @include hover {
+          color: $primary_;
+        }
+      }
 
     }
   }

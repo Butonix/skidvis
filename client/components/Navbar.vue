@@ -1,82 +1,80 @@
 <template>
   <nav class="navbar">
-    <div class="container">
+    <div class="container navbar__container">
       <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar__brand">
+        <div class="navbar__brand__label">
+          сервис скидок
+        </div>
         <full-logo/>
       </router-link>
 
       <div class="">
-        <div class="">
-
+        <div class="cursor-pointer nav-link">
+          <span class="pr-1">{{ cityName }}</span>
+          <chevron/>
         </div>
         <div>
           <ul class="navbar__nav list-unstyled">
-            <nav-item :to="{ name: 'products' }">
+            <nav-item :to="{ name: 'products' }" class-link="nav-link--default">
               Все акции
             </nav-item>
-            <nav-item :to="{ name: 'organizations' }">
+            <nav-item :to="{ name: 'organizations' }" class-link="nav-link--default">
               Все компании
             </nav-item>
-            <nav-item :to="{ name: 'business' }">
+            <nav-item :to="{ name: 'business' }" class-link="nav-link--business">
               Бизнесу
             </nav-item>
-            <nav-item :to="{ name: 'blog' }">
+            <nav-item :to="{ name: 'blog' }" class-link="nav-link--blog icon-blog">
               Блог
             </nav-item>
-            <nav-item :to="{ name: 'contacts' }">
+            <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default">
               Контакты
             </nav-item>
-
           </ul>
         </div>
       </div>
+      <div class="ml-auto">
+        <flag :count="wishCount"/>
+      </div>
+      <div class="ml-4">
+        <div v-if="user" class="auth-collapse">
+          <button v-if="user.avatar && user.avatar.src" class="btn btn-outline-primary btn-auth btn-auth--active">
+            <img :src="user.avatar.src">
+          </button>
+          <button v-else class="btn btn-outline-primary btn-auth btn-auth--active text-uppercase">
+            {{ user.initials || 'АК' }}
+          </button>
+          <div class="auth-collapse__wrapper">
+            <ul class="auth-collapse__list list-unstyled">
+              <nav-item :to="{ name: 'management.organizations.index' }">
+                Организации
+              </nav-item>
+              <li class="nav-item">
+                <div class="nav-link cursor-pointer" @click.prevent="logout">
+                  Выйти
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <router-link v-else :to="{ name: 'login' }"
+                     class="btn btn-outline-primary btn-auth">
+          Войти
+        </router-link>
+      </div>
     </div>
-
-
-    <!--<div id="navbarToggler" class="collapse navbar-collapse">-->
-
-    <!--  <ul class="navbar-nav ml-auto">-->
-    <!--    &lt;!&ndash; Authenticated &ndash;&gt;-->
-    <!--    <template v-if="user">-->
-    <!--      <li class="nav-item">-->
-    <!--        <router-link :to="{ name: 'settings.profile' }" class="nav-link pl-3">-->
-    <!--          <fa icon="cog" fixed-width/>-->
-    <!--          {{ $t('settings') }}-->
-    <!--        </router-link>-->
-    <!--      </li>-->
-    <!--      <li class="nav-item">-->
-    <!--        <a class="nav-link pl-3" href="#" @click.prevent="logout">-->
-    <!--          <fa icon="sign-out-alt" fixed-width/>-->
-    <!--          Выход-->
-    <!--        </a>-->
-    <!--      </li>-->
-    <!--    </template>-->
-    <!--    &lt;!&ndash; Guest &ndash;&gt;-->
-    <!--    <template v-else>-->
-    <!--      <li class="nav-item">-->
-    <!--        <router-link :to="{ name: 'login' }" class="nav-link" active-class="active">-->
-    <!--          Вход-->
-    <!--        </router-link>-->
-    <!--      </li>-->
-    <!--      <li class="nav-item">-->
-    <!--        <router-link :to="{ name: 'register' }" class="nav-link" active-class="active">-->
-    <!--          Регистрация-->
-    <!--        </router-link>-->
-    <!--      </li>-->
-    <!--    </template>-->
-    <!--  </ul>-->
-    <!--</div>-->
   </nav>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-// import NavItem from '~/components/Navbar/NavItem'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
+    'vSelect': () => import('vue-select'),
     'NavItem': () => import('~/components/Navbar/NavItem'),
+    'Chevron': () => import('~/components/Icons/Chevron'),
+    'Flag': () => import('~/components/Icons/Flag'),
     'FullLogo': () => import('~/components/Navbar/FullLogo')
   },
 
@@ -85,10 +83,17 @@ export default {
   }),
 
   computed: mapGetters({
-    user: 'auth/user'
+    user: 'auth/user',
+    cities: 'auth/cities',
+    wishCount: 'auth/wishCount',
+    cityName: 'auth/cityName',
+    city: 'auth/city'
   }),
 
   methods: {
+    ...mapActions({
+      setCity: 'auth/setCity'
+    }),
     async logout () {
       // Log out the user.
       await this.$store.dispatch('auth/logout')
@@ -100,10 +105,5 @@ export default {
 }
 </script>
 
-<style scoped>
-.profile-photo {
-  width: 2rem;
-  height: 2rem;
-  margin: -.375rem 0;
-}
+<style>
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div class="layout" :class="{'page-loaded': loaded}">
     <main>
       <navbar/>
       <breadcrumbs/>
@@ -20,7 +20,13 @@ export default {
     Navbar,
     AppFooter
   },
+  data: () => ({
+    loaded: false
+  }),
   computed: {
+  },
+  mounted () {
+    this.loaded = true
   }
 }
 </script>

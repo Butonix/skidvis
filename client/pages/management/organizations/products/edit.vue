@@ -132,7 +132,7 @@ export default {
     return {
       title: 'Редактирование организации',
       bodyAttrs: {
-        class: 'theme-edit'
+        class: 'theme-business'
       }
     }
   },

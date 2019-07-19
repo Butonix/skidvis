@@ -178,7 +178,7 @@ export default {
     return {
       title: 'Мои точки',
       bodyAttrs: {
-        class: 'theme-edit'
+        class: 'theme-business'
       }
     }
   },

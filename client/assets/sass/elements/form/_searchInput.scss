@@ -20,7 +20,7 @@
           }
         }
         .search-input__lupe{
-          color: $edit-color;
+          color: $business;
         }
       }
     }
@@ -38,7 +38,7 @@
       right: 50%;
       width: 0;
       height: 3px;
-      background: $edit-color;
+      background: $business;
       transition: .2s ease;
     }
   }

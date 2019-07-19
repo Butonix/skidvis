@@ -4,18 +4,35 @@ import Cookies from 'js-cookie'
 // state
 export const state = () => ({
   user: null,
-  token: null
+  token: null,
+  city: 1,
+  wishCount: 22,
+  cityName: 'Петропавловск-Камчатский',
+  cities: [
+    { value: 1, label: 'Петропавловск-Камчатский' },
+    { value: 2, label: 'Петропавловск-Камчатский' },
+    { value: 3, label: 'Петропавловск-Камчатский' },
+    { value: 4, label: 'Петропавловск-Камчатский' },
+    { value: 5, label: 'Петропавловск-Камчатский' }
+  ]
 })
 
 // getters
 export const getters = {
   user: state => state.user,
   token: state => state.token,
+  city: state => state.city,
+  wishCount: state => state.wishCount,
+  cityName: state => state.cityName,
+  cities: state => state.cities,
   check: state => state.user !== null
 }
 
 // mutations
 export const mutations = {
+  SET_CITY (state, city) {
+    state.city = city
+  },
   SET_TOKEN (state, token) {
     state.token = token
   },
@@ -40,6 +57,9 @@ export const mutations = {
 
 // actions
 export const actions = {
+  setCity ({ commit }, value) {
+    commit('SET_CITY', value)
+  },
   saveToken ({ commit, dispatch }, { token, remember }) {
     commit('SET_TOKEN', token)
 

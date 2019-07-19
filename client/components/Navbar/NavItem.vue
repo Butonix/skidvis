@@ -1,6 +1,9 @@
 <template>
   <li class="nav-item">
-    <router-link :to="to" class="nav-link" active-class="active">
+    <router-link :to="to"
+                 :class="classLink"
+                 class="nav-link"
+                 active-class="active">
       <slot/>
     </router-link>
   </li>
@@ -9,6 +12,14 @@
 <script>
 export default {
   props: {
+    classLink: {
+      type: String,
+      default: ''
+    },
+    type: {
+      type: String,
+      default: undefined
+    },
     to: {
       type: Object,
       required: true

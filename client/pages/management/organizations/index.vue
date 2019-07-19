@@ -97,7 +97,7 @@ export default {
     return {
       title: 'Мои организации',
       bodyAttrs: {
-        class: 'theme-edit'
+        class: 'theme-business'
       }
     }
   },
