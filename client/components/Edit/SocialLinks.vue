@@ -55,13 +55,11 @@
 
 <script>
 import MaterialInput from '~/components/Edit/Inputs/MaterialInput'
-import Social from '~/components/Icons/Social'
 import Pain from '~/components/Icons/Pain'
 
 export default {
   components: {
     MaterialInput,
-    Social,
     Pain
   },
   props: {

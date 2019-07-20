@@ -3,6 +3,10 @@
     :data-type="type"
     :class="'social-icon' + ((classBox !== '') ? ' ' + classBox : '')"
     @click="$emit('click', $event)"
+    @mouseleave="$emit('mouseleave', $event)"
+    @mouseenter="$emit('mouseenter', $event)"
+    @mousedown="$emit('mousedown', $event)"
+    @mouseup="$emit('mouseup', $event)"
   >
     <fa :icon="icon" />
   </div>
@@ -11,6 +15,7 @@
 <script>
 
 export default {
+  name: 'Social',
   props: {
     // eslint-disable-next-line vue/require-default-prop
     type: {

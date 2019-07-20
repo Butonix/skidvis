@@ -19,14 +19,9 @@
 </template>
 
 <script>
-import Social from '~/components/Icons/Social'
 import { openWindow } from '~/utils'
 
 export default {
-
-  components: {
-    Social
-  },
 
   props: {
     store: {

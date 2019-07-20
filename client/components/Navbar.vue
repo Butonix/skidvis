@@ -91,7 +91,6 @@ export default {
   components: {
     'login': () => import('~/components/Auth/login'),
     'vSelect': () => import('vue-select'),
-    'NavItem': () => import('~/components/Navbar/NavItem'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'Flag': () => import('~/components/Icons/Flag'),
     'ModalLogin': () => import('~/components/ModalLogin'),

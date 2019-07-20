@@ -1,0 +1,31 @@
+.product{
+  &__slider{
+    border-radius: 15px;
+    overflow: hidden;
+    .full-slider{
+      &__slider{
+        height: 313px;
+      }
+    }
+  }
+  &__content, &__sidebar{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  &__content{
+    flex-basis: 0;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    max-width: 100%;
+    padding-right: 30px;
+  }
+  &__sidebar{
+    -webkit-box-flex: 0;
+    flex: 0 0 330px;
+    max-width: 330px;
+    padding-left: 30px;
+
+  }
+
+}
