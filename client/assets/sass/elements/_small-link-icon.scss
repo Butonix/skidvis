@@ -1,0 +1,15 @@
+.sli{
+  display: inline-block;
+  cursor: pointer;
+  color: $body-color;
+  &--delete{
+    &:hover{
+      color: $danger;
+    }
+  }
+  &--edit{
+    &:hover{
+      color: $primary;
+    }
+  }
+}

@@ -5,6 +5,7 @@
         Мои организации
       </h5>
       <search-input
+        v-if="params"
         v-model="params.search"
       />
     </div>
@@ -16,7 +17,7 @@
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <div class="btn btn-outline-primary btn-sm" @click="showModalAddPoint">
+          <div class="btn btn-outline-primary btn-sm" @click="showModalSavePoint">
             + Добавить адрес
           </div>
         </div>
@@ -30,8 +31,10 @@
         <div class="col pl-2">
           <div class="text-primary">
             {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
+            <span class="sli sli--edit" @click="onEdit(key)"><fa icon="pencil-alt" /></span>
+            <span class="sli sli--delete" @click="onDelete(key)"><fa :icon="['far', 'trash-alt']"/></span>
           </div>
-          {{ item.time }}
+          {{ item.operationModeText }}
           <div class="font-weight-bolder d-block d-md-none">
             <div>
               {{ item.email }}
@@ -55,7 +58,7 @@
     <div class="container mt-5">
 
       <paginate
-        v-if="pageCount && pageCount > 1"
+        v-if="params && pageCount && pageCount > 1"
         v-model="params.page"
         :page-count="pageCount"
         :page-range="3"
@@ -67,7 +70,7 @@
         next-class="d-none"/>
 
     </div>
-    <modal name="add-point" @closed="closedModalAddPoint">
+    <modal name="save-point" @closed="closedModalSavePoint">
       <div class="basic-modal">
 
         <material-input
@@ -140,7 +143,12 @@
           </div>
         </div>
         <div class="text-center mt-5">
-          <button class="btn btn-outline-primary mr-2"
+          <button v-if="updateId" class="btn btn-outline-primary mr-2"
+                  @click="savePoint"
+          >
+            Сохранить адрес
+          </button>
+          <button v-else class="btn btn-outline-primary mr-2"
                   @click="addPoint"
           >
             Добавить адрес
@@ -237,6 +245,9 @@ export default {
       }
     }
   },
+  data: () => ({
+    updateId: null
+  }),
   watch: {
     'params.search': listWatchInstanceSearch,
     'params.page': listWatchInstancePage
@@ -262,6 +273,34 @@ export default {
     ...mapActions({
       fetchTimezones: 'variables/fetchTimezones'
     }),
+    async onDelete (key) {
+      let res = await this.$confirmDelete()
+      if (res.value) {
+        try {
+          await axios.delete(`management/organizations/${this.organizationId}/points/${this.items[key].id}`)
+          await this.$callToast({
+            type: 'success',
+            text: 'Точка успешно удалена'
+          })
+          this.reloadList()
+        } catch (e) {
+          await this.$callToast({
+            type: 'error',
+            text: 'Удалить не удалось'
+          })
+        }
+      }
+    },
+    onEdit (key) {
+      this.form.name = this.items[key].name
+      this.form.full_street = this.items[key].full_street
+      this.form.email = this.items[key].email
+      this.form.phone = this.items[key].phone
+      this.form.timezone = this.items[key].timezone
+      this.form.operationMode = this.items[key].operationMode
+      this.updateId = this.items[key].id
+      this.$modal.push('save-point')
+    },
     setDefaultFormData () {
       this.form.name = ''
       this.form.full_street = ''
@@ -281,11 +320,12 @@ export default {
         }
       }
     },
-    closedModalAddPoint () {
+    closedModalSavePoint () {
       this.setDefaultFormData()
     },
-    showModalAddPoint () {
-      this.$modal.push('add-point')
+    showModalSavePoint () {
+      this.updateId = null
+      this.$modal.push('save-point')
     },
     reloadList () {
       listWatchInstanceDelete.call(this)
@@ -296,10 +336,26 @@ export default {
         this.reloadList()
         await this.$callToast({
           type: 'success',
-          text: 'Данные успешно сохранены',
+          text: 'Точка успешно добавлена',
           duration: 3000
         })
         this.setDefaultFormData()
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Сохранить не удалось'
+        })
+      }
+    },
+    async savePoint () {
+      try {
+        await this.form.patch(`management/organizations/${this.organizationId}/points/${this.updateId}`)
+        this.reloadList()
+        await this.$callToast({
+          type: 'success',
+          text: 'Точка успешно изменена',
+          duration: 3000
+        })
       } catch (e) {
         await this.$callToast({
           type: 'error',
