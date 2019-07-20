@@ -62,6 +62,8 @@ export default {
         // Update the user.
         await this.$store.dispatch('auth/updateUser', { user: data })
 
+        form.reset()
+
         this.slide = 'login'
       } catch (e) {
         console.log(e)
@@ -80,6 +82,8 @@ export default {
 
         // Fetch the user.
         await this.$store.dispatch('auth/fetchUser')
+
+        form.reset()
 
         this.$modal.pop()
 

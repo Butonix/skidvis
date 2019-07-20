@@ -1,103 +1,19 @@
 <template>
   <div class="container pt-3">
     <div class="row">
-      <form class="custom-col login-col mx-auto" autocomplete="on"
-            @submit.prevent @keydown="form.onKeydown($event)">
-        <h5 class="text-center">
-          Регистрация
-        </h5>
-        <div class="text-center font-weight-light mb-3">
-          Через социальные сети
-        </div>
-        <login-with-social />
-        <div class="text-center font-weight-light mb-4">
-          Или заполните форму
-        </div>
-        <div class="mb-5">
-          <material-input
-            :autofocus="true"
-            v-model="form.l_name"
-            :form="form"
-            field="l_name"
-            type-input="inline"
-            placeholder="Фамилия"
-            form-class="mb-4"
-          />
-          <material-input
-            v-model="form.f_name"
-            :form="form"
-            field="f_name"
-            type-input="inline"
-            placeholder="Имя"
-            form-class="mb-4"
-          />
-          <material-input
-            v-model="form.m_name"
-            :form="form"
-            field="m_name"
-            type-input="inline"
-            placeholder="Отчество"
-            form-class="mb-4"
-          />
-          <material-input
-            v-model="form.phone"
-            :form="form"
-            field="phone"
-            type-input="inline"
-            placeholder="Телефон"
-            form-class="mb-4"
-          />
-          <material-input
-            v-model="form.email"
-            :form="form"
-            field="email"
-            type-input="inline"
-            placeholder="Эл. почта"
-            form-class="mb-4"
-          />
-
-          <material-input
-            v-model="form.password"
-            :form="form"
-            type="password"
-            field="password"
-            type-input="inline"
-            placeholder="Пароль"
-            form-class="mb-4"
-          />
-
-          <material-input
-            v-model="form.password_confirmation"
-            :form="form"
-            type="password"
-            field="password_confirmation"
-            type-input="inline"
-            placeholder="Повторите пароль"
-            form-class="mb-4"
-          />
-        </div>
-        <div class="mb-4">
-          <v-button
-            :block="true"
-            :loading="form.busy"
-            type="outline-primary"
-            @click="register">
-            Войти
-          </v-button>
-        </div>
-        <div class="text-center">
+      <div class="custom-col login-col mx-auto">
+        <register @register="register"/>
+        <div class="text-center mt-4">
           <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm">
             <&nbsp;Назад
           </router-link>
         </div>
-
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Form from 'vform'
 
 export default {
   head () {
@@ -105,35 +21,25 @@ export default {
   },
   middleware: 'authRoutes',
   components: {
-    'LoginWithSocial': () => import('~/components/Auth/LoginWithSocial'),
-    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
+    'register': () => import('~/components/Auth/register')
   },
-  data: () => ({
-    form: new Form({
-      l_name: '',
-      f_name: '',
-      m_name: '',
-      phone: '',
-      email: '',
-      password: '',
-      password_confirmation: ''
-    })
-  }),
 
   methods: {
-    async register () {
+    async register (form) {
       try {
         // Register the user.
-        const { data } = await this.form.post('/register')
+        const { data } = await form.post('/register')
 
         // Log in the user.
-        const { data: { token } } = await this.form.post('/login')
+        const { data: { token } } = await form.post('/login')
 
         // Save the token.
         this.$store.dispatch('auth/saveToken', { token })
 
         // Update the user.
         await this.$store.dispatch('auth/updateUser', { user: data })
+
+        form.reset()
 
         // Redirect home.
         this.$router.push({ name: 'home' })

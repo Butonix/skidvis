@@ -1,55 +1,9 @@
 <template>
   <div class="container pt-3">
     <div class="row">
-      <form class="custom-col login-col mx-auto" autocomplete="on"
-            @submit.prevent @keydown="form.onKeydown($event)">
-        <h5 class="text-center">
-          Вход
-        </h5>
-        <div class="text-center font-weight-light mb-3">
-          Через социальные сети
-        </div>
-        <login-with-social />
-        <div class="text-center font-weight-light mb-4">
-          С паролем
-        </div>
-        <div class="mb-4">
-
-          <material-input
-            :autofocus="true"
-            v-model="form.email"
-            :form="form"
-            field="email"
-            type-input="inline"
-            placeholder="Эл. почта"
-            form-class="mb-4"
-          />
-
-          <material-input
-            v-model="form.password"
-            :form="form"
-            type="password"
-            field="password"
-            type-input="inline"
-            placeholder="Пароль"
-            form-class="mb-4"
-          />
-
-          <checkbox v-model="remember" name="remember">
-            Запомни меня
-          </checkbox>
-        </div>
-
-        <div class="text-center">
-          <v-button
-            :block="true"
-            :loading="form.busy"
-            type="outline-primary"
-            @click="login"
-          >
-            Войти
-          </v-button>
-          <br>
+      <div class="custom-col login-col mx-auto">
+        <login @login="login"/>
+        <div class="text-center mt-4">
           <router-link :to="{ name: 'password.request' }" class="btn btn-link">
             Забыл пароль
           </router-link>
@@ -58,15 +12,12 @@
             Зарегистрироваться
           </router-link>
         </div>
-
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Form from 'vform'
-import axios from 'axios'
 
 export default {
   head () {
@@ -74,22 +25,14 @@ export default {
   },
   middleware: 'authRoutes',
   components: {
-    'LoginWithSocial': () => import('~/components/Auth/LoginWithSocial'),
-    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
+    'login': () => import('~/components/Auth/login')
   },
-  data: () => ({
-    form: new Form({
-      email: '',
-      password: ''
-    }),
-    remember: false
-  }),
 
   methods: {
-    async login () {
+    async login (form) {
       try {
         // Submit the form.
-        const { data } = await this.form.post('/login')
+        const { data } = await form.post('/login')
 
         // Save the token.
         this.$store.dispatch('auth/saveToken', {
@@ -100,10 +43,12 @@ export default {
         // Fetch the user.
         await this.$store.dispatch('auth/fetchUser')
 
+        form.reset()
+
         // Redirect home.
         this.$router.push({ name: 'home' })
       } catch (e) {
-
+        console.log(e)
       }
     }
 
