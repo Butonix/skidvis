@@ -103,6 +103,7 @@ export default {
           type: 'success',
           text: 'Вы успешно сбросили пароль'
         })
+        this.$router.push({ name: 'login' })
       } catch (e) {
         console.log(this.form)
       }

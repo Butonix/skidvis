@@ -2,7 +2,7 @@
   <div class="container pt-3">
     <div class="row">
       <div class="custom-col login-col mx-auto">
-        <register @register="register"/>
+        <register :store="$store" :router="$router" @register="register"/>
         <div class="text-center mt-4">
           <router-link :to="{ name: 'login' }" class="btn btn-gray btn-sm">
             <&nbsp;Назад

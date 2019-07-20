@@ -78,6 +78,7 @@ module.exports = {
     { src: '~plugins/toast', ssr: false },
     { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },
+    { src: '~plugins/vue-click-outside', ssr: false },
     // { src: '~plugins/vue-quill-editor', ssr: false },
     { src: '~plugins/vue-picture-input', ssr: false }
     // '~plugins/nuxt-client-init',
@@ -91,7 +92,6 @@ module.exports = {
   ],
 
   build: {
-    vendor: ['axios', 'vuex'],
     extractCSS: true
   }
 }

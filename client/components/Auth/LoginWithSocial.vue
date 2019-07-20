@@ -20,6 +20,7 @@
 
 <script>
 import Social from '~/components/Icons/Social'
+import { openWindow } from '~/utils'
 
 export default {
 
@@ -27,7 +28,19 @@ export default {
     Social
   },
 
+  props: {
+    store: {
+      type: Object,
+      required: true
+    },
+    router: {
+      type: Object,
+      required: true
+    }
+  },
+
   data: () => ({
+    type: '',
     vkontakte: {
       width: 800,
       height: 500
@@ -57,16 +70,17 @@ export default {
 
   methods: {
     async login (type) {
+      this.type = type
       try {
-        const newWindow = openWindow('', this.$t('login'), this[type])
+        const newWindow = openWindow('', 'Вход', this[type])
 
-        const url = await this.$store.dispatch('auth/fetchOauthUrl', {
+        const url = await this.store.dispatch('auth/fetchOauthUrl', {
           provider: type
         })
 
         newWindow.location.href = url
       } catch (e) {
-
+        console.log(e)
       }
     },
 
@@ -77,47 +91,18 @@ export default {
       if (e.origin !== process.env.apiOrigin) {
         return
       }
+      if (this.type !== e.data.type) {
+        return
+      }
+      this.type = ''
 
-      this.$store.dispatch('auth/saveToken', {
+      this.store.dispatch('auth/saveToken', {
         token: e.data.token
       })
 
-      this.$router.push({ name: 'home' })
+      this.router.push({ name: 'home' })
     }
   }
 }
 
-/**
- * @param  {Object} options
- * @return {Window}
- */
-function openWindow (url, title, options = {}) {
-  if (typeof url === 'object') {
-    options = url
-    url = ''
-  }
-
-  options = { url, title, width: 600, height: 720, ...options }
-
-  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left
-  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top
-  const width = window.innerWidth || document.documentElement.clientWidth || window.screen.width
-  const height = window.innerHeight || document.documentElement.clientHeight || window.screen.height
-
-  options.left = ((width / 2) - (options.width / 2)) + dualScreenLeft
-  options.top = ((height / 2) - (options.height / 2)) + dualScreenTop
-
-  const optionsStr = Object.keys(options).reduce((acc, key) => {
-    acc.push(`${key}=${options[key]}`)
-    return acc
-  }, []).join(',')
-
-  const newWindow = window.open(url, title, optionsStr)
-
-  if (window.focus) {
-    newWindow.focus()
-  }
-
-  return newWindow
-}
 </script>

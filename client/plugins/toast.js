@@ -11,7 +11,7 @@ Vue.use({
   * @param  {Vue} Vue
   * @param  {object} options  lazyload options
   */
-  install (Vue, options = {}) {
+  install (Vue) {
     Vue.prototype.$callToast = $callToast
 
     Vue.prototype.$confirmDelete = function (data) {

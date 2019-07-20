@@ -8,7 +8,7 @@
     <div class="text-center font-weight-light mb-3">
       Через социальные сети
     </div>
-    <login-with-social />
+    <login-with-social :store="store" :router="router"/>
     <div class="text-center font-weight-light mb-4">
       С паролем
     </div>
@@ -58,6 +58,16 @@ export default {
   components: {
     'LoginWithSocial': () => import('~/components/Auth/LoginWithSocial'),
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
+  },
+  props: {
+    store: {
+      type: Object,
+      required: true
+    },
+    router: {
+      type: Object,
+      required: true
+    }
   },
   data: () => ({
     form: new Form({

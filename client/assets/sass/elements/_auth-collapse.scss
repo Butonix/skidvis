@@ -20,6 +20,10 @@
     visibility: hidden;
     transform: translateY(10px);
     transition: opacity .2s, transform .2s, visibility 0s linear, z-index 0s linear;
+    @include media-breakpoint-down(md){
+      right: 50%;
+      transform: translateY(10px) translateX(50%);
+    }
   }
   &__list{
     display: block;
@@ -51,6 +55,24 @@
         visibility: visible;
         transform: translateY(0px);
         transition-delay: 0s;
+        @include media-breakpoint-down(md){
+          transform: translateY(0px) translateX(50%);
+        }
+      }
+    }
+  }
+  @media (hover: none) {
+    &.active{
+      .auth-collapse__wrapper{
+        z-index: 1;
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+        transform: translateY(0px);
+        transition-delay: 0s;
+        @include media-breakpoint-down(md){
+          transform: translateY(0px) translateX(50%);
+        }
       }
     }
   }

@@ -5,6 +5,9 @@
   .card-img-top{
     overflow: hidden;
     position: relative;
+    &--error{
+      display: none;
+    }
     .embed-responsive{
       &:before{
         display: block;
@@ -22,6 +25,16 @@
       max-width: 100%;
       max-height: 100%;
       height: auto;
+      &.card-img-top--no-error{
+        &[lazy="error"]{
+          display: none;
+          & ~ {
+            .card-img-top--error{
+              display: block!important;
+            }
+          }
+        }
+      }
     }
     &__label{
       position: absolute;
