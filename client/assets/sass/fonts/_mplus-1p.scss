@@ -1,17 +1,17 @@
 $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
 
-@font-face {
-  font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot');
-  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
+//@font-face {
+//  font-family: 'mplus-1p';
+//  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot');
+//  src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot?#iefix') format('embedded-opentype'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff2') format('woff2'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.woff') format('woff'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.ttf') format('truetype'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-Black.svg#mplus1p-Black') format('svg');
+//  font-weight: 100;
+//  font-style: normal;
+//  font-display: swap;
+//}
 
 @font-face {
   font-family: 'mplus-1p';
@@ -52,19 +52,19 @@ $ww-mplus1p-font-path: "/fonts/mplus1p" !default;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'mplus-1p';
-  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot');
-  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot?#iefix') format('embedded-opentype'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff2') format('woff2'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff') format('woff'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.ttf') format('truetype'),
-  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
+//@font-face {
+//  font-family: 'mplus-1p';
+//  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot');
+//  src: url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.eot?#iefix') format('embedded-opentype'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff2') format('woff2'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.woff') format('woff'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.ttf') format('truetype'),
+//  url('#{$ww-mplus1p-font-path}/Mplus1p-ExtraBold.svg#mplus1p-ExtraBold') format('svg');
+//  font-weight: 800;
+//  font-style: normal;
+//  font-display: swap;
+//}
+//
 @font-face {
   font-family: 'mplus-1p';
   src: url('#{$ww-mplus1p-font-path}/Mplus1p-Black.eot');

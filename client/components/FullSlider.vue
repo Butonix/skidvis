@@ -18,18 +18,23 @@
              :key="index">
         <div :style="{backgroundImage:`url(${image.src})`}" class="full-slider__slide"/>
       </slide>
+      <hooper-navigation slot="hooper-addons"/>
+      <hooper-pagination slot="hooper-addons"/>
     </hooper>
+    <slot/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Hooper, Slide } from 'hooper'
+import { Hooper, Slide, Navigation as HooperNavigation, Pagination as HooperPagination } from 'hooper'
 
 export default {
   components: {
     Hooper,
-    Slide
+    Slide,
+    HooperNavigation,
+    HooperPagination
   },
   props: {
     images: {

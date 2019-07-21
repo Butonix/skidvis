@@ -1,10 +1,30 @@
 .product{
   &__slider{
-    border-radius: 15px;
-    overflow: hidden;
     .full-slider{
+      border-radius: 15px;
+      overflow: hidden;
       &__slider{
         height: 313px;
+      }
+    }
+    &__label{
+      position: absolute;
+      right: 0;
+      top: 0;
+      left: auto;
+      border-radius: 0  0 0 34px;
+      font-size: 24px;
+      height: 72px;
+      min-width: 115px;
+      font-weight: 900;
+      padding: 0 rem(36);
+      .product__slider__label__input{
+        left: 33px;
+        right: 34px;
+        input{
+          font-size: 24px;
+          font-weight: 900;
+        }
       }
     }
   }
@@ -17,7 +37,7 @@
     flex-basis: 0;
     -webkit-box-flex: 1;
     flex-grow: 1;
-    max-width: 100%;
+    max-width: calc(100% - 330px);
     padding-right: 30px;
   }
   &__sidebar{
@@ -25,7 +45,26 @@
     flex: 0 0 330px;
     max-width: 330px;
     padding-left: 30px;
-
   }
-
+  &__logo{
+    width: 123px;
+    min-width: 123px;
+    height: 77px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 11px rgba(216, 216, 216, 0.6);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+      max-width: 100%;
+      max-height: 100%;
+      height: auto;
+    }
+  }
+  &__name{
+    color: #000000;
+    font-size: rem(20);
+    line-height: 1.3;
+  }
 }
