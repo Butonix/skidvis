@@ -35,7 +35,51 @@
           </div>
         </div>
       </div>
-      <div class="product__sidebar"/>
+      <div class="product__sidebar">
+
+        <list-item-icon>
+          <template slot="icon">
+            <hourglass/>
+          </template>
+          <template slot="text">
+            Акция действует
+            <div class="">
+              с 28 мая по 28 августа 2019 Пн–пт, 10:00–17:00 Вс, 10:00–12:00 Кроме адресов
+            </div>
+          </template>
+        </list-item-icon>
+
+        <list-item-icon>
+          <template slot="icon">
+            <clock/>
+          </template>
+          <template slot="text">
+            Режим работы
+            <div class="">
+              10:00-22:00
+            </div>
+          </template>
+        </list-item-icon>
+
+        <list-item-icon>
+          <template slot="icon">
+            <percent/>
+          </template>
+          <template slot="text">
+            <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
+          </template>
+        </list-item-icon>
+
+        <list-item-icon>
+          <template slot="icon">
+            <percent/>
+          </template>
+          <template slot="text">
+            <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
+          </template>
+        </list-item-icon>
+
+      </div>
     </div>
   </div>
 </template>
@@ -44,10 +88,18 @@
 import axios from 'axios'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
+import ListItemIcon from '~/components/ListItemIcon'
+import Hourglass from '~/components/Icons/Hourglass'
+import Percent from '~/components/Icons/Percent'
+import Clock from '~/components/Icons/Clock'
 
 export default {
   components: {
     DynamicLabelInput,
+    Hourglass,
+    Clock,
+    ListItemIcon,
+    Percent,
     FullSlider
   },
   head () {
@@ -100,9 +152,9 @@ export default {
       },
       {
         src: 'http://lorempixel.com/1920/700'
-      },
+      }
     ]
-  }),
+  })
 }
 </script>
 

@@ -1,0 +1,13 @@
+.list-item-icon{
+  display: flex;
+  margin-bottom: rem(20);
+  &__icon{
+    color: #B1B1B1;
+    text-align: left;
+    min-width: rem(39);
+    svg{
+      width: auto!important;
+      height: auto!important;
+    }
+  }
+}
