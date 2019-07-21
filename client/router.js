@@ -6,11 +6,17 @@ Vue.use(Router)
 
 const Home = () => import('~/pages/home').then(m => m.default || m)
 const Welcome = () => import('~/pages/welcome').then(m => m.default || m)
-const Blog = () => import('~/pages/blog/index').then(m => m.default || m)
 const Business = () => import('~/pages/business/index').then(m => m.default || m)
 const Contacts = () => import('~/pages/contacts/index').then(m => m.default || m)
-const Organizations = () => import('~/pages/organizations/index').then(m => m.default || m)
-const Products = () => import('~/pages/products/index').then(m => m.default || m)
+const BlogIndex = () => import('~/pages/blog/index').then(m => m.default || m)
+const BlogHome = () => import('~/pages/blog/home').then(m => m.default || m)
+const BlogShow = () => import('~/pages/blog/show').then(m => m.default || m)
+const OrganizationsIndex = () => import('~/pages/organizations/index').then(m => m.default || m)
+const OrganizationsHome = () => import('~/pages/organizations/home').then(m => m.default || m)
+const OrganizationsShow = () => import('~/pages/organizations/show').then(m => m.default || m)
+const ProductsIndex = () => import('~/pages/products/index').then(m => m.default || m)
+const ProductsHome = () => import('~/pages/products/home').then(m => m.default || m)
+const ProductsShow = () => import('~/pages/products/show').then(m => m.default || m)
 
 const Login = () => import('~/pages/auth/login').then(m => m.default || m)
 const Register = () => import('~/pages/auth/register').then(m => m.default || m)
@@ -43,11 +49,65 @@ const routes = [
   { path: '/password/reset', name: 'password.request', component: PasswordRequest },
   { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 
-  { path: '/blog', name: 'blog', component: Blog },
   { path: '/business', name: 'business', component: Business },
   { path: '/contacts', name: 'contacts', component: Contacts },
-  { path: '/organizations', name: 'organizations', component: Organizations },
-  { path: '/products', name: 'products', component: Products },
+  { path: '/blog',
+    component: BlogHome,
+    meta: {
+      breadcrumb: 'Блог'
+    },
+    children: [
+      { path: '',
+        name: 'blog.index',
+        component: BlogIndex
+      },
+      { path: ':articleId',
+        name: 'blog.show',
+        meta: {
+          breadcrumb: 'Статья'
+        },
+        component: BlogShow
+      }
+    ]
+  },
+  { path: '/organizations',
+    component: OrganizationsHome,
+    meta: {
+      breadcrumb: 'Организации'
+    },
+    children: [
+      { path: '',
+        name: 'organizations.index',
+        component: OrganizationsIndex
+      },
+      { path: ':organizationId',
+        name: 'organizations.show',
+        meta: {
+          breadcrumb: 'Организация'
+        },
+        component: OrganizationsShow
+      }
+    ]
+  },
+  { path: '/products',
+    component: ProductsHome,
+    meta: {
+      breadcrumb: 'Акции'
+    },
+    children: [
+      { path: '',
+        name: 'products.index',
+        component: ProductsIndex
+      },
+      { path: ':productId',
+        name: 'products.show',
+        meta: {
+          breadcrumb: 'Акция'
+        },
+        component: ProductsShow
+      }
+    ]
+  },
 
   { path: '/settings',
     component: Settings,

@@ -20,16 +20,16 @@
             </div>
             <div>
               <ul class="navbar__nav list-unstyled">
-                <nav-item :to="{ name: 'products' }" class-link="nav-link--default">
+                <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default">
                   Все акции
                 </nav-item>
-                <nav-item :to="{ name: 'organizations' }" class-link="nav-link--default">
+                <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default">
                   Все компании
                 </nav-item>
                 <nav-item :to="{ name: 'business' }" class-link="nav-link--business">
                   Бизнесу
                 </nav-item>
-                <nav-item :to="{ name: 'blog' }" class-link="nav-link--blog icon-blog">
+                <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog">
                   Блог
                 </nav-item>
                 <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default">

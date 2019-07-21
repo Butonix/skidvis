@@ -11,9 +11,7 @@
 
           </div>
         </div>
-        <div class="product__sidebar">
-
-        </div>
+        <div class="product__sidebar"/>
       </div>
     </div>
 
@@ -51,9 +49,9 @@ export default {
         color: '#FFFFFF',
         src: ''
         // id: 1
-      },
+      }
     })
-  }),
+  })
 }
 </script>
 

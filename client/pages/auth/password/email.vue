@@ -18,6 +18,6 @@ export default {
   middleware: 'authRoutes',
   components: {
     'email': () => import('~/components/Auth/password/email')
-  },
+  }
 }
 </script>
