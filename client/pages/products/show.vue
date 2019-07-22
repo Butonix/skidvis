@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="product__content">
-        <div class="product__slider">
+
+        <div class="order-2 order-lg-1 product__slider mb-3">
           <full-slider
             :images="images"
           >
@@ -14,28 +15,35 @@
             />
           </full-slider>
         </div>
-        <div class="d-flex pt-2 mt-1 mb-4">
-          <div class="product__logo">
+
+        <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
+          <div class="product__logo mr-4 mb-3">
             <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
           </div>
-          <h1 class="flex-grow-1 product__name ff-montserrat ml-4">
+          <h1 class="flex-grow-1 product__name ff-montserrat">
             Хороший кинотеатр, советую. большой экран, погружаешься в атмосферу фильма с головой) советую!)
           </h1>
         </div>
-        <div class="mb-5">
+
+        <div class="order-3 order-lg-3 mb-4">
           Акции по тегам
-          <div class="tag mx-1">
+          <div class="tag mx-1 mb-2">
             Кинотеатр
           </div>
-          <div class="tag mx-1">
+          <div class="tag mx-1 mb-2">
             7D
           </div>
-          <div class="tag mx-1">
+          <div class="tag mx-1 mb-2">
             Билет
           </div>
         </div>
 
-        <div class="tab-panel mb-4">
+        <sidebar
+          box-class="order-4 order-lg-4 mb-4 mt-2"
+          box-mod="center"
+        />
+
+        <div class="order-5 order-lg-5 tab-panel mt-3">
           <div
             :class="{'active':(tab === 'circs')}"
             class="tab"
@@ -51,12 +59,12 @@
           <div class="tab">
             Адрес
           </div>
-          <div class="tab">
+          <div class="tab d-none d-sm-block">
             Отзывы
           </div>
         </div>
 
-        <div class="tab-content mb-5">
+        <div class="order-6 order-lg-6 tab-content mb-5">
           <transition name="fade" mode="out-in">
             <div v-if="tab === 'circs'" :key="'circs'">
               Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
@@ -75,7 +83,7 @@
           </transition>
         </div>
 
-        <template v-if="addresses">
+        <div class="order-7 order-lg-7" v-if="addresses">
           <h5>
             Акция по адресам:
           </h5>
@@ -85,78 +93,12 @@
             placeholder="Введите адрес или метро"
           />
           <addresses-frame :marker-id="1" :addresses="getAddresses"/>
-        </template>
+        </div>
 
       </div>
-      <div class="product__sidebar">
-
-        <list-item-icon>
-          <template slot="icon">
-            <hourglass />
-          </template>
-          <template slot="text">
-            Акция действует
-            <div class="">
-              с 28 мая по 28 августа 2019 Пн–пт, 10:00–17:00 Вс, 10:00–12:00 Кроме адресов
-            </div>
-          </template>
-        </list-item-icon>
-
-        <list-item-icon>
-          <template slot="icon">
-            <clock />
-          </template>
-          <template slot="text">
-            Режим работы
-            <div class="">
-              10:00-22:00
-            </div>
-          </template>
-        </list-item-icon>
-
-        <list-item-icon>
-          <template slot="icon">
-            <percent />
-          </template>
-          <template slot="text">
-            <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
-          </template>
-        </list-item-icon>
-
-        <list-item-icon class-box="mb-4">
-          <template slot="icon">
-            <relations />
-          </template>
-          <template slot="text">
-            <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center">
-              <social
-                class-box="mx-1"
-                type="vk" />
-              <social
-                class-box="mx-1"
-                type="ok" />
-              <social
-                class-box="mx-1"
-                type="facebook" />
-            </div>
-          </template>
-        </list-item-icon>
-
-        <list-item-icon class-box="mb-4">
-          <template slot="icon">
-            <flag class-box="ml-1" />
-          </template>
-          <template slot="text">
-            В закладки
-          </template>
-        </list-item-icon>
-
-        <categories>
-          <category src-active="/categories/entertainment/entertainment-default-active.svg"
-                    src="/categories/entertainment/entertainment-default-normal.svg" label="Красота" />
-        </categories>
-
-      </div>
+      <sidebar
+        box-mod="right"
+      />
     </div>
 
   </div>
@@ -168,30 +110,16 @@ import Fuse from 'fuse.js'
 import axios from 'axios'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
-import ListItemIcon from '~/components/ListItemIcon'
-import Hourglass from '~/components/Icons/Hourglass'
-import Percent from '~/components/Icons/Percent'
-import Clock from '~/components/Icons/Clock'
-import Relations from '~/components/Icons/Relations'
-import Flag from '~/components/Flag'
-import Category from '~/components/Category'
-import Categories from '~/components/Categories'
 import AddressesFrame from '~/components/AddressesFrame'
+import Sidebar from '~/components/Product/Sidebar'
 import { loremIpsum } from 'lorem-ipsum'
 
 export default {
   components: {
     'SearchInput': () => import('~/components/SearchInput'),
     DynamicLabelInput,
-    Hourglass,
-    Clock,
-    Flag,
-    Category,
-    Categories,
-    Relations,
-    ListItemIcon,
-    Percent,
     AddressesFrame,
+    Sidebar,
     FullSlider
   },
   head () {
@@ -311,8 +239,4 @@ export default {
 </script>
 
 <style>
-  .social-icons__shared {
-    position: relative;
-    top: -4px;
-  }
 </style>

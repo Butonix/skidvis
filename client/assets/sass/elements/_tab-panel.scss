@@ -7,6 +7,10 @@
   $height: 4;
   padding-bottom: rem($height + 6);
   margin-right: rem(52);
+  margin-bottom: 1rem;
+  @media (max-width: 400px) {
+    margin-right: 0;
+  }
   &:before{
     content: '';
     position: absolute;
@@ -37,6 +41,9 @@
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
-
+    flex-wrap: wrap;
+    @media (max-width: 400px) {
+      justify-content: space-between;
+    }
   }
 }
