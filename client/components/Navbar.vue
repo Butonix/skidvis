@@ -92,7 +92,7 @@ export default {
     'login': () => import('~/components/Auth/login'),
     'vSelect': () => import('vue-select'),
     'Chevron': () => import('~/components/Icons/Chevron'),
-    'Flag': () => import('~/components/Icons/Flag'),
+    'Flag': () => import('~/components/Navbar/Flag'),
     'ModalLogin': () => import('~/components/ModalLogin'),
     'FullLogo': () => import('~/components/Navbar/FullLogo')
   },

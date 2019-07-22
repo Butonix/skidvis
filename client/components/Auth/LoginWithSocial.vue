@@ -2,17 +2,17 @@
   <div class="text-center mb-5">
     <social
       type="vk"
-      class-box="social-icon-lg mx-2 cursor-pointer"
+      class-box="social-icon-lg mx-2"
       @click="login('vkontakte')"
     />
     <social
       type="google"
-      class-box="social-icon-lg mx-2 cursor-pointer"
+      class-box="social-icon-lg mx-2"
       @click="login('google')"
     />
     <social
       type="facebook"
-      class-box="social-icon-lg mx-2 cursor-pointer"
+      class-box="social-icon-lg mx-2"
       @click="login('facebook')"
     />
   </div>

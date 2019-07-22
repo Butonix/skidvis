@@ -46,42 +46,42 @@ main {
     padding: 1.1rem;
 
     &[data-border='vk'] {
-      border-color: #5181B8;
+      border-color: $social_vk;
 
       &[data-fill='1'] {
-        background: #5181B8;
+        background: $social_vk;
       }
     }
 
     &[data-border='ok'] {
-      border-color: #F7931E;
+      border-color: $social_ok;
 
       &[data-fill='1'] {
-        background: #F7931E;
+        background: $social_ok;
       }
     }
 
     &[data-border='facebook'] {
-      border-color: #0075FB;
+      border-color: $social_facebook;
 
       &[data-fill='1'] {
-        background: #0075FB;
+        background: $social_facebook;
       }
     }
 
     &[data-border='google'] {
-      border-color: #FF3D00;
+      border-color: $social_google;
 
       &[data-fill='1'] {
-        background: #FF3D00;
+        background: $social_google;
       }
     }
 
     &[data-border='instagram'] {
-      border-color: #DE3391;
+      border-color: $social_instagram;
 
       &[data-fill='1'] {
-        background: #DE3391;
+        background: $social_instagram;
       }
     }
   }

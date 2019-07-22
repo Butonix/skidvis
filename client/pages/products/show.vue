@@ -70,14 +70,37 @@
           </template>
         </list-item-icon>
 
-        <list-item-icon>
+        <list-item-icon class-box="mb-4">
           <template slot="icon">
-            <percent/>
+            <relations/>
           </template>
           <template slot="text">
-            <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
+            <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center">
+              <social
+                class-box="mx-1"
+                type="vk" />
+              <social
+                class-box="mx-1"
+                type="ok" />
+              <social
+                class-box="mx-1"
+                type="facebook" />
+            </div>
           </template>
         </list-item-icon>
+
+        <list-item-icon class-box="mb-4">
+          <template slot="icon">
+            <flag class-box="ml-1"/>
+          </template>
+          <template slot="text">
+            В закладки
+          </template>
+        </list-item-icon>
+
+        <categories>
+          <category src-active="/placeholders/demo.jpg" src="/people.png"/>
+        </categories>
 
       </div>
     </div>
@@ -92,12 +115,20 @@ import ListItemIcon from '~/components/ListItemIcon'
 import Hourglass from '~/components/Icons/Hourglass'
 import Percent from '~/components/Icons/Percent'
 import Clock from '~/components/Icons/Clock'
+import Relations from '~/components/Icons/Relations'
+import Flag from '~/components/Flag'
+import Category from '~/components/Category'
+import Categories from '~/components/Categories'
 
 export default {
   components: {
     DynamicLabelInput,
     Hourglass,
     Clock,
+    Flag,
+    Category,
+    Categories,
+    Relations,
     ListItemIcon,
     Percent,
     FullSlider
@@ -159,4 +190,8 @@ export default {
 </script>
 
 <style>
+  .social-icons__shared{
+    position: relative;
+    top: -4px;
+  }
 </style>

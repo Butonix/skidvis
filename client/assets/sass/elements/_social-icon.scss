@@ -1,4 +1,5 @@
 .social-icon{
+  cursor: pointer;
   display: inline-block;
   $height: rem(40);
   $height-lg: rem(68);
@@ -18,22 +19,58 @@
     font-size: 2rem;
   }
   &[data-type='vk']{
-    background: #5181B8;
+    background: $social_vk;
   }
   &[data-type='ok']{
-    background: #F7931E;
+    background: $social_ok;
   }
   &[data-type='odnoklassniki']{
-    background: #F7931E;
+    background: $social_ok;
   }
   &[data-type='facebook']{
-    background: #0075FB;
+    background: $social_facebook;
   }
   &[data-type='google']{
-    background: #FF3D00;
+    background: $social_google;
   }
   &[data-type='instagram']{
-    background: radial-gradient(2.2em at 39.76% 0%, #2F4DF0 0%, #DE3391 35.18%, #EF4740 58.82%, #EE8728 83.77%, #EACD77 100%);
+    background: $social_instagram_grad;
   }
-
+  &s__shared{
+    .social-icon{
+      color: $body-color;
+      background: #FFFFFF;
+      box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+      border-radius: 50%;
+      transform-origin: center;
+      transform: translateY(0);
+      transition: .2s linear;
+      &:hover{
+        box-shadow: 0 2px 11px rgba(216, 216, 216, 0.6);
+        transform: translateY(1px);
+      }
+      &:active{
+        box-shadow: 0 0 11px rgba(216, 216, 216, 0.6);
+        transform: translateY(3px);
+      }
+      &[data-type='vk']{
+        color: $social_vk;
+      }
+      &[data-type='ok']{
+        color: $social_ok;
+      }
+      &[data-type='odnoklassniki']{
+        color: $social_ok;
+      }
+      &[data-type='facebook']{
+        color: $social_facebook;
+      }
+      &[data-type='google']{
+        color: $social_google;
+      }
+      &[data-type='instagram']{
+        color: $social_instagram;
+      }
+    }
+  }
 }

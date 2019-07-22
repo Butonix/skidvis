@@ -1,5 +1,8 @@
 <template>
-  <div class="list-item-icon">
+  <div :class="{
+         [classBox]:!!classBox,
+       }"
+       class="list-item-icon">
     <div class="list-item-icon__icon">
       <slot name="icon"/>
     </div>
@@ -12,6 +15,12 @@
 <script>
 
 export default {
+  props: {
+    classBox: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 
