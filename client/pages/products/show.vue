@@ -13,33 +13,86 @@
               class-input="ff-mplus-1p"
             />
           </full-slider>
-          <div class="d-flex pt-2 mt-1 mb-4">
-            <div class="product__logo">
-              <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
-            </div>
-            <h1 class="flex-grow-1 product__name ff-montserrat ml-4">
-              Хороший кинотеатр, советую. большой экран, погружаешься в атмосферу фильма с головой) советую!)
-            </h1>
+        </div>
+        <div class="d-flex pt-2 mt-1 mb-4">
+          <div class="product__logo">
+            <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
           </div>
-          <div class="">
-            Акции по тегам
-            <div class="tag mx-1">
-              Кинотеатр
-            </div>
-            <div class="tag mx-1">
-              7D
-            </div>
-            <div class="tag mx-1">
-              Билет
-            </div>
+          <h1 class="flex-grow-1 product__name ff-montserrat ml-4">
+            Хороший кинотеатр, советую. большой экран, погружаешься в атмосферу фильма с головой) советую!)
+          </h1>
+        </div>
+        <div class="mb-5">
+          Акции по тегам
+          <div class="tag mx-1">
+            Кинотеатр
+          </div>
+          <div class="tag mx-1">
+            7D
+          </div>
+          <div class="tag mx-1">
+            Билет
           </div>
         </div>
+
+        <div class="tab-panel mb-4">
+          <div
+            :class="{'active':(tab === 'circs')}"
+            class="tab"
+            @click="tab ='circs'">
+            Условия
+          </div>
+          <div
+            :class="{'active':(tab === 'desc')}"
+            class="tab"
+            @click="tab ='desc'">
+            Описание
+          </div>
+          <div class="tab">
+            Адрес
+          </div>
+          <div class="tab">
+            Отзывы
+          </div>
+        </div>
+
+        <div class="tab-content mb-5">
+          <transition name="fade" mode="out-in">
+            <div v-if="tab === 'circs'" :key="'circs'">
+              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
+              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
+              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
+              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
+              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
+            </div>
+            <div v-if="tab === 'desc'" :key="'desc'">
+              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
+              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
+              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
+              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
+              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
+            </div>
+          </transition>
+        </div>
+
+        <template v-if="addresses">
+          <h5>
+            Акция по адресам:
+          </h5>
+          <search-input
+            v-model="search"
+            type-style="lite"
+            placeholder="Введите адрес или метро"
+          />
+          <addresses-frame :marker-id="1" :addresses="getAddresses"/>
+        </template>
+
       </div>
       <div class="product__sidebar">
 
         <list-item-icon>
           <template slot="icon">
-            <hourglass/>
+            <hourglass />
           </template>
           <template slot="text">
             Акция действует
@@ -51,7 +104,7 @@
 
         <list-item-icon>
           <template slot="icon">
-            <clock/>
+            <clock />
           </template>
           <template slot="text">
             Режим работы
@@ -63,7 +116,7 @@
 
         <list-item-icon>
           <template slot="icon">
-            <percent/>
+            <percent />
           </template>
           <template slot="text">
             <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
@@ -72,7 +125,7 @@
 
         <list-item-icon class-box="mb-4">
           <template slot="icon">
-            <relations/>
+            <relations />
           </template>
           <template slot="text">
             <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center">
@@ -91,7 +144,7 @@
 
         <list-item-icon class-box="mb-4">
           <template slot="icon">
-            <flag class-box="ml-1"/>
+            <flag class-box="ml-1" />
           </template>
           <template slot="text">
             В закладки
@@ -99,15 +152,19 @@
         </list-item-icon>
 
         <categories>
-          <category src-active="/placeholders/demo.jpg" src="/people.png"/>
+          <category src-active="/categories/entertainment/entertainment-default-active.svg"
+                    src="/categories/entertainment/entertainment-default-normal.svg" label="Красота" />
         </categories>
 
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+// import { sortBy } from 'lodash'
+import Fuse from 'fuse.js'
 import axios from 'axios'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
@@ -119,9 +176,12 @@ import Relations from '~/components/Icons/Relations'
 import Flag from '~/components/Flag'
 import Category from '~/components/Category'
 import Categories from '~/components/Categories'
+import AddressesFrame from '~/components/AddressesFrame'
+import { loremIpsum } from 'lorem-ipsum'
 
 export default {
   components: {
+    'SearchInput': () => import('~/components/SearchInput'),
     DynamicLabelInput,
     Hourglass,
     Clock,
@@ -131,6 +191,7 @@ export default {
     Relations,
     ListItemIcon,
     Percent,
+    AddressesFrame,
     FullSlider
   },
   head () {
@@ -155,13 +216,51 @@ export default {
     } else {
       console.log('error 404')
     }
+    let addresses = []
+    for (let i = 0; i < 20; i++) {
+      addresses.push({
+        text: loremIpsum()
+      })
+    }
 
     return {
-
+      addresses
     }
   },
   data: () => ({
+    tab: 'circs',
+    search: '',
     action: '',
+    categories: [
+      {
+        id: 123,
+        name: '',
+        images: {
+          default: {
+            normal: 'http://lorempixel.com/1920/700',
+            active: 'http://lorempixel.com/1920/700'
+          },
+          business: {
+            normal: 'http://lorempixel.com/1920/700',
+            active: 'http://lorempixel.com/1920/700'
+          }
+        }
+      },
+      {
+        id: 321,
+        name: '',
+        images: {
+          default: {
+            normal: 'http://lorempixel.com/1920/700',
+            active: 'http://lorempixel.com/1920/700'
+          },
+          business: {
+            normal: 'http://lorempixel.com/1920/700',
+            active: 'http://lorempixel.com/1920/700'
+          }
+        }
+      }
+    ],
     images: [
       {
         src: 'http://lorempixel.com/1920/700'
@@ -184,13 +283,35 @@ export default {
       {
         src: 'http://lorempixel.com/1920/700'
       }
-    ]
-  })
+    ],
+    fuseAddresses: null
+  }),
+  computed: {
+    getAddresses () {
+      return (this.fuseAddresses && this.search.length > 0) ? this.fuseAddresses.search(this.search) : this.addresses
+    }
+  },
+
+  async beforeMount () {
+    if (!(this.addresses instanceof Fuse)) {
+      this.fuseAddresses = new Fuse(this.addresses, {
+        shouldSort: true,
+        threshold: 0.6,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          'text'
+        ]
+      })
+    }
+  }
 }
 </script>
 
 <style>
-  .social-icons__shared{
+  .social-icons__shared {
     position: relative;
     top: -4px;
   }

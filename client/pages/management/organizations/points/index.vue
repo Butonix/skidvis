@@ -5,6 +5,7 @@
         Мои организации
       </h5>
       <search-input
+        autofocus="autofocus"
         v-if="params"
         v-model="params.search"
       />

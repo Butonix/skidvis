@@ -11,3 +11,11 @@
     }
   }
 }
+.list-box{
+  max-height: 306px;
+  padding-top: 6px;
+  &__wrapper{
+    max-height: 300px;
+    overflow: auto;
+  }
+}

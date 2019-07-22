@@ -5,6 +5,7 @@
         Мои организации
       </h5>
       <search-input
+        autofocus="autofocus"
         :value="search"
         @input="setSearch"
       />

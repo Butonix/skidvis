@@ -1,13 +1,19 @@
 <template>
-  <label :class="'search-input '+formClass">
+  <label :class="{
+    'search-input': true,
+    [formClass]: !!formClass,
+    ['search-input--'+typeStyle]: !!typeStyle
+  }">
     <input
       :type="type"
-      :class="inputClass"
       :value="value"
       :placeholder="placeholder"
       :name="name"
-      class="ff-montserrat"
-      autofocus
+      :class="{
+        'ff-montserrat': !typeStyle,
+        [inputClass]: !!inputClass
+      }"
+      :autofocus="!!autofocus"
       @input="$emit('input', $event.target.value)"
     >
     <div class="search-input__line"/>
@@ -25,6 +31,10 @@ export default {
     Lupe
   },
   props: {
+    typeStyle: {
+      type: String,
+      default: ''
+    },
     formClass: {
       type: String,
       default: ''
@@ -44,6 +54,10 @@ export default {
     value: {
       type: String | Number,
       default: ''
+    },
+    autofocus: {
+      type: Boolean | Number | String,
+      default: false
     },
     placeholder: {
       type: String,
