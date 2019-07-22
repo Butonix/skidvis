@@ -1,68 +1,57 @@
 <template>
-  <div>
-    <div class="container mb-5">
-      <h5 class="mb-2">
-        Мои организации
-      </h5>
-      <search-input
-        autofocus="autofocus"
-        :value="search"
-        @input="setSearch"
-      />
+  <div class="container">
+    <div class="text-center">
+      <h1 class="bg-primary text-white d-inline mb-5">
+        Праздник — отличный двигатель продаж
+      </h1>
+      <div class="mb-3">
+        Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от
+        экономии.
+      </div>
+      <div class="text-primary mb-5">
+        Предлагаем стать нашим партнером. На открытии сервиса это бесплатно!
+      </div>
     </div>
-
-    <div class="container container--long-offset">
-      <div class="row">
-        <div
-          v-for="(item, index) in items"
-          :key="index"
-          class="col-lg-4 mb-5"
-        >
-          <div class="card w-100">
-            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block">
-              <div class="embed-responsive embed-responsive-1by1">
-                <div class="embed-responsive-item">
-                  <img :src="item.logo.src" class="w-100 h-100 img-cover" alt="Card image cap">
-                </div>
-              </div>
-            </router-link>
-            <div class="card-body">
-              <div class="d-flex justify-content-around mb-4">
-                <a href="#" class="btn btn-gray btn-sm px-4">Точки</a>
-                <a href="#" class="btn btn-gray btn-sm px-4">Акции</a>
-              </div>
-              <p class="card-text pt-3" v-text="item.description"/>
-            </div>
-          </div>
+    <div class="d-flex justify-content-center">
+      <div>
+        <div class="business__kommersant p-4">
+          Больше половины россиян покупают товары только по акции
         </div>
+        <a href="/" class="link-solid-on-span">
+          <span>
+            Коммерсантъ
+          </span>
+          <br>
+          13 июня 2019
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import SearchInput from '~/components/SearchInput'
 
 export default {
-  middleware: 'auth',
-  components: {
-    SearchInput
-  },
-  computed: {
-    ...mapGetters({
-      search: 'organizations/getSearch',
-      items: 'organizations/getItems'
-    })
-  },
-  methods: {
-    ...mapActions({
-      setSearch: 'organizations/setSearch'
-    })
+  head () {
+    return {
+      title: 'Праздник — отличный двигатель продаж',
+      bodyAttrs: {
+        class: 'theme-business'
+      }
+    }
   }
-
 }
 </script>
 
-<style>
+<style lang="scss">
+  .business{
+    &__kommersant{
+      background: url("/img/business/kommersant.svg") center no-repeat;
+      -webkit-background-size: contain;
+      background-size: contain;
+      width: 340px;
+      height: 127px;
+      font-weight: 700;
+    }
+  }
 </style>

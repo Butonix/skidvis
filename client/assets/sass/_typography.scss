@@ -137,11 +137,14 @@ body {
     >span{
       border-bottom: 1px solid;
     }
-  }
-  &.link-black, .link-white{
     &:hover{
-      border-color: transparent;
+      >span{
+        border-color: transparent;
+      }
     }
+  }
+  &:hover{
+    border-color: transparent;
   }
 }
 .link-primary{

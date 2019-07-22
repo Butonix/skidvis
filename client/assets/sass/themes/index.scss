@@ -11,11 +11,17 @@
         .btn-#{$color} {
           @include button-variant($value, $value);
         }
-      }
 
-      @each $color, $value in $theme-colors_ {
         .btn-outline-#{$color} {
           @include button-outline-variant($value);
+        }
+
+        @include text-emphasis-variant(".text-#{$color}", $value);
+
+        @include bg-variant(".bg-#{$color}", $value);
+
+        .navbar__full-logo{
+          color: $value;
         }
       }
 
