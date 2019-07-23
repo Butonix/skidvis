@@ -3,4 +3,20 @@
   padding: 5px 23px 6px 23px;
   background: #EEEEEE;
   border-radius: 115px;
+  &--edit{
+    cursor: pointer;
+    background: white;
+    border: 1px dashed #929292;
+    &:hover{
+      border: 1px solid #929292;
+    }
+    &.active{
+      border: 1px solid $primary;
+      color: white;
+      background: $primary;
+    }
+  }
+  &s__select{
+    margin: 0 -0.125rem;
+  }
 }

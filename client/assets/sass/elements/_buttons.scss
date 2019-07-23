@@ -55,6 +55,36 @@
   }
 }
 
+.btn-outline-gray{
+  border: 1px dashed #929292;
+  background: transparent;
+  position: relative;
+  color: #949494;
+  transition: 0.2s ease;
+  @include hover {
+    border: 1px solid #929292;
+    color: #949494;
+    background: transparent;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 0.1rem rgba(#929292, 0.5);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: white;
+    border: 1px solid #C6C6C6;
+    background: #C6C6C6;
+    &:focus,
+    &.focus {
+      box-shadow: 0 0 0 0.1rem rgba(#C6C6C6, 0.5);
+    }
+  }
+}
+
 .btn-link {
   padding: 0!important;
   border-radius: 0!important;

@@ -11,8 +11,21 @@
       </template>
       <template slot="text">
         Акция действует
-        <div class="">
-          с 28 мая по 28 августа 2019 Пн–пт, 10:00–17:00 Вс, 10:00–12:00 Кроме адресов
+        <div>
+          с 28 мая по 28 августа 2019 <br>
+          Пн–пт, 10:00–17:00  <br>
+          Вс, 10:00–12:00
+        </div>
+        <div class="mb-2">
+          <span class="text-primary link-dashed">
+          Кроме адресов
+          </span>
+        </div>
+        <div class="btn btn-outline-gray btn-sm btn-block mb-2">
+          + добавить время
+        </div>
+        <div class="btn btn-outline-gray btn-sm btn-block mb-2">
+          + адреса без акции
         </div>
       </template>
     </list-item-icon>
@@ -70,6 +83,13 @@
       <category src-active="/img/categories/entertainment/entertainment-default-active.svg"
                 src="/img/categories/entertainment/entertainment-default-normal.svg" label="Красота" />
     </categories>
+
+    <div class="text-center">
+      <div class="btn btn-outline-primary btn-sm px-4"
+           @click="$emit('onEditSelect', 'categories')">
+        Выбрать категорию
+      </div>
+    </div>
 
   </div>
 </template>

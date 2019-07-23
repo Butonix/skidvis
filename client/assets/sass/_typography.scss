@@ -1,6 +1,7 @@
 html {
   font-size: 16px;
-  font-family: 'mplus-1p','Montserrat', #{$font-family-sans-serif};
+  //font-family: 'mplus-1p', #{$font-family-sans-serif};
+  font-family: #{$font-family-sans-serif};
   position: relative;
 }
 
@@ -25,14 +26,16 @@ html {
   }
 }
 body {
-  font-family: 'mplus-1p','Montserrat', #{$font-family-sans-serif};
+  //font-family: 'mplus-1p', #{$font-family-sans-serif};
+  font-family: #{$font-family-sans-serif};
 }
 .ff-montserrat{
   font-family: 'Montserrat', #{$font-family-sans-serif};
   font-weight: 600;
 }
 .ff-mplus-1p{
-  font-family: 'mplus-1p', #{$font-family-sans-serif};
+  font-family: #{$font-family-sans-serif};
+  //font-family: 'mplus-1p', #{$font-family-sans-serif};
 }
 .bg-cover{
   background-repeat: no-repeat;

@@ -23,6 +23,7 @@
         .navbar__full-logo{
           color: $value;
         }
+
       }
 
       $primary_: map_get($theme-colors_, "primary");
@@ -82,6 +83,14 @@
           }
         }
 
+        .tag{
+          &--edit{
+            &.active{
+              border: 1px solid $primary_;
+              background: $primary_;
+            }
+          }
+        }
 
       }
 
