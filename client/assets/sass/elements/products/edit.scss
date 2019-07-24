@@ -1,3 +1,78 @@
-.products-edit{
+.products-edit {
+  &__editor {
+    .ql-editor.ql-blank::before {
+      color: #949494;
+      font-size: 16px;
+      line-height: 1.5;
+      left: 25px;
+      right: 25px;
+    }
 
+    .ql-editor {
+      font-family: 'Open Sans', #{$font-family-sans-serif};
+      font-size: 1rem;
+      min-height: 271px;
+    }
+
+    .quill-editor {
+      border: 1px solid #CACACA;
+      border-radius: 5px;
+
+      strong {
+        font-weight: 600;
+      }
+
+      ul, ul > li {
+        padding-left: 0;
+      }
+      ul > li::before{
+        font-size: 1.6em;
+        color: $primary;
+        line-height: 1;
+        position: relative;
+        top: .15em;
+      }
+    }
+
+    .ql-editor {
+      padding-left: 25px;
+      padding-right: 25px;
+    }
+
+    .ql-toolbar {
+      border: none;
+      border-radius: 0;
+      padding-left: 16px;
+      padding-right: 16px;
+
+      button{
+        background: #FFFFFF;
+        box-shadow: 0px 3px 11px rgba(216, 216, 216, 0.6);
+        border-radius: 15px;
+        padding: 5px 11px;
+        width: 46px;
+        height: 38px;
+        margin-right: 11px;
+        transition: .2s;
+        position: relative;
+        top: 0;
+        svg{
+          display: inline-block;
+          float: none;
+          width: 100%;
+          line-height: 1;
+        }
+        &.ql-active{
+          top: 2px;
+          box-shadow: 0 1px 1px rgba(216, 216, 216, 0.6);
+        }
+      }
+
+    }
+
+    .ql-container {
+      border: none;
+      border-radius: 0;
+    }
+  }
 }

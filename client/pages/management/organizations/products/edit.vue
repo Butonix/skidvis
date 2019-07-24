@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container products-edit">
     <div class="row mb-4">
       <div class="col">
         <h5 class="text-primary">
@@ -122,19 +122,17 @@
 
         <div class="order-6 order-lg-6 tab-content mb-5">
           <transition name="fade" mode="out-in">
-            <div v-if="tab === 'circs'" :key="'circs'">
-              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
-              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
-              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
-              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
-              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
+            <div v-if="tab === 'circs'" :key="'circs'" class="products-edit__editor">
+              <no-ssr>
+                <quill-editor v-model="form.conditions"
+                              :options="editorOptionCircs"/>
+              </no-ssr>
             </div>
-            <div v-if="tab === 'desc'" :key="'desc'">
-              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
-              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
-              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
-              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
-              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
+            <div v-if="tab === 'desc'" :key="'desc'" class="products-edit__editor">
+              <no-ssr>
+                <quill-editor v-model="form.description"
+                              :options="editorOptionCircs"/>
+              </no-ssr>
             </div>
           </transition>
         </div>
@@ -361,7 +359,16 @@ export default {
     }
   },
   data: () => ({
-    someValue: '',
+    content: '',
+    editorOptionCircs: {
+      placeholder: 'Рекомендуем писать сжато, до 700 знаков. Так клиент легче соглашается на прочтение, и не откладывает вкладку, прочитать позже (никогда). \n\r\n\rИспользуйте абзацы, так легче читать.',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+          [{ 'list': 'bullet' }]
+        ]
+      }
+    },
     tab: 'circs',
     search: '',
     action: '',
