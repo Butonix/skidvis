@@ -75,6 +75,7 @@ module.exports = {
     // '~plugins/tooltip',
     '~plugins/modal',
     '~plugins/asyncComputed',
+    '~plugins/vue-textarea-autosize',
     { src: '~plugins/toast', ssr: false },
     { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },

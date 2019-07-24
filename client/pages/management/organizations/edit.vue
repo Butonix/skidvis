@@ -160,6 +160,7 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import Form from 'vform'
 import axios from 'axios'
@@ -196,9 +197,8 @@ export default {
     if (organizationId) {
       try {
         let { data } = await axios.get('management/organizations/' + organizationId)
-        console.log(data)
         logo = data.organization.logo.src
-        images = data.organization.images
+        images = cloneDeep(data.organization.images)
         if (data.organization.operationMode) {
           operationMode = data.organization.operationMode
         }
@@ -298,31 +298,31 @@ export default {
           src: image
         })
       }
-      this.imagesLoading[index] = true
+      this.$set(this.imagesLoading, index, true)
       try {
         let { data } = await axios.post('management/organizations/image', {
-          cover: image
+          image: image
         })
 
-        if (!data.mainImages || !data.mainImages.src || !data.mainImages.id) {
+        if (!data.image || !data.image.src || !data.image.id) {
           throw new Error()
         }
 
-        image = data.mainImages
+        image = data.image
 
         if (index !== undefined && this.form.images[index]) {
           this.$set(this.form.images, index, image)
         } else {
           this.form.images.push(image)
         }
-        this.imagesLoading[index] = false
+        this.$set(this.imagesLoading, index, false)
       } catch (e) {
         if (index !== undefined && this.images[index]) {
           this.$delete(this.images, index)
         } else {
           this.$delete(this.images, this.images.length - 1)
         }
-        this.imagesLoading[index] = false
+        this.$set(this.imagesLoading, index, false)
         await this.$callToast({
           type: 'error',
           text: 'Загрузить изображение не удалось'

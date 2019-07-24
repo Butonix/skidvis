@@ -18,8 +18,8 @@
           fileType: '',
           aspect: '',
         }"
-        width="1920"
-        height="700"
+        :width="width"
+        :height="height"
         button-class="d-none"
         @change="onChange" />
     </no-ssr>
@@ -33,6 +33,14 @@ export default {
     // 'PictureInput': () => import('~/components/PictureInput')
   },
   props: {
+    width: {
+      type: String | Number,
+      default: 1920
+    },
+    height: {
+      type: String | Number,
+      default: 700
+    },
     loading: {
       type: Boolean,
       default: false

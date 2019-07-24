@@ -44,6 +44,8 @@
             v-if="images"
             :images="images"
             :images-loading="imagesLoading"
+            :width="765"
+            :height="313"
             @change="setMainImage"
             @delete="deleteMainImage"
           />
@@ -51,7 +53,12 @@
 
         <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
           <div class="product__logo mr-4 mb-3">
-            <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
+            <img
+              v-lazy="form.organization_logo || '/placeholders/logo.svg'"
+              :alt="form.name"
+              :title="form.name"
+              src="/placeholders/loading_spinner.gif"
+            >
           </div>
           <div class="h1 flex-grow-1 product__name ff-montserrat">
             <material-textarea
@@ -64,8 +71,16 @@
             />
           </div>
         </div>
-
         <div class="order-3 order-lg-3 mb-4">
+          <material-textarea
+            v-model="form.short_description"
+            placeholder="Сокращенное описание для карточки"
+            data-align="left"
+            form-class="mb-4 mt-0"
+            size="sm"
+            rows="1"
+          />
+
           Акции по тегам
           <div
             v-for="(tag, key) in form.tags"
@@ -100,12 +115,6 @@
             class="tab"
             @click="tab ='desc'">
             Описание
-          </div>
-          <div class="tab">
-            Адрес
-          </div>
-          <div class="tab d-none d-sm-block">
-            Отзывы
           </div>
         </div>
 
@@ -284,6 +293,7 @@ export default {
     }
   },
   asyncData: async ({ params, error, app }) => {
+    let images = []
     let form = {
       currency_id: 1,
       tags: [],
@@ -300,6 +310,7 @@ export default {
       try {
         let { data } = await axios.get(`management/organizations/172/products/206/edit`)
         form = data.product
+        images = cloneDeep(data.product.images)
         console.log(data.product)
       } catch (e) {
         console.log(e)
@@ -316,10 +327,12 @@ export default {
 
     return {
       form,
-      addresses
+      addresses,
+      images
     }
   },
   data: () => ({
+    someValue: '',
     tab: 'circs',
     search: '',
     action: '',
@@ -367,7 +380,6 @@ export default {
     //     }
     //   }
     // }
-    images: [],
     fuseAddresses: null
   }),
   computed: {
@@ -454,31 +466,29 @@ export default {
           src: image
         })
       }
-      this.imagesLoading[index] = true
+      this.$set(this.imagesLoading, index, true)
       try {
-        let { data } = await axios.post('management/organizations/image', {
-          cover: image
+        let { data } = await axios.post('management/products/image', {
+          image: image
         })
-
-        if (!data.mainImages || !data.mainImages.src || !data.mainImages.id) {
+        if (!data.image || !data.image.src || !data.image.id) {
           throw new Error()
         }
-
-        image = data.mainImages
+        image = data.image
 
         if (index !== undefined && this.form.images[index]) {
           this.$set(this.form.images, index, image)
         } else {
           this.form.images.push(image)
         }
-        this.imagesLoading[index] = false
+        this.$set(this.imagesLoading, index, false)
       } catch (e) {
         if (index !== undefined && this.images[index]) {
           this.$delete(this.images, index)
         } else {
           this.$delete(this.images, this.images.length - 1)
         }
-        this.imagesLoading[index] = false
+        this.$set(this.imagesLoading, index, false)
         await this.$callToast({
           type: 'error',
           text: 'Загрузить изображение не удалось'

@@ -5,7 +5,9 @@
       v-if="i <= images.length"
       :key="i"
       :image="images[i]"
-      :loading="!!imagesLoading[i]"
+      :loading="imagesLoading[i]"
+      :width="width"
+      :height="height"
       @delete="onDelete(i)"
       @change="onChange($event.image, i)"
     />
@@ -21,6 +23,14 @@ export default {
     ThumbFileInput
   },
   props: {
+    width: {
+      type: String | Number,
+      default: 1920
+    },
+    height: {
+      type: String | Number,
+      default: 700
+    },
     max: {
       type: Number,
       default: 7

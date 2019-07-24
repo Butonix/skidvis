@@ -1,6 +1,6 @@
 <template>
   <div :class="formClass_" :data-align="dataAlign">
-    <textarea
+    <textarea-autosize
       ref="materialInput"
       :id="id"
       :class="inputClass_"
@@ -9,9 +9,11 @@
       :readonly="readonly"
       :rows="rows"
       :cols="cols"
+      :value="getValue"
+      :min-height="30"
+      :max-height="350"
       required
-      @input="$emit('input', $event.target.value)"
-      v-html="value"
+      @input="$emit('input', $event)"
     />
     <label :for="id" v-html="placeholder"/>
     <div class="material-input__line"/>
@@ -103,6 +105,9 @@ export default {
   computed: {
     id () {
       return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
+    },
+    getValue () {
+      return (this.value) ? this.value : ''
     },
     formClass_ () {
       let typeClass = this.typesInput[this.typeInput]
