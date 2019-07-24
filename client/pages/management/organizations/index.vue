@@ -65,8 +65,8 @@
                   <span class="px-2">Акции</span>
                 </router-link>
               </div>
-              <p v-if="item.description" class="card-text pt-3"
-                 v-html="(item.description)?item.description.replaceAll('\n', '<br>'):item.description" />
+              <p v-if="item.short_description" class="card-text pt-3"
+                 v-html="item.short_description.replaceAll('\n', '<br>')" />
             </div>
             <div class="card-buttons mt-auto text-nowrap">
               <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"

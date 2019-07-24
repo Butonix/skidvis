@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-start align-items-center">
+  <div class="category-icons">
     <slot/>
   </div>
 </template>

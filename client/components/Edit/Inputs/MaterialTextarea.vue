@@ -36,6 +36,13 @@ export default {
       type: Object,
       default: undefined
     },
+    size: {
+      type: String,
+      default: '',
+      validator: function (value) {
+        return ['', 'sm'].indexOf(value) !== -1
+      }
+    },
     field: {
       type: String,
       default: ''
@@ -79,11 +86,11 @@ export default {
       default: 'left'
     },
     cols: {
-      type: String,
+      type: String | Number,
       default: '50'
     },
     rows: {
-      type: String,
+      type: String | Number,
       default: '4'
     }
   },
@@ -100,9 +107,10 @@ export default {
     formClass_ () {
       let typeClass = this.typesInput[this.typeInput]
       let formClass = this.formClass
+      let sizeClass = (this.size) ? ' material-input--' + this.size : ''
       if (!typeClass.isEmpty()) { typeClass = ' ' + typeClass }
       if (!formClass.isEmpty()) { formClass = ' ' + formClass }
-      return 'material-input' + typeClass + formClass
+      return 'material-input' + typeClass + formClass + sizeClass
     },
     inputClass_ () {
       let res = {

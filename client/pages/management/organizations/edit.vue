@@ -88,10 +88,15 @@
         <div class="col-lg-8 organizations-edit__editor">
           <material-textarea
             v-model="form.description"
-            name="link"
             placeholder="Почему к вам стоит прийти?"
             data-align="center"
-            form-class="my-5"
+            form-class="mt-5 mb-4"
+          />
+          <material-textarea
+            v-model="form.short_description"
+            placeholder="Короткое описание"
+            data-align="left"
+            form-class="mb-5"
           />
           <social-links
             :links="form.socials"
@@ -191,6 +196,7 @@ export default {
     if (organizationId) {
       try {
         let { data } = await axios.get('management/organizations/' + organizationId)
+        console.log(data)
         logo = data.organization.logo.src
         images = data.organization.images
         if (data.organization.operationMode) {
@@ -214,6 +220,7 @@ export default {
         name: '',
         inn: '',
         description: '',
+        short_description: '',
         logo: {
           color: '#FFFFFF',
           src: ''

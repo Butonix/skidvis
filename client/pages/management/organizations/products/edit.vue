@@ -35,9 +35,16 @@
           <div class="product__logo mr-4 mb-3">
             <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
           </div>
-          <h1 class="flex-grow-1 product__name ff-montserrat">
-            Хороший кинотеатр, советую. большой экран, погружаешься в атмосферу фильма с головой) советую!)
-          </h1>
+          <div class="h1 flex-grow-1 product__name ff-montserrat">
+            <material-textarea
+              v-model="form.name"
+              placeholder="Название"
+              data-align="left"
+              form-class="my-0"
+              size="sm"
+              rows="3"
+            />
+          </div>
         </div>
 
         <div class="order-3 order-lg-3 mb-4">
@@ -55,6 +62,7 @@
         </div>
 
         <sidebar
+          :categories="form.categories"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
           @onEditSelect="onEditSelect($event)"
@@ -114,6 +122,7 @@
 
       </div>
       <sidebar
+        :categories="form.categories"
         box-mod="right"
         @onEditSelect="onEditSelect($event)"
       />
@@ -180,30 +189,24 @@
               />
               <categories>
                 <category
-                  v-for="(category, key) in getCategories"
+                  v-for="(category, key) in getCategoriesSelected"
+                  :active="true"
                   :key="'categories-selected-'+key"
                   :label="category.name"
                   :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
                   :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                  @click="removeFromSelect(category.id, 'categories')"
+                />
+                <category
+                  v-for="(category, key) in getCategories"
+                  v-if="!categoriesSelectedId[category.id]"
+                  :key="'categories-'+key"
+                  :label="category.name"
+                  :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
+                  :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                  @click="addToSelect(category, 'categories')"
                 />
               </categories>
-              <div class="tags__select">
-                <div
-                  v-for="(tag, key) in getTagsSelected"
-                  :key="'tags-selected-'+key"
-                  class="tag tag--edit active mx-1 mb-2"
-                  @click="removeFromSelect(tag.id, 'tags')"
-                  v-text="tag.name"
-                />
-                <div
-                  v-for="(tag, key) in getTags"
-                  v-if="!tagsSelectedId[tag.id]"
-                  :key="'get-tags-'+key"
-                  class="tag tag--edit mx-1 mb-2"
-                  @click="addToSelect(tag, 'tags')"
-                  v-text="tag.name"
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -240,6 +243,7 @@ import Form from 'vform'
 
 export default {
   components: {
+    'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'SearchInput': () => import('~/components/SearchInput'),
     DynamicLabelInput,
     AddressesFrame,
@@ -302,7 +306,7 @@ export default {
     tagsSelectedId: {},
     // Categories
     categories: {},
-    categoriesMax: 10,
+    categoriesMax: 3,
     categoriesTotal: 0,
     categoriesSelected: [],
     categoriesSelectedId: {},
@@ -441,15 +445,17 @@ export default {
       }
       return res
     },
-    async addToSelect (tag, name) {
+    async addToSelect (item, name) {
+      console.log(item)
       if (this[name + 'Selected'].length >= this[name + 'Max']) {
         await this.$callToast({
           type: 'warning',
           text: this.getWarningMaxSelect(name)
         })
-      } else if (!this[name + 'SelectedId'][tag.id]) {
-        this[name + 'Selected'].push(tag)
-        this.$set(this[name + 'SelectedId'], tag.id, true)
+      } else if (!this[name + 'SelectedId'][item.id]) {
+        console.log(item)
+        this[name + 'Selected'].push(item)
+        this.$set(this[name + 'SelectedId'], item.id, true)
       }
     },
     async categoriesFetch () {

@@ -86,11 +86,31 @@
         .tag{
           &--edit{
             &.active{
-              border: 1px solid $primary_;
+              border-color: $primary_;
               background: $primary_;
             }
           }
         }
+
+        .category-icon {
+          &__wrapper{
+            &:before{
+              border-color: $primary_;
+            }
+          }
+          &__img{
+            &--active{
+              background-color: $primary_;
+            }
+          }
+        }
+        .tab{
+          color: $primary_;
+          &:before{
+            background: $primary_;
+          }
+        }
+
 
       }
 

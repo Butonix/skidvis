@@ -1,5 +1,10 @@
 <template>
-  <div class="category-icon">
+  <div :class="{
+         'active': !!active,
+         ['category-icon--'+type]: !!type,
+       }"
+       class="category-icon"
+       @click="$emit('click', $event)">
     <div class="category-icon__wrapper"
     >
       <div :style="`background-image: url(${src});`" class="category-icon__img"/>
@@ -17,6 +22,10 @@ export default {
       type: String,
       default: 'Название'
     },
+    type: {
+      type: String,
+      default: ''
+    },
     srcActive: {
       type: String,
       required: true
@@ -24,6 +33,10 @@ export default {
     src: {
       type: String,
       required: true
+    },
+    active: {
+      type: Boolean | Number | String,
+      default: false
     }
   }
 }

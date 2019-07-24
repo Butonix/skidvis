@@ -18,7 +18,7 @@
         </div>
         <div class="mb-2">
           <span class="text-primary link-dashed">
-          Кроме адресов
+            Кроме адресов
           </span>
         </div>
         <div class="btn btn-outline-gray btn-sm btn-block mb-2">
@@ -70,18 +70,14 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon class-box="mb-4">
-      <template slot="icon">
-        <flag class-box="ml-1" />
-      </template>
-      <template slot="text">
-        В закладки
-      </template>
-    </list-item-icon>
-
     <categories>
-      <category src-active="/img/categories/entertainment/entertainment-default-active.svg"
-                src="/img/categories/entertainment/entertainment-default-normal.svg" label="Красота" />
+      <category
+        v-for="(category, key) in categories"
+        :key="'categories-selected-'+key"
+        :label="category.name"
+        :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
+        :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+      />
     </categories>
 
     <div class="text-center">
@@ -119,6 +115,10 @@ export default {
     boxMod: {
       type: String,
       default: ''
+    },
+    categories: {
+      type: Array,
+      default: () => ([])
     },
     boxClass: {
       type: String,
