@@ -22,13 +22,21 @@
           <full-slider
             :images="images"
           >
-            <dynamic-label-input
-              v-model="action"
-              class-wrapper="product__slider__label"
-              class-box="product__slider__label__input"
-              class-input="ff-mplus-1p"
-            />
+            <div class="product__slider__label">
+              <dynamic-label-input
+                v-model="action"
+                class-input="ff-mplus-1p"
+              />
+              123
+            </div>
           </full-slider>
+          <thumbs-file-input
+            v-if="images"
+            :images="images"
+            :images-loading="imagesLoading"
+            @change="setMainImage"
+            @delete="deleteMainImage"
+          />
         </div>
 
         <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
@@ -244,6 +252,7 @@ import Form from 'vform'
 export default {
   components: {
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
+    'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
     'SearchInput': () => import('~/components/SearchInput'),
     DynamicLabelInput,
     AddressesFrame,
@@ -277,7 +286,7 @@ export default {
         console.log(e)
       }
     } else {
-      console.log('error 404')
+      console.log('create')
     }
     let addresses = []
     for (let i = 0; i < 20; i++) {
@@ -296,6 +305,7 @@ export default {
     search: '',
     action: '',
     loading: true,
+    imagesLoading: {},
     // Select
     selectName: '',
     // Tags
@@ -338,29 +348,7 @@ export default {
     //     }
     //   }
     // }
-    images: [
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      }
-    ],
+    images: [],
     fuseAddresses: null
   }),
   computed: {
@@ -431,6 +419,51 @@ export default {
         }))
         this.$delete(this[name + 'SelectedId'], id)
       }
+    },
+    async setMainImage ({ image, index }) {
+      if (index !== undefined && this.images[index]) {
+        this.$set(this.images, index, {
+          src: image
+        })
+      } else {
+        this.images.push({
+          src: image
+        })
+      }
+      this.imagesLoading[index] = true
+      try {
+        let { data } = await axios.post('management/organizations/image', {
+          cover: image
+        })
+
+        if (!data.mainImages || !data.mainImages.src || !data.mainImages.id) {
+          throw new Error()
+        }
+
+        image = data.mainImages
+
+        if (index !== undefined && this.form.images[index]) {
+          this.$set(this.form.images, index, image)
+        } else {
+          this.form.images.push(image)
+        }
+        this.imagesLoading[index] = false
+      } catch (e) {
+        if (index !== undefined && this.images[index]) {
+          this.$delete(this.images, index)
+        } else {
+          this.$delete(this.images, this.images.length - 1)
+        }
+        this.imagesLoading[index] = false
+        await this.$callToast({
+          type: 'error',
+          text: 'Загрузить изображение не удалось'
+        })
+      }
+    },
+    deleteMainImage ({ index }) {
+      this.$delete(this.images, index)
+      this.$delete(this.form.images, index)
     },
     getWarningMaxSelect (name) {
       let res = ''

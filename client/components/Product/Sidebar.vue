@@ -12,7 +12,12 @@
       <template slot="text">
         Акция действует
         <div class="">
-          с 28 мая по 28 августа 2019 Пн–пт, 10:00–17:00 Вс, 10:00–12:00 Кроме адресов
+          с 28 мая по 28 августа 2019 Пн–пт
+          <div class="mb-2">
+          <span class="text-primary link-dashed">
+            Кроме адресов
+          </span>
+          </div>
         </div>
       </template>
     </list-item-icon>

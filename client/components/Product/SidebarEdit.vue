@@ -12,9 +12,7 @@
       <template slot="text">
         Акция действует
         <div>
-          с 28 мая по 28 августа 2019 <br>
-          Пн–пт, 10:00–17:00  <br>
-          Вс, 10:00–12:00
+          с 28 мая по 28 августа 2019
         </div>
         <div class="mb-2">
           <span class="text-primary link-dashed">
