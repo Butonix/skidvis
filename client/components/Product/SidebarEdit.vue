@@ -54,21 +54,21 @@
         <relations />
       </template>
       <template slot="text">
-        <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center">
+        <div v-if="socials.length" class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center mb-2">
           <social
+            v-for="(social, key) in socials"
+            :key="'socials-'+key"
             class-box="mx-1"
-            type="vk" />
-          <social
-            class-box="mx-1"
-            type="ok" />
-          <social
-            class-box="mx-1"
-            type="facebook" />
+            :type="social.type"
+            :link="social.link"
+          />
         </div>
+        <div class="btn btn-outline-gray btn-sm btn-block mb-2"
+             @click="$emit('onEditSocial')" v-text="(socials.length)?'+ изменить соц. сети':'+ указать соц. сети'"/>
       </template>
     </list-item-icon>
 
-    <categories>
+    <categories v-if="categories.length">
       <category
         v-for="(category, key) in categories"
         :key="'categories-selected-'+key"
@@ -80,9 +80,7 @@
 
     <div class="text-center">
       <div class="btn btn-outline-primary btn-sm px-4"
-           @click="$emit('onEditSelect', 'categories')">
-        Выбрать категорию
-      </div>
+           @click="$emit('onEditSelect', 'categories')" v-text="(categories.length)?'Изменить категории':'Выбрать категории'"/>
     </div>
 
   </div>
@@ -123,6 +121,10 @@ export default {
       default: ''
     },
     categories: {
+      type: Array,
+      default: () => ([])
+    },
+    socials: {
       type: Array,
       default: () => ([])
     },

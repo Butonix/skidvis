@@ -1,15 +1,16 @@
 <template>
-  <div
+  <a
+    :href="link"
     :data-type="type"
     :class="'social-icon' + ((classBox !== '') ? ' ' + classBox : '')"
-    @click="$emit('click', $event)"
+    @click="onClick"
     @mouseleave="$emit('mouseleave', $event)"
     @mouseenter="$emit('mouseenter', $event)"
     @mousedown="$emit('mousedown', $event)"
     @mouseup="$emit('mouseup', $event)"
   >
     <fa :icon="icon" />
-  </div>
+  </a>
 </template>
 
 <script>
@@ -17,9 +18,13 @@
 export default {
   name: 'Social',
   props: {
-    // eslint-disable-next-line vue/require-default-prop
+    link: {
+      type: String,
+      default: '#'
+    },
     type: {
-      type: String
+      type: String,
+      required: true
     },
     classBox: {
       type: String,
@@ -39,6 +44,14 @@ export default {
   computed: {
     icon () {
       return ['fab', this.icons[this.type]]
+    }
+  },
+  methods: {
+    onClick ($event) {
+      if (this.link === '#') {
+        $event.preventDefault()
+      }
+      this.$emit('click', $event)
     }
   }
 }

@@ -95,12 +95,14 @@
         </div>
 
         <sidebar
+          :socials="form.socials"
           :value="form.value"
           :currency-id="form.currency_id"
           :categories="form.categories"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
           @onEditSelect="onEditSelect($event)"
+          @onEditSocial="onEditSocial"
         />
 
         <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -151,11 +153,13 @@
 
       </div>
       <sidebar
+        :socials="form.socials"
         :value="form.value"
         :currency-id="form.currency_id"
         :categories="form.categories"
         box-mod="right"
         @onEditSelect="onEditSelect($event)"
+        @onEditSocial="onEditSocial"
       />
     </div>
 
@@ -256,6 +260,29 @@
       </div>
     </modal>
 
+    <modal name="save-social">
+      <div class="basic-modal">
+        <social-links
+          :links="socials"
+          @change="changeSocialsLink"
+          @add="addSocialsLink"
+          @delete="deleteSocialsLink"
+        />
+        <div class="text-center mt-5">
+          <button class="btn btn-outline-primary mr-2"
+                  @click="saveSocial"
+          >
+            Сохранить
+          </button>
+          <button class="btn btn-outline-danger ml-2"
+                  @click="$modal.pop()"
+          >
+            Отменить
+          </button>
+        </div>
+      </div>
+    </modal>
+
   </div>
 </template>
 
@@ -277,6 +304,7 @@ export default {
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
     'SearchInput': () => import('~/components/SearchInput'),
+    'SocialLinks': () => import('~/components/Edit/SocialLinks'),
     DynamicLabelInput,
     AddressesFrame,
     Sidebar,
@@ -302,6 +330,7 @@ export default {
       value: '',
       short_description: '',
       description: '',
+      socials: [],
       images: []
     }
     let productId = params.productId
@@ -309,7 +338,7 @@ export default {
     if (productId) {
       try {
         let { data } = await axios.get(`management/organizations/172/products/206/edit`)
-        form = data.product
+        form = { ...form, ...data.product }
         images = cloneDeep(data.product.images)
         console.log(data.product)
       } catch (e) {
@@ -352,6 +381,8 @@ export default {
     categoriesTotal: 0,
     categoriesSelected: [],
     categoriesSelectedId: {},
+    // Socials
+    socials: [],
     // {
     //   id: 123,
     //   name: '',
@@ -400,8 +431,8 @@ export default {
     }
   },
   watch: {
-    'form.currency_id': function(v) {
-      if(v === 1 && this.form.value && Number(this.form.value) > 100){
+    'form.currency_id': function (v) {
+      if (v === 1 && this.form.value && Number(this.form.value) > 100) {
         this.$set(this.form, 'value', 100)
       }
     },
@@ -429,6 +460,23 @@ export default {
     }
   },
   methods: {
+    async onEditSocial () {
+      this.socials = cloneDeep(this.form.socials)
+      this.$modal.push('save-social')
+    },
+    saveSocial () {
+      this.$set(this.form, 'socials', cloneDeep(this.socials))
+      this.$modal.pop()
+    },
+    deleteSocialsLink (index) {
+      this.$delete(this.socials, index)
+    },
+    changeSocialsLink ({ index, value }) {
+      this.$set(this.socials, index, value)
+    },
+    addSocialsLink (link) {
+      this.socials.push(link)
+    },
     async onEditSelect (name) {
       this.selectName = name
       this.loading = true

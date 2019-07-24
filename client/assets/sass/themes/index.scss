@@ -57,7 +57,7 @@
         $link-color: $primary_;
         $link-hover-color: darken($link-color, 15%);
         a {
-          &:not(.btn):not(.nav-link){
+          &:not(.btn):not(.nav-link):not(.social-icon){
             color: $link-color;
             @include hover {
               color: $link-hover-color;
