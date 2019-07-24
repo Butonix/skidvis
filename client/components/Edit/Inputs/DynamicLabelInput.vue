@@ -15,6 +15,7 @@
         :placeholder="placeholder"
         type="text"
         required
+        @keypress="onlyNumber"
         @input="$emit('input', $event.target.value)"
       >
     </div>
@@ -28,6 +29,13 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: 'text',
+      validator: function (value) {
+        return ['text', 'number', 'percent'].indexOf(value) !== -1
+      }
     },
     value: {
       type: String | Number,
@@ -48,6 +56,20 @@ export default {
     classInput: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    onlyNumber (event) {
+      if (this.type === 'number') {
+        if (!/\d/.test(event.key) && event.key !== '.') return event.preventDefault()
+      }
+      if (this.type === 'percent') {
+        if (!/\d/.test(event.key) && event.key !== '.') return event.preventDefault()
+        let value = Number(event.target.value + event.key)
+        if (value > 100) {
+          return event.preventDefault()
+        }
+      }
     }
   }
 }

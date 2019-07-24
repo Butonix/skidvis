@@ -11,7 +11,7 @@
               v-model="action"
               class-wrapper="product__slider__label"
               class-box="product__slider__label__input"
-              class-input="ff-mplus-1p"
+              class-input="ff-open-sans"
             />
           </full-slider>
         </div>

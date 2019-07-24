@@ -24,10 +24,20 @@
           >
             <div class="product__slider__label">
               <dynamic-label-input
-                v-model="action"
-                class-input="ff-mplus-1p"
+                v-model="form.value"
+                :type="form.currency_id === 1? 'percent' : 'number'"
+                class-input="ff-open-sans"
               />
-              123
+              <div :class="{'active': form.currency_id === 1}"
+                   class="product__currency"
+                   @click="form.currency_id = 1"
+                   v-text="'%'"
+              />
+              <div :class="{'active': form.currency_id === 2}"
+                   class="product__currency"
+                   @click="form.currency_id = 2"
+                   v-text="'₽'"
+              />
             </div>
           </full-slider>
           <thumbs-file-input
@@ -48,7 +58,7 @@
               v-model="form.name"
               placeholder="Название"
               data-align="left"
-              form-class="my-0"
+              form-class="mb-0 mt-xs-0"
               size="sm"
               rows="3"
             />
@@ -70,6 +80,8 @@
         </div>
 
         <sidebar
+          :value="form.value"
+          :currency-id="form.currency_id"
           :categories="form.categories"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
@@ -130,6 +142,8 @@
 
       </div>
       <sidebar
+        :value="form.value"
+        :currency-id="form.currency_id"
         :categories="form.categories"
         box-mod="right"
         @onEditSelect="onEditSelect($event)"
@@ -271,12 +285,17 @@ export default {
   },
   asyncData: async ({ params, error, app }) => {
     let form = {
+      currency_id: 1,
       tags: [],
       categories: [],
+      name: '',
+      value: '',
+      short_description: '',
+      description: '',
       images: []
     }
     let productId = params.productId
-
+    productId = 1
     if (productId) {
       try {
         let { data } = await axios.get(`management/organizations/172/products/206/edit`)
@@ -369,6 +388,11 @@ export default {
     }
   },
   watch: {
+    'form.currency_id': function(v) {
+      if(v === 1 && this.form.value && Number(this.form.value) > 100){
+        this.$set(this.form, 'value', 100)
+      }
+    },
     search () {
       this[this.selectName + 'Fetch']()
     }

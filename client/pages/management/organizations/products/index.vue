@@ -30,7 +30,7 @@
               <dynamic-label-input
                 class-wrapper="card-img-top__label"
                 class-box="card-img-top__label__input"
-                class-input="ff-mplus-1p"
+                class-input="ff-open-sans"
               />
               <thumb-product
 

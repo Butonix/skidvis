@@ -40,12 +40,12 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon>
+    <list-item-icon v-if="!!value">
       <template slot="icon">
         <percent />
       </template>
       <template slot="text">
-        <span class="text-line-through text-muted">1000 ₽</span> 900 ₽, экономия 100 ₽
+        <span class="text-line-through text-muted">{{ getFullPrice }}</span> {{ getPrice }}
       </template>
     </list-item-icon>
 
@@ -110,6 +110,14 @@ export default {
     Percent
   },
   props: {
+    value: {
+      type: String | Number,
+      default: ''
+    },
+    currencyId: {
+      type: String | Number,
+      default: 1
+    },
     boxMod: {
       type: String,
       default: ''
@@ -121,6 +129,29 @@ export default {
     boxClass: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    getPrice () {
+      let currencyId = Number(this.currencyId)
+      let value = Number(this.value)
+
+      if (currencyId === 1) {
+        let price_ = 1000 * value / 100
+        let price = 1000 - price_
+        return price + ' ₽, экономия ' + price_ + ' ₽'
+      } else {
+        return '900 ₽, экономия 100 ₽'
+      }
+    },
+    getFullPrice () {
+      let currencyId = Number(this.currencyId)
+
+      if (currencyId === 1) {
+        return `1000 ₽`
+      } else {
+        return `1000 ₽`
+      }
     }
   }
 }
