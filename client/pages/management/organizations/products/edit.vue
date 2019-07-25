@@ -99,10 +99,13 @@
           :value="form.value"
           :currency-id="form.currency_id"
           :categories="form.categories"
+          :start-at="form.start_at"
+          :end-at="form.end_at"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
           @onEditSelect="onEditSelect($event)"
           @onEditSocial="onEditSocial"
+          @onInputDate="onInputDate"
         />
 
         <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -155,9 +158,12 @@
         :value="form.value"
         :currency-id="form.currency_id"
         :categories="form.categories"
+        :start-at="form.start_at"
+        :end-at="form.end_at"
         box-mod="right"
         @onEditSelect="onEditSelect($event)"
         @onEditSocial="onEditSocial"
+        @onInputDate="onInputDate"
       />
     </div>
 
@@ -328,6 +334,8 @@ export default {
       value: '',
       short_description: '',
       description: '',
+      start_at: '',
+      end_at: '',
       socials: [],
       images: []
     }
@@ -359,7 +367,6 @@ export default {
     }
   },
   data: () => ({
-    content: '',
     editorOptionCircs: {
       placeholder: 'Рекомендуем писать сжато, до 700 знаков. Так клиент легче соглашается на прочтение, и не откладывает вкладку, прочитать позже (никогда). \n\r\n\rИспользуйте абзацы, так легче читать.',
       modules: {
@@ -604,6 +611,10 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    onInputDate (value) {
+      let date = value.split(' — ')
+      console.log(date)
     }
   }
 }

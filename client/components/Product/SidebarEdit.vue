@@ -19,8 +19,14 @@
             Кроме адресов
           </span>
         </div>
-        <div class="btn btn-outline-gray btn-sm btn-block mb-2">
+        <div class="btn btn-outline-gray btn-sm btn-block btn-time-picker mb-2">
           + добавить время
+          <div class="btn-time-picker__picker">
+            <flat-pickr
+              v-model="date"
+              :config="config"
+            />
+          </div>
         </div>
         <div class="btn btn-outline-gray btn-sm btn-block mb-2">
           + адреса без акции
@@ -40,12 +46,12 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="!!value">
+    <list-item-icon v-if="!!value && Number(currencyId) === 1">
       <template slot="icon">
         <percent />
       </template>
       <template slot="text">
-        <span class="text-line-through text-muted">{{ getFullPrice }}</span> {{ getPrice }}
+        <span class="text-line-through text-muted">{{ getFullPrice }} ₽</span> {{ getPrice }}
       </template>
     </list-item-icon>
 
@@ -58,9 +64,9 @@
           <social
             v-for="(social, key) in socials"
             :key="'socials-'+key"
-            class-box="mx-1"
             :type="social.type"
             :link="social.link"
+            class-box="mx-1"
           />
         </div>
         <div class="btn btn-outline-gray btn-sm btn-block mb-2"
@@ -95,9 +101,12 @@ import Relations from '~/components/Icons/Relations'
 import Flag from '~/components/Flag'
 import Category from '~/components/Category'
 import Categories from '~/components/Categories'
+import flatPickr from 'vue-flatpickr-component'
+import { Russian } from 'flatpickr/dist/l10n/ru'
 
 export default {
   components: {
+    flatPickr,
     Hourglass,
     Clock,
     Flag,
@@ -120,6 +129,14 @@ export default {
       type: String,
       default: ''
     },
+    startAt: {
+      type: String,
+      default: ''
+    },
+    endAt: {
+      type: String,
+      default: ''
+    },
     categories: {
       type: Array,
       default: () => ([])
@@ -133,6 +150,14 @@ export default {
       default: ''
     }
   },
+  data: () => ({
+    date: null,
+    mounted: false,
+    config: {
+      mode: 'range',
+      locale: Russian
+    }
+  }),
   computed: {
     getPrice () {
       let currencyId = Number(this.currencyId)
@@ -143,17 +168,51 @@ export default {
         let price = 1000 - price_
         return price + ' ₽, экономия ' + price_ + ' ₽'
       } else {
-        return '900 ₽, экономия 100 ₽'
+        if (value && !isNaN(value)) {
+          return (this.getFullPrice - value) + ' ₽, экономия ' + value + ' ₽'
+        } else {
+          return '0 ₽, экономия 0 ₽'
+        }
       }
     },
     getFullPrice () {
       let currencyId = Number(this.currencyId)
+      let value = Number(this.value)
 
       if (currencyId === 1) {
-        return `1000 ₽`
+        return 1000
       } else {
-        return `1000 ₽`
+        if (value && !isNaN(value)) {
+          return Math.ceil(value / 1000) * 1000
+        } else {
+          return 1000
+        }
       }
+    }
+  },
+  watch: {
+    date (v) {
+      if (this.mounted) {
+        this.onInputDate(v)
+      }
+      this.mounted = true
+    }
+  },
+  beforeMount () {
+    this.date = this.getDate()
+  },
+  methods: {
+    onInputDate (value) {
+      this.$emit('onInputDate', value)
+    },
+    getDate () {
+      let res = (this.startAt) ? this.startAt : ''
+
+      if (res && this.endAt) {
+        res += ' — ' + this.endAt
+      }
+
+      return res
     }
   }
 }
