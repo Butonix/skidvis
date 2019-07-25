@@ -23,8 +23,9 @@
           + добавить время
           <div class="btn-time-picker__picker">
             <flat-pickr
-              v-model="date"
+              :value="getDate"
               :config="config"
+              @input="onInputDate"
             />
           </div>
         </div>
@@ -188,22 +189,6 @@ export default {
           return 1000
         }
       }
-    }
-  },
-  watch: {
-    date (v) {
-      if (this.mounted) {
-        this.onInputDate(v)
-      }
-      this.mounted = true
-    }
-  },
-  beforeMount () {
-    this.date = this.getDate()
-  },
-  methods: {
-    onInputDate (value) {
-      this.$emit('onInputDate', value)
     },
     getDate () {
       let res = (this.startAt) ? this.startAt : ''
@@ -213,6 +198,11 @@ export default {
       }
 
       return res
+    }
+  },
+  methods: {
+    onInputDate (value) {
+      this.$emit('onInputDate', value)
     }
   }
 }
