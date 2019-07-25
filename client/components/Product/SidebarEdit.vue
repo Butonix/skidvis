@@ -10,17 +10,12 @@
         <hourglass />
       </template>
       <template slot="text">
-        Акция действует
-        <div>
-          с 28 мая по 28 августа 2019
-        </div>
-        <div class="mb-2">
-          <span class="text-primary link-dashed">
-            Кроме адресов
-          </span>
-        </div>
+        <template v-if="timeHuman">
+          Акция действует
+          <div v-html="timeHuman"/>
+        </template>
         <div class="btn btn-outline-gray btn-sm btn-block btn-time-picker mb-2">
-          + добавить время
+          <span v-text="timeHuman?'+ изменить время':'+ добавить время'"/>
           <div class="btn-time-picker__picker">
             <flat-pickr
               :value="getDate"
@@ -28,6 +23,11 @@
               @input="onInputDate"
             />
           </div>
+        </div>
+        <div class="mb-2">
+          <span class="text-primary link-dashed">
+            Кроме адресов
+          </span>
         </div>
         <div class="btn btn-outline-gray btn-sm btn-block mb-2">
           + адреса без акции
@@ -152,6 +152,20 @@ export default {
     }
   },
   data: () => ({
+    monthRussian: {
+      '01': 'января',
+      '02': 'февраля',
+      '03': 'марта',
+      '04': 'апреля',
+      '05': 'мая',
+      '06': 'июня',
+      '07': 'июля',
+      '08': 'августа',
+      '09': 'сентября',
+      '10': 'октября',
+      '11': 'ноября',
+      '12': 'декабря'
+    },
     date: null,
     mounted: false,
     config: {
@@ -190,10 +204,13 @@ export default {
         }
       }
     },
+    timeHuman () {
+      return this.getTimeHuman(this.startAt, this.endAt, this.monthRussian)
+    },
     getDate () {
       let res = (this.startAt) ? this.startAt : ''
 
-      if (res && this.endAt) {
+      if (res && this.endAt && this.startAt !== this.endAt) {
         res += ' — ' + this.endAt
       }
 
@@ -201,6 +218,28 @@ export default {
     }
   },
   methods: {
+    getTimeHuman (startAt, endAt, monthRussian) {
+      if (!startAt) {
+        return ''
+      }
+      let mR = monthRussian
+      if (startAt === endAt || !endAt) {
+        let arr = startAt.split('-')
+        return `только ${arr[2]} ${mR[arr[1]]} ${arr[0]}`
+      } else {
+        let sArr = startAt.split('-')
+        let eArr = endAt.split('-')
+        let start = `с ${sArr[2]} `
+        if (sArr[1] !== eArr[1]) {
+          start += `${mR[sArr[1]]} `
+        }
+        if (sArr[0] !== eArr[0]) {
+          start += sArr[0] + '<br>'
+        }
+        let end = `по ${eArr[2]} ${mR[eArr[1]]} ${eArr[0]}`
+        return start + end
+      }
+    },
     onInputDate (value) {
       this.$emit('onInputDate', value)
     }

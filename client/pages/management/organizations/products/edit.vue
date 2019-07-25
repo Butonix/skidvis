@@ -340,7 +340,7 @@ export default {
       images: []
     }
     let productId = params.productId
-    productId = 1
+    // productId = 1
     if (productId) {
       try {
         let { data } = await axios.get(`management/organizations/172/products/206/edit`)
@@ -613,8 +613,28 @@ export default {
       }
     },
     onInputDate (value) {
-      let date = value.split(' — ')
-      console.log(date)
+      try {
+        value = value.trim()
+        if (value) {
+          let date = value.split(' — ')
+          console.log(date)
+          if (date[0]) {
+            this.$set(this.form, 'start_at', date[0])
+            if (date[1]) {
+              this.$set(this.form, 'end_at', date[1])
+            } else {
+              this.$set(this.form, 'end_at', date[0])
+            }
+          } else {
+            throw new Error()
+          }
+        } else {
+          throw new Error()
+        }
+      } catch (e) {
+        this.$set(this.form, 'start_at', null)
+        this.$set(this.form, 'end_at', null)
+      }
     }
   }
 }
