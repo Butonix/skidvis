@@ -1,6 +1,11 @@
 .btn{
   cursor: pointer;
 }
+.btn-sm--sm{
+  @include media-breakpoint-down(xs){
+    @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+  }
+}
 .btn-auth{
   padding: 0.72rem 1.84rem;
   border-width: 2px!important;

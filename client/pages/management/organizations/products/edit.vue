@@ -1,16 +1,16 @@
 <template>
   <div class="container products-edit">
-    <div class="row mb-4">
+    <div class="row mb-3">
       <div class="col">
         <h5 class="text-primary">
           Панель редактирования
         </h5>
       </div>
       <div class="col-auto">
-        <div class="btn btn-outline-danger btn-sm">
+        <div class="btn btn-outline-danger btn-sm mb-2">
           Снять с публикации
         </div>
-        <div class="btn btn-success btn-sm">
+        <div class="btn btn-success btn-sm mb-2">
           Сохранить
         </div>
       </div>
@@ -149,6 +149,16 @@
             type-style="lite"
             placeholder="Найти адрес"
           />
+          <div class="py-3">
+            <div class="btn btn-gray btn-sm mr-2"
+                 @click="selectAllAddresses">
+              Выделить все
+            </div>
+            <div class="btn btn-gray btn-sm"
+                 @click="clearAllAddresses">
+              Снять все
+            </div>
+          </div>
           <addresses-frame :marker-id="1" :addresses="getAddresses" :selected-addresses="form.points"
                            @change="changeAddresses"
           />
@@ -202,12 +212,12 @@
           </div>
         </div>
         <div class="text-center mt-5">
-          <button v-if="!loading" class="btn btn-outline-primary mr-2"
+          <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="saveSelect('tags')"
           >
             Сохранить
           </button>
-          <button class="btn btn-outline-danger ml-2"
+          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="$modal.pop()"
           >
             Отменить
@@ -252,12 +262,12 @@
           </div>
         </div>
         <div class="text-center mt-5">
-          <button v-if="!loading" class="btn btn-outline-primary mr-2"
+          <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="saveSelect('categories')"
           >
             Сохранить
           </button>
-          <button class="btn btn-outline-danger ml-2"
+          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="$modal.pop()"
           >
             Отменить
@@ -275,12 +285,12 @@
           @delete="deleteSocialsLink"
         />
         <div class="text-center mt-5">
-          <button class="btn btn-outline-primary mr-2"
+          <button class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="saveSocial"
           >
             Сохранить
           </button>
-          <button class="btn btn-outline-danger ml-2"
+          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="$modal.pop()"
           >
             Отменить
@@ -666,6 +676,16 @@ export default {
           this.$delete(this.form.points, index)
         }
       }
+    },
+    selectAllAddresses () {
+      let points = []
+      this.addresses.forEach(v => {
+        points.push(v.id)
+      })
+      this.$set(this.form, 'points', points)
+    },
+    clearAllAddresses () {
+      this.$set(this.form, 'points', [])
     }
   }
 }

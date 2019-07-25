@@ -64,6 +64,8 @@
     transition: .2s ease;
     font-size: 1rem;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
   }
   &[data-align="left"]
   {
