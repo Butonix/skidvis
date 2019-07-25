@@ -7,3 +7,13 @@
     padding: 30px 19px;
   }
 }
+.modal-content{
+  max-width: 800px;
+  width: 100%;
+  @media (max-width: 860px) {
+    max-width: calc(100% - 60px);
+  }
+  @media (max-width: 480px) {
+    max-width: calc(100% - 10px);
+  }
+}

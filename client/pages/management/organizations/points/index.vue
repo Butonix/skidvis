@@ -208,7 +208,6 @@ export default {
       try {
         let req = await axios.get('management/organizations/' + organizationId)
         dataOrg = req.data
-
         if (dataOrg.organization.operationMode) {
           operationMode = dataOrg.organization.operationMode
         } else if (dataOrg.organization) {
@@ -224,6 +223,7 @@ export default {
           params: params_
         })
         list = data
+        console.log(data)
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }

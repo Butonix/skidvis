@@ -140,16 +140,18 @@
           </transition>
         </div>
 
-        <div v-if="addresses" class="order-7 order-lg-7">
+        <div v-if="addresses.length" class="order-7 order-lg-7">
           <h5>
             Акция по адресам:
           </h5>
           <search-input
             v-model="search"
             type-style="lite"
-            placeholder="Введите адрес или метро"
+            placeholder="Найти адрес"
           />
-          <addresses-frame :marker-id="1" :addresses="getAddresses"/>
+          <addresses-frame :marker-id="1" :addresses="getAddresses" :selected-addresses="form.points"
+                           @change="changeAddresses"
+          />
         </div>
 
       </div>
@@ -175,7 +177,7 @@
             Добавлено {{ tagsSelected.length }} из {{ tagsTotal }}
             <div class="">
               <search-input
-                v-model="search"
+                v-model="selectSearch"
                 form-class="mb-4"
                 autofocus="autofocus"
               />
@@ -222,7 +224,7 @@
             Добавлено {{ categoriesSelected.length }} из {{ categoriesTotal }}
             <div class="">
               <search-input
-                v-model="search"
+                v-model="selectSearch"
                 form-class="mb-4"
                 autofocus="autofocus"
               />
@@ -337,10 +339,11 @@ export default {
       start_at: '',
       end_at: '',
       socials: [],
+      points: [],
       images: []
     }
     let productId = params.productId
-    // productId = 1
+    productId = 1
     if (productId) {
       try {
         let { data } = await axios.get(`management/organizations/172/products/206/edit`)
@@ -353,16 +356,16 @@ export default {
     } else {
       console.log('create')
     }
-    let addresses = []
-    for (let i = 0; i < 20; i++) {
-      addresses.push({
-        text: loremIpsum()
-      })
-    }
+    // let addresses = []
+    // for (let i = 0; i < 20; i++) {
+    //   addresses.push({
+    //     text: loremIpsum()
+    //   })
+    // }
 
     return {
       form,
-      addresses,
+      // addresses,
       images
     }
   },
@@ -382,6 +385,7 @@ export default {
     loading: true,
     imagesLoading: {},
     // Select
+    selectSearch: '',
     selectName: '',
     // Tags
     tagsMax: 10,
@@ -397,6 +401,8 @@ export default {
     categoriesSelectedId: {},
     // Socials
     socials: [],
+    // Addresses
+    addresses: [],
     // {
     //   id: 123,
     //   name: '',
@@ -450,7 +456,7 @@ export default {
         this.$set(this.form, 'value', 100)
       }
     },
-    search () {
+    selectSearch () {
       this[this.selectName + 'Fetch']()
     }
   },
@@ -458,18 +464,35 @@ export default {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
     }
-
-    if (!(this.addresses instanceof Fuse)) {
-      this.fuseAddresses = new Fuse(this.addresses, {
-        shouldSort: true,
-        threshold: 0.6,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: [
-          'text'
-        ]
+  },
+  async mounted () {
+    try {
+      let { data } = await axios.get(`management/organizations/172/points`, {
+        params: {
+          responseTypeId: 2
+        }
+      })
+      if (!data) {
+        throw new Error()
+      }
+      this.addresses = data
+      if (!(this.addresses instanceof Fuse)) {
+        this.fuseAddresses = new Fuse(this.addresses, {
+          shouldSort: true,
+          threshold: 0.6,
+          location: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: [
+            'name', 'full_street'
+          ]
+        })
+      }
+    } catch (e) {
+      await this.$callToast({
+        type: 'error',
+        text: 'Получить адреса не удалось'
       })
     }
   },
@@ -494,7 +517,7 @@ export default {
     async onEditSelect (name) {
       this.selectName = name
       this.loading = true
-      this.search = ''
+      this.selectSearch = ''
       this.$modal.push('save-' + name)
       await this[name + 'Fetch']()
       this[name + 'Total'] = this[name].total
@@ -575,14 +598,12 @@ export default {
       return res
     },
     async addToSelect (item, name) {
-      console.log(item)
       if (this[name + 'Selected'].length >= this[name + 'Max']) {
         await this.$callToast({
           type: 'warning',
           text: this.getWarningMaxSelect(name)
         })
       } else if (!this[name + 'SelectedId'][item.id]) {
-        console.log(item)
         this[name + 'Selected'].push(item)
         this.$set(this[name + 'SelectedId'], item.id, true)
       }
@@ -591,11 +612,10 @@ export default {
       try {
         let { data } = await axios.get(`management/categories`, {
           params: {
-            search: this.search
+            search: this.selectSearch
           }
         })
         this.categories = data
-        console.log(data)
       } catch (e) {
         console.log(e)
       }
@@ -604,7 +624,7 @@ export default {
       try {
         let { data } = await axios.get(`management/tags`, {
           params: {
-            search: this.search
+            search: this.selectSearch
           }
         })
         this.tags = data
@@ -617,7 +637,6 @@ export default {
         value = value.trim()
         if (value) {
           let date = value.split(' — ')
-          console.log(date)
           if (date[0]) {
             this.$set(this.form, 'start_at', date[0])
             if (date[1]) {
@@ -634,6 +653,18 @@ export default {
       } catch (e) {
         this.$set(this.form, 'start_at', null)
         this.$set(this.form, 'end_at', null)
+      }
+    },
+    changeAddresses ({ id, value }) {
+      let index = this.form.points.indexOf(id)
+      if (value) {
+        if (index === -1) {
+          this.form.points.push(id)
+        }
+      } else {
+        if (index !== -1) {
+          this.$delete(this.form.points, index)
+        }
       }
     }
   }

@@ -24,14 +24,6 @@
             />
           </div>
         </div>
-        <div class="mb-2">
-          <span class="text-primary link-dashed">
-            Кроме адресов
-          </span>
-        </div>
-        <div class="btn btn-outline-gray btn-sm btn-block mb-2">
-          + адреса без акции
-        </div>
       </template>
     </list-item-icon>
 
