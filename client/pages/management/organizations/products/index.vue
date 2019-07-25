@@ -26,7 +26,7 @@
           class="col-md-6 col-lg-4 mb-5"
         >
           <div class="card card--product w-100 h-100">
-            <div class="card-img-top">
+            <router-link :to="{ name: 'products.show', params: { productId: item.id } }" class="card-img-top d-block" >
               <div v-if="item.currency_id && item.value" class="card-img-top__label">
                 {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
               </div>
@@ -41,11 +41,11 @@
                   >
                 </div>
               </div>
-            </div>
+            </router-link>
             <label class="card-body pb-2 pt-4" v-html="item.short_description"/>
             <div class="card-buttons mt-auto text-nowrap">
               <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
-                <fa icon="pencil-alt" class="mr-2"/>Редактировать страницу
+                <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
               </router-link>
               <div class="card-buttons__controls">
                 <div class="card-buttons__controls__left"><fa :icon="['fas', 'chevron-left']"/></div>

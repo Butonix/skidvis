@@ -365,10 +365,9 @@ export default {
       points: [],
       images: []
     }
-    productId = 1
     if (productId) {
       try {
-        let { data } = await axios.get(`management/organizations/172/products/206/edit`)
+        let { data } = await axios.get(`management/organizations/${organizationId}/products/${productId}/edit`)
         form = { ...form, ...data.product }
         images = cloneDeep(data.product.images)
         console.log(data.product)
