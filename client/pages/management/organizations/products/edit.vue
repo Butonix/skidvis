@@ -10,8 +10,17 @@
         <div class="btn btn-outline-danger btn-sm mb-2">
           Снять с публикации
         </div>
-        <div class="btn btn-success btn-sm mb-2">
+        <div class="btn btn-success btn-sm mb-2"
+             @click="onSave"
+        >
           Сохранить
+        </div>
+        <div
+          v-if="productId"
+          class="btn btn-danger btn-sm mb-2"
+          @click="onDelete"
+        >
+          Удалить
         </div>
       </div>
     </div>
@@ -101,6 +110,7 @@
           :categories="form.categories"
           :start-at="form.start_at"
           :end-at="form.end_at"
+          :operation-mode-text="getOperationModeText"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
           @onEditSelect="onEditSelect($event)"
@@ -172,6 +182,7 @@
         :categories="form.categories"
         :start-at="form.start_at"
         :end-at="form.end_at"
+        :operation-mode-text="getOperationModeText"
         box-mod="right"
         @onEditSelect="onEditSelect($event)"
         @onEditSocial="onEditSocial"
@@ -312,7 +323,6 @@ import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/SidebarEdit'
 import Category from '~/components/Category'
 import Categories from '~/components/Categories'
-import { loremIpsum } from 'lorem-ipsum'
 import Form from 'vform'
 
 export default {
@@ -338,6 +348,8 @@ export default {
   },
   asyncData: async ({ params, error, app }) => {
     let images = []
+    let productId = params.productId
+    let organizationId = params.organizationId
     let form = {
       currency_id: 1,
       tags: [],
@@ -348,11 +360,11 @@ export default {
       description: '',
       start_at: '',
       end_at: '',
+      operationModeText: '',
       socials: [],
       points: [],
       images: []
     }
-    let productId = params.productId
     productId = 1
     if (productId) {
       try {
@@ -361,21 +373,14 @@ export default {
         images = cloneDeep(data.product.images)
         console.log(data.product)
       } catch (e) {
-        console.log(e)
+        error({ statusCode: 404, message: 'Product not found' })
       }
-    } else {
-      console.log('create')
     }
-    // let addresses = []
-    // for (let i = 0; i < 20; i++) {
-    //   addresses.push({
-    //     text: loremIpsum()
-    //   })
-    // }
 
     return {
+      organizationId,
+      productId,
       form,
-      // addresses,
       images
     }
   },
@@ -444,6 +449,9 @@ export default {
     fuseAddresses: null
   }),
   computed: {
+    getOperationModeText () {
+      return (this.form.operationModeText) ? this.form.operationModeText.replace(', ', ', <br>') : ''
+    },
     getTagsSelected () {
       return sortBy(this.tagsSelected, 'name')
     },
@@ -498,6 +506,9 @@ export default {
             'name', 'full_street'
           ]
         })
+      }
+      if (!this.productId) {
+        this.selectAllAddresses()
       }
     } catch (e) {
       await this.$callToast({
@@ -686,6 +697,57 @@ export default {
     },
     clearAllAddresses () {
       this.$set(this.form, 'points', [])
+    },
+    async onDelete () {
+      if (!this.productId) {
+        return
+      }
+      let res = await this.$confirmDelete()
+      if (res.value) {
+        try {
+          await axios.delete(`management/organizations/${this.organizationId}/products/${this.productId}`)
+          await this.$callToast({
+            type: 'success',
+            text: 'Акция успешно удалена'
+          })
+          this.$router.push({ name: 'management.organizations.products.index',
+            params: {
+              organizationId: this.organizationId
+            }
+          })
+        } catch (e) {
+          await this.$callToast({
+            type: 'error',
+            text: 'Удалить не удалось'
+          })
+        }
+      }
+    },
+    async onSave () {
+      try {
+        if (this.productId) {
+          await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
+        } else {
+          const { data } = await this.form.post(`management/organizations/${this.organizationId}/products`)
+          console.log(data)
+          this.productId = data.product.id
+          this.$router.push({ name: 'management.organizations.products.edit',
+            params: {
+              organizationId: this.organizationId,
+              productId: this.productId
+            }
+          })
+        }
+        await this.$callToast({
+          type: 'success',
+          text: 'Данные успешно сохранены'
+        })
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Сохранить не удалось'
+        })
+      }
     }
   }
 }

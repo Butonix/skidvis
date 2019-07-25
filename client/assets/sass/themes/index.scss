@@ -70,7 +70,7 @@
           input{
             &:focus{
               ~{
-                .search-input__line{
+                .search-input__lupe{
                   color: $primary_;
                 }
               }

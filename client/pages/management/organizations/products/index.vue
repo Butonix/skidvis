@@ -5,8 +5,8 @@
         Акции организации
       </h5>
       <search-input
-        autofocus="autofocus"
         v-model="params.search"
+        autofocus="autofocus"
       />
     </div>
 
@@ -27,20 +27,24 @@
         >
           <div class="card card--product w-100 h-100">
             <div class="card-img-top">
-              <dynamic-label-input
-                class-wrapper="card-img-top__label"
-                class-box="card-img-top__label__input"
-                class-input="ff-open-sans"
-              />
-              <thumb-product
-
-              />
+              <div v-if="item.currency_id && item.value" class="card-img-top__label">
+                {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
+              </div>
+              <div class="embed-responsive">
+                <div class="embed-responsive-item">
+                  <img
+                    v-lazy="item.images[0].src"
+                    v-if="item.images && item.images[0] && item.images[0].src"
+                    :data-id="item.id" :alt="item.name"
+                    :title="item.name"
+                    src="/placeholders/loading_spinner.gif"
+                  >
+                </div>
+              </div>
             </div>
-            <label class="card-body pb-2 pt-4">
-              <textarea cols="30" rows="4" placeholder="Короткое описание">123123213</textarea>
-            </label>
+            <label class="card-body pb-2 pt-4" v-html="item.short_description"/>
             <div class="card-buttons mt-auto text-nowrap">
-              <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
+              <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
                 <fa icon="pencil-alt" class="mr-2"/>Редактировать страницу
               </router-link>
               <div class="card-buttons__controls">
@@ -113,7 +117,8 @@ export default {
         let { data } = await axios.get(indexApiUrl, {
           params: params_
         })
-        list = data
+        list = data.products
+        console.log(data.products)
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }

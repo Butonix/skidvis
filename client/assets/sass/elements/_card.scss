@@ -39,25 +39,11 @@
     &__label{
       position: absolute;
       z-index: 10;
-      height: rem(37);
       border-radius: 0 0 15px 0;
       background: #FF2E00;
-      padding: 0 17px;
-      min-width: 65px;
-      &__input{
-        left: 15px;
-        right: 15px;
-        input{
-          color: white;
-          background: transparent;
-          $color: white;
-          &::-moz-placeholder { color: $color; }
-          &::-webkit-input-placeholder { color: $color; }
-          &:-ms-input-placeholder { color: $color; }
-          &::-ms-input-placeholder { color: $color; }
-          &::placeholder { color: $color; }
-        }
-      }
+      padding: 7px 15px;
+      color: white;
+      font-weight: 700;
     }
   }
   .card-buttons{
@@ -186,7 +172,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 350px;
+    min-height: 300px;
     &:before, &:after{
       content: '';
       display: block;
@@ -208,6 +194,8 @@
       min-height: 100%;
       max-width: none;
       max-height: none;
+      height: auto;
+      width: 100%;
     }
     .card-body{
       textarea{

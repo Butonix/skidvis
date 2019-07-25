@@ -230,7 +230,7 @@ export default {
     }
 
     return {
-      id: organizationId,
+      organizationId,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       images,
       logo,
@@ -345,13 +345,13 @@ export default {
       this.$set(this.form.socials, index, value)
     },
     async onDelete () {
-      if (!this.id) {
+      if (!this.organizationId) {
         return
       }
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          await axios.delete('management/organizations/' + this.id)
+          await axios.delete('management/organizations/' + this.organizationId)
           await this.$callToast({
             type: 'success',
             text: 'Организация успешно удалена'
@@ -367,11 +367,11 @@ export default {
     },
     async onSave () {
       try {
-        if (this.id) {
-          await this.form.patch('management/organizations/' + this.id)
+        if (this.organizationId) {
+          await this.form.patch('management/organizations/' + this.organizationId)
         } else {
           const { data } = await this.form.post('management/organizations')
-          this.id = data.organization.id
+          this.organizationId = data.organization.id
           this.$router.push({ name: 'management.organizations.edit', params: { organizationId: data.organization.id } })
         }
         await this.$callToast({

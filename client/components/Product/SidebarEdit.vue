@@ -27,15 +27,13 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon>
+    <list-item-icon v-if="operationModeText">
       <template slot="icon">
         <clock />
       </template>
       <template slot="text">
         Режим работы
-        <div class="">
-          10:00-22:00
-        </div>
+        <div v-html="operationModeText"/>
       </template>
     </list-item-icon>
 
@@ -117,6 +115,10 @@ export default {
     currencyId: {
       type: String | Number,
       default: 1
+    },
+    operationModeText: {
+      type: String,
+      default: ''
     },
     boxMod: {
       type: String,
