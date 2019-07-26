@@ -1,41 +1,38 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="product">
     <div class="row">
       <div class="product__content">
 
         <div class="order-2 order-lg-1 product__slider mb-3">
           <full-slider
-            :images="images"
+            :images="product.images"
           >
-            <dynamic-label-input
-              v-model="action"
-              class-wrapper="product__slider__label"
-              class-box="product__slider__label__input"
-              class-input="ff-open-sans"
-            />
+            <div v-if="product.currency_id && product.value" class="product__slider__label">
+              {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
+            </div>
           </full-slider>
         </div>
 
         <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
           <div class="product__logo mr-4 mb-3">
-            <img src="/placeholders/logo.svg" alt="Акция" title="Акция">
+            <img
+              v-lazy="product.organization_logo || '/placeholders/logo.svg'"
+              :alt="product.name"
+              :title="product.name"
+              src="/placeholders/loading_spinner.gif"
+            >
           </div>
-          <h1 class="flex-grow-1 product__name ff-montserrat">
-            Хороший кинотеатр, советую. большой экран, погружаешься в атмосферу фильма с головой) советую!)
-          </h1>
+          <h1 class="flex-grow-1 product__name ff-montserrat" v-html="product.name"/>
         </div>
 
-        <div class="order-3 order-lg-3 mb-4">
+        <div v-if="product.tags && product.tags.length" class="order-3 order-lg-3 mb-4">
           Акции по тегам
-          <div class="tag mx-1 mb-2">
-            Кинотеатр
-          </div>
-          <div class="tag mx-1 mb-2">
-            7D
-          </div>
-          <div class="tag mx-1 mb-2">
-            Билет
-          </div>
+          <div
+            v-for="(tag, key) in product.tags"
+            :key="'tags-'+key"
+            class="tag mx-1 mb-2"
+            v-text="tag.name"
+          />
         </div>
 
         <sidebar
@@ -43,14 +40,18 @@
           box-mod="center"
         />
 
-        <div class="order-5 order-lg-5 tab-panel mt-3">
+        <div
+          v-if="product.conditions || product.description"
+          class="order-5 order-lg-5 tab-panel mt-3">
           <div
+            v-if="product.conditions"
             :class="{'active':(tab === 'circs')}"
             class="tab"
             @click="tab ='circs'">
             Условия
           </div>
           <div
+            v-if="product.description"
             :class="{'active':(tab === 'desc')}"
             class="tab"
             @click="tab ='desc'">
@@ -64,26 +65,16 @@
           </div>
         </div>
 
-        <div class="order-6 order-lg-6 tab-content mb-5">
+        <div
+          v-if="product.conditions || product.description"
+          class="order-6 order-lg-6 tab-content product__description mb-5">
           <transition name="fade" mode="out-in">
-            <div v-if="tab === 'circs'" :key="'circs'">
-              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
-              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
-              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
-              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
-              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
-            </div>
-            <div v-if="tab === 'desc'" :key="'desc'">
-              Скачайте приложение Biglion для iOs или Android и предъявите купон с экрана телефона. Вы также можете
-              предъявить купон в электронном или распечатанном виде. Один человек может купить неограниченное количество
-              купонов для себя или в подарок. Купон действует на следующие виды услуг: 1 сеанс кино: Скидка 50% на любой
-              сеанс кино на цилиндрическом широкоформатном экране для одного (150 руб. вместо 300 руб.) Скидка 51% на
-              любой сеанс кино на цилиндрическом широкоформатном экране для двоих
-            </div>
+            <div v-if="tab === 'circs'" :key="'circs'" v-html="product.conditions"/>
+            <div v-if="tab === 'desc'" :key="'desc'" v-html="product.description"/>
           </transition>
         </div>
 
-        <div class="order-7 order-lg-7" v-if="addresses">
+        <div v-if="product.points" class="order-7 order-lg-7">
           <h5>
             Акция по адресам:
           </h5>
@@ -92,7 +83,7 @@
             type-style="lite"
             placeholder="Введите адрес или метро"
           />
-          <addresses-frame :marker-id="1" :addresses="getAddresses"/>
+          <addresses-frame :addresses="getPoints"/>
         </div>
 
       </div>
@@ -112,7 +103,6 @@ import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/Sidebar'
-import { loremIpsum } from 'lorem-ipsum'
 
 export default {
   components: {
@@ -132,28 +122,25 @@ export default {
   },
   asyncData: async ({ params, error, app }) => {
     let productId = params.productId
+    let res = {
+      productId
+    }
 
     if (productId) {
       try {
-        // let { data } = await axios.get(`management/organizations/172/products/206`)
-
-        // console.log(data)
+        let { data } = await axios.get(`products/${productId}`)
+        res = {
+          ...data
+        }
+        console.log(data)
       } catch (e) {
-        console.log(e)
+        error({ statusCode: 404, message: 'Product not found' })
       }
     } else {
       console.log('error 404')
     }
-    let addresses = []
-    for (let i = 0; i < 20; i++) {
-      addresses.push({
-        text: loremIpsum()
-      })
-    }
 
-    return {
-      addresses
-    }
+    return res
   },
   data: () => ({
     tab: 'circs',
@@ -189,40 +176,17 @@ export default {
         }
       }
     ],
-    images: [
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      },
-      {
-        src: 'http://lorempixel.com/1920/700'
-      }
-    ],
-    fuseAddresses: null
+    fusePoints: null
   }),
   computed: {
-    getAddresses () {
-      return (this.fuseAddresses && this.search.length > 0) ? this.fuseAddresses.search(this.search) : this.addresses
+    getPoints () {
+      return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
     }
   },
 
   async beforeMount () {
-    if (!(this.addresses instanceof Fuse)) {
-      this.fuseAddresses = new Fuse(this.addresses, {
+    if (!(this.product.points instanceof Fuse)) {
+      this.fusePoints = new Fuse(this.product.points, {
         shouldSort: true,
         threshold: 0.6,
         location: 0,
@@ -230,7 +194,7 @@ export default {
         maxPatternLength: 32,
         minMatchCharLength: 1,
         keys: [
-          'text'
+          'name', 'full_street'
         ]
       })
     }

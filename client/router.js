@@ -105,7 +105,8 @@ const routes = [
         name: 'products.show',
         meta: {
           breadcrumb: {
-            name: 'productId'
+            name: 'productId',
+            length: 100
           }
         },
         component: ProductsShow

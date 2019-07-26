@@ -217,4 +217,20 @@
       line-height: 1.2;
     }
   }
+  &__description{
+    strong {
+      font-weight: 600;
+    }
+
+    ul, ul > li {
+      padding-left: 0;
+    }
+    ul > li::before{
+      font-size: 1.6em;
+      color: $primary;
+      line-height: 1;
+      position: relative;
+      top: .15em;
+    }
+  }
 }

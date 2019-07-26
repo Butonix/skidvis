@@ -46,12 +46,13 @@ export default {
       } else if (bc instanceof Object) {
         let reactData = this.$store.getters['variables/getReactData']
         let name = bc.name
+        let length = bc.length
         if (reactData[name] && params[name] && reactData[name][Number(params[name])]) {
           let res_ = reactData[name][Number(params[name])]
           if (res_.name) {
             res = res_.name
-            if (res.length > 20) {
-              res = res.slice(0, 20)
+            if (res.length > (length || 20)) {
+              res = res.slice(0, (length || 20))
               res += '...'
             }
           }
