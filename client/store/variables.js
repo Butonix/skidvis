@@ -149,13 +149,15 @@ export const actions = {
       commit('SET_PREVIOUS_ROUTE', [])
     }
   },
-  async fetchTimezones ({ commit, dispatch }) {
-    try {
-      const { data } = await axios.get('management/timezones')
-      commit('SET_TIMEZONES', data.data)
-      commit('SET_DEFAULT_TIMEZONE', data.default)
-    } catch (e) {
-      console.log('error fetchTimezones', e)
+  async fetchTimezones ({ state, commit, dispatch }) {
+    if (state.timezones.length === 0) {
+      try {
+        const { data } = await axios.get('management/timezones')
+        commit('SET_TIMEZONES', data.list.data)
+        commit('SET_DEFAULT_TIMEZONE', data.list.default)
+      } catch (e) {
+        console.log('error fetchTimezones', e)
+      }
     }
   },
   async fetchReactData ({ commit, dispatch, state }, params) {

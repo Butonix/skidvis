@@ -27,6 +27,11 @@
         >
           <div class="card card--product w-100 h-100">
             <router-link :to="{ name: 'products.show', params: { productId: item.id } }" class="card-img-top d-block" >
+              <div v-if="!item.is_published" class="card-img-top__message">
+                <div>
+                  Не опубликован
+                </div>
+              </div>
               <div v-if="item.currency_id && item.value" class="card-img-top__label">
                 {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
               </div>

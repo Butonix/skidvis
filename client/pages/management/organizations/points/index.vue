@@ -5,9 +5,9 @@
         Мои организации
       </h5>
       <search-input
-        autofocus="autofocus"
         v-if="params"
         v-model="params.search"
+        autofocus="autofocus"
       />
     </div>
     <div class="container">
@@ -247,6 +247,7 @@ export default {
     }
   },
   data: () => ({
+    address: '',
     updateId: null
   }),
   watch: {
@@ -258,6 +259,22 @@ export default {
       this.form = new Form(this.form)
     }
     this.fetchTimezones()
+    // try {
+    //   let { data } = await axios({
+    //     method: 'POST',
+    //     url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+    //     data: { 'query': 'е', 'count': 10 },
+    //     responseType: 'json',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Accept': 'application/json',
+    //       'Authorization': `Token ${process.env.daDataApi}`,
+    //     }
+    //   })
+    //   console.log(data)
+    // } catch (e) {
+    //   console.log(e)
+    // }
   },
   computed: {
     ...mapGetters({

@@ -32,6 +32,11 @@
               :class="{'p-3': (item.logo && item.logo.src && !errorLogos[item.id]), 'pb-3': !(item.logo && item.logo.src && !errorLogos[item.id])}"
               class="card-img-top d-block"
             >
+              <div v-if="!item.is_published" class="card-img-top__message">
+                <div>
+                  Не опубликован
+                </div>
+              </div>
               <div class="embed-responsive embed-responsive-1by1">
                 <div
                   :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
