@@ -39,7 +39,28 @@ export default {
   },
   methods: {
     getBreadcrumb (bc) {
-      return typeof bc === 'function' ? bc.call(this, this.$route.params) : bc
+      let res = ''
+      let params = this.$route.params
+      if (bc instanceof Function) {
+        res = bc.call(this, params)
+      } else if (bc instanceof Object) {
+        let reactData = this.$store.getters['variables/getReactData']
+        let name = bc.name
+        if (reactData[name] && params[name] && reactData[name][Number(params[name])]) {
+          let res_ = reactData[name][Number(params[name])]
+          if (res_.name) {
+            res = res_.name
+            if (res.length > 20) {
+              res = res.slice(0, 20)
+              res += '...'
+            }
+          }
+        }
+      } else {
+        res = bc
+      }
+
+      return res
     },
     getPath (crumb) {
       let { path } = crumb

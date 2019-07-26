@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { scrollBehavior } from '~/utils'
+import {scrollBehavior} from '~/utils'
 
 Vue.use(Router)
 
@@ -28,7 +28,7 @@ const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.def
 const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
 
 const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
-const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
+// const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
 const ManagementOrganizationsIndex = () => import('~/pages/management/organizations/index').then(m => m.default || m)
@@ -83,7 +83,9 @@ const routes = [
       { path: ':organizationId',
         name: 'organizations.show',
         meta: {
-          breadcrumb: 'Организация'
+          breadcrumb: {
+            name: 'organizationId'
+          }
         },
         component: OrganizationsShow
       }
@@ -102,7 +104,9 @@ const routes = [
       { path: ':productId',
         name: 'products.show',
         meta: {
-          breadcrumb: 'Акция'
+          breadcrumb: {
+            name: 'productId'
+          }
         },
         component: ProductsShow
       }
@@ -126,7 +130,8 @@ const routes = [
     children: [
       { path: '',
         name: 'management.index',
-        component: ManagementIndex
+        redirect: { name: 'management.organizations.index' }
+        // component: ManagementIndex
       },
       { path: 'organizations',
         component: ManagementOrganizationsHome,
@@ -145,45 +150,69 @@ const routes = [
             },
             component: ManagementOrganizationsEdit
           },
-          { path: ':organizationId/products',
-            component: ManagementOrganizationsProductsHome,
+          { path: ':organizationId',
+            name: 'management.organizations.show',
             meta: {
-              breadcrumb: 'Акции'
+              breadcrumb: {
+                name: 'organizationId'
+              }
             },
+            redirect: { name: 'management.organizations.edit' },
+            component: ManagementOrganizationsHome,
             children: [
-              { path: '',
-                name: 'management.organizations.products.index',
-                component: ManagementOrganizationsProductsIndex
-              },
-              { path: 'create',
-                name: 'management.organizations.products.create',
-                meta: {
-                  breadcrumb: 'Создание'
-                },
-                component: ManagementOrganizationsProductsEdit
-              },
-              { path: ':productId/edit',
-                name: 'management.organizations.products.edit',
+              { path: 'edit',
+                name: 'management.organizations.edit',
                 meta: {
                   breadcrumb: 'Редактирование'
                 },
-                component: ManagementOrganizationsProductsEdit
+                component: ManagementOrganizationsEdit
+              },
+              { path: 'products',
+                component: ManagementOrganizationsProductsHome,
+                meta: {
+                  breadcrumb: 'Акции'
+                },
+                children: [
+                  { path: '',
+                    name: 'management.organizations.products.index',
+                    component: ManagementOrganizationsProductsIndex
+                  },
+                  { path: 'create',
+                    name: 'management.organizations.products.create',
+                    meta: {
+                      breadcrumb: 'Создание'
+                    },
+                    component: ManagementOrganizationsProductsEdit
+                  },
+                  { path: ':productId',
+                    name: 'management.organizations.products.show',
+                    meta: {
+                      breadcrumb: {
+                        name: 'productId'
+                      }
+                    },
+                    redirect: { name: 'management.organizations.products.edit' },
+                    component: ManagementOrganizationsProductsHome,
+                    children: [
+                      { path: 'edit',
+                        name: 'management.organizations.products.edit',
+                        meta: {
+                          breadcrumb: 'Редактирование'
+                        },
+                        component: ManagementOrganizationsProductsEdit
+                      }
+                    ]
+                  }
+                ]
+              },
+              { path: 'points',
+                component: ManagementOrganizationsPointsIndex,
+                name: 'management.organizations.points.index',
+                meta: {
+                  breadcrumb: 'Точки'
+                }
               }
             ]
-          },
-          { path: ':organizationId/points',
-            component: ManagementOrganizationsPointsIndex,
-            name: 'management.organizations.points.index',
-            meta: {
-              breadcrumb: 'Точки'
-            }
-          },
-          { path: ':organizationId/edit',
-            name: 'management.organizations.edit',
-            meta: {
-              breadcrumb: 'Редактирование'
-            },
-            component: ManagementOrganizationsEdit
           }
         ]
       }

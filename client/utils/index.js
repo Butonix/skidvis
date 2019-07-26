@@ -129,6 +129,7 @@ export function $callToast (data, toast) {
     message += `<div class="toast-alert-text">${data.text}</div>`
   }
   const setup = {
+    mode: 'queue',
     transition: 'slide-down',
     horizontalPosition: 'center',
     className: typeClass,

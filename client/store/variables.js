@@ -1,4 +1,5 @@
 // state
+import Vue from 'vue'
 import axios from 'axios'
 
 export const state = () => {
@@ -13,6 +14,8 @@ export const state = () => {
     '1920x700': '/placeholders/96x35-1920x700.gif',
     daysOfTheWeek: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
     timezones: [],
+    reactData: {},
+    pageNamesBreadcrumb: {},
     defaultTimezone: 2,
     defaultOperationModeSelected: {
       mon: {
@@ -93,6 +96,8 @@ export const getters = {
   getOperationMode: state => state.operationMode,
   getDefaultOperationModeSelected: state => state.defaultOperationModeSelected,
   getTimezones: state => state.timezones,
+  getReactData: state => state.reactData,
+  getPageNamesBreadcrumb: state => state.pageNamesBreadcrumb,
   getDefaultTimezone: state => state.defaultTimezone,
   getDefaultTimeSelect: state => state.operationMode.default,
   getInterval: (state) => {
@@ -112,11 +117,27 @@ export const mutations = {
   },
   SET_DEFAULT_TIMEZONE (state, value) {
     state.defaultTimezone = value
+  },
+  SET_PAGE_NAMES_BREADCRUMB (state, value) {
+    state.pageNamesBreadcrumb = value
+  },
+  SET_REACT_DATA (state, data) {
+    for (let param in data) {
+      if (!state.reactData[param]) {
+        Vue.set(state.reactData, param, {})
+      }
+      for (let id in data[param]) {
+        Vue.set(state.reactData[param], Number(id), data[param][id])
+      }
+    }
   }
 }
 
 // actions
 export const actions = {
+  setPageNamesBreadcrumb ({ commit }, value) {
+    commit('SET_PAGE_NAMES_BREADCRUMB', value)
+  },
   addPreviousRoute ({ commit, dispatch }, fun) {
     commit('ADD_PREVIOUS_ROUTE', fun)
   },
@@ -135,6 +156,17 @@ export const actions = {
       commit('SET_DEFAULT_TIMEZONE', data.default)
     } catch (e) {
       console.log('error fetchTimezones', e)
+    }
+  },
+  async fetchReactData ({ commit, dispatch, state }, params) {
+    try {
+      const { data } = await axios.get('management/react-data', {
+        params
+      })
+      console.log(params, data)
+      commit('SET_REACT_DATA', data)
+    } catch (e) {
+      console.log('error fetchReactData', e)
     }
   }
 }

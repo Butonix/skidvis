@@ -518,7 +518,7 @@ export default {
       if (!data) {
         throw new Error()
       }
-      this.addresses = data
+      this.addresses = cloneDeep(data)
       if (!(this.addresses instanceof Fuse)) {
         this.fuseAddresses = new Fuse(this.addresses, {
           shouldSort: true,
@@ -532,8 +532,10 @@ export default {
           ]
         })
       }
-      if (!this.productId) {
-        this.selectAllAddresses()
+      if (!this.productId && this.addresses.length) {
+        this.addresses.forEach(v => {
+          this.form.points.push(v.id)
+        })
       }
     } catch (e) {
       await this.$callToast({
