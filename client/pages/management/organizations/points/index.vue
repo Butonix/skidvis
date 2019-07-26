@@ -193,7 +193,7 @@ export default {
   },
   asyncData: async ({ params, error, app, query }) => {
     let indexApiUrl
-    let list = {}
+    let collection = {}
     let dataOrg = {}
     let params_ = getQueryData({ query })
 
@@ -222,7 +222,7 @@ export default {
         let { data } = await axios.get(indexApiUrl, {
           params: params_
         })
-        list = data
+        collection = data
         console.log(data)
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
@@ -230,7 +230,7 @@ export default {
     }
 
     return {
-      list,
+      collection,
       data: dataOrg,
       params: params_,
       organizationId: organizationId,
@@ -264,10 +264,10 @@ export default {
       getTimezones: 'variables/getTimezones'
     }),
     items () {
-      return (this.list && this.list.data) ? this.list.data : []
+      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },
     pageCount () {
-      return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
+      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
     }
   },
   methods: {

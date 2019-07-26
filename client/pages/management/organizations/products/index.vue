@@ -104,7 +104,7 @@ export default {
   },
   asyncData: async ({ params, error, app, query }) => {
     let indexApiUrl
-    let list = {}
+    let collection = {}
     let params_ = getQueryData({ query })
 
     let organizationId = params.organizationId
@@ -115,14 +115,14 @@ export default {
         let { data } = await axios.get(indexApiUrl, {
           params: params_
         })
-        list = data.products
+        collection = data
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }
     }
 
     return {
-      list,
+      collection,
       params: params_,
       organizationId: organizationId,
       indexApiUrl
@@ -130,10 +130,10 @@ export default {
   },
   computed: {
     items () {
-      return (this.list && this.list.data) ? this.list.data : []
+      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },
     pageCount () {
-      return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
+      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
     }
   },
   watch: {

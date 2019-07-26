@@ -125,18 +125,18 @@ export default {
   },
   asyncData: async ({ query }) => {
     let indexApiUrl = 'management/organizations'
-    let list = {}
+    let collection = {}
     let params = getQueryData({ query })
 
     try {
       const { data } = await axios.get(indexApiUrl, { params })
-      list = data
+      collection = data
     } catch (e) {
     }
     return {
       indexApiUrl,
       params,
-      list
+      collection
     }
   },
   data: () => ({
@@ -144,10 +144,10 @@ export default {
   }),
   computed: {
     items () {
-      return (this.list && this.list.data) ? this.list.data : []
+      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },
     pageCount () {
-      return (this.list && this.list.total) ? Math.ceil(this.list.total / this.params.perPage) : 0
+      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
     }
   },
   watch: {

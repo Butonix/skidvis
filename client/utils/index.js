@@ -113,7 +113,7 @@ export function watchList (axios, keyApiUrl, type) {
           }
           break
       }
-      this.$set(this, 'list', data)
+      this.$set(this, 'collection', data)
     }).catch((e) => {
     })
   }

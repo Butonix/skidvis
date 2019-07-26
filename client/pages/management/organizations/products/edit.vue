@@ -510,15 +510,15 @@ export default {
   },
   async mounted () {
     try {
-      let { data } = await axios.get(`management/organizations/172/points`, {
+      let { data } = await axios.get(`management/organizations/${this.organizationId}/points`, {
         params: {
           responseTypeId: 2
         }
       })
-      if (!data) {
+      if (!data.list) {
         throw new Error()
       }
-      this.addresses = cloneDeep(data)
+      this.addresses = cloneDeep(data.list)
       if (!(this.addresses instanceof Fuse)) {
         this.fuseAddresses = new Fuse(this.addresses, {
           shouldSort: true,
@@ -663,7 +663,7 @@ export default {
             search: this.selectSearch
           }
         })
-        this.categories = data
+        this.categories = data.list
       } catch (e) {
         console.log(e)
       }
@@ -675,7 +675,7 @@ export default {
             search: this.selectSearch
           }
         })
-        this.tags = data
+        this.tags = data.list
       } catch (e) {
         console.log(e)
       }

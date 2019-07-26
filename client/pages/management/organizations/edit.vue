@@ -156,15 +156,27 @@
         </div>
       </div>
       <div class="text-center mt-5">
+        <template v-if="organizationId">
+          <div v-if="form.is_published" class="btn btn-outline-danger mx-1 mb-2"
+               @click="onUnpublish"
+          >
+            Снять с публикации
+          </div>
+          <div v-else class="btn btn-outline-success mx-1 mb-2"
+               @click="onPublish"
+          >
+            Опубликовать
+          </div>
+        </template>
         <div
-          class="btn btn-outline-primary"
+          class="btn btn-outline-primary mx-1 mb-2"
           @click="onSave"
         >
           Сохранить
         </div>
         <div
           v-if="organizationId"
-          class="btn btn-outline-danger ml-2"
+          class="btn btn-outline-danger mx-1 mb-2"
           @click="onDelete"
         >
           Удалить
@@ -233,6 +245,7 @@ export default {
         operationMode,
         images: [],
         timezone,
+        is_published: false,
         link: '',
         name: '',
         inn: '',
@@ -399,6 +412,33 @@ export default {
         await this.$callToast({
           type: 'error',
           text: 'Сохранить не удалось'
+        })
+      }
+    },
+    async onUnpublish () {
+      try {
+        await this.form.patch(`/management/organizations/${this.organizationId}/unpublish`)
+        this.form.is_published = false
+        await this.$callToast({
+          type: 'success',
+          text: 'Организация успешно снята с публикации.'
+        })
+      } catch (e) {
+      }
+    },
+    async onPublish () {
+      this.form.is_published = true
+      try {
+        await this.form.patch(`management/organizations/${this.organizationId}`)
+        await this.$callToast({
+          type: 'success',
+          text: 'Организация опубликована'
+        })
+      } catch (e) {
+        this.form.is_published = false
+        await this.$callToast({
+          type: 'error',
+          text: 'Опубликовать организацию не удалось'
         })
       }
     }
