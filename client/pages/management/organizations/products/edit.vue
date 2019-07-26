@@ -776,35 +776,31 @@ export default {
       }
     },
     async onUnpublish () {
-      this.$set(this.form, 'is_published', false)
-      // try {
-      //   await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
-      //   await this.$callToast({
-      //     type: 'success',
-      //     text: 'Данные успешно сохранены'
-      //   })
-      // } catch (e) {
-      //   await this.$callToast({
-      //     type: 'error',
-      //     text: 'Сохранить не удалось'
-      //   })
-      // }
+      try {
+        await this.form.patch(`/management/products/${this.productId}/unpublish`)
+        this.form.is_published = false
+        await this.$callToast({
+          type: 'success',
+          text: 'Акция успешно снята с публикации.'
+        })
+      } catch (e) {
+      }
     },
     async onPublish () {
-      this.$set(this.form, 'is_published', true)
-      // try {
-      //   await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
-      //   await this.$callToast({
-      //     type: 'success',
-      //     text: 'Данные успешно сохранены'
-      //   })
-      // } catch (e) {
-      //   this.$set(this.form, 'is_published', false)
-      //   await this.$callToast({
-      //     type: 'error',
-      //     text: 'Сохранить не удалось'
-      //   })
-      // }
+      this.form.is_published = true
+      try {
+        await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
+        await this.$callToast({
+          type: 'success',
+          text: 'Акция опубликована'
+        })
+      } catch (e) {
+        this.form.is_published = false
+        await this.$callToast({
+          type: 'error',
+          text: 'Опубликовать акцию не удалось'
+        })
+      }
     }
   }
 }

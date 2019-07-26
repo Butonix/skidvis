@@ -163,7 +163,6 @@ export const actions = {
       const { data } = await axios.get('management/react-data', {
         params
       })
-      console.log(params, data)
       commit('SET_REACT_DATA', data)
     } catch (e) {
       console.log('error fetchReactData', e)

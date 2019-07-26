@@ -50,7 +50,7 @@
               <div class="card-buttons__controls">
                 <div class="card-buttons__controls__left"><fa :icon="['fas', 'chevron-left']"/></div>
                 <div class="card-buttons__controls__delete"
-                @click="deleteHandle(item.id)"
+                     @click="deleteHandle(item.id)"
                 >
                   <div class="card-buttons__controls__chevron"/>
                   <fa :icon="['far', 'trash-alt']"/> Удалить акцию
@@ -82,9 +82,7 @@
 import { getQueryData, watchList } from '~/utils'
 import axios from 'axios'
 import SearchInput from '~/components/SearchInput'
-import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
-import ThumbProduct from '~/components/Edit/ThumbProduct.vue'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -93,8 +91,6 @@ let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 export default {
   components: {
     SearchInput,
-    ThumbProduct,
-    DynamicLabelInput,
     Paginate
   },
   middleware: ['auth'],

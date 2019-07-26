@@ -14,6 +14,11 @@
           @change="setMainImage"
           @delete="deleteMainImage"
         />
+        <no-ssr>
+          <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
+            <has-error :form="form" field="images"/>
+          </div>
+        </no-ssr>
         <div class="row justify-content-center">
           <div class="col-lg-8 organizations-edit__editor">
 
@@ -58,15 +63,21 @@
                 </div>
                 <material-input
                   v-model="form.link"
+                  :form="form"
+                  field="link"
                   form-class="mb-4"
                   placeholder="Ссылка на ваш сайт"
                 />
                 <material-input
                   v-model="form.name"
+                  :form="form"
+                  field="name"
                   placeholder="Введите название компании"
                 />
                 <material-input
                   v-model="form.inn"
+                  :form="form"
+                  field="inn"
                   placeholder="ИНН"
                 />
               </div>
@@ -88,12 +99,16 @@
         <div class="col-lg-8 organizations-edit__editor">
           <material-textarea
             v-model="form.description"
+            :form="form"
+            field="description"
             placeholder="Почему к вам стоит прийти?"
             data-align="center"
             form-class="mt-5 mb-4"
           />
           <material-textarea
             v-model="form.short_description"
+            :form="form"
+            field="short_description"
             placeholder="Короткое описание"
             data-align="left"
             form-class="mb-5"
