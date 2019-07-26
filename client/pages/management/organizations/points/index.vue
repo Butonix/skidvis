@@ -258,6 +258,7 @@ export default {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
     }
+
     this.fetchTimezones()
     // try {
     //   let { data } = await axios({

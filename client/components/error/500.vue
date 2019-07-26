@@ -1,7 +1,12 @@
 <template>
-  <div class="error-500">
-    <h1>500</h1>
-    <p>The link you clicked on may be broken or no longer exist.</p>
+  <div class="text-center py-5">
+    <h5 class="text-primary mb-4 pb-3">
+      500
+    </h5>
+    <h5 class="mb-0">
+      Ошибка сервера, <br>
+      все ошибаются...
+    </h5>
   </div>
 </template>
 <script>
