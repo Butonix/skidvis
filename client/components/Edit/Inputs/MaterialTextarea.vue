@@ -17,7 +17,7 @@
     />
     <label :for="id" v-html="placeholder"/>
     <div class="material-input__line"/>
-    <has-error v-if="form" :form="form" :field="field"/>
+    <has-error v-if="form && form.errors" :form="form" :field="field"/>
     <slot/>
   </div>
 </template>
@@ -124,7 +124,7 @@ export default {
       if (this.inputClass) {
         res = { ...res, [this.inputClass]: true }
       }
-      if (this.form) {
+      if (this.form && this.form.errors) {
         res = { ...res, 'is-invalid': this.form.errors.has(this.field) }
       }
       return res

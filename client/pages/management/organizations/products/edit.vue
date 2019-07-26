@@ -72,6 +72,8 @@
           <div class="h1 flex-grow-1 product__name ff-montserrat">
             <material-textarea
               v-model="form.name"
+              :form="form"
+              field="name"
               placeholder="Название"
               data-align="left"
               form-class="mb-0 mt-xs-0"
@@ -83,6 +85,8 @@
         <div class="order-3 order-lg-3 mb-4">
           <material-textarea
             v-model="form.short_description"
+            :form="form"
+            field="short_description"
             placeholder="Сокращенное описание для карточки"
             data-align="left"
             form-class="mb-4 mt-0"

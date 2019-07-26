@@ -42,7 +42,7 @@
                 </div>
               </div>
             </router-link>
-            <label class="card-body pb-2 pt-4" v-html="item.short_description"/>
+            <label class="card-body pb-2 pt-4" v-html="(item.short_description)?item.short_description.replaceAll('\n', '<br>'):''"/>
             <div class="card-buttons mt-auto text-nowrap">
               <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
                 <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
