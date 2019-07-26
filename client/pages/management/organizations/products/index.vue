@@ -49,7 +49,9 @@
               </router-link>
               <div class="card-buttons__controls">
                 <div class="card-buttons__controls__left"><fa :icon="['fas', 'chevron-left']"/></div>
-                <div class="card-buttons__controls__delete">
+                <div class="card-buttons__controls__delete"
+                @click="deleteHandle(item.id)"
+                >
                   <div class="card-buttons__controls__chevron"/>
                   <fa :icon="['far', 'trash-alt']"/> Удалить акцию
                 </div>
@@ -100,7 +102,7 @@ export default {
     return {
       title: 'Мои акции',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-business'
       }
     }
   },
@@ -118,7 +120,6 @@ export default {
           params: params_
         })
         list = data.products
-        console.log(data.products)
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }

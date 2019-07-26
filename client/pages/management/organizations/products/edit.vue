@@ -7,14 +7,24 @@
         </h5>
       </div>
       <div class="col-auto">
-        <div class="btn btn-outline-danger btn-sm mb-2">
-          Снять с публикации
-        </div>
-        <div class="btn btn-success btn-sm mb-2"
+        <template v-if="productId">
+          <div v-if="form.is_published" class="btn btn-outline-danger btn-sm mb-2"
+               @click="onUnpublish"
+          >
+            Снять с публикации
+          </div>
+          <div v-else class="btn btn-outline-success btn-sm mb-2"
+               @click="onPublish"
+          >
+            Опубликовать
+          </div>
+        </template>
+        <div v-if="productId" class="btn btn-success btn-sm mb-2"
              @click="onSave"
-        >
-          Сохранить
-        </div>
+        >Сохранить</div>
+        <div v-else class="btn btn-success px-5 mb-2"
+             @click="onSave"
+        >Создать</div>
         <div
           v-if="productId"
           class="btn btn-danger btn-sm mb-2"
@@ -58,6 +68,11 @@
             @change="setMainImage"
             @delete="deleteMainImage"
           />
+          <no-ssr>
+            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
+              <has-error :form="form" field="images"/>
+            </div>
+          </no-ssr>
         </div>
 
         <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
@@ -108,6 +123,7 @@
         </div>
 
         <sidebar
+          :form="form"
           :socials="form.socials"
           :value="form.value"
           :currency-id="form.currency_id"
@@ -163,6 +179,11 @@
             type-style="lite"
             placeholder="Найти адрес"
           />
+          <no-ssr>
+            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('points') }">
+              <has-error :form="form" field="points"/>
+            </div>
+          </no-ssr>
           <div class="py-3">
             <div class="btn btn-gray btn-sm mr-2"
                  @click="selectAllAddresses">
@@ -180,6 +201,7 @@
 
       </div>
       <sidebar
+        :form="form"
         :socials="form.socials"
         :value="form.value"
         :currency-id="form.currency_id"
@@ -356,6 +378,7 @@ export default {
     let organizationId = params.organizationId
     let form = {
       currency_id: 1,
+      is_published: false,
       tags: [],
       categories: [],
       name: '',
@@ -374,7 +397,6 @@ export default {
         let { data } = await axios.get(`management/organizations/${organizationId}/products/${productId}/edit`)
         form = { ...form, ...data.product }
         images = cloneDeep(data.product.images)
-        console.log(data.product)
       } catch (e) {
         error({ statusCode: 404, message: 'Product not found' })
       }
@@ -732,7 +754,6 @@ export default {
           await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
         } else {
           const { data } = await this.form.post(`management/organizations/${this.organizationId}/products`)
-          console.log(data)
           this.productId = data.product.id
           this.$router.push({ name: 'management.organizations.products.edit',
             params: {
@@ -751,6 +772,37 @@ export default {
           text: 'Сохранить не удалось'
         })
       }
+    },
+    async onUnpublish () {
+      this.$set(this.form, 'is_published', false)
+      // try {
+      //   await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
+      //   await this.$callToast({
+      //     type: 'success',
+      //     text: 'Данные успешно сохранены'
+      //   })
+      // } catch (e) {
+      //   await this.$callToast({
+      //     type: 'error',
+      //     text: 'Сохранить не удалось'
+      //   })
+      // }
+    },
+    async onPublish () {
+      this.$set(this.form, 'is_published', true)
+      // try {
+      //   await this.form.patch(`management/organizations/${this.organizationId}/products/${this.productId}`)
+      //   await this.$callToast({
+      //     type: 'success',
+      //     text: 'Данные успешно сохранены'
+      //   })
+      // } catch (e) {
+      //   this.$set(this.form, 'is_published', false)
+      //   await this.$callToast({
+      //     type: 'error',
+      //     text: 'Сохранить не удалось'
+      //   })
+      // }
     }
   }
 }

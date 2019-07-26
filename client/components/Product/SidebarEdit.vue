@@ -24,6 +24,11 @@
             />
           </div>
         </div>
+        <no-ssr>
+          <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('start_at') }">
+            <has-error :form="form" field="start_at"/>
+          </div>
+        </no-ssr>
       </template>
     </list-item-icon>
 
@@ -143,6 +148,10 @@ export default {
     boxClass: {
       type: String,
       default: ''
+    },
+    form: {
+      type: Object,
+      default: () => ({})
     }
   },
   data: () => ({
