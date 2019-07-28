@@ -170,7 +170,6 @@ export default {
       '12': 'декабря'
     },
     date: null,
-    mounted: false,
     config: {
       mode: 'range',
       locale: Russian

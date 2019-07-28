@@ -36,6 +36,13 @@
         </div>
 
         <sidebar
+          :socials="product.socials"
+          :value="product.value"
+          :currency-id="product.currency_id"
+          :categories="product.categories"
+          :start-at="product.start_at"
+          :end-at="product.end_at"
+          :operation-mode-text="getOperationModeText"
           box-class="order-4 order-lg-4 mb-4 mt-2"
           box-mod="center"
         />
@@ -57,7 +64,7 @@
             @click="tab ='desc'">
             Описание
           </div>
-          <div class="tab">
+          <div class="tab" v-scroll-to="'#addresses'">
             Адрес
           </div>
           <div class="tab d-none d-sm-block">
@@ -74,7 +81,7 @@
           </transition>
         </div>
 
-        <div v-if="product.points" class="order-7 order-lg-7">
+        <div v-if="product.points" class="order-7 order-lg-7" id="addresses">
           <h5>
             Акция по адресам:
           </h5>
@@ -88,6 +95,13 @@
 
       </div>
       <sidebar
+        :socials="product.socials"
+        :value="product.value"
+        :currency-id="product.currency_id"
+        :categories="product.categories"
+        :start-at="product.start_at"
+        :end-at="product.end_at"
+        :operation-mode-text="getOperationModeText"
         box-mod="right"
       />
     </div>
@@ -132,7 +146,6 @@ export default {
         res = {
           ...data
         }
-        console.log(data)
       } catch (e) {
         error({ statusCode: 404, message: 'Product not found' })
       }
@@ -179,6 +192,9 @@ export default {
     fusePoints: null
   }),
   computed: {
+    getOperationModeText () {
+      return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
+    },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
     }

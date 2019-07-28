@@ -218,14 +218,23 @@
     }
   }
   &__description{
+    padding: .5rem .9rem;
+
     strong {
       font-weight: 600;
     }
 
     ul, ul > li {
       padding-left: 0;
+      list-style-type: none;
     }
     ul > li::before{
+      content: '\2022';
+
+      margin-left: -.8rem;
+      margin-right: .2rem;
+      text-align: right;
+
       font-size: 1.6em;
       color: $primary;
       line-height: 1;

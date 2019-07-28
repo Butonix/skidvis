@@ -4,6 +4,7 @@
     :data-type="type"
     :class="'social-icon' + ((classBox !== '') ? ' ' + classBox : '')"
     @click="onClick"
+    target="_blank"
     @mouseleave="$emit('mouseleave', $event)"
     @mouseenter="$emit('mouseenter', $event)"
     @mousedown="$emit('mousedown', $event)"

@@ -88,6 +88,7 @@ module.exports = {
 
   modules: [
     '@nuxtjs/router',
+    'vue-scrollto/nuxt',
     'vue-sweetalert2/nuxt',
     '~/modules/spa'
   ],
