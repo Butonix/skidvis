@@ -173,3 +173,13 @@ export function openWindow (url, title, options = {}) {
 
   return newWindow
 }
+
+export function getWindowParams () {
+  let w = window
+  let d = document
+  let e = d.documentElement
+  let g = d.getElementsByTagName('body')[0]
+  let x = w.innerWidth || e.clientWidth || g.clientWidth
+  let y = w.innerHeight || e.clientHeight || g.clientHeight
+  return { x, y }
+}

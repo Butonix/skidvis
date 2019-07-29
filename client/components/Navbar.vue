@@ -18,6 +18,8 @@
             <select-alphabet
               :selected="city"
               :list="cities"
+              @click="onShowCities"
+              @select="setCity"
             />
 
             <div>
@@ -134,6 +136,11 @@ export default {
     },
     showModalLogin () {
       this.$modal.push('login')
+    },
+    async onShowCities () {
+      if (!this.cities.length) {
+        await this.$store.dispatch('auth/fetchCities')
+      }
     },
     async logout () {
       // Log out the user.

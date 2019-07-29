@@ -28,7 +28,10 @@ export const getters = {
 // mutations
 export const mutations = {
   SET_CITY (state, city) {
-    state.city = city
+    state.user.city = city
+  },
+  SET_CITIES (state, cities) {
+    state.cities = cities
   },
   SET_TOKEN (state, token) {
     state.token = token
@@ -54,8 +57,17 @@ export const mutations = {
 
 // actions
 export const actions = {
-  setCity ({ commit }, value) {
+  async setCity ({ commit, getters }, value) {
+    let oldCity = getters.city
     commit('SET_CITY', value)
+    try {
+      const { data } = await axios.post('user/city', {
+        city_id: value.id
+      })
+      console.log(data)
+    } catch (e) {
+      commit('SET_CITY', oldCity)
+    }
   },
   saveToken ({ commit, dispatch }, { token, remember }) {
     commit('SET_TOKEN', token)
@@ -72,6 +84,17 @@ export const actions = {
       Cookies.remove('token')
 
       commit('FETCH_USER_FAILURE')
+    }
+  },
+
+  async fetchCities ({ commit, getters }) {
+    if (getters.cities.length === 0) {
+      try {
+        const { data } = await axios.get('cities')
+        commit('SET_CITIES', data.list)
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
 
