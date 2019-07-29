@@ -1,5 +1,6 @@
 <template>
-  <div :class="{'show':show}"
+  <div v-click-outside="closeCollapse"
+       :class="{'show':show}"
        class="select-ab">
     <div :class="{'active':show}"
          class="nav-link cursor-pointer"
@@ -54,6 +55,11 @@ export default {
   data: () => ({
     search: '',
     show: false
-  })
+  }),
+  methods: {
+    closeCollapse () {
+      this.show = false
+    }
+  }
 }
 </script>
