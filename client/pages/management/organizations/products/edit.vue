@@ -1,127 +1,207 @@
 <template>
-  <div class="container products-edit">
-    <div class="row mb-3">
-      <div class="col">
-        <h5 class="text-primary">
-          Панель редактирования
-        </h5>
-      </div>
-      <div class="col-auto">
-        <template v-if="productId">
-          <div v-if="form.is_published" class="btn btn-outline-danger btn-sm mb-2"
-               @click="onUnpublish"
-          >
-            Снять с публикации
-          </div>
-          <div v-else class="btn btn-outline-success btn-sm mb-2"
-               @click="onPublish"
-          >
-            Опубликовать
-          </div>
-        </template>
-        <div v-if="productId" class="btn btn-success btn-sm mb-2"
-             @click="onSave"
-        >Сохранить</div>
-        <div v-else class="btn btn-success px-5 mb-2"
-             @click="onSave"
-        >Создать</div>
-        <div
-          v-if="productId"
-          class="btn btn-danger btn-sm mb-2"
-          @click="onDelete"
-        >
-          Удалить
+  <div>
+    <breadcrumbs/>
+    <div class="container products-edit">
+      <div class="row mb-3">
+        <div class="col">
+          <h5 class="text-primary">
+            Панель редактирования
+          </h5>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="product__content">
-
-        <div class="order-2 order-lg-1 product__slider mb-3">
-          <full-slider
-            :images="images"
-          >
-            <div class="product__slider__label">
-              <dynamic-label-input
-                v-model="form.value"
-                :type="form.currency_id === 1? 'percent' : 'number'"
-                class-input="ff-open-sans"
-              />
-              <div :class="{'active': form.currency_id === 1}"
-                   class="product__currency"
-                   @click="form.currency_id = 1"
-                   v-text="'%'"
-              />
-              <div :class="{'active': form.currency_id === 2}"
-                   class="product__currency"
-                   @click="form.currency_id = 2"
-                   v-text="'₽'"
-              />
-            </div>
-          </full-slider>
-          <thumbs-file-input
-            v-if="images"
-            :images="images"
-            :images-loading="imagesLoading"
-            :width="765"
-            :height="313"
-            @change="setMainImage"
-            @delete="deleteMainImage"
-          />
-          <no-ssr>
-            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
-              <has-error :form="form" field="images"/>
-            </div>
-          </no-ssr>
-        </div>
-
-        <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
-          <div class="product__logo mr-4 mb-3">
-            <img
-              v-lazy="form.organization_logo || '/placeholders/logo.svg'"
-              :alt="form.name"
-              :title="form.name"
-              src="/placeholders/loading_spinner.gif"
+        <div class="col-auto">
+          <template v-if="productId">
+            <div v-if="form.is_published" class="btn btn-outline-danger btn-sm mb-2"
+                 @click="onUnpublish"
             >
+              Снять с публикации
+            </div>
+            <div v-else class="btn btn-outline-success btn-sm mb-2"
+                 @click="onPublish"
+            >
+              Опубликовать
+            </div>
+          </template>
+          <div v-if="productId" class="btn btn-success btn-sm mb-2"
+               @click="onSave"
+          >Сохранить</div>
+          <div v-else class="btn btn-success px-5 mb-2"
+               @click="onSave"
+          >Создать</div>
+          <div
+            v-if="productId"
+            class="btn btn-danger btn-sm mb-2"
+            @click="onDelete"
+          >
+            Удалить
           </div>
-          <div class="h1 flex-grow-1 product__name ff-montserrat">
+        </div>
+      </div>
+      <div class="row">
+        <div class="product__content">
+
+          <div class="order-2 order-lg-1 product__slider mb-3">
+            <full-slider
+              :images="images"
+            >
+              <div class="product__slider__label">
+                <dynamic-label-input
+                  v-model="form.value"
+                  :type="form.currency_id === 1? 'percent' : 'number'"
+                  class-input="ff-open-sans"
+                />
+                <div :class="{'active': form.currency_id === 1}"
+                     class="product__currency"
+                     @click="form.currency_id = 1"
+                     v-text="'%'"
+                />
+                <div :class="{'active': form.currency_id === 2}"
+                     class="product__currency"
+                     @click="form.currency_id = 2"
+                     v-text="'₽'"
+                />
+              </div>
+            </full-slider>
+            <thumbs-file-input
+              v-if="images"
+              :images="images"
+              :images-loading="imagesLoading"
+              :width="765"
+              :height="313"
+              @change="setMainImage"
+              @delete="deleteMainImage"
+            />
+            <no-ssr>
+              <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
+                <has-error :form="form" field="images"/>
+              </div>
+            </no-ssr>
+          </div>
+
+          <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
+            <div class="product__logo mr-4 mb-3">
+              <img
+                v-lazy="form.organization_logo || '/placeholders/logo.svg'"
+                :alt="form.name"
+                :title="form.name"
+                src="/placeholders/loading_spinner.gif"
+              >
+            </div>
+            <div class="h1 flex-grow-1 product__name ff-montserrat">
+              <material-textarea
+                v-model="form.name"
+                :form="form"
+                field="name"
+                placeholder="Название"
+                data-align="left"
+                form-class="mb-0 mt-xs-0"
+                size="sm"
+                rows="3"
+              />
+            </div>
+          </div>
+          <div class="order-3 order-lg-3 mb-4">
             <material-textarea
-              v-model="form.name"
+              v-model="form.short_description"
               :form="form"
-              field="name"
-              placeholder="Название"
+              field="short_description"
+              placeholder="Сокращенное описание для карточки"
               data-align="left"
-              form-class="mb-0 mt-xs-0"
+              form-class="mb-4 mt-0"
               size="sm"
-              rows="3"
+              rows="1"
+            />
+
+            Акции по тегам
+            <div
+              v-for="(tag, key) in form.tags"
+              :key="'tags-'+key"
+              class="tag mx-1 mb-2"
+              v-text="tag.name"
+            />
+            <div class="btn btn-outline-gray btn-sm px-4 mx-1"
+                 @click="onEditSelect('tags')">
+              + добавить тег
+            </div>
+          </div>
+
+          <sidebar
+            :form="form"
+            :socials="form.socials"
+            :value="form.value"
+            :currency-id="form.currency_id"
+            :categories="form.categories"
+            :start-at="form.start_at"
+            :end-at="form.end_at"
+            :operation-mode-text="getOperationModeText"
+            box-class="order-4 order-lg-4 mb-4 mt-2"
+            box-mod="center"
+            @onEditSelect="onEditSelect($event)"
+            @onEditSocial="onEditSocial"
+            @onInputDate="onInputDate"
+          />
+
+          <div class="order-5 order-lg-5 tab-panel mt-3">
+            <div
+              :class="{'active':(tab === 'circs')}"
+              class="tab"
+              @click="tab ='circs'">
+              Условия
+            </div>
+            <div
+              :class="{'active':(tab === 'desc')}"
+              class="tab"
+              @click="tab ='desc'">
+              Описание
+            </div>
+          </div>
+
+          <div class="order-6 order-lg-6 tab-content mb-5">
+            <transition name="fade" mode="out-in">
+              <div v-if="tab === 'circs'" :key="'circs'" class="products-edit__editor">
+                <no-ssr>
+                  <quill-editor v-model="form.conditions"
+                                :options="editorOptionCircs"/>
+                </no-ssr>
+              </div>
+              <div v-if="tab === 'desc'" :key="'desc'" class="products-edit__editor">
+                <no-ssr>
+                  <quill-editor v-model="form.description"
+                                :options="editorOptionCircs"/>
+                </no-ssr>
+              </div>
+            </transition>
+          </div>
+
+          <div v-if="addresses.length" class="order-7 order-lg-7">
+            <h5>
+              Акция по адресам:
+            </h5>
+            <search-input
+              v-model="search"
+              type-style="lite"
+              placeholder="Найти адрес"
+            />
+            <no-ssr>
+              <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('points') }">
+                <has-error :form="form" field="points"/>
+              </div>
+            </no-ssr>
+            <div class="py-3">
+              <div class="btn btn-gray btn-sm mr-2"
+                   @click="selectAllAddresses">
+                Выделить все
+              </div>
+              <div class="btn btn-gray btn-sm"
+                   @click="clearAllAddresses">
+                Снять все
+              </div>
+            </div>
+            <addresses-frame :marker-id="1" :addresses="getAddresses" :selected-addresses="form.points"
+                             @change="changeAddresses"
             />
           </div>
-        </div>
-        <div class="order-3 order-lg-3 mb-4">
-          <material-textarea
-            v-model="form.short_description"
-            :form="form"
-            field="short_description"
-            placeholder="Сокращенное описание для карточки"
-            data-align="left"
-            form-class="mb-4 mt-0"
-            size="sm"
-            rows="1"
-          />
 
-          Акции по тегам
-          <div
-            v-for="(tag, key) in form.tags"
-            :key="'tags-'+key"
-            class="tag mx-1 mb-2"
-            v-text="tag.name"
-          />
-          <div class="btn btn-outline-gray btn-sm px-4 mx-1"
-               @click="onEditSelect('tags')">
-            + добавить тег
-          </div>
         </div>
-
         <sidebar
           :form="form"
           :socials="form.socials"
@@ -131,211 +211,134 @@
           :start-at="form.start_at"
           :end-at="form.end_at"
           :operation-mode-text="getOperationModeText"
-          box-class="order-4 order-lg-4 mb-4 mt-2"
-          box-mod="center"
+          box-mod="right"
           @onEditSelect="onEditSelect($event)"
           @onEditSocial="onEditSocial"
           @onInputDate="onInputDate"
         />
-
-        <div class="order-5 order-lg-5 tab-panel mt-3">
-          <div
-            :class="{'active':(tab === 'circs')}"
-            class="tab"
-            @click="tab ='circs'">
-            Условия
-          </div>
-          <div
-            :class="{'active':(tab === 'desc')}"
-            class="tab"
-            @click="tab ='desc'">
-            Описание
-          </div>
-        </div>
-
-        <div class="order-6 order-lg-6 tab-content mb-5">
-          <transition name="fade" mode="out-in">
-            <div v-if="tab === 'circs'" :key="'circs'" class="products-edit__editor">
-              <no-ssr>
-                <quill-editor v-model="form.conditions"
-                              :options="editorOptionCircs"/>
-              </no-ssr>
-            </div>
-            <div v-if="tab === 'desc'" :key="'desc'" class="products-edit__editor">
-              <no-ssr>
-                <quill-editor v-model="form.description"
-                              :options="editorOptionCircs"/>
-              </no-ssr>
-            </div>
-          </transition>
-        </div>
-
-        <div v-if="addresses.length" class="order-7 order-lg-7">
-          <h5>
-            Акция по адресам:
-          </h5>
-          <search-input
-            v-model="search"
-            type-style="lite"
-            placeholder="Найти адрес"
-          />
-          <no-ssr>
-            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('points') }">
-              <has-error :form="form" field="points"/>
-            </div>
-          </no-ssr>
-          <div class="py-3">
-            <div class="btn btn-gray btn-sm mr-2"
-                 @click="selectAllAddresses">
-              Выделить все
-            </div>
-            <div class="btn btn-gray btn-sm"
-                 @click="clearAllAddresses">
-              Снять все
-            </div>
-          </div>
-          <addresses-frame :marker-id="1" :addresses="getAddresses" :selected-addresses="form.points"
-                           @change="changeAddresses"
-          />
-        </div>
-
       </div>
-      <sidebar
-        :form="form"
-        :socials="form.socials"
-        :value="form.value"
-        :currency-id="form.currency_id"
-        :categories="form.categories"
-        :start-at="form.start_at"
-        :end-at="form.end_at"
-        :operation-mode-text="getOperationModeText"
-        box-mod="right"
-        @onEditSelect="onEditSelect($event)"
-        @onEditSocial="onEditSocial"
-        @onInputDate="onInputDate"
-      />
-    </div>
 
-    <modal name="save-tags">
-      <div class="basic-modal">
-        <div class="position-relative">
-          <div :class="{'active': loading}" class="preloader"/>
-          <div class="">
-            Добавлено {{ tagsSelected.length }} из {{ tagsTotal }}
+      <modal name="save-tags">
+        <div class="basic-modal">
+          <div class="position-relative">
+            <div :class="{'active': loading}" class="preloader"/>
             <div class="">
-              <search-input
-                v-model="selectSearch"
-                form-class="mb-4"
-                autofocus="autofocus"
-              />
-              <div class="tags__select">
-                <div
-                  v-for="(tag, key) in getTagsSelected"
-                  :key="'tags-selected-'+key"
-                  class="tag tag--edit active mx-1 mb-2"
-                  @click="removeFromSelect(tag.id, 'tags')"
-                  v-text="tag.name"
+              Добавлено {{ tagsSelected.length }} из {{ tagsTotal }}
+              <div class="">
+                <search-input
+                  v-model="selectSearch"
+                  form-class="mb-4"
+                  autofocus="autofocus"
                 />
-                <div
-                  v-for="(tag, key) in getTags"
-                  v-if="!tagsSelectedId[tag.id]"
-                  :key="'get-tags-'+key"
-                  class="tag tag--edit mx-1 mb-2"
-                  @click="addToSelect(tag, 'tags')"
-                  v-text="tag.name"
-                />
+                <div class="tags__select">
+                  <div
+                    v-for="(tag, key) in getTagsSelected"
+                    :key="'tags-selected-'+key"
+                    class="tag tag--edit active mx-1 mb-2"
+                    @click="removeFromSelect(tag.id, 'tags')"
+                    v-text="tag.name"
+                  />
+                  <div
+                    v-for="(tag, key) in getTags"
+                    v-if="!tagsSelectedId[tag.id]"
+                    :key="'get-tags-'+key"
+                    class="tag tag--edit mx-1 mb-2"
+                    @click="addToSelect(tag, 'tags')"
+                    v-text="tag.name"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="text-center mt-5">
-          <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="saveSelect('tags')"
-          >
-            Сохранить
-          </button>
-          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Отменить
-          </button>
-        </div>
-      </div>
-    </modal>
-
-    <modal name="save-categories">
-      <div class="basic-modal">
-        <div class="position-relative">
-          <div :class="{'active': loading}" class="preloader"/>
-          <div class="">
-            Добавлено {{ categoriesSelected.length }} из {{ categoriesTotal }}
-            <div class="">
-              <search-input
-                v-model="selectSearch"
-                form-class="mb-4"
-                autofocus="autofocus"
-              />
-              <categories>
-                <category
-                  v-for="(category, key) in getCategoriesSelected"
-                  :active="true"
-                  :key="'categories-selected-'+key"
-                  :label="category.name"
-                  :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                  :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-                  @click="removeFromSelect(category.id, 'categories')"
-                />
-                <category
-                  v-for="(category, key) in getCategories"
-                  v-if="!categoriesSelectedId[category.id]"
-                  :key="'categories-'+key"
-                  :label="category.name"
-                  :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                  :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-                  @click="addToSelect(category, 'categories')"
-                />
-              </categories>
-            </div>
+          <div class="text-center mt-5">
+            <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="saveSelect('tags')"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="$modal.pop()"
+            >
+              Отменить
+            </button>
           </div>
         </div>
-        <div class="text-center mt-5">
-          <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="saveSelect('categories')"
-          >
-            Сохранить
-          </button>
-          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Отменить
-          </button>
-        </div>
-      </div>
-    </modal>
+      </modal>
 
-    <modal name="save-social">
-      <div class="basic-modal">
-        <social-links
-          :links="socials"
-          @change="changeSocialsLink"
-          @add="addSocialsLink"
-          @delete="deleteSocialsLink"
-        />
-        <div class="text-center mt-5">
-          <button class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="saveSocial"
-          >
-            Сохранить
-          </button>
-          <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Отменить
-          </button>
+      <modal name="save-categories">
+        <div class="basic-modal">
+          <div class="position-relative">
+            <div :class="{'active': loading}" class="preloader"/>
+            <div class="">
+              Добавлено {{ categoriesSelected.length }} из {{ categoriesTotal }}
+              <div class="">
+                <search-input
+                  v-model="selectSearch"
+                  form-class="mb-4"
+                  autofocus="autofocus"
+                />
+                <categories>
+                  <category
+                    v-for="(category, key) in getCategoriesSelected"
+                    :active="true"
+                    :key="'categories-selected-'+key"
+                    :label="category.name"
+                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
+                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                    @click="removeFromSelect(category.id, 'categories')"
+                  />
+                  <category
+                    v-for="(category, key) in getCategories"
+                    v-if="!categoriesSelectedId[category.id]"
+                    :key="'categories-'+key"
+                    :label="category.name"
+                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
+                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                    @click="addToSelect(category, 'categories')"
+                  />
+                </categories>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="saveSelect('categories')"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="$modal.pop()"
+            >
+              Отменить
+            </button>
+          </div>
         </div>
-      </div>
-    </modal>
+      </modal>
 
+      <modal name="save-social">
+        <div class="basic-modal">
+          <social-links
+            :links="socials"
+            @change="changeSocialsLink"
+            @add="addSocialsLink"
+            @delete="deleteSocialsLink"
+          />
+          <div class="text-center mt-5">
+            <button class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="saveSocial"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="$modal.pop()"
+            >
+              Отменить
+            </button>
+          </div>
+        </div>
+      </modal>
+
+    </div>
   </div>
 </template>
 

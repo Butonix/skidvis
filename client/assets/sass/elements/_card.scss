@@ -60,6 +60,83 @@
       color: white;
       font-weight: 700;
     }
+    &__cover, &__logo{
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      transition: .5s linear;
+    }
+    &__cover{
+      img{
+        min-width: 100%;
+        min-height: 100%;
+        max-width: none;
+        max-height: none;
+        height: auto;
+        width: 100%;
+      }
+    }
+    &__logo{
+      &__wrapper{
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      img{
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto;
+        min-width: 0;
+        min-height: 0;
+      }
+    }
+    &.error-logo{
+      .card-img-top__logo__wrapper{
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      img{
+        &[lazy="error"]{
+          min-width: 100%;
+          min-height: 100%;
+          max-width: none;
+          max-height: none;
+          height: auto;
+          width: 100%;
+        }
+      }
+    }
+    &.with-logo{
+      .card-img-top{
+        &__logo{
+          opacity: 0;
+        }
+      }
+    }
+    &.with-logo:not(.error-logo){
+      &:hover{
+        .card-img-top{
+          &__cover{
+            opacity: 0;
+          }
+          &__logo{
+            opacity: 1;
+          }
+        }
+      }
+    }
   }
   .card-buttons{
     position: relative;
@@ -204,14 +281,6 @@
     }
   }
   &--product{
-    .card-img-top img{
-      min-width: 100%;
-      min-height: 100%;
-      max-width: none;
-      max-height: none;
-      height: auto;
-      width: 100%;
-    }
     .card-body{
       textarea{
         border: none!important;
@@ -221,5 +290,25 @@
         resize: none;
       }
     }
+    //.card-img-top{
+    //  img{
+    //    min-width: 100%;
+    //    min-height: 100%;
+    //    max-width: none;
+    //    max-height: none;
+    //    height: auto;
+    //    width: 100%;
+    //  }
+    //  &__logo{
+    //    img{
+    //      max-width: 100%;
+    //      max-height: 100%;
+    //      height: auto;
+    //      width: auto;
+    //      min-width: 0;
+    //      min-height: 0;
+    //    }
+    //  }
+    //}
   }
 }

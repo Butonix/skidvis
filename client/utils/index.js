@@ -97,17 +97,17 @@ export function watchList (axios, keyApiUrl, type) {
     }).then(({ data }) => {
       switch (type) {
         case 'delete':
-          if (data.data.length === 0 && this.params.page > 1) {
+          if (data.list.data.length === 0 && this.params.page > 1) {
             this.params.page++
             return
           }
-          if (data.data.length === 0 && this.params.search !== '') {
+          if (data.list.data.length === 0 && this.params.search !== '') {
             this.params.search = ''
             return
           }
           break
         case 'page':
-          if (data.data.length === 0 && this.params.search !== '') {
+          if (data.list.data.length === 0 && this.params.search !== '') {
             this.params.search = ''
             return
           }

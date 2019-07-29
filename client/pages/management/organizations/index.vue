@@ -1,12 +1,13 @@
 <template>
-  <div v-if="true">
+  <div>
+    <breadcrumbs/>
     <div class="container mb-5">
       <h5 class="mb-2">
         Мои организации
       </h5>
       <search-input
-        autofocus="autofocus"
         v-model="params.search"
+        autofocus="autofocus"
       />
     </div>
 
@@ -29,7 +30,9 @@
           <div class="card w-100 h-100">
             <router-link
               :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
-              :class="{'p-3': (item.logo && item.logo.src && !errorLogos[item.id]), 'pb-3': !(item.logo && item.logo.src && !errorLogos[item.id])}"
+              :class="{
+                'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
+              }"
               class="card-img-top d-block"
             >
               <div v-if="!item.is_published" class="card-img-top__message">
@@ -38,19 +41,14 @@
                 </div>
               </div>
               <div class="embed-responsive embed-responsive-1by1">
-                <div
-                  :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
-                  class="embed-responsive-item">
-                  <img
-                    v-lazy="item.logo.src"
-                    v-if="item.logo && item.logo.src"
-                    :data-id="item.id" :alt="item.name"
+                <div class="embed-responsive-item">
+                  <card-logo
+                    :img="(item.logo && item.logo.src)?item.logo.src:undefined"
+                    :color="(item.logo && item.logo.color)?item.logo.color:undefined"
                     :title="item.name"
-                    class="card-img-top--no-error"
-                    src="/placeholders/loading_spinner.gif"
-                    @error="onError">
-                  <div v-else class="img-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
-                  <div class="card-img-top--error img-cover w-100 h-100" style="background-image: url('/placeholders/error.svg');" />
+                    :alt="item.name"
+                    :id="item.id"
+                  />
                 </div>
               </div>
             </router-link>
@@ -117,6 +115,7 @@ let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 export default {
   components: {
     'SearchInput': () => import('~/components/SearchInput'),
+    'CardLogo': () => import('~/components/Product/CardLogo'),
     'Paginate': () => import('vuejs-paginate/src/components/Paginate.vue')
   },
   middleware: ['auth'],
@@ -145,7 +144,7 @@ export default {
     }
   },
   data: () => ({
-    errorLogos: {}
+    errorsImages: {}
   }),
   computed: {
     items () {
@@ -159,21 +158,21 @@ export default {
     'params.search': listWatchInstanceSearch,
     'params.page': listWatchInstancePage
   },
-  mounted () {
-    let vm = this
-    this.$Lazyload.$on('error', function ({ bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error }, formCache) {
-      let id = el.getAttribute('data-id')
-      if (id) {
-        vm.$set(vm.errorLogos, Number(id), true)
-      }
-    })
-  },
-  beforeDestroy () {
-    this.$Lazyload.$off('loaded')
+  beforeMount () {
+    this.$Lazyload.$off('error')
+    this.$Lazyload.$on('error', this.onErrorImg)
   },
   methods: {
-    onError (e) {
-      console.log(e)
+    onErrorImg ({ el }) {
+      let id = el.getAttribute('data-id')
+      let type = el.getAttribute('data-type')
+      if (id) {
+        if (!this.errorsImages[type]) {
+          this.$set(this.errorsImages, type, { [Number(id)]: true })
+        } else {
+          this.$set(this.errorsImages[type], Number(id), true)
+        }
+      }
     },
     async deleteHandle (id) {
       let res = await this.$confirmDelete()

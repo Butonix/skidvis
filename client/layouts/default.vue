@@ -2,7 +2,6 @@
   <div :class="{'page-loaded': loaded}" class="layout">
     <main>
       <navbar/>
-      <breadcrumbs/>
       <nuxt/>
     </main>
 

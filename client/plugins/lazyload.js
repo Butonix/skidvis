@@ -4,5 +4,5 @@ import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {
   error: '/placeholders/error.svg',
   loading: '/placeholders/loading_spinner.gif',
-  attempt: 3
+  attempt: 1
 })

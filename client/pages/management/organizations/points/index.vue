@@ -1,5 +1,6 @@
 <template>
   <div>
+    <breadcrumbs/>
     <div class="container mb-5">
       <h5 class="mb-2">
         Мои организации
