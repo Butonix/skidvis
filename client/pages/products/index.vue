@@ -93,7 +93,6 @@
 <script>
 import { getQueryData, watchList } from '~/utils'
 import axios from 'axios'
-import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
@@ -101,10 +100,10 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
+    'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     'Category': () => import('~/components/Category'),
     'Categories': () => import('~/components/Categories'),
-    SearchInput,
     Paginate
   },
   middleware: [],

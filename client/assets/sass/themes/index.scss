@@ -29,6 +29,23 @@
       $primary_: map_get($theme-colors_, "primary");
       @if($primary_){
 
+        //h1, h2, h3, h4, h5, a, label, div, p{
+        //  &::selection {
+        //    background: $primary_; /* Safari */
+        //  }
+        //  &::-moz-selection {
+        //    background: $primary_; /* Firefox */
+        //  }
+        //}
+
+        .select-ab{
+          &__item{
+            &:active, &.active{
+              color: $primary_;
+            }
+          }
+        }
+
         //Form
         .material-input{
           textarea, input{

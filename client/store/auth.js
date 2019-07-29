@@ -3,29 +3,24 @@ import Cookies from 'js-cookie'
 
 // state
 export const state = () => ({
+  defaultUser: {
+    city: { id: 3, name: 'Санкт-Петербург' },
+    wishlist: []
+  },
   user: {
+    city: { id: 3, name: 'Санкт-Петербург' },
     wishlist: []
   },
   token: null,
-  city: 1,
-  wishCount: 22,
-  cityName: 'Петропавловск-Камчатский',
-  cities: [
-    { value: 1, label: 'Петропавловск-Камчатский' },
-    { value: 2, label: 'Петропавловск-Камчатский' },
-    { value: 3, label: 'Петропавловск-Камчатский' },
-    { value: 4, label: 'Петропавловск-Камчатский' },
-    { value: 5, label: 'Петропавловск-Камчатский' }
-  ]
+  cities: []
 })
 
 // getters
 export const getters = {
   user: state => state.user,
   token: state => state.token,
-  city: state => state.city,
+  city: state => state.user.city,
   wishCount: state => state.user.wishlist.length,
-  cityName: state => state.cityName,
   cities: state => state.cities,
   check: state => !!state.user.id
 }
@@ -48,7 +43,7 @@ export const mutations = {
   },
 
   LOGOUT (state) {
-    state.user = null
+    state.user = { ...state.defaultUser }
     state.token = null
   },
 

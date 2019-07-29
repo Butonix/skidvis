@@ -14,10 +14,12 @@
             <div :class="{'active': openMenu}" class="nav-burger d-inline-block mb-2" @click="openMenu = !openMenu"/>
           </div>
           <div class="order-2 order-lg-1 mb-2 mb-lg-0">
-            <div class="cursor-pointer nav-link">
-              <span class="pr-1">{{ cityName }}</span>
-              <chevron/>
-            </div>
+
+            <select-alphabet
+              :selected="city"
+              :list="cities"
+            />
+
             <div>
               <ul class="navbar__nav list-unstyled">
                 <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default">
@@ -94,7 +96,6 @@ export default {
   components: {
     'login': () => import('~/components/Auth/login'),
     'vSelect': () => import('vue-select'),
-    'Chevron': () => import('~/components/Icons/Chevron'),
     'Flag': () => import('~/components/Navbar/Flag'),
     'ModalLogin': () => import('~/components/ModalLogin'),
     'FullLogo': () => import('~/components/Navbar/FullLogo')
@@ -119,9 +120,8 @@ export default {
   computed: mapGetters({
     user: 'auth/user',
     check: 'auth/check',
-    cities: 'auth/cities',
     wishCount: 'auth/wishCount',
-    cityName: 'auth/cityName',
+    cities: 'auth/cities',
     city: 'auth/city'
   }),
 

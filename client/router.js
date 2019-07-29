@@ -42,8 +42,8 @@ const ManagementOrganizationsProductsEdit = () => import('~/pages/management/org
 const ManagementOrganizationsPointsIndex = () => import('~/pages/management/organizations/points/index').then(m => m.default || m)
 
 const routes = [
-  { path: '/', name: 'welcome', component: Welcome },
-  { path: '/home', name: 'home', component: Home },
+  { path: '/', name: 'welcome', component: ProductsIndex },
+  // { path: '/home', name: 'home', component: Home },
 
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
