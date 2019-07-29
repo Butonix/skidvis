@@ -4,7 +4,21 @@
       <search-input
         v-model="params.search"
         autofocus="autofocus"
+        form-class="mb-4"
       />
+      <div class="text-muted small mb-2">
+        Категории
+      </div>
+      <categories>
+        <category
+          v-for="(category, key) in getCategories"
+          :key="'categories-'+key"
+          :label="category.name"
+          :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
+          :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+          @click="filter('category',category)"
+        />
+      </categories>
     </div>
 
     <div class="container container--long-offset">
@@ -88,9 +102,12 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 export default {
   components: {
     'CardLogo': () => import('~/components/Product/CardLogo'),
+    'Category': () => import('~/components/Category'),
+    'Categories': () => import('~/components/Categories'),
     SearchInput,
     Paginate
   },
+  middleware: [],
   head () {
     return {
       title: 'Все акции',
@@ -102,6 +119,7 @@ export default {
   asyncData: async ({ params, error, app, query }) => {
     let indexApiUrl
     let collection = {}
+    let categories = {}
     let params_ = getQueryData({ query })
 
     indexApiUrl = 'products'
@@ -114,7 +132,17 @@ export default {
       error({ statusCode: 500, message: 'Упс' })
     }
 
+    try {
+      let { data } = await axios.get('categories', {
+        // params: params_
+      })
+      categories = data
+    } catch (e) {
+      console.log(e)
+    }
+
     return {
+      categories,
       collection,
       params: params_,
       indexApiUrl
@@ -124,6 +152,9 @@ export default {
     errorsImages: {}
   }),
   computed: {
+    getCategories () {
+      return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
+    },
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },

@@ -133,8 +133,8 @@ export default {
         // Update the user.
         await this.$store.dispatch('auth/updateUser', { user: data })
 
-        // Redirect home.
-        this.$router.push({ name: 'home' })
+        // Redirect welcome.
+        this.$router.push({ name: 'welcome' })
 
         this.$emit('success')
       } catch (e) {

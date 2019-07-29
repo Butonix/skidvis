@@ -89,7 +89,7 @@ export default {
 
         if (this.$route.name === 'login') {
           // Redirect home.
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'welcome' })
         }
       } catch (e) {
         console.log(e)

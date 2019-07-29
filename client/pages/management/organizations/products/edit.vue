@@ -83,7 +83,7 @@
                 v-lazy="form.organization_logo || '/placeholders/logo.svg'"
                 :alt="form.name"
                 :title="form.name"
-                src="/placeholders/loading_spinner.gif"
+                src=" /placeholders/96x35-1920x700.gif"
               >
             </div>
             <div class="h1 flex-grow-1 product__name ff-montserrat">
@@ -283,8 +283,8 @@
                     :active="true"
                     :key="'categories-selected-'+key"
                     :label="category.name"
-                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-business-active.svg'"
+                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-business-normal.svg'"
                     @click="removeFromSelect(category.id, 'categories')"
                   />
                   <category
@@ -292,8 +292,8 @@
                     v-if="!categoriesSelectedId[category.id]"
                     :key="'categories-'+key"
                     :label="category.name"
-                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+                    :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-business-active.svg'"
+                    :src="category.images.business.normal || '/img/categories/entertainment/entertainment-business-normal.svg'"
                     @click="addToSelect(category, 'categories')"
                   />
                 </categories>
@@ -350,8 +350,6 @@ import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/SidebarEdit'
-import Category from '~/components/Category'
-import Categories from '~/components/Categories'
 import Form from 'vform'
 
 export default {
@@ -363,8 +361,8 @@ export default {
     DynamicLabelInput,
     AddressesFrame,
     Sidebar,
-    Category,
-    Categories,
+    'Category': () => import('~/components/Category'),
+    'Categories': () => import('~/components/Categories'),
     FullSlider
   },
   head () {
@@ -661,7 +659,7 @@ export default {
     },
     async categoriesFetch () {
       try {
-        let { data } = await axios.get(`management/categories`, {
+        let { data } = await axios.get(`categories`, {
           params: {
             search: this.selectSearch
           }
@@ -673,7 +671,7 @@ export default {
     },
     async tagsFetch () {
       try {
-        let { data } = await axios.get(`management/tags`, {
+        let { data } = await axios.get(`tags`, {
           params: {
             search: this.selectSearch
           }

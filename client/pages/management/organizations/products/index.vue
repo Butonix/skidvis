@@ -27,7 +27,13 @@
           class="col-md-6 col-lg-4 mb-5"
         >
           <div class="card card--product w-100 h-100">
-            <router-link :to="{ name: 'products.show', params: { productId: item.id } }" class="card-img-top d-block" >
+            <router-link :to="{ name: 'products.show', params: { productId: item.id } }"
+                         :class="{
+                           'with-logo':item.organization_logo,
+                           'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
+                           'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
+                         }"
+                         class="card-img-top d-block" >
               <div v-if="!item.is_published" class="card-img-top__message">
                 <div>
                   Не опубликован
@@ -38,13 +44,29 @@
               </div>
               <div class="embed-responsive">
                 <div class="embed-responsive-item">
-                  <img
-                    v-lazy="item.images[0].src"
+
+                  <div
+                    v-lazy:background-image="{
+                      src: item.images[0].src,
+                      loading: '/placeholders/cover.jpg'
+                    }"
                     v-if="item.images && item.images[0] && item.images[0].src"
-                    :data-id="item.id" :alt="item.name"
+                    data-loading="/placeholders/cover.jpg"
+                    class="card-img-top__cover bg-cover"
+                    role="img"/>
+                  <div
+                    v-else :style="{backgroundImage: '/placeholders/cover.jpg'}"
+                    class="card-img-top__cover img-cover"
+                    role="img"/>
+
+                  <card-logo
+                    v-if="item.organization_logo"
+                    :img="item.organization_logo"
+                    :color="item.organization_color"
                     :title="item.name"
-                    src="/placeholders/loading_spinner.gif"
-                  >
+                    :alt="item.name"
+                    :id="item.id"
+                  />
                 </div>
               </div>
             </router-link>
@@ -96,6 +118,7 @@ let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 
 export default {
   components: {
+    'CardLogo': () => import('~/components/Product/CardLogo'),
     SearchInput,
     Paginate
   },
@@ -134,6 +157,9 @@ export default {
       indexApiUrl
     }
   },
+  data: () => ({
+    errorsImages: {}
+  }),
   computed: {
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
@@ -146,6 +172,10 @@ export default {
     'params.search': listWatchInstanceSearch,
     'params.page': listWatchInstancePage
   },
+  beforeMount () {
+    this.$Lazyload.$off('error')
+    this.$Lazyload.$on('error', this.onErrorImg)
+  },
   methods: {
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
@@ -155,6 +185,17 @@ export default {
           listWatchInstanceDelete.call(this)
         } catch (e) {
           listWatchInstanceDelete.call(this)
+        }
+      }
+    },
+    onErrorImg ({ el }) {
+      let id = el.getAttribute('data-id')
+      let type = el.getAttribute('data-type')
+      if (id) {
+        if (!this.errorsImages[type]) {
+          this.$set(this.errorsImages, type, { [Number(id)]: true })
+        } else {
+          this.$set(this.errorsImages[type], Number(id), true)
         }
       }
     }

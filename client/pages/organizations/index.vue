@@ -42,7 +42,7 @@
                     :data-id="item.id" :alt="item.name"
                     :title="item.name"
                     class="card-img-top--no-error"
-                    src="/placeholders/loading_spinner.gif"
+                    src="/placeholders/96x35-1920x700.gif"
                     @error="onError">
                   <div v-else class="img-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
                   <div class="card-img-top--error img-cover w-100 h-100" style="background-image: url('/placeholders/error.svg');" />

@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="container navbar__container">
-      <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar__brand">
+      <router-link :to="{ name: 'welcome' }" class="navbar__brand">
         <div class="navbar__brand__label">
           сервис скидок
         </div>
@@ -42,7 +42,7 @@
             <flag :count="wishCount"/>
           </div>
           <div class="order-1 order-lg-3 ml-lg-4 mb-3 mb-lg-0">
-            <div v-click-outside="closeCollapse" v-if="user" :class="{'active': openCollapse}"
+            <div v-click-outside="closeCollapse" v-if="check" :class="{'active': openCollapse}"
                  class="auth-collapse"
                  @click="openCollapse = !openCollapse">
               <button v-if="user.avatar && user.avatar.src" class="btn btn-outline-primary btn-auth btn-auth--active">
@@ -53,6 +53,9 @@
               </button>
               <div class="auth-collapse__wrapper">
                 <ul class="auth-collapse__list list-unstyled">
+                  <nav-item :to="{ name: 'profile.show' }">
+                    Профиль
+                  </nav-item>
                   <nav-item :to="{ name: 'management.organizations.index' }">
                     Организации
                   </nav-item>
@@ -115,6 +118,7 @@ export default {
 
   computed: mapGetters({
     user: 'auth/user',
+    check: 'auth/check',
     cities: 'auth/cities',
     wishCount: 'auth/wishCount',
     cityName: 'auth/cityName',

@@ -11,7 +11,8 @@ export default async ({ store, req }) => {
     }
   }
 
-  if (!store.getters['auth/check'] && token) {
-    await store.dispatch('auth/fetchUser')
-  }
+  // if (!store.getters['auth/check'] && token) {
+  //   await store.dispatch('auth/fetchUser')
+  // }
+  await store.dispatch('auth/fetchUser')
 }

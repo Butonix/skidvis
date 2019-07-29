@@ -10,7 +10,7 @@
         :title="title"
         :data-id="id"
         data-type="logo"
-        src="/placeholders/loading_spinner.gif"
+        src=" /placeholders/96x35-1920x700.gif"
       >
     </div>
     <div v-else class="img-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />

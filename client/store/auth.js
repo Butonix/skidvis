@@ -3,7 +3,9 @@ import Cookies from 'js-cookie'
 
 // state
 export const state = () => ({
-  user: null,
+  user: {
+    wishlist: []
+  },
   token: null,
   city: 1,
   wishCount: 22,
@@ -22,10 +24,10 @@ export const getters = {
   user: state => state.user,
   token: state => state.token,
   city: state => state.city,
-  wishCount: state => state.wishCount,
+  wishCount: state => state.user.wishlist.length,
   cityName: state => state.cityName,
   cities: state => state.cities,
-  check: state => state.user !== null
+  check: state => !!state.user.id
 }
 
 // mutations
@@ -69,7 +71,7 @@ export const actions = {
   async fetchUser ({ commit }) {
     try {
       const { data } = await axios.get('/user')
-
+      console.log(data)
       commit('FETCH_USER_SUCCESS', data)
     } catch (e) {
       Cookies.remove('token')

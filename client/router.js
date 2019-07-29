@@ -28,6 +28,7 @@ const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.def
 const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
 
 const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
+const Profile = () => import('~/pages/profile/show').then(m => m.default || m)
 // const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
@@ -121,6 +122,11 @@ const routes = [
       { path: 'profile', name: 'settings.profile', component: SettingsProfile },
       { path: 'password', name: 'settings.password', component: SettingsPassword }
     ]
+  },
+
+  { path: '/profile',
+    component: Profile,
+    name: 'profile.show'
   },
 
   { path: '/management',

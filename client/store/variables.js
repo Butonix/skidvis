@@ -152,7 +152,7 @@ export const actions = {
   async fetchTimezones ({ state, commit, dispatch }) {
     if (state.timezones.length === 0) {
       try {
-        const { data } = await axios.get('management/timezones')
+        const { data } = await axios.get('timezones')
         commit('SET_TIMEZONES', data.list.data)
         commit('SET_DEFAULT_TIMEZONE', data.list.default)
       } catch (e) {
@@ -162,7 +162,7 @@ export const actions = {
   },
   async fetchReactData ({ commit, dispatch, state }, params) {
     try {
-      const { data } = await axios.get('management/react-data', {
+      const { data } = await axios.get('react-data', {
         params
       })
       commit('SET_REACT_DATA', data)

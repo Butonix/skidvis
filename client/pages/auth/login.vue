@@ -45,8 +45,8 @@ export default {
 
         form.reset()
 
-        // Redirect home.
-        this.$router.push({ name: 'home' })
+        // Redirect welcome.
+        this.$router.push({ name: 'welcome' })
       } catch (e) {
         console.log(e)
       }
