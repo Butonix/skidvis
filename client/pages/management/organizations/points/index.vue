@@ -181,14 +181,6 @@
         <div class="">
           Режим работы по адресу
         </div>
-        <div class="row my-4">
-          <div class="col-4 col-lg-4 col-xl-3">
-            Часовой пояс
-          </div>
-          <div class="col-6 col-lg-6 col-xl-6">
-            <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
-          </div>
-        </div>
         <div class="mb-5">
           <div v-for="(value, index) in form.operationMode" :key="index" class="row">
             <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
@@ -269,10 +261,7 @@ export default {
     let dataOrg = {}
     let params_ = getQueryData({ query })
 
-    await app.store.dispatch('variables/fetchTimezones')
-
     let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
-    let timezone = app.store.getters['variables/getDefaultTimezone']
     let organizationId = params.organizationId
 
     if (organizationId) {
@@ -284,11 +273,6 @@ export default {
           operationMode = dataOrg.organization.operationMode
         } else if (dataOrg.organization) {
           dataOrg.organization['operationMode'] = operationMode
-        }
-        if (dataOrg.organization.timezone) {
-          timezone = dataOrg.organization.timezone
-        } else if (dataOrg.organization) {
-          dataOrg.organization['timezone'] = timezone
         }
 
         let { data } = await axios.get(indexApiUrl, {
@@ -310,13 +294,12 @@ export default {
       indexApiUrl,
       form: {
         operationMode,
-        timezone,
         name: '',
         full_street: '',
         city_kladr_id: '',
         latitude: '',
         longitude: '',
-        payload: '',
+        payload: null,
         email: '',
         phone: ''
       }
@@ -336,12 +319,9 @@ export default {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
     }
-
-    this.fetchTimezones()
   },
   computed: {
     ...mapGetters({
-      getTimezones: 'variables/getTimezones',
       getReactData: 'variables/getReactData'
     }),
     items () {
@@ -352,9 +332,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      fetchTimezones: 'variables/fetchTimezones'
-    }),
     async onEditAddress () {
       let address = this.form.full_street
       this.form.full_street = ''
@@ -368,8 +345,7 @@ export default {
         this.form.city_kladr_id = address.data.city_kladr_id
         this.form.latitude = address.data.geo_lat
         this.form.longitude = address.data.geo_lon
-        this.form.payload = JSON.stringify(address)
-        console.log(this.form, address, address.data.city_kladr_id)
+        this.form.payload = { ...address }
       }
     },
     async onInputAddress (v) {
@@ -412,7 +388,6 @@ export default {
       this.form.full_street = this.items[key].full_street
       this.form.email = this.items[key].email
       this.form.phone = this.items[key].phone
-      this.form.timezone = this.items[key].timezone
       this.form.operationMode = this.items[key].operationMode
       this.updateId = this.items[key].id
 
@@ -435,13 +410,12 @@ export default {
       this.form.full_street = ''
       this.form.email = ''
       this.form.phone = ''
-      this.form.timezone = this.data.organization.timezone
       this.form.operationMode = this.data.organization.operationMode
 
       this.form.city_kladr_id = ''
       this.form.latitude = ''
       this.form.longitude = ''
-      this.form.payload = ''
+      this.form.payload = null
     },
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
