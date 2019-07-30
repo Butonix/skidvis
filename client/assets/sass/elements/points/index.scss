@@ -1,0 +1,42 @@
+.points-index{
+  &__addresses{
+    position: relative;
+    &__collapse {
+      position: absolute;
+      z-index: -9999;
+      opacity: 0;
+      visibility: hidden;
+      top: 100%;
+      margin-left: -15px;
+      margin-bottom: 1rem;
+      width: calc(100% + 15px);
+      max-height: 591px;
+      background: #FFFFFF;
+      box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+      border-radius: 15px;
+      padding: 10px 10px 10px 0;
+      display: flex;
+      flex-direction: column;
+      transition: max-height .1s, opacity .1s, visibility 0s linear .1s, z-index 0s linear .1s;
+    }
+
+    &.show{
+      .points-index{
+        &__addresses{
+          &__collapse {
+            z-index: 101;
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s;
+          }
+        }
+      }
+    }
+
+    &__list {
+      overflow: auto;
+      max-height: 322px;
+      padding: 0 15px;
+    }
+  }
+}

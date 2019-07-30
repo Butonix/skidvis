@@ -1,5 +1,6 @@
 <template>
-  <div :class="formClass_">
+  <div :class="formClass_"
+       @click="$emit('click', $event)">
     <input
       ref="materialInput"
       :id="id"

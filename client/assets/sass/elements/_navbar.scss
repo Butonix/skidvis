@@ -11,7 +11,8 @@
 }
 
 .navbar {
-
+  position: relative;
+  z-index: 999;
   &__container {
     display: flex;
     align-items: center;

@@ -45,7 +45,7 @@ export default ({ app, store, redirect }) => {
       // })
     }
 
-    if (process.client) {
+    if (data && process.client) {
       if (data.alert && data.alert.type) {
         $callToast(data.alert, Vue.toast)
       }

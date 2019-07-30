@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="points-index">
     <breadcrumbs/>
     <div class="container mb-5">
       <h5 class="mb-2">
@@ -19,7 +19,7 @@
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <div class="btn btn-outline-primary btn-sm" @click="showModalSavePoint">
+          <div class="btn btn-outline-primary btn-sm" @click="onAdd">
             + Добавить адрес
           </div>
         </div>
@@ -72,17 +72,84 @@
         next-class="d-none"/>
 
     </div>
-    <modal name="save-point" @closed="closedModalSavePoint">
+    <modal name="save-point">
       <div class="basic-modal">
 
-        <material-input
-          v-model="form.full_street"
-          :form="form"
-          field="full_street"
-          type-input="inline"
-          placeholder="Адрес точки"
-          form-class="mb-4"
-        />
+        <div v-if="form.full_street" class="row mb-4">
+          <div class="col-auto text-primary pr-0">
+            <fa icon="map-marker-alt" />
+          </div>
+          <div class="col pl-2 text-primary">
+            {{ form.full_street }}
+            <span class="sli sli--edit"
+            @click="onEditAddress"
+            ><fa icon="pencil-alt" /></span>
+          </div>
+          <div class="col-12">
+            <no-ssr>
+              <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
+                <has-error :form="form" field="full_street"/>
+              </div>
+            </no-ssr>
+          </div>
+        </div>
+
+        <div v-else class="row mb-4">
+          <div class="col-auto text-muted pr-0">
+            <fa icon="map-marker-alt" />
+          </div>
+          <div class="col pl-2 text-muted">
+            Адресс не добавлен, используйте поиск, ниже, для его добавления
+          </div>
+          <div class="col-12">
+            <no-ssr>
+              <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
+                <has-error :form="form" field="full_street"/>
+              </div>
+            </no-ssr>
+          </div>
+        </div>
+
+
+
+        <div
+          v-if="!form.full_street"
+          v-click-outside="hideAddresses"
+             :class="{'show': showAddresses}"
+             class="points-index__addresses">
+
+          <material-input
+            :value="address"
+            type-input="inline"
+            placeholder="Поиск адреса"
+            form-class="mb-4"
+            @click="onInputAddress(address)"
+            @input="onInputAddress"
+          />
+
+          <div class="points-index__addresses__collapse">
+            <div
+              class="points-index__addresses__list">
+              <div v-for="(address, key) in addresses"
+                   :key="key" class="row mb-2">
+                <div class="col-auto text-primary pr-0 pt-1">
+                  <fa icon="map-marker-alt" />
+                </div>
+                <div class="col pl-2 text-primary">
+                  <div class="d-inline-block pt-1">
+                    {{ address.value }}
+                  </div>
+                  <div class="btn btn-outline-primary float-right ml-2 btn-sm"
+                       @click="onSelectAddress(address)"
+                  >
+                    Выбрать
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
         <material-input
           v-model="form.name"
@@ -90,7 +157,7 @@
           field="name"
           type-input="inline"
           placeholder="Название точки"
-          form-class="mb-4"
+          form-class="mb-4 mt-5"
         />
 
         <material-input
@@ -122,28 +189,31 @@
             <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
           </div>
         </div>
-        <div v-for="(value, index) in form.operationMode" class="row">
-          <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
-            {{ operationMode.data[index].label }}
-          </div>
-          <div class="col-lg-6 col-xl-7 py-1">
-            <v-select
-              :clearable="false"
-              v-model="value.start"
-              :options="operationMode.interval"
-              class="v-select--time mr-2"
-            />
-            <v-select
-              :clearable="false"
-              v-model="value.end"
-              :options="operationMode.interval"
-              class="v-select--time mr-5"
-            />
-            <div class="d-inline-block">
-              <checkbox v-model="value.active" />
+        <div class="mb-5">
+          <div v-for="(value, index) in form.operationMode" :key="index" class="row">
+            <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
+              {{ operationMode.data[index].label }}
+            </div>
+            <div class="col-lg-6 col-xl-7 py-1">
+              <v-select
+                :clearable="false"
+                v-model="value.start"
+                :options="operationMode.interval"
+                class="v-select--time mr-2"
+              />
+              <v-select
+                :clearable="false"
+                v-model="value.end"
+                :options="operationMode.interval"
+                class="v-select--time mr-5"
+              />
+              <div class="d-inline-block">
+                <checkbox v-model="value.active" />
+              </div>
             </div>
           </div>
         </div>
+
         <div class="text-center mt-5">
           <button v-if="updateId" class="btn btn-outline-primary mr-2"
                   @click="savePoint"
@@ -167,11 +237,12 @@
 </template>
 
 <script>
-import { getQueryData, watchList } from '~/utils'
+import { getQueryData, watchList, fetchAddresses } from '~/utils'
 import Form from 'vform'
 import axios from 'axios'
 import { mapActions, mapGetters } from 'vuex'
 
+let fetchAddressesInstance = fetchAddresses(axios)
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
@@ -242,6 +313,8 @@ export default {
         timezone,
         name: '',
         full_street: '',
+        city_kladr_id: '',
+        payload: '',
         email: '',
         phone: ''
       }
@@ -249,6 +322,8 @@ export default {
   },
   data: () => ({
     address: '',
+    showAddresses: false,
+    addresses: [],
     updateId: null
   }),
   watch: {
@@ -261,26 +336,11 @@ export default {
     }
 
     this.fetchTimezones()
-    // try {
-    //   let { data } = await axios({
-    //     method: 'POST',
-    //     url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
-    //     data: { 'query': 'е', 'count': 10 },
-    //     responseType: 'json',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Accept': 'application/json',
-    //       'Authorization': `Token ${process.env.daDataApi}`,
-    //     }
-    //   })
-    //   console.log(data)
-    // } catch (e) {
-    //   console.log(e)
-    // }
   },
   computed: {
     ...mapGetters({
-      getTimezones: 'variables/getTimezones'
+      getTimezones: 'variables/getTimezones',
+      getReactData: 'variables/getReactData'
     }),
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
@@ -293,6 +353,39 @@ export default {
     ...mapActions({
       fetchTimezones: 'variables/fetchTimezones'
     }),
+    async onEditAddress () {
+      let address = this.form.full_street
+      this.form.full_street = ''
+      this.onInputAddress(address)
+    },
+    async onSelectAddress (v) {
+      let data = await fetchAddressesInstance({ query: v.unrestricted_value, count: 1 })
+      if (data[0]) {
+        let address = data[0]
+        this.form.full_street = address.value
+        this.form.city_kladr_id = address.data.city_kladr_id
+        this.form.latitude = address.data.geo_lat
+        this.form.longitude = address.data.geo_lon
+        this.form.payload = JSON.stringify(address)
+      }
+    },
+    async onInputAddress (v) {
+      this.address = v
+      if (v.length) {
+        this.addresses = await fetchAddressesInstance({ query: v, count: 10 })
+        if (this.addresses.length) {
+          this.showAddresses = true
+        } else {
+          this.showAddresses = false
+        }
+      } else {
+        this.showAddresses = false
+        this.addresses = []
+      }
+    },
+    hideAddresses () {
+      this.showAddresses = false
+    },
     async onDelete (key) {
       let res = await this.$confirmDelete()
       if (res.value) {
@@ -322,7 +415,14 @@ export default {
       this.$modal.push('save-point')
     },
     setDefaultFormData () {
-      this.form.name = ''
+      let name = ''
+
+      try {
+        name = this.getReactData['organizationId'][this.$route.params['organizationId']].name
+      } catch (e) {
+      }
+
+      this.form.name = name
       this.form.full_street = ''
       this.form.email = ''
       this.form.phone = ''
@@ -340,11 +440,9 @@ export default {
         }
       }
     },
-    closedModalSavePoint () {
-      this.setDefaultFormData()
-    },
-    showModalSavePoint () {
+    onAdd () {
       this.updateId = null
+      this.setDefaultFormData()
       this.$modal.push('save-point')
     },
     reloadList () {

@@ -85,7 +85,8 @@ export const state = () => {
         }
       }
     },
-    interval
+    interval,
+    addresses: []
   }
 }
 
@@ -97,6 +98,7 @@ export const getters = {
   getDefaultOperationModeSelected: state => state.defaultOperationModeSelected,
   getTimezones: state => state.timezones,
   getReactData: state => state.reactData,
+  getAddresses: state => state.addresses,
   getPageNamesBreadcrumb: state => state.pageNamesBreadcrumb,
   getDefaultTimezone: state => state.defaultTimezone,
   getDefaultTimeSelect: state => state.operationMode.default,
@@ -111,6 +113,9 @@ export const mutations = {
   },
   SET_PREVIOUS_ROUTE (state, value) {
     state.previousRoute = value
+  },
+  SET_ADDRESSES (state, value) {
+    state.addresses = value
   },
   SET_TIMEZONES (state, value) {
     state.timezones = value
@@ -168,6 +173,25 @@ export const actions = {
       commit('SET_REACT_DATA', data)
     } catch (e) {
       console.log('error fetchReactData', e)
+    }
+  },
+  async fetchAddresses ({ commit }, params) {
+    try {
+      let { data } = await axios({
+        method: 'POST',
+        url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+        data: { 'query': params.query, 'count': params.count || 10 },
+        responseType: 'json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Token ${process.env.daDataApi}`
+        }
+      })
+      console.log(data)
+      commit('SET_ADDRESSES', data.suggestions)
+    } catch (e) {
+      console.log(e)
     }
   }
 }

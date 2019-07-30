@@ -1,3 +1,4 @@
+import axios from "axios";
 
 /**
  * Get cookie from request.
@@ -182,4 +183,36 @@ export function getWindowParams () {
   let x = w.innerWidth || e.clientWidth || g.clientWidth
   let y = w.innerHeight || e.clientHeight || g.clientHeight
   return { x, y }
+}
+
+export function fetchAddresses (axios) {
+  const CancelToken = axios.CancelToken
+  let cancelRequest
+  return async function (params) {
+    if (cancelRequest) {
+      cancelRequest()
+    }
+    try {
+      let { data } = await axios({
+        method: 'POST',
+        url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
+        data: params,
+        responseType: 'json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Token ${process.env.daDataApi}`
+        },
+        cancelToken: new CancelToken(function executor (c) {
+          // An executor function receives a cancel function as a parameter
+          cancelRequest = c
+        })
+      })
+      console.log(data.suggestions)
+      return data.suggestions
+    } catch (e) {
+      console.log(e)
+      return []
+    }
+  }
 }
