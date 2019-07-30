@@ -314,6 +314,8 @@ export default {
         name: '',
         full_street: '',
         city_kladr_id: '',
+        latitude: '',
+        longitude: '',
         payload: '',
         email: '',
         phone: ''
@@ -367,6 +369,7 @@ export default {
         this.form.latitude = address.data.geo_lat
         this.form.longitude = address.data.geo_lon
         this.form.payload = JSON.stringify(address)
+        console.log(this.form, address, address.data.city_kladr_id)
       }
     },
     async onInputAddress (v) {
@@ -412,6 +415,12 @@ export default {
       this.form.timezone = this.items[key].timezone
       this.form.operationMode = this.items[key].operationMode
       this.updateId = this.items[key].id
+
+      this.form.city_kladr_id = this.items[key].city_kladr_id
+      this.form.latitude = this.items[key].latitude
+      this.form.longitude = this.items[key].longitude
+      this.form.payload = this.items[key].payload
+
       this.$modal.push('save-point')
     },
     setDefaultFormData () {
@@ -428,6 +437,11 @@ export default {
       this.form.phone = ''
       this.form.timezone = this.data.organization.timezone
       this.form.operationMode = this.data.organization.operationMode
+
+      this.form.city_kladr_id = ''
+      this.form.latitude = ''
+      this.form.longitude = ''
+      this.form.payload = ''
     },
     async deleteHandle (id) {
       let res = await this.$confirmDelete()
