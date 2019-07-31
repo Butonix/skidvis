@@ -406,6 +406,8 @@ export default {
       } catch (e) {
       }
 
+      this.address = ''
+
       this.form.name = name
       this.form.full_street = ''
       this.form.email = ''

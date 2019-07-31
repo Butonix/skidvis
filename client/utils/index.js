@@ -1,4 +1,3 @@
-import axios from "axios";
 
 /**
  * Get cookie from request.
@@ -7,7 +6,7 @@ import axios from "axios";
  * @param  {String} key
  * @return {String|undefined}
  */
-export function cookieFromRequest (req, key) {
+export function cookieFromRequest (req, key, json) {
   if (!req.headers.cookie) {
     return
   }
@@ -17,7 +16,8 @@ export function cookieFromRequest (req, key) {
   )
 
   if (cookie) {
-    return cookie.split('=')[1]
+    let value = cookie.split('=')[1]
+    return (json) ? JSON.parse(decodeURIComponent(value)) : value
   }
 }
 

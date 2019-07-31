@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="product">
+  <div v-if="product" class="container">
     <div class="row">
       <div class="product__content">
 
@@ -64,7 +64,7 @@
             @click="tab ='desc'">
             Описание
           </div>
-          <div class="tab" v-scroll-to="'#addresses'">
+          <div v-scroll-to="'#addresses'" class="tab">
             Адрес
           </div>
           <div class="tab d-none d-sm-block">
@@ -81,7 +81,7 @@
           </transition>
         </div>
 
-        <div v-if="product.points" class="order-7 order-lg-7" id="addresses">
+        <div v-if="product.points" id="addresses" class="order-7 order-lg-7">
           <h5>
             Акция по адресам:
           </h5>
@@ -105,6 +105,18 @@
         box-mod="right"
       />
     </div>
+    <no-ssr>
+      <yandex-map
+        :coords="coords"
+        @click="onClick"
+      >
+        <ymap-marker
+          :coords="coords"
+          marker-id="123"
+          hint-content="some hint"
+        />
+      </yandex-map>
+    </no-ssr>
 
   </div>
 </template>
@@ -156,39 +168,15 @@ export default {
     return res
   },
   data: () => ({
+    coords: [54, 39],
+    settings: {
+      apiKey: '',
+      lang: 'ru_RU',
+      coordorder: 'latlong',
+      version: '2.1'
+    },
     tab: 'circs',
     search: '',
-    action: '',
-    categories: [
-      {
-        id: 123,
-        name: '',
-        images: {
-          default: {
-            normal: 'http://lorempixel.com/1920/700',
-            active: 'http://lorempixel.com/1920/700'
-          },
-          business: {
-            normal: 'http://lorempixel.com/1920/700',
-            active: 'http://lorempixel.com/1920/700'
-          }
-        }
-      },
-      {
-        id: 321,
-        name: '',
-        images: {
-          default: {
-            normal: 'http://lorempixel.com/1920/700',
-            active: 'http://lorempixel.com/1920/700'
-          },
-          business: {
-            normal: 'http://lorempixel.com/1920/700',
-            active: 'http://lorempixel.com/1920/700'
-          }
-        }
-      }
-    ],
     fusePoints: null
   }),
   computed: {
@@ -199,7 +187,6 @@ export default {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
     }
   },
-
   async beforeMount () {
     if (!(this.product.points instanceof Fuse)) {
       this.fusePoints = new Fuse(this.product.points, {
@@ -214,9 +201,18 @@ export default {
         ]
       })
     }
+  },
+  methods: {
+    onClick (e) {
+      this.coords = e.get('coords')
+      console.log(this.coords)
+    }
   }
 }
 </script>
 
 <style>
+  .ymap-container{
+    height: 600px;
+  }
 </style>

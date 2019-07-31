@@ -70,6 +70,18 @@
               </div>
             </router-link>
             <label class="card-body pb-2 pt-4" v-html="((item.short_description)?item.short_description.replaceAll('\n', '<br>'):((item.name)?item.name.replaceAll('\n', '<br>'):''))"/>
+            <div class="">
+              <div v-if="wishlist.indexOf(item.id) !== -1" class="btn btn-danger btn-sm"
+                   @click="removeFromWishlist(item.id)"
+              >
+                Удалить из избранного
+              </div>
+              <div v-else class="btn btn-primary btn-sm"
+                   @click="pushInWishlist(item.id)"
+              >
+                Добавить в избранное
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,6 +103,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import { getQueryData, watchList } from '~/utils'
 import axios from 'axios'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
@@ -151,6 +164,9 @@ export default {
     errorsImages: {}
   }),
   computed: {
+    ...mapGetters({
+      wishlist: 'auth/wishlist'
+    }),
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
     },
@@ -170,6 +186,10 @@ export default {
     this.$Lazyload.$on('error', this.onErrorImg)
   },
   methods: {
+    ...mapActions({
+      pushInWishlist: 'auth/pushInWishlist',
+      removeFromWishlist: 'auth/removeFromWishlist'
+    }),
     onErrorImg ({ el }) {
       let id = el.getAttribute('data-id')
       let type = el.getAttribute('data-type')

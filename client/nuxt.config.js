@@ -87,6 +87,12 @@ module.exports = {
   ],
 
   modules: [
+    ['vue-yandex-maps/nuxt', {
+      apiKey: '',
+      lang: 'ru_RU',
+      coordorder: 'latlong',
+      version: '2.1'
+    }],
     '@nuxtjs/router',
     'vue-scrollto/nuxt',
     'vue-sweetalert2/nuxt',
