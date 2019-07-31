@@ -301,13 +301,13 @@ export default {
       this.logoLoading = true
       try {
         let { data } = await axios.post('management/organizations/logo', {
-          logo
+          image: logo
         })
-        if (!data.logo || !data.logo.src || !data.logo.id) {
+        if (!data.image || !data.image.src || !data.image.id) {
           throw new Error()
         }
-        this.form.logo.src = data.logo.src
-        this.form.logo.id = data.logo.id
+        this.form.logo.src = data.image.src
+        this.form.logo.id = data.image.id
         this.logoLoading = false
       } catch (e) {
         this.logo = null

@@ -82,7 +82,7 @@
           <div class="col pl-2 text-primary">
             {{ form.full_street }}
             <span class="sli sli--edit"
-            @click="onEditAddress"
+                  @click="onEditAddress"
             ><fa icon="pencil-alt" /></span>
           </div>
           <div class="col-12">
@@ -99,7 +99,7 @@
             <fa icon="map-marker-alt" />
           </div>
           <div class="col pl-2 text-muted">
-            Адресс не добавлен, используйте поиск, ниже, для его добавления
+            Адрес не добавлен, используйте поиск ниже для его добавления
           </div>
           <div class="col-12">
             <no-ssr>
@@ -110,13 +110,11 @@
           </div>
         </div>
 
-
-
         <div
-          v-if="!form.full_street"
           v-click-outside="hideAddresses"
-             :class="{'show': showAddresses}"
-             class="points-index__addresses">
+          v-if="!form.full_street"
+          :class="{'show': showAddresses}"
+          class="points-index__addresses">
 
           <material-input
             :value="address"
@@ -295,6 +293,7 @@ export default {
       form: {
         operationMode,
         name: '',
+        street: '',
         full_street: '',
         city_kladr_id: '',
         latitude: '',
@@ -342,6 +341,23 @@ export default {
       if (data[0]) {
         let address = data[0]
         this.form.full_street = address.value
+        let street = []
+        if (address.data.area_with_type) {
+          street.push(address.data.area_with_type)
+        }
+        if (address.data.settlement_with_type) {
+          street.push(address.data.settlement_with_type)
+        }
+        if (address.data.street_with_type) {
+          street.push(address.data.street_with_type)
+        }
+        if (address.data.house_type && address.data.house) {
+          street.push(address.data.house_type + ' ' + address.data.house)
+        }
+        if (address.data.flat_type && address.data.flat) {
+          street.push(address.data.flat_type + ' ' + address.data.flat)
+        }
+        this.form.street = street.join(', ')
         this.form.city_kladr_id = address.data.city_kladr_id
         this.form.latitude = address.data.geo_lat
         this.form.longitude = address.data.geo_lon
@@ -385,6 +401,7 @@ export default {
     },
     onEdit (key) {
       this.form.name = this.items[key].name
+      this.form.street = this.items[key].street
       this.form.full_street = this.items[key].full_street
       this.form.email = this.items[key].email
       this.form.phone = this.items[key].phone
@@ -409,6 +426,7 @@ export default {
       this.address = ''
 
       this.form.name = name
+      this.form.street = ''
       this.form.full_street = ''
       this.form.email = ''
       this.form.phone = ''

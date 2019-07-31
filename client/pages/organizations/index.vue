@@ -124,7 +124,7 @@ export default {
     }
   },
   asyncData: async ({ query }) => {
-    let indexApiUrl = 'management/organizations'
+    let indexApiUrl = 'organizations'
     let collection = {}
     let params = getQueryData({ query })
 
