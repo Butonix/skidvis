@@ -9,7 +9,6 @@
 .select-ab {
   display: inline-block;
   position: relative;
-
   &__chevron{
     display: inline-block;
     transition: .2s;
@@ -26,12 +25,11 @@
     left: -24px;
     margin-bottom: 1rem;
     width: 309px;
+    pointer-events: none;
     max-height: 591px;
     background: #FFFFFF;
-    pointer-events: none;
     box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
     border-radius: 15px;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     transition: max-height .2s, margin-top .2s, opacity .2s, visibility 0s linear, z-index 0s linear;
@@ -40,18 +38,29 @@
       left: 50%;
       transform: translateX(-50%);
     }
+    &__wrapper{
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0s linear .2s;
+    }
   }
 
   &.show{
     .select-ab{
       &__collapse {
-        pointer-events: auto;
-        height: auto;
         z-index: 101;
         margin-top: 0;
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
         transition-delay: 0s;
+        &__wrapper{
+          transition-delay: 0s;
+          max-height: 100%;
+        }
       }
       &__chevron{
         transform: rotate(90deg);

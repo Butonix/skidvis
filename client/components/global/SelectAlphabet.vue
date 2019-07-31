@@ -16,22 +16,24 @@
          }"
          class="select-ab__collapse"
     >
-      <div :class="{'active': !list.length}" class="preloader"/>
-      <div class="select-ab__search">
-        <search-input
-          v-model="search"
-          form-class=""
-        />
+      <div class="select-ab__collapse__wrapper">
+        <div :class="{'active': !list.length}" class="preloader"/>
+        <div class="select-ab__search">
+          <search-input
+            v-model="search"
+            form-class=""
+          />
+        </div>
+        <ul class="select-ab__list list-unstyled">
+          <li v-for="item in getList"
+              :key="item.id"
+              :class="{ 'active': selected.id === item.id }"
+              class="select-ab__item"
+              @click="onSelect(item)"
+              v-html="item.name"
+          />
+        </ul>
       </div>
-      <ul class="select-ab__list list-unstyled">
-        <li v-for="item in getList"
-            :key="item.id"
-            :class="{ 'active': selected.id === item.id }"
-            class="select-ab__item"
-            @click="onSelect(item)"
-            v-html="item.name"
-        />
-      </ul>
     </div>
   </div>
 </template>

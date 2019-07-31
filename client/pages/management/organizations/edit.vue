@@ -1,189 +1,210 @@
 <template>
-  <form v-if="form" class="organizations-edit"
-        @submit.prevent @keydown="form.onKeydown($event)">
-    <full-slider
-      v-if="images"
-      :images="images"
-    />
-    <div class="overflow-hidden">
-      <div class="container">
-        <thumbs-file-input
-          v-if="images"
-          :images="images"
-          :images-loading="imagesLoading"
-          @change="setMainImage"
-          @delete="deleteMainImage"
-        />
-        <no-ssr>
-          <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
-            <has-error :form="form" field="images"/>
+  <div>
+    <div class="container">
+      <div class="row">
+        <breadcrumbs box-class="col-12 col-lg order-2 order-lg-1"/>
+        <div v-if="organizationId" class="col-12 col-lg-auto h-100 order-1 order-lg-2">
+          <div class="d-flex align-items-center h-100">
+            <router-link
+              :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
+              class="btn btn-gray btn-sm px-4 mr-2">
+              <span class="px-2">Точки</span>
+            </router-link>
+            <router-link
+              :to="{ name: 'management.organizations.products.index', params: { organizationId } }"
+              class="btn btn-gray btn-sm px-4">
+              <span class="px-2">Акции</span>
+            </router-link>
           </div>
-        </no-ssr>
+        </div>
+      </div>
+    </div>
+    <form v-if="form" class="organizations-edit"
+          @submit.prevent @keydown="form.onKeydown($event)">
+      <full-slider
+        v-if="images"
+        :images="images"
+      />
+      <div class="overflow-hidden">
+        <div class="container">
+          <thumbs-file-input
+            v-if="images"
+            :images="images"
+            :images-loading="imagesLoading"
+            @change="setMainImage"
+            @delete="deleteMainImage"
+          />
+          <no-ssr>
+            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
+              <has-error :form="form" field="images"/>
+            </div>
+          </no-ssr>
+          <div class="row justify-content-center">
+            <div class="col-lg-8 organizations-edit__editor">
+
+              <div class="row mt-xl-3">
+                <div class="col">
+
+                  <div
+                    class="row">
+                    <div class="col-sm">
+                      <div class="organizations-edit__logo">
+                        <div class="text-center small pb-2">
+                          Логотип организации
+                        </div>
+                        <div
+                          :style="{color:form.logo.color || '#ffffff'}"
+                          class="organizations-edit__logo-file-input">
+                          <logo-file-input
+                            :src="logo"
+                            :loading="logoLoading"
+                            @change="setLogoSrc"
+                            @delete="deleteLogo"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-auto d-flex d-md-none flex-column">
+                      <div class="text-center small pb-2 pt-4 pt-sm-0">
+                        Цвет заливки логотипа
+                      </div>
+                      <div class="color-box__wrapper">
+                        <div
+                          :style="{backgroundColor: form.logo.color || '#ffffff'}"
+                          :class="{'active':isActiveClassColorBox}"
+                          class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
+                        />
+                        <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
+                        <no-ssr>
+                          <sketch-picker :value="form.logo.color || '#ffffff'" class="mx-auto" @input="setLogoColor" />
+                        </no-ssr>
+                      </div>
+                    </div>
+                  </div>
+                  <material-input
+                    v-model="form.link"
+                    :form="form"
+                    field="link"
+                    form-class="mb-4"
+                    placeholder="Ссылка на ваш сайт"
+                  />
+                  <material-input
+                    v-model="form.name"
+                    :form="form"
+                    field="name"
+                    placeholder="Введите название компании"
+                  />
+                  <material-input
+                    v-model="form.inn"
+                    :form="form"
+                    field="inn"
+                    placeholder="ИНН"
+                  />
+                </div>
+                <div class="col-auto d-none d-md-block">
+                  <div class="text-center small pb-2">
+                    Цвет заливки логотипа
+                  </div>
+                  <no-ssr>
+                    <sketch-picker :value="form.logo.color || '#ffffff'" @input="setLogoColor" />
+                  </no-ssr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8 organizations-edit__editor">
-
-            <div class="row mt-xl-3">
-              <div class="col">
-
-                <div
-                  class="row">
-                  <div class="col-sm">
-                    <div class="organizations-edit__logo">
-                      <div class="text-center small pb-2">
-                        Логотип организации
-                      </div>
-                      <div
-                        :style="{color:form.logo.color || '#ffffff'}"
-                        class="organizations-edit__logo-file-input">
-                        <logo-file-input
-                          :src="logo"
-                          :loading="logoLoading"
-                          @change="setLogoSrc"
-                          @delete="deleteLogo"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-auto d-flex d-md-none flex-column">
-                    <div class="text-center small pb-2 pt-4 pt-sm-0">
-                      Цвет заливки логотипа
-                    </div>
-                    <div class="color-box__wrapper">
-                      <div
-                        :style="{backgroundColor: form.logo.color || '#ffffff'}"
-                        :class="{'active':isActiveClassColorBox}"
-                        class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
-                      />
-                      <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
-                      <no-ssr>
-                        <sketch-picker :value="form.logo.color || '#ffffff'" class="mx-auto" @input="setLogoColor" />
-                      </no-ssr>
-                    </div>
-                  </div>
+            <material-textarea
+              v-model="form.description"
+              :form="form"
+              field="description"
+              placeholder="Почему к вам стоит прийти?"
+              data-align="center"
+              form-class="mt-5 mb-4"
+            />
+            <material-textarea
+              v-model="form.short_description"
+              :form="form"
+              field="short_description"
+              placeholder="Короткое описание"
+              data-align="left"
+              form-class="mb-5"
+            />
+            <social-links
+              :links="form.socials"
+              @change="changeSocialsLink"
+              @add="addSocialsLink"
+              @delete="deleteSocialsLink"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <div class="row mt-5 mb-4">
+              <div class="col-4 col-lg-4 col-xl-3">
+                Часовой пояс
+              </div>
+              <div class="col-6 col-lg-6 col-xl-6">
+                <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
+              </div>
+            </div>
+            <div v-for="(value, index) in form.operationMode" class="row">
+              <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
+                {{ operationMode.data[index].label }}
+              </div>
+              <div class="col-lg-6 col-xl-7 py-1">
+                <v-select
+                  :clearable="false"
+                  v-model="value.start"
+                  :options="operationMode.interval"
+                  class="v-select--time mr-2"
+                />
+                <v-select
+                  :clearable="false"
+                  v-model="value.end"
+                  :options="operationMode.interval"
+                  class="v-select--time mr-5"
+                />
+                <div class="d-inline-block">
+                  <checkbox v-model="value.active" />
                 </div>
-                <material-input
-                  v-model="form.link"
-                  :form="form"
-                  field="link"
-                  form-class="mb-4"
-                  placeholder="Ссылка на ваш сайт"
-                />
-                <material-input
-                  v-model="form.name"
-                  :form="form"
-                  field="name"
-                  placeholder="Введите название компании"
-                />
-                <material-input
-                  v-model="form.inn"
-                  :form="form"
-                  field="inn"
-                  placeholder="ИНН"
-                />
-              </div>
-              <div class="col-auto d-none d-md-block">
-                <div class="text-center small pb-2">
-                  Цвет заливки логотипа
-                </div>
-                <no-ssr>
-                  <sketch-picker :value="form.logo.color || '#ffffff'" @input="setLogoColor" />
-                </no-ssr>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 organizations-edit__editor">
-          <material-textarea
-            v-model="form.description"
-            :form="form"
-            field="description"
-            placeholder="Почему к вам стоит прийти?"
-            data-align="center"
-            form-class="mt-5 mb-4"
-          />
-          <material-textarea
-            v-model="form.short_description"
-            :form="form"
-            field="short_description"
-            placeholder="Короткое описание"
-            data-align="left"
-            form-class="mb-5"
-          />
-          <social-links
-            :links="form.socials"
-            @change="changeSocialsLink"
-            @add="addSocialsLink"
-            @delete="deleteSocialsLink"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-6 mx-auto">
-          <div class="row mt-5 mb-4">
-            <div class="col-4 col-lg-4 col-xl-3">
-              Часовой пояс
+        <div class="text-center mt-5">
+          <template v-if="organizationId">
+            <div v-if="form.is_published" class="btn btn-outline-danger mx-1 mb-2"
+                 @click="onUnpublish"
+            >
+              Снять с публикации
             </div>
-            <div class="col-6 col-lg-6 col-xl-6">
-              <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
+            <div v-else class="btn btn-outline-success mx-1 mb-2"
+                 @click="onPublish"
+            >
+              Опубликовать
             </div>
-          </div>
-          <div v-for="(value, index) in form.operationMode" class="row">
-            <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
-              {{ operationMode.data[index].label }}
-            </div>
-            <div class="col-lg-6 col-xl-7 py-1">
-              <v-select
-                :clearable="false"
-                v-model="value.start"
-                :options="operationMode.interval"
-                class="v-select--time mr-2"
-              />
-              <v-select
-                :clearable="false"
-                v-model="value.end"
-                :options="operationMode.interval"
-                class="v-select--time mr-5"
-              />
-              <div class="d-inline-block">
-                <checkbox v-model="value.active" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="text-center mt-5">
-        <template v-if="organizationId">
-          <div v-if="form.is_published" class="btn btn-outline-danger mx-1 mb-2"
-               @click="onUnpublish"
+          </template>
+          <div
+            class="btn btn-outline-primary mx-1 mb-2"
+            @click="onSave"
           >
-            Снять с публикации
+            Сохранить
           </div>
-          <div v-else class="btn btn-outline-success mx-1 mb-2"
-               @click="onPublish"
+          <div
+            v-if="organizationId"
+            class="btn btn-outline-danger mx-1 mb-2"
+            @click="onDelete"
           >
-            Опубликовать
+            Удалить
           </div>
-        </template>
-        <div
-          class="btn btn-outline-primary mx-1 mb-2"
-          @click="onSave"
-        >
-          Сохранить
-        </div>
-        <div
-          v-if="organizationId"
-          class="btn btn-outline-danger mx-1 mb-2"
-          @click="onDelete"
-        >
-          Удалить
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script>

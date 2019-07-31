@@ -76,14 +76,14 @@
                 <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
               </router-link>
               <div class="card-buttons__controls">
-                <div class="card-buttons__controls__left"><fa :icon="['fas', 'chevron-left']"/></div>
+                <div class="card-buttons__controls__left d-none"><fa :icon="['fas', 'chevron-left']"/></div>
                 <div class="card-buttons__controls__delete"
                      @click="deleteHandle(item.id)"
                 >
                   <div class="card-buttons__controls__chevron"/>
                   <fa :icon="['far', 'trash-alt']"/> Удалить акцию
                 </div>
-                <div class="card-buttons__controls__right"><fa :icon="['fas', 'chevron-right']"/></div>
+                <div class="card-buttons__controls__right d-none"><fa :icon="['fas', 'chevron-right']"/></div>
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <div :class="{[boxClass]:!!boxClass}"
+       class="container">
     <ol
       v-if="breadcrumbs.length"
       class="breadcrumb"
@@ -29,6 +30,12 @@
 <script>
 export default {
   name: 'Breadcrumbs',
+  props: {
+    boxClass: {
+      type: String,
+      default: ''
+    }
+  },
   computed: {
     breadcrumbs () {
       return this.$route.matched.map(route => ({
