@@ -1,7 +1,15 @@
 .card {
+  border: 0;
   border-radius: 15px;
   background: #FFFFFF;
   box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+  .card-body{
+    br{
+      @include media-breakpoint-down(sm){
+        display: none;
+      }
+    }
+  }
   .card-img-top{
     overflow: hidden;
     position: relative;
@@ -280,7 +288,11 @@
       transform: rotate(90deg);
     }
   }
+  &-footer{
+    border-top: 0;
+  }
   &--product{
+    background: #FFFFFF;
     .card-body{
       textarea{
         border: none!important;
@@ -288,6 +300,78 @@
         outline: none!important;
         overflow: hidden;
         resize: none;
+      }
+    }
+    .card-footer{
+      display: flex;
+      position: relative;
+      &__address{
+        flex-basis: 0;
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        max-width: calc(100% - 30px);
+        position: relative;
+        z-index: 12;
+        &__wrapper{
+          width: 100%;
+        }
+        &__text{
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        &__btn{
+          position: absolute;
+          right: -1px;
+          top: 50%;
+          transform: translateY(-50%);
+          box-shadow: -16px 0px 11px 0px rgba(255,255,255,1);
+        }
+      }
+      &__wishlist{
+        -webkit-box-flex: 0;
+        flex: 0 0 30px;
+        width: 30px;
+        max-width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        position: relative;
+        z-index: 12;
+      }
+      &__list-address{
+        padding-top: 3rem;
+        padding-bottom: .5rem;
+        max-width: 100%;
+        margin-bottom: 0;
+        &__wrapper{
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 3rem;
+          margin-top: -3rem;
+          z-index: 11;
+          box-shadow: 0 14px 19px rgba(216, 216, 216, 0.7);
+          border-radius:  0 0 15px 15px;
+          background: white;
+          overflow: hidden;
+          pointer-events: none;
+          transition: .4s;
+          &.active{
+            pointer-events: auto;
+          }
+        }
+        &__item{
+          width: 100%;
+          display: block;
+          padding: rem(6) $card-spacer-x;
+        }
+        &__link{
+          display: block;
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+        }
       }
     }
     //.card-img-top{

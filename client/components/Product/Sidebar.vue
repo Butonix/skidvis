@@ -41,12 +41,12 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon class-box="mb-4">
+    <list-item-icon v-if="socials.length" class-box="mb-4">
       <template slot="icon">
         <relations />
       </template>
       <template slot="text">
-        <div v-if="socials.length" class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center mb-2">
+        <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center mb-2">
           <social
             v-for="(social, key) in socials"
             :key="'socials-'+key"

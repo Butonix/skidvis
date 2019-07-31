@@ -164,6 +164,7 @@ body {
   max-width: 0;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 .border-bottom-dashed{
   border-bottom: 1px dashed;

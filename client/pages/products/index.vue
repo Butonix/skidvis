@@ -13,10 +13,11 @@
         <category
           v-for="(category, key) in getCategories"
           :key="'categories-'+key"
+          :active="params.categories.indexOf(String(category.id)) !== -1"
           :label="category.name"
           :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
           :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-          @click="filter('category',category)"
+          @click="filter('categories',category)"
         />
       </categories>
     </div>
@@ -69,17 +70,53 @@
                 </div>
               </div>
             </router-link>
-            <label class="card-body pb-2 pt-4" v-html="((item.short_description)?item.short_description.replaceAll('\n', '<br>'):((item.name)?item.name.replaceAll('\n', '<br>'):''))"/>
-            <div class="">
-              <div v-if="wishlist.indexOf(item.id) !== -1" class="btn btn-danger btn-sm"
-                   @click="removeFromWishlist(item.id)"
-              >
-                Удалить из избранного
+            <label class="card-body pb-2 pt-4"
+                   v-html="((item.short_description)?item.short_description.replaceAll('\n', '<br>'):((item.name)?item.name.replaceAll('\n', '<br>'):''))"
+            />
+            <div class="card-footer">
+              <div class="card-footer__address">
+                <div :title="(item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):''"
+                     class="card-footer__address__wrapper"
+                >
+                  <div class="card-footer__address__text"
+                       v-text="(item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):''"
+                  />
+                </div>
+                <div
+                  v-if="item.points[1]"
+                  class="card-footer__address__btn btn btn-sm btn-gray"
+                  @click="activeAddresses ? activeAddresses = 0 : activeAddresses = item.id"
+                >
+                  еще {{ item.points.length - 1 }}
+                </div>
               </div>
-              <div v-else class="btn btn-primary btn-sm"
-                   @click="pushInWishlist(item.id)"
+              <div class="card-footer__wishlist">
+                <flag v-if="wishlist.indexOf(item.id) !== -1" :active="true" class-box="ml-1" title="Удалить из избранного"
+                      @click="removeFromWishlist(item.id)"
+                />
+                <flag v-else :active="false" class-box="ml-1" title="Добавить в избранное"
+                      @click="pushInWishlist(item.id)"
+                />
+              </div>
+              <div
+                v-if="item.points[1]"
+                :class="{'active': activeAddresses === item.id}"
+                :style="{
+                  maxHeight: (activeAddresses === item.id)? (3 + 2.5 * (item.points.length - 1)) + 'rem': '3rem'
+                }"
+                class="card-footer__list-address__wrapper"
               >
-                Добавить в избранное
+                <ul class="card-footer__list-address list-unstyled text-muted">
+                  <li
+                    v-for="(point, index) in item.points"
+                    v-if="index !== 0"
+                    :key="'list-address__item-'+index"
+                    :title="(point.street)?point.street:point.full_street"
+                    class="card-footer__list-address__item"
+                  >
+                    <div class="card-footer__list-address__link" v-text="(point.street)?point.street:point.full_street"/>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -113,6 +150,7 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
+    'Flag': () => import('~/components/Flag'),
     'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     'Category': () => import('~/components/Category'),
@@ -132,7 +170,18 @@ export default {
     let indexApiUrl
     let collection = {}
     let categories = {}
-    let params_ = getQueryData({ query })
+    let city = app.store.getters['auth/city']
+
+    let params_ = getQueryData({ query,
+      defaultData: {
+        categories: [],
+        city_id: city.id
+      }
+    })
+
+    if (Number(params_.city_id) !== Number(city.id)) {
+      await app.store.dispatch('auth/setCity', params_.city_id)
+    }
 
     indexApiUrl = 'products'
     try {
@@ -161,11 +210,13 @@ export default {
     }
   },
   data: () => ({
-    errorsImages: {}
+    errorsImages: {},
+    activeAddresses: 0
   }),
   computed: {
     ...mapGetters({
-      wishlist: 'auth/wishlist'
+      wishlist: 'auth/wishlist',
+      city: 'auth/city'
     }),
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
@@ -179,7 +230,14 @@ export default {
   },
   watch: {
     'params.search': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage
+    'params.categories': listWatchInstanceSearch,
+    'params.page': listWatchInstancePage,
+    'city': function (v) {
+      if (v.id) {
+        this.params.city_id = v.id
+        listWatchInstanceSearch.call(this)
+      }
+    }
   },
   beforeMount () {
     this.$Lazyload.$off('error')
@@ -190,6 +248,18 @@ export default {
       pushInWishlist: 'auth/pushInWishlist',
       removeFromWishlist: 'auth/removeFromWishlist'
     }),
+    filter (type, item) {
+      switch (type) {
+        case 'categories':
+          let index = this.params.categories.indexOf(String(item.id))
+          if (index === -1) {
+            this.params.categories.push(String(item.id))
+          } else {
+            this.$delete(this.params.categories, index)
+          }
+          break
+      }
+    },
     onErrorImg ({ el }) {
       let id = el.getAttribute('data-id')
       let type = el.getAttribute('data-type')

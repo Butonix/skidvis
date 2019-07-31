@@ -71,21 +71,19 @@ export const mutations = {
 export const actions = {
   async postWishlist ({ getters }) {
     Cookies.set('wishlist', getters.wishlist, { expires: 365 })
-
-    if (getters.check) {
-      try {
-        await axios.post('user/wishlist', {
-          products: getters.wishlist
-        })
-      } catch (e) {
-        console.log(e)
-      }
-    }
   },
   async pushInWishlist ({ commit, getters, dispatch }, id) {
     if (getters.wishlist.indexOf(id) === -1) {
       commit('PUSH_IN_WISHLIST', id)
       dispatch('postWishlist')
+
+      if (getters.check) {
+        try {
+          await axios.post(`products/${id}/marked`)
+        } catch (e) {
+          console.log(e)
+        }
+      }
     }
   },
   async removeFromWishlist ({ commit, getters, dispatch }, id) {
@@ -94,9 +92,26 @@ export const actions = {
     if (index !== -1) {
       commit('REMOVE_FROM_WISHLIST', index)
       dispatch('postWishlist')
+
+      if (getters.check) {
+        try {
+          await axios.delete(`products/${id}/marked`)
+        } catch (e) {
+          console.log(e)
+        }
+      }
     }
   },
   async setCity ({ commit, getters }, city) {
+    if (!(city instanceof Object)) {
+      try {
+        let { data } = await axios.get('cities/' + city)
+        city = data
+      } catch (e) {
+        return true
+      }
+    }
+
     let oldCity = getters.city
     let check = getters.check
 
@@ -167,8 +182,6 @@ export const actions = {
       }
     }
 
-    console.log('isEqual', isEqual(data.wishlist, newUser.wishlist), data.wishlist, newUser.wishlist)
-
     if (!isEqual(data.wishlist, newUser.wishlist)) {
       try {
         await axios.post('user/wishlist', {
@@ -183,6 +196,7 @@ export const actions = {
   async fetchUser ({ commit, dispatch }) {
     try {
       const { data } = await axios.get('user')
+      console.log('fetchUser', data)
       let newData = await dispatch('beforeSaveUpdateUser', { data })
       commit('FETCH_USER_SUCCESS', newData)
       dispatch('afterSaveUpdateUser', {

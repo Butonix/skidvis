@@ -28,6 +28,7 @@
     width: 309px;
     max-height: 591px;
     background: #FFFFFF;
+    pointer-events: none;
     box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
     border-radius: 15px;
     padding: 10px;
@@ -44,6 +45,8 @@
   &.show{
     .select-ab{
       &__collapse {
+        pointer-events: auto;
+        height: auto;
         z-index: 101;
         margin-top: 0;
         opacity: 1;

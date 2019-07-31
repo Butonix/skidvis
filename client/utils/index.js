@@ -49,7 +49,8 @@ export function getQueryData ({ query, defaultData }) {
     search: '',
     orderingDir: 'desc',
     ordering: 'name',
-    ...defaultData
+    ...defaultData,
+    ...query
   }
   if (query.page) {
     res.page = Number(query.page)
@@ -81,7 +82,7 @@ export function watchList (axios, keyApiUrl, type) {
         this.params.page = 1
         break
     }
-    let params = getQueryData({ query: this.params })
+    let params = getQueryData({ query: this.params, defaultData: this.params })
     this.$router.push({ name: this.$route.name,
       query: params
     })
@@ -96,6 +97,7 @@ export function watchList (axios, keyApiUrl, type) {
         cancelRequest = c
       })
     }).then(({ data }) => {
+      console.log(data)
       switch (type) {
         case 'delete':
           if (data.list.data.length === 0 && this.params.page > 1) {
