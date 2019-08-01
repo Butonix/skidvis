@@ -97,7 +97,6 @@ export function watchList (axios, keyApiUrl, type) {
         cancelRequest = c
       })
     }).then(({ data }) => {
-      console.log(data)
       switch (type) {
         case 'delete':
           if (data.list.data.length === 0 && this.params.page > 1) {
@@ -210,7 +209,6 @@ export function fetchAddresses (axios) {
           cancelRequest = c
         })
       })
-      console.log(data.suggestions)
       return data.suggestions
     } catch (e) {
       console.log(e)

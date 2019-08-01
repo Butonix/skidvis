@@ -188,7 +188,6 @@ export const actions = {
           'Authorization': `Token ${process.env.daDataApi}`
         }
       })
-      console.log(data)
       commit('SET_ADDRESSES', data.suggestions)
     } catch (e) {
       console.log(e)

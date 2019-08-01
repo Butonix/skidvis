@@ -277,7 +277,6 @@ export default {
           params: params_
         })
         collection = data
-        console.log(data)
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }

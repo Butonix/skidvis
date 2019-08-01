@@ -196,7 +196,6 @@ export const actions = {
   async fetchUser ({ commit, dispatch }) {
     try {
       const { data } = await axios.get('user')
-      console.log('fetchUser', data)
       let newData = await dispatch('beforeSaveUpdateUser', { data })
       commit('FETCH_USER_SUCCESS', newData)
       dispatch('afterSaveUpdateUser', {

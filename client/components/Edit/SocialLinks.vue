@@ -108,7 +108,6 @@ export default {
         this.edit.error = 'noParsed'
         return
       }
-      console.log(value)
       this.$emit('change', {
         value: {
           link: this.edit.value,

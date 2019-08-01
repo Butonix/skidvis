@@ -105,7 +105,7 @@ export default {
         })
         this.$router.push({ name: 'login' })
       } catch (e) {
-        console.log(this.form)
+        console.log(e)
       }
     }
   }

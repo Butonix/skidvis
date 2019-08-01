@@ -1,4 +1,15 @@
 .orgs-show{
+  &__social{
+    text-align: center;
+    @include media-breakpoint-up(md){
+      margin-left: auto;
+      $width: 214;
+      width: #{$width}px;
+      flex: 0 0 #{$width}px;
+      max-width: #{$width}px;
+      text-align: right;
+    }
+  }
   &__logo{
     $width: 283;
     $height: 117;

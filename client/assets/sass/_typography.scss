@@ -175,17 +175,17 @@ body {
 .cursor-pointer{
   cursor: pointer!important;
 }
-//@each $key, $value in $grid-breakpoints{
-//  .br--#{$key}{
-//    br{
-//      display: none;
-//      @include media-breakpoint-up($key)
-//      {
-//        display: block;
-//      }
-//    }
-//  }
-//}
+@each $key, $value in $grid-breakpoints{
+  .br--#{$key}{
+    br{
+      display: none;
+      @include media-breakpoint-up($key)
+      {
+        display: block;
+      }
+    }
+  }
+}
 
 .text-black{
   color: black!important;
