@@ -10,27 +10,27 @@
         class-box="mr-2"
       />
       <label class="social-links-edit__item__link">
-        <a v-if="edit.value === undefined" :href="link.link" class="text-break" target="_blank" v-text="link.link"/>
+        <a v-if="!isEdit(index)" :href="link.link" class="text-break" target="_blank" v-text="link.link"/>
         <material-input
-          v-if="edit.value !== undefined"
+          v-if="isEdit(index)"
           v-model="edit.value"
           type-input="inline"
           form-class="flex-grow-1 m-0"
         />
-        <span v-if="edit.value === undefined" class="social-links-edit__item__link__change" @click="editHandle(index)">
+        <span v-if="!isEdit(index)" class="social-links-edit__item__link__change" @click="editHandle(index)">
           <pain />
         </span>
-        <span v-if="edit.value === undefined" class="social-links-edit__item__link__delete" @click="deleteHandle(index)">
+        <span v-if="!isEdit(index)" class="social-links-edit__item__link__delete" @click="deleteHandle(index)">
           <fa :icon="['far', 'trash-alt']"/>
         </span>
-        <span v-if="edit.value !== undefined" class="social-links-edit__item__link__save" @click="editSave">
+        <span v-if="isEdit(index)" class="social-links-edit__item__link__save" @click="editSave">
           <fa icon="check"/>
         </span>
-        <span v-if="edit.value !== undefined" class="social-links-edit__item__link__cancel" @click="editCancel">
+        <span v-if="isEdit(index)" class="social-links-edit__item__link__cancel" @click="editCancel">
           <fa icon="times"/>
         </span>
       </label>
-      <div v-if="edit.error" class="text-danger small w-100 text-center">
+      <div v-if="isEdit(index) && edit.error" class="text-danger small w-100 text-center">
         {{ errors[edit.error] }}
       </div>
     </div>
@@ -88,6 +88,12 @@ export default {
     }
   },
   methods: {
+    isEdit (index) {
+      if (index === this.edit.index && this.edit.value !== undefined) {
+        return true
+      }
+      return false
+    },
     editHandle (index) {
       this.edit.index = index
       this.edit.value = this.links[index].link

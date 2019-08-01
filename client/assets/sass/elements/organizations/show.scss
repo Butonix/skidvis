@@ -1,21 +1,7 @@
-
-.orgs {
-  &__container{
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  &__row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-left: -20px;
-    margin-right: -20px;
-  }
-
-  &__col {
-    $width: 186;
-    $height: 93;
+.orgs-show{
+  &__logo{
+    $width: 283;
+    $height: 117;
     width: #{$width}px;
     flex: 0 0 #{$width}px;
     max-width: #{$width}px;
@@ -26,14 +12,14 @@
     margin-bottom: 1rem;
     margin-left: 10px;
     margin-right: 10px;
-    @include media-breakpoint-down(xxl){
-      $width: 140;
-      $height: 70;
-      width: #{$width}px;
-      flex: 0 0 #{$width}px;
-      max-width: #{$width}px;
-      height: #{$height}px;
-    }
+    //@include media-breakpoint-down(xxl){
+    //  $width: 140;
+    //  $height: 70;
+    //  width: #{$width}px;
+    //  flex: 0 0 #{$width}px;
+    //  max-width: #{$width}px;
+    //  height: #{$height}px;
+    //}
     &__box {
       display: block;
       position: relative;
@@ -41,6 +27,8 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      border: 1px dashed #B1B1B1;
+      box-shadow: 0px 3px 11px rgba(216, 216, 216, 0.6);
 
       &__wrapper {
         position: absolute;
@@ -66,7 +54,7 @@
       &.error-logo {
         background: white !important;
 
-        .orgs__col__box__wrapper {
+        .orgs-show__logo__box__wrapper {
           top: 0;
           left: 0;
           right: 0;
@@ -76,6 +64,3 @@
     }
   }
 }
-
-@import "./edit";
-@import "./show";

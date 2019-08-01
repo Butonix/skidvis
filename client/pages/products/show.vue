@@ -167,6 +167,7 @@ export default {
           }
         })
         res = {
+          ...res,
           ...data
         }
       } catch (e) {
@@ -222,9 +223,9 @@ export default {
       console.log(this.coords)
     },
     async fetchProduct () {
-      if (this.product.id && this.city.id) {
+      if (this.productId && this.city.id) {
         try {
-          let { data } = await axios.get(`products/${this.product.id}`, {
+          let { data } = await axios.get(`products/${this.productId}`, {
             params: {
               city_id: this.city.id
             }
