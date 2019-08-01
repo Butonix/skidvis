@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <form v-if="form" class="organizations-edit"
+    <form v-if="form" class="orgs-edit"
           @submit.prevent @keydown="form.onKeydown($event)">
       <full-slider
         v-if="images"
@@ -40,7 +40,7 @@
             </div>
           </no-ssr>
           <div class="row justify-content-center">
-            <div class="col-lg-8 organizations-edit__editor">
+            <div class="col-lg-8 orgs-edit__editor">
 
               <div class="row mt-xl-3">
                 <div class="col">
@@ -48,13 +48,13 @@
                   <div
                     class="row">
                     <div class="col-sm">
-                      <div class="organizations-edit__logo">
+                      <div class="orgs-edit__logo">
                         <div class="text-center small pb-2">
                           Логотип организации
                         </div>
                         <div
                           :style="{color:form.logo.color || '#ffffff'}"
-                          class="organizations-edit__logo-file-input">
+                          class="orgs-edit__logo-file-input">
                           <logo-file-input
                             :src="logo"
                             :loading="logoLoading"
@@ -116,7 +116,7 @@
       </div>
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-8 organizations-edit__editor">
+          <div class="col-lg-8 orgs-edit__editor">
             <material-textarea
               v-model="form.description"
               :form="form"
@@ -468,7 +468,7 @@ export default {
 </script>
 
 <style>
-  .organizations-edit__logo-file-input .picture-preview{
+  .orgs-edit__logo-file-input .picture-preview{
     background-color: currentColor!important;
   }
 </style>

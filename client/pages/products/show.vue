@@ -110,12 +110,15 @@
       <no-ssr>
         <yandex-map
           :coords="coords"
+          :zoom="zoom"
           @click="onClick"
         >
           <ymap-marker
-            :coords="coords"
-            marker-id="123"
+            :coords="[57.906280040815496, 60.089627381835875]"
+            marker-id="1"
             hint-content="some hint"
+            marker-type="Placemark"
+            content="some content here"
           />
         </yandex-map>
       </no-ssr>
@@ -125,7 +128,7 @@
 </template>
 
 <script>
-// import { sortBy } from 'lodash'
+import { mapGetters } from 'vuex'
 import Fuse from 'fuse.js'
 import axios from 'axios'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
@@ -151,13 +154,18 @@ export default {
   },
   asyncData: async ({ params, error, app }) => {
     let productId = params.productId
+    let city = app.store.getters['auth/city']
     let res = {
       productId
     }
 
     if (productId) {
       try {
-        let { data } = await axios.get(`products/${productId}`)
+        let { data } = await axios.get(`products/${productId}`, {
+          params: {
+            city_id: city.id
+          }
+        })
         res = {
           ...data
         }
@@ -171,23 +179,26 @@ export default {
     return res
   },
   data: () => ({
-    coords: [54, 39],
-    settings: {
-      apiKey: '',
-      lang: 'ru_RU',
-      coordorder: 'latlong',
-      version: '2.1'
-    },
+    coords: [57.907605, 59.972211],
+    zoom: 10,
     tab: 'circs',
     search: '',
     fusePoints: null
   }),
   computed: {
+    ...mapGetters({
+      city: 'auth/city'
+    }),
     getOperationModeText () {
       return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
     },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
+    }
+  },
+  watch: {
+    'city': function (v) {
+      this.fetchProduct()
     }
   },
   async beforeMount () {
@@ -209,6 +220,22 @@ export default {
     onClick (e) {
       this.coords = e.get('coords')
       console.log(this.coords)
+    },
+    async fetchProduct () {
+      if (this.product.id && this.city.id) {
+        try {
+          let { data } = await axios.get(`products/${this.product.id}`, {
+            params: {
+              city_id: this.city.id
+            }
+          })
+          this.$set(this, 'product', data.product)
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        console.log('error 404')
+      }
     }
   }
 }

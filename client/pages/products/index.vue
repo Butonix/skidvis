@@ -26,7 +26,7 @@
       <div class="row">
         <div
           v-for="(item, index) in items"
-          v-if="items[0]"
+          v-if="items.length"
           :key="index"
           class="col-md-6 col-lg-4 mb-5"
         >
@@ -122,7 +122,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
+        <div v-else class="col-12">
           <h5 class="text-center py-5">
             Ничего не нашлось :(
           </h5>
