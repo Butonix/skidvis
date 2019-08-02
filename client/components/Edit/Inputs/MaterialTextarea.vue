@@ -68,7 +68,7 @@ export default {
       type: String,
       default: '',
       validator: function (value) {
-        return ['', 'inline'].indexOf(value) !== -1
+        return ['', 'inline', 'review'].indexOf(value) !== -1
       }
     },
     name: {
@@ -99,7 +99,8 @@ export default {
   data: () => ({
     typesInput: {
       '': '',
-      'inline': 'material-input--inline'
+      'inline': 'material-input--inline',
+      'review': 'material-input--review'
     }
   }),
   computed: {

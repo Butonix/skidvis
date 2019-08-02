@@ -153,6 +153,30 @@
       padding-right: 0;
     }
   }
+  &--review{
+    margin: 2px 0 0 0;
+    textarea, input{
+      background: #FFFFFF;
+      border: 1px solid rgba(216, 216, 216, 0.7);
+      border-radius: 15px;
+      padding: 10px 14px;
+      transition: .2s;
+      width: 100%;
+      color: $body-color;
+      caret-color: $primary;
+      &:focus{
+        border-color: $primary;
+        box-shadow: 0 0 0 0.1rem rgba($primary, 0.5);
+      }
+      ~{
+        label{
+          color: #8C8C8C;
+          font-weight: 400;
+          padding: 12px 14px;
+        }
+      }
+    }
+  }
   &--sm{
     textarea{
       padding: 15px;

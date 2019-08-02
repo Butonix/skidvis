@@ -1,0 +1,14 @@
+.avatar{
+  $width: 36;
+  width: rem($width);
+  min-width: rem($width);
+  flex-basis: rem($width);
+  height: rem($width);
+  font-weight: 600;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #38BEF0;
+  border-radius: 50%;
+}

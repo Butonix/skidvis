@@ -1,5 +1,5 @@
 <template>
-  <div class="orgs-show" v-if="organization">
+  <div v-if="organization" class="orgs-show">
     <full-slider
       v-if="organization.images"
       :images="organization.images"
@@ -39,7 +39,7 @@
           </div>
         </div>
       </div>
-      <div class="">
+      <div class="mb-5">
         <h5 class="text-black text-center mb-5" v-text="organization.name"/>
         <div class="d-flex justify-content-center align-items-center mb-4 pb-2">
           <star-rating
@@ -53,20 +53,60 @@
         <div class="text-center br--sm mx-auto" style="max-width: 750px" v-html="(organization.description)?organization.description.replaceAll('\n', '<br>'):''"/>
 
       </div>
-      <div class="font-weight-bolder">
-        Из {{ organization.points_count }} точек в {{ organization.points_with_products_count }} действуют акции
+      <div
+        v-if="products.data.length"
+        class="my-5">
+        <div class="font-weight-bolder text-center">
+          Из {{ organization.points_count }} точек в {{ organization.points_with_products_count }} действуют акции
+        </div>
+      </div>
+    </div>
+    <products
+      v-if="products.data.length"
+      :items="products.data"
+      :page-count="pageProductsCount"
+      :page="products.current_page"
+      @setpage="products.current_page = $event"
+    />
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-xl-8 mb-4">
+          <div class="mb-4">
+            <h5>Отзывы и рейтинг</h5>
+          </div>
+          <review-edit
+            v-if="check"
+            :form="review.form"
+            :user="user"
+            field-rating="rating"
+            field-content="text"
+            @setrating="review.form.rating = $event"
+            @inputcomment="review.form.text = $event"
+            @send="sendReview"
+          />
+          <review
+            v-for="(review, index) in reviews.data"
+            :key="index"
+            :review="review"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Form from 'vform'
 import axios from 'axios'
 
 export default {
   components: {
+    'Products': () => import('~/components/Products'),
     'StarRating': () => import('~/components/StarRating'),
     'FullSlider': () => import('~/components/FullSlider'),
+    'Review': () => import('~/components/Review'),
+    'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SocialLinks': () => import('~/components/Edit/SocialLinks')
   },
   head () {
@@ -99,6 +139,42 @@ export default {
 
     return res
   },
+  data: () => ({
+    review: {
+      form: new Form({
+        text: '',
+        rating: 0
+      })
+    }
+  }),
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+      check: 'auth/check'
+    }),
+    pageProductsCount () {
+      return (this.products && this.products.total) ? Math.ceil(this.products.total / this.products.per_page) : 0
+    }
+  },
+  methods: {
+    async sendReview () {
+      try {
+        const { data } = await this.review.form.post(`organizations/${this.organizationId}/reviews`)
+        console.log(data)
+        this.review.form.reset()
+
+        await this.$callToast({
+          type: 'success',
+          text: 'Отзыв успешно сохранен'
+        })
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Отправить отзыв не удалось'
+        })
+      }
+    }
+  }
 }
 </script>
 
