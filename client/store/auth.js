@@ -202,7 +202,6 @@ export const actions = {
         newData,
         data
       })
-      console.log(data)
     } catch (e) {
       Cookies.remove('token')
 

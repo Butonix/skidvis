@@ -83,7 +83,7 @@
                 v-lazy="form.organization_logo || '/placeholders/logo.svg'"
                 :alt="form.name"
                 :title="form.name"
-                src=" /placeholders/96x35-1920x700.gif"
+                src="/placeholders/96x35-1920x700.gif"
               >
             </div>
             <div class="h1 flex-grow-1 product__name ff-montserrat">

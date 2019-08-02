@@ -1,0 +1,49 @@
+.star{
+  display: inline-block;
+  &--1{
+    .star-path{
+      fill: transparent;
+    }
+  }
+  &--2{
+    .star-path{
+      fill: $blog;
+    }
+  }
+  &--3{
+    .star-path--3{
+      fill: $blog;
+    }
+  }
+  &.active{
+    .star-path{
+      fill: $blog;
+    }
+    .star-path--3{
+      fill: transparent;
+    }
+  }
+}
+.star-path{
+  stroke: $blog;
+  fill: transparent;
+  transition: .1s;
+  &--3{
+    fill: transparent;
+    transition: .1s;
+  }
+}
+.star-range{
+  display: flex;
+  .star{
+    user-select: none;
+    margin-left: .25rem;
+    margin-right: .25rem;
+  }
+  &.edit{
+    .star{
+      cursor: pointer;
+    }
+  }
+
+}

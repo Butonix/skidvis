@@ -21,7 +21,7 @@
                 v-lazy="product.organization_logo || '/placeholders/logo.svg'"
                 :alt="product.name"
                 :title="product.name"
-                src=" /placeholders/96x35-1920x700.gif"
+                src="/placeholders/96x35-1920x700.gif"
               >
             </div>
             <h1 class="flex-grow-1 product__name ff-montserrat" v-html="product.name"/>
