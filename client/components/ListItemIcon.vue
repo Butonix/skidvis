@@ -2,7 +2,8 @@
   <div :class="{
          [classBox]:!!classBox,
        }"
-       class="list-item-icon">
+       class="list-item-icon"
+       @click="$emit('click', $event)">
     <div class="list-item-icon__icon">
       <slot name="icon"/>
     </div>

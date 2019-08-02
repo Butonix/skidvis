@@ -14,9 +14,9 @@
           Акция действует
           <div v-html="timeHuman"/>
           <div class="mb-2">
-          <span class="text-primary link-dashed">
-            Кроме адресов
-          </span>
+            <span class="text-primary link-dashed">
+              Кроме адресов
+            </span>
           </div>
         </template>
       </template>
@@ -37,7 +37,7 @@
         <percent />
       </template>
       <template slot="text">
-        <span class="text-line-through text-muted">{{ getFullPrice }}&nbsp;₽</span> <span v-html="getPrice"></span>
+        <span class="text-line-through text-muted">{{ getFullPrice }}&nbsp;₽</span> <span v-html="getPrice"/>
       </template>
     </list-item-icon>
 
@@ -60,10 +60,10 @@
 
     <list-item-icon class-box="mb-4">
       <template slot="icon">
-        <flag class-box="ml-1" />
+        <flag :active="wishlistActive" class-box="ml-1" @click="$emit('wishlistchange')" />
       </template>
       <template slot="text">
-        В закладки
+        <span class="cursor-pointer no-select" @click="$emit('wishlistchange')" v-text="(wishlistActive)?'В закладках':'В закладки'"/>
       </template>
     </list-item-icon>
 
@@ -102,6 +102,10 @@ export default {
     Percent
   },
   props: {
+    wishlistActive: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: String | Number,
       default: ''
@@ -153,7 +157,7 @@ export default {
       '10': 'октября',
       '11': 'ноября',
       '12': 'декабря'
-    },
+    }
   }),
   computed: {
     getPrice () {

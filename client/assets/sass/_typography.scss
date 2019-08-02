@@ -209,3 +209,6 @@ body {
 .invalid-feedback{
   display: block;
 }
+.no-select{
+  user-select: none;
+}

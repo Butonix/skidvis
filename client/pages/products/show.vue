@@ -2,7 +2,7 @@
   <div>
     <breadcrumbs/>
     <div v-if="product" class="container">
-      <div class="row">
+      <div class="row mb-4">
         <div class="product__content">
 
           <div class="order-2 order-lg-1 product__slider mb-3">
@@ -38,6 +38,7 @@
           </div>
 
           <sidebar
+            :wishlist-active="wishlist.indexOf(productId) !== -1"
             :socials="product.socials"
             :value="product.value"
             :currency-id="product.currency_id"
@@ -47,6 +48,7 @@
             :operation-mode-text="getOperationModeText"
             box-class="order-4 order-lg-4 mb-4 mt-2"
             box-mod="center"
+            @wishlistchange="wishListChange"
           />
 
           <div
@@ -97,6 +99,7 @@
 
         </div>
         <sidebar
+          :wishlist-active="wishlist.indexOf(productId) !== -1"
           :socials="product.socials"
           :value="product.value"
           :currency-id="product.currency_id"
@@ -105,20 +108,22 @@
           :end-at="product.end_at"
           :operation-mode-text="getOperationModeText"
           box-mod="right"
+          @wishlistchange="wishListChange"
         />
       </div>
       <no-ssr>
         <yandex-map
-          :coords="coords"
+          v-if="getCoords"
+          :coords="getCoords"
           :zoom="zoom"
           @click="onClick"
         >
           <ymap-marker
-            :coords="[57.906280040815496, 60.089627381835875]"
-            marker-id="1"
-            hint-content="some hint"
-            marker-type="Placemark"
-            content="some content here"
+            v-for="(point, key) in getPoints"
+            :key="key"
+            :coords="[point.latitude, point.longitude]"
+            :marker-id="key"
+            :hint-content="point.name"
           />
         </yandex-map>
       </no-ssr>
@@ -128,7 +133,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Fuse from 'fuse.js'
 import axios from 'axios'
 import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
@@ -160,6 +165,7 @@ export default {
     }
 
     if (productId) {
+      res.productId = Number(productId)
       try {
         let { data } = await axios.get(`products/${productId}`, {
           params: {
@@ -180,7 +186,6 @@ export default {
     return res
   },
   data: () => ({
-    coords: [57.907605, 59.972211],
     zoom: 10,
     tab: 'circs',
     search: '',
@@ -188,8 +193,16 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
+    getCoords () {
+      let res = null
+      if (this.city && this.city.latitude && this.city.longitude) {
+        res = [this.city.latitude, this.city.longitude]
+      }
+      return res
+    },
     getOperationModeText () {
       return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
     },
@@ -204,6 +217,15 @@ export default {
   },
   async beforeMount () {
     if (!(this.product.points instanceof Fuse)) {
+      this.addPointsToSearchArray()
+    }
+  },
+  methods: {
+    ...mapActions({
+      pushInWishlist: 'auth/pushInWishlist',
+      removeFromWishlist: 'auth/removeFromWishlist'
+    }),
+    addPointsToSearchArray () {
       this.fusePoints = new Fuse(this.product.points, {
         shouldSort: true,
         threshold: 0.6,
@@ -215,12 +237,17 @@ export default {
           'name', 'full_street'
         ]
       })
-    }
-  },
-  methods: {
-    onClick (e) {
+    },
+    async onClick (e) {
       this.coords = e.get('coords')
       console.log(this.coords)
+    },
+    wishListChange (e) {
+      if (this.wishlist.indexOf(this.productId) !== -1) {
+        this.removeFromWishlist(this.productId)
+      } else {
+        this.pushInWishlist(this.productId)
+      }
     },
     async fetchProduct () {
       if (this.productId && this.city.id) {
@@ -231,6 +258,9 @@ export default {
             }
           })
           this.$set(this, 'product', data.product)
+          this.search = ''
+          this.zoom = 10
+          this.addPointsToSearchArray()
         } catch (e) {
           console.log(e)
         }
