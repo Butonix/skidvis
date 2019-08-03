@@ -41,3 +41,30 @@
     }
   }
 }
+
+
+.navbar-fixed{
+  .navbar{
+    .wish-list {
+      &__flag {
+        svg {
+          path {
+            stroke: white;
+            @include media-breakpoint-down(md) {
+              stroke: #000000;
+            }
+          }
+        }
+        &.active {
+          color: $blog;
+          svg {
+            path {
+              stroke: $blog;
+              fill: $blog;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -57,6 +57,7 @@
                    class="card-footer__address__wrapper"
               >
                 <div class="card-footer__address__text"
+                     :style="{'opacity':((activeAddresses === item.id)?0:1)}"
                      v-text="(item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):''"
                 />
               </div>
@@ -80,14 +81,13 @@
               v-if="item.points[1]"
               :class="{'active': activeAddresses === item.id}"
               :style="{
-                maxHeight: (activeAddresses === item.id)? (3 + 2.5 * (item.points.length - 1)) + 'rem': '3rem'
+                maxHeight: (activeAddresses === item.id)? (3 + 2.5 * (item.points.length)) + 'rem': '3rem'
               }"
               class="card-footer__list-address__wrapper"
             >
               <ul class="card-footer__list-address list-unstyled text-muted">
                 <li
                   v-for="(point, index) in item.points"
-                  v-if="index !== 0"
                   :key="'list-address__item-'+index"
                   :title="(point.street)?point.street:point.full_street"
                   class="card-footer__list-address__item"

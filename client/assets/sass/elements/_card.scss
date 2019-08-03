@@ -318,6 +318,7 @@
         &__text{
           white-space: nowrap;
           overflow: hidden;
+          transition: .2s;
         }
         &__btn{
           position: absolute;
