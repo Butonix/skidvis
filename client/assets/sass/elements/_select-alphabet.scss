@@ -9,6 +9,7 @@
 .select-ab {
   display: inline-block;
   position: relative;
+  color: $body-color;
   &__chevron{
     display: inline-block;
     transition: .2s;

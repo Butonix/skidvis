@@ -113,7 +113,7 @@ export default {
     return {
       title: 'Организация',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default navbar-fixed'
       }
     }
   },
@@ -121,6 +121,12 @@ export default {
     let organizationId = params.organizationId
     let res = {
       organizationId,
+      review: {
+        form: {
+          text: '',
+          rating: 0
+        }
+      },
       organization: null
     }
 
@@ -136,17 +142,12 @@ export default {
         error({ statusCode: 404, message: 'Organization not found' })
       }
     }
-
+    if (res.organization.rating_user) {
+      res.review.form.rating = res.organization.rating_user
+    }
     return res
   },
-  data: () => ({
-    review: {
-      form: new Form({
-        text: '',
-        rating: 0
-      })
-    }
-  }),
+  data: () => ({}),
   computed: {
     ...mapGetters({
       user: 'auth/user',
@@ -156,12 +157,29 @@ export default {
       return (this.products && this.products.total) ? Math.ceil(this.products.total / this.products.per_page) : 0
     }
   },
+  beforeMount () {
+    if (!(this.review.form instanceof Form)) {
+      this.review.form = new Form(this.review.form)
+    }
+  },
   methods: {
+    setDefaultReviewForm ({ rating = 0, text = '' }) {
+      this.review.form = new Form({
+        text: text,
+        rating: rating
+      })
+    },
     async sendReview () {
       try {
         const { data } = await this.review.form.post(`organizations/${this.organizationId}/reviews`)
-        console.log(data)
-        this.review.form.reset()
+
+        if (data.review) {
+          this.setDefaultReviewForm({
+            rating: data.review.rating
+          })
+          this.reviews.data.unshift(data.review)
+          this.reviews.total += 1
+        }
 
         await this.$callToast({
           type: 'success',

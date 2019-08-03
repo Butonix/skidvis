@@ -166,7 +166,29 @@
   }
 }
 
+.navbar-fixed{
+  .navbar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: white;
 
+    &__brand {
+      color: white !important;
+    }
+    &__full-logo{
+      .char{
+        fill: white;
+      }
+    }
+    .nav {
+      &-link {
+        color: white;
+      }
+    }
+  }
+}
 
 
 

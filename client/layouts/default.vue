@@ -1,6 +1,6 @@
 <template>
   <div :class="{'page-loaded': loaded}" class="layout">
-    <main>
+    <main class="position-relative">
       <navbar/>
       <nuxt/>
     </main>

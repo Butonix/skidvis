@@ -77,9 +77,9 @@
               >
                 Войти
               </button>
-              <button class="btn btn-outline-primary btn-auth btn-auth--active d-inline-block d-xl-none"
+              <button class="btn btn-outline-primary btn-auth btn-auth--active btn-auth--sign-in d-inline-block d-xl-none"
                       @click="showModalLogin">
-                <fa icon="sign-in-alt" style="font-size: 1.8rem; top: .3rem; position: relative;"/>
+                <sign-in-icon styled="font-size: 1.8rem; top: .3rem; position: relative;"/>
               </button>
             </template>
           </div>
@@ -100,6 +100,7 @@ export default {
     'vSelect': () => import('vue-select'),
     'Flag': () => import('~/components/Navbar/Flag'),
     'ModalLogin': () => import('~/components/ModalLogin'),
+    'SignInIcon': () => import('~/components/Icons/SignInIcon'),
     'FullLogo': () => import('~/components/Navbar/FullLogo')
   },
 

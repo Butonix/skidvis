@@ -19,6 +19,11 @@
     height: $width;
     line-height: rem(51 - 3);
   }
+  &--sign-in{
+    &:not(:hover), &:not(:active), &:not(.active){
+      border-color: transparent!important;
+    }
+  }
   img{
     position: absolute;
     left: 0;

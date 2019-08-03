@@ -1,21 +1,12 @@
 <template>
   <div class="review review--edit">
     <div class="review-header">
-      <div class="d-flex align-items-center justify-content-start">
-        <avatar
-          :user="user"
-        />
-        <div v-if="user.f_name && user.l_name" class="pl-2 ml-1 font-weight-bolder" v-text="user.f_name + ' ' + user.l_name.trim().charAt(0).toUpperCase() + '.'"/>
-        <div v-else-if="user.f_name && user.m_name" class="pl-2 ml-1 font-weight-bolder" v-text="user.f_name + ' ' + user.m_name.trim().charAt(0).toUpperCase() + '.'"/>
-        <div v-else-if="user.f_name" class="pl-2 ml-1 font-weight-bolder" v-text="user.f_name"/>
-        <div v-else-if="user.email" class="pl-2 ml-1 font-weight-bolder" v-text="user.email"/>
-        <div v-else class="pl-2 ml-1 font-weight-bolder" v-text="'АК'"/>
-      </div>
+      <avatar-with-name
+        :user="user"
+      />
 
-      <div class="d-flex align-items-center justify-content-end">
-        <div class="h6 text-muted pr-2 mr-1">
-          Поставить оценку
-        </div>
+      <div class="d-flex align-items-center justify-content-start justify-content-md-end pt-3 pt-xs-0">
+        <div class="h6 text-muted pr-2 mr-1 d-none d-md-block" v-text="form[fieldRating]?'Ваша оценка':'Поставить оценку'"/>
 
         <star-rating
           :edit="true"
@@ -54,7 +45,7 @@
 export default {
   components: {
     'StarRating': () => import('~/components/StarRating'),
-    'Avatar': () => import('~/components/Avatar'),
+    'AvatarWithName': () => import('~/components/AvatarWithName'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea')
   },
   props: {

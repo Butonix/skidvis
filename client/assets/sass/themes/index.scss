@@ -128,6 +128,11 @@
           }
         }
 
+        .nav-burger{
+          &:before, &:after{
+            background: $primary_;
+          }
+        }
 
       }
 
@@ -145,6 +150,16 @@
       .nav-link--#{$theme}{
         @include hover {
           color: $primary_;
+        }
+      }
+
+      .navbar-fixed{
+        .navbar{
+          .nav-link--#{$theme}{
+            @include hover {
+              color: $primary_;
+            }
+          }
         }
       }
 

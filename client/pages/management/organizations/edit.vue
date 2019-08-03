@@ -1,24 +1,5 @@
 <template>
   <div>
-    <div class="container">
-      <div class="row">
-        <breadcrumbs box-class="col-12 col-lg order-2 order-lg-1"/>
-        <div v-if="organizationId" class="col-12 col-lg-auto h-100 order-1 order-lg-2">
-          <div class="d-flex align-items-center h-100">
-            <router-link
-              :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
-              class="btn btn-gray btn-sm px-4 mr-2">
-              <span class="px-2">Точки</span>
-            </router-link>
-            <router-link
-              :to="{ name: 'management.organizations.products.index', params: { organizationId } }"
-              class="btn btn-gray btn-sm px-4">
-              <span class="px-2">Акции</span>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </div>
     <form v-if="form" class="orgs-edit"
           @submit.prevent @keydown="form.onKeydown($event)">
       <full-slider
@@ -204,6 +185,21 @@
         </div>
       </div>
     </form>
+
+    <div v-if="organizationId" class="container pt-5">
+      <div class="d-flex align-items-center justify-content-center h-100">
+        <router-link
+          :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
+          class="btn btn-gray btn-sm px-4 mr-2">
+          <span class="px-2">Точки</span>
+        </router-link>
+        <router-link
+          :to="{ name: 'management.organizations.products.index', params: { organizationId } }"
+          class="btn btn-gray btn-sm px-4">
+          <span class="px-2">Акции</span>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -227,7 +223,7 @@ export default {
     return {
       title: 'Редактирование организации',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-business navbar-fixed'
       }
     }
   },
