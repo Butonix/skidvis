@@ -139,6 +139,34 @@
       </no-ssr>
 
     </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 col-xl-8 mb-4">
+          <div class="mb-4">
+            <h5>Отзывы и рейтинг</h5>
+          </div>
+          <review-edit
+            v-if="check"
+            :form="review.form"
+            :user="user"
+            field-pros="pros"
+            field-cons="cons"
+            field-content="text"
+            @inputpros="review.form.pros = $event"
+            @inputcons="review.form.cons = $event"
+            @inputcomment="review.form.text = $event"
+            @send="sendReview"
+          />
+          <review
+            v-for="(review, index) in reviews.data"
+            :key="index"
+            :review="review"
+          />
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -150,9 +178,12 @@ import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/Sidebar'
+import Form from 'vform'
 
 export default {
   components: {
+    'Review': () => import('~/components/Review'),
+    'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SearchInput': () => import('~/components/SearchInput'),
     DynamicLabelInput,
     AddressesFrame,
@@ -171,7 +202,14 @@ export default {
     let productId = params.productId
     let city = app.store.getters['auth/city']
     let res = {
-      productId
+      productId,
+      review: {
+        form: {
+          text: '',
+          pros: '',
+          cons: ''
+        }
+      }
     }
 
     if (productId) {
@@ -204,6 +242,8 @@ export default {
   computed: {
     ...mapGetters({
       wishlist: 'auth/wishlist',
+      check: 'auth/check',
+      user: 'auth/user',
       city: 'auth/city'
     }),
     getCoords () {
@@ -228,6 +268,9 @@ export default {
   async beforeMount () {
     if (!(this.product.points instanceof Fuse)) {
       this.addPointsToSearchArray()
+    }
+    if (!(this.review.form instanceof Form)) {
+      this.review.form = new Form(this.review.form)
     }
   },
   methods: {
@@ -285,6 +328,35 @@ export default {
         }
       } else {
         console.log('error 404')
+      }
+    },
+    setDefaultReviewForm ({ cons = '', pros = '', text = '' }) {
+      this.review.form = new Form({
+        text: text,
+        pros: pros,
+        cons: cons
+      })
+    },
+    async sendReview () {
+      try {
+        const { data } = await this.review.form.post(`products/${this.productId}/reviews`)
+
+        if (data.review) {
+          this.reviews.data.unshift(data.review)
+          this.reviews.total += 1
+        }
+
+        this.setDefaultReviewForm()
+
+        await this.$callToast({
+          type: 'success',
+          text: 'Отзыв успешно сохранен'
+        })
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Отправить отзыв не удалось'
+        })
       }
     }
   }

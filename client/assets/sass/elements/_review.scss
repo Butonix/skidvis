@@ -15,7 +15,7 @@
   }
   &-body{
     padding: 12px 12px 22px;
-    &__field{
+    &__desc{
       @include media-breakpoint-down(sm){
         margin-bottom: 12px;
       }

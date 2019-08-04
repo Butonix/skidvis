@@ -179,6 +179,10 @@ export default {
           })
           this.reviews.data.unshift(data.review)
           this.reviews.total += 1
+        } else {
+          this.setDefaultReviewForm({
+            rating: this.review.form.rating
+          })
         }
 
         await this.$callToast({

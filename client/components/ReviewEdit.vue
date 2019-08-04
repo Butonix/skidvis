@@ -5,7 +5,7 @@
         :user="user"
       />
 
-      <div class="d-flex align-items-center justify-content-start justify-content-md-end pt-3 pt-xs-0">
+      <div v-if="fieldRating" class="d-flex align-items-center justify-content-start justify-content-md-end pt-3 pt-xs-0">
         <div class="h6 text-muted pr-2 mr-1 d-none d-md-block" v-text="form[fieldRating]?'Ваша оценка':'Поставить оценку'"/>
 
         <star-rating
@@ -17,17 +17,51 @@
 
     </div>
     <div class="review-body">
-      <div class="review-body__field">
+      <div class="review-body__desc">
         <material-textarea
           :value="form[fieldContent]"
           :form="form"
           :rows="1"
+          :field="fieldContent"
           type-input="review"
-          field="fieldContent"
           placeholder="Написать отзыв..."
           form-class=""
           @input="$emit('inputcomment', $event)"
         />
+        <div v-if="fieldPros" class="row no-gutters mb-3 mt-4">
+          <div class="col-auto d-flex align-items-center px-2 pb-2">
+            <plus-bold class="mx-1" style="color: #049F5C"/>
+          </div>
+          <div class="col">
+            <material-textarea
+              :value="form[fieldPros]"
+              :form="form"
+              :rows="1"
+              :field="fieldPros"
+              type-input="review"
+              placeholder="Плюсы..."
+              form-class=""
+              @input="$emit('inputpros', $event)"
+            />
+          </div>
+        </div>
+        <div v-if="fieldCons" class="row no-gutters">
+          <div class="col-auto d-flex align-items-center px-2 pb-2">
+            <minus-bold class="mx-1" style="color: #FF2E2E"/>
+          </div>
+          <div class="col">
+            <material-textarea
+              :value="form[fieldCons]"
+              :form="form"
+              :rows="1"
+              :field="fieldCons"
+              type-input="review"
+              placeholder="Минусы..."
+              form-class=""
+              @input="$emit('inputcons', $event)"
+            />
+          </div>
+        </div>
       </div>
       <div class="review-body__btn">
         <div class="btn btn-outline-primary"
@@ -44,6 +78,8 @@
 
 export default {
   components: {
+    'PlusBold': () => import('~/components/Icons/PlusBold'),
+    'MinusBold': () => import('~/components/Icons/MinusBold'),
     'StarRating': () => import('~/components/StarRating'),
     'AvatarWithName': () => import('~/components/AvatarWithName'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea')
@@ -51,7 +87,15 @@ export default {
   props: {
     fieldRating: {
       type: String,
-      required: true
+      default: null
+    },
+    fieldPros: {
+      type: String,
+      default: null
+    },
+    fieldCons: {
+      type: String,
+      default: null
     },
     fieldContent: {
       type: String,
