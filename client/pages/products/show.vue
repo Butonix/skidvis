@@ -122,6 +122,20 @@
           <ymap-marker
             v-for="(point, key) in getPoints"
             :key="key"
+            :properties="{
+              iconCaption: point.name
+            }"
+            :icon="{
+              layout: 'default#imageWithContent',
+              imageHref: '/img/map/icon.svg',
+              imageSize: [34, 47],
+              imageOffset: [0, 0],
+              contentOffset: [0, 15],
+              contentLayout: (product.categories[0]
+                && product.categories[0].images.default
+              && product.categories[0].images.default.active)?`<div><img src='${product.categories[0].images.default.active}'></div>`:''
+            }"
+            :balloon-template="balloonTemplatePoint(point)"
             :coords="[point.latitude, point.longitude]"
             :marker-id="key"
             :hint-content="point.name"
@@ -250,6 +264,12 @@ export default {
     },
     async clickMarker (e, point, key) {
       console.log(e, point, key)
+    },
+    balloonTemplatePoint (point) {
+      return `
+        <h5>${point.name}</h5>
+        <p>${point.full_street}</p>
+      `
     },
     wishListChange (e) {
       if (this.wishlist.indexOf(this.productId) !== -1) {
