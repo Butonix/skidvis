@@ -21,73 +21,79 @@
           </router-link>
           <router-link :to="{ name: 'management.organizations.products.create', params: { organizationId } }" class="card--empty d-none d-md-flex"/>
         </div>
-        <div
+
+        <transition
           v-for="(item, index) in items"
           :key="index"
-          class="col-md-6 col-lg-4 mb-5"
+          name="fade" mode="out-in"
         >
-          <div class="card card--product w-100 h-100">
-            <router-link :to="{ name: 'products.show', params: { productId: item.id } }"
-                         :class="{
-                           'with-logo':item.organization_logo,
-                           'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
-                           'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
-                         }"
-                         class="card-img-top d-block" >
-              <div v-if="!item.is_published" class="card-img-top__message">
-                <div>
-                  Не опубликован
+          <div
+            class="col-md-6 col-lg-4 mb-5"
+          >
+            <div class="card card--product w-100 h-100">
+              <router-link :to="{ name: 'products.show', params: { productId: item.id } }"
+                           :class="{
+                             'with-logo':item.organization_logo,
+                             'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
+                             'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
+                           }"
+                           class="card-img-top d-block" >
+                <div v-if="!item.is_published" class="card-img-top__message">
+                  <div>
+                    Не опубликован
+                  </div>
                 </div>
-              </div>
-              <div v-if="item.currency_id && item.value" class="card-img-top__label">
-                {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
-              </div>
-              <div class="embed-responsive">
-                <div class="embed-responsive-item">
-
-                  <div
-                    v-lazy:background-image="{
-                      src: item.images[0].src,
-                      loading: '/placeholders/cover.jpg'
-                    }"
-                    v-if="item.images && item.images[0] && item.images[0].src"
-                    data-loading="/placeholders/cover.jpg"
-                    class="card-img-top__cover bg-cover"
-                    role="img"/>
-                  <div
-                    v-else :style="{backgroundImage: '/placeholders/cover.jpg'}"
-                    class="card-img-top__cover img-cover"
-                    role="img"/>
-
-                  <card-logo
-                    v-if="item.organization_logo"
-                    :img="item.organization_logo"
-                    :color="item.organization_color"
-                    :title="item.name"
-                    :alt="item.name"
-                    :id="item.id"
-                  />
+                <div v-if="item.currency_id && item.value" class="card-img-top__label">
+                  {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
                 </div>
-              </div>
-            </router-link>
-            <label class="card-body pb-2 pt-4" v-html="(item.short_description)?item.short_description.replaceAll('\n', '<br>'):''"/>
-            <div class="card-buttons mt-auto text-nowrap">
-              <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
-                <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
+                <div class="embed-responsive">
+                  <div class="embed-responsive-item">
+
+                    <div
+                      v-lazy:background-image="{
+                        src: item.images[0].src,
+                        loading: '/placeholders/cover.jpg'
+                      }"
+                      v-if="item.images && item.images[0] && item.images[0].src"
+                      data-loading="/placeholders/cover.jpg"
+                      class="card-img-top__cover bg-cover"
+                      role="img"/>
+                    <div
+                      v-else :style="{backgroundImage: '/placeholders/cover.jpg'}"
+                      class="card-img-top__cover img-cover"
+                      role="img"/>
+
+                    <card-logo
+                      v-if="item.organization_logo"
+                      :img="item.organization_logo"
+                      :color="item.organization_color"
+                      :title="item.name"
+                      :alt="item.name"
+                      :id="item.id"
+                    />
+                  </div>
+                </div>
               </router-link>
-              <div class="card-buttons__controls">
-                <div class="card-buttons__controls__left d-none"><fa :icon="['fas', 'chevron-left']"/></div>
-                <div class="card-buttons__controls__delete"
-                     @click="deleteHandle(item.id)"
-                >
-                  <div class="card-buttons__controls__chevron"/>
-                  <fa :icon="['far', 'trash-alt']"/> Удалить акцию
+              <label class="card-body pb-2 pt-4" v-html="(item.short_description)?item.short_description.replaceAll('\n', '<br>'):''"/>
+              <div class="card-buttons mt-auto text-nowrap">
+                <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
+                  <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
+                </router-link>
+                <div class="card-buttons__controls">
+                  <div class="card-buttons__controls__left d-none"><fa :icon="['fas', 'chevron-left']"/></div>
+                  <div class="card-buttons__controls__delete"
+                       @click="deleteHandle(item.id)"
+                  >
+                    <div class="card-buttons__controls__chevron"/>
+                    <fa :icon="['far', 'trash-alt']"/> Удалить акцию
+                  </div>
+                  <div class="card-buttons__controls__right d-none"><fa :icon="['fas', 'chevron-right']"/></div>
                 </div>
-                <div class="card-buttons__controls__right d-none"><fa :icon="['fas', 'chevron-right']"/></div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
+
       </div>
 
       <paginate

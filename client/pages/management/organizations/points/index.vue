@@ -25,38 +25,54 @@
         </div>
       </div>
     </div>
-    <div v-if="items.length" class="container" style="min-height: 400px">
-      <div v-for="(item, key) in items" :key="key" class="row mb-4">
-        <div class="col-auto text-primary pr-0">
-          <fa icon="map-marker-alt" />
-        </div>
-        <div class="col pl-2">
-          <div class="text-primary">
-            {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
-            <span class="sli sli--edit" @click="onEdit(key)"><fa icon="pencil-alt" /></span>
-            <span class="sli sli--delete" @click="onDelete(key)"><fa :icon="['far', 'trash-alt']"/></span>
-          </div>
-          {{ item.operationModeText }}
-          <div class="font-weight-bolder d-block d-md-none">
-            <div>
-              {{ item.email }}
+
+    <transition
+      v-if="items.length"
+      name="fade" mode="out-in">
+      <div class="container" style="min-height: 400px">
+        <transition
+          v-for="(item, index) in items"
+          :key="index"
+          name="fade" mode="out-in"
+        >
+          <div class="row mb-4">
+            <div class="col-auto text-primary pr-0">
+              <fa icon="map-marker-alt" />
             </div>
-            {{ item.phone }}
+            <div class="col pl-2">
+              <div class="text-primary">
+                {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
+                <span class="sli sli--edit" @click="onEdit(key)"><fa icon="pencil-alt" /></span>
+                <span class="sli sli--delete" @click="onDelete(key)"><fa :icon="['far', 'trash-alt']"/></span>
+              </div>
+              {{ item.operationModeText }}
+              <div class="font-weight-bolder d-block d-md-none">
+                <div>
+                  {{ item.email }}
+                </div>
+                {{ item.phone }}
+              </div>
+            </div>
+            <div class="col-4 font-weight-bolder d-none d-md-block">
+              <div>
+                {{ item.email }}
+              </div>
+              {{ item.phone }}
+            </div>
           </div>
-        </div>
-        <div class="col-4 font-weight-bolder d-none d-md-block">
-          <div>
-            {{ item.email }}
-          </div>
-          {{ item.phone }}
+        </transition>
+      </div>
+    </transition>
+    <transition
+      v-else
+      name="fade" mode="out-in">
+      <div style="min-height: 300px" class="container d-flex align-items-center justify-content-center">
+        <div class="mb-4">
+          Адреса еще не добавлены
         </div>
       </div>
-    </div>
-    <div v-else style="min-height: 300px" class="container d-flex align-items-center justify-content-center">
-      <div class="mb-4">
-        Адреса еще не добавлены
-      </div>
-    </div>
+    </transition>
+
     <div class="container mt-5">
 
       <paginate

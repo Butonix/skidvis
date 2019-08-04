@@ -23,39 +23,47 @@
     </div>
 
     <div class="container orgs__container">
-      <div
+      <transition
         v-if="items.length"
-        class="orgs__row">
+        name="fade" mode="out-in">
         <div
-          v-for="(item, index) in items"
-          :key="index"
-          :title="item.name"
-          class="orgs__col"
-        >
-          <router-link
-            :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
-            :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
-            class="orgs__col__box">
-            <div v-if="(item.logo && item.logo.src)?item.logo.src:null"
-                 class="orgs__col__box__wrapper">
-              <img
-                v-lazy="(item.logo && item.logo.src)?item.logo.src:''"
-                :alt="item.name"
-                :title="item.name"
-                :data-id="item.id"
-                data-type="logo"
-                src="/placeholders/96x35-1920x700.gif"
-              >
+          class="orgs__row">
+          <transition
+            v-for="(item, index) in items"
+            :key="index"
+            name="fade" mode="out-in">
+            <div
+              :title="item.name"
+              class="orgs__col"
+            >
+              <router-link
+                :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
+                :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
+                class="orgs__col__box">
+                <div v-if="(item.logo && item.logo.src)?item.logo.src:null"
+                     class="orgs__col__box__wrapper">
+                  <img
+                    v-lazy="(item.logo && item.logo.src)?item.logo.src:''"
+                    :alt="item.name"
+                    :title="item.name"
+                    :data-id="item.id"
+                    data-type="logo"
+                    src="/placeholders/96x35-1920x700.gif"
+                  >
+                </div>
+                <div v-else class="bg-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
+              </router-link>
             </div>
-            <div v-else class="bg-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
-          </router-link>
+          </transition>
         </div>
-      </div>
-      <div v-else>
+      </transition>
+      <transition
+        v-else
+        name="fade" mode="out-in">
         <h5 class="text-center py-5">
           Ничего не нашлось :(
         </h5>
-      </div>
+      </transition>
 
       <paginate
         v-if="pageCount && pageCount > 1"

@@ -22,70 +22,75 @@
           </router-link>
           <router-link :to="{ name: 'management.organizations.create' }" class="card--empty d-none d-md-flex" />
         </div>
-        <div
+        <transition
           v-for="(item, index) in items"
           :key="index"
-          class="col-md-6 col-lg-4 mb-5"
+          name="fade" mode="out-in"
         >
-          <div class="card w-100 h-100">
-            <router-link
-              :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
-              :class="{
+          <div
+            class="col-md-6 col-lg-4 mb-5"
+          >
+            <div class="card w-100 h-100">
+              <router-link
+                :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
+                :class="{
                 'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
               }"
-              class="card-img-top d-block"
-            >
-              <div v-if="!item.is_published" class="card-img-top__message">
-                <div>
-                  Не опубликован
-                </div>
-              </div>
-              <div class="embed-responsive embed-responsive-1by1">
-                <div class="embed-responsive-item">
-                  <card-logo
-                    :img="(item.logo && item.logo.src)?item.logo.src:undefined"
-                    :color="(item.logo && item.logo.color)?item.logo.color:undefined"
-                    :title="item.name"
-                    :alt="item.name"
-                    :id="item.id"
-                  />
-                </div>
-              </div>
-            </router-link>
-            <div class="card-header border-0 py-0">
-              <div class="text-dark text-center" v-text="item.name" />
-            </div>
-            <div class="card-body pb-3">
-              <div class="d-flex justify-content-around mb-4">
-                <router-link
-                  :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
-                  class="btn btn-gray btn-sm px-4">
-                  <span class="px-2">Точки</span>
-                </router-link>
-                <router-link
-                  :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
-                  class="btn btn-gray btn-sm px-4">
-                  <span class="px-2">Акции</span>
-                </router-link>
-              </div>
-              <p v-if="item.short_description" class="card-text pt-3"
-                 v-html="item.short_description.replaceAll('\n', '<br>')" />
-            </div>
-            <div class="card-buttons mt-auto text-nowrap">
-              <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
-                           class="card-btn card-btn--left text-muted btn btn-outline-secondary">
-                <fa icon="pencil-alt" class="mr-2" />
-                Редактировать
-              </router-link>
-              <div
-                class="card-btn card-btn--right btn btn-outline-danger"
-                @click="deleteHandle(item.id)"
+                class="card-img-top d-block"
               >
-                Удалить
+                <div v-if="!item.is_published" class="card-img-top__message">
+                  <div>
+                    Не опубликован
+                  </div>
+                </div>
+                <div class="embed-responsive embed-responsive-1by1">
+                  <div class="embed-responsive-item">
+                    <card-logo
+                      :img="(item.logo && item.logo.src)?item.logo.src:undefined"
+                      :color="(item.logo && item.logo.color)?item.logo.color:undefined"
+                      :title="item.name"
+                      :alt="item.name"
+                      :id="item.id"
+                    />
+                  </div>
+                </div>
+              </router-link>
+              <div class="card-header border-0 py-0">
+                <div class="text-dark text-center" v-text="item.name" />
+              </div>
+              <div class="card-body pb-3">
+                <div class="d-flex justify-content-around mb-4">
+                  <router-link
+                    :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
+                    class="btn btn-gray btn-sm px-4">
+                    <span class="px-2">Точки</span>
+                  </router-link>
+                  <router-link
+                    :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
+                    class="btn btn-gray btn-sm px-4">
+                    <span class="px-2">Акции</span>
+                  </router-link>
+                </div>
+                <p v-if="item.short_description" class="card-text pt-3"
+                   v-html="item.short_description.replaceAll('\n', '<br>')" />
+              </div>
+              <div class="card-buttons mt-auto text-nowrap">
+                <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
+                             class="card-btn card-btn--left text-muted btn btn-outline-secondary">
+                  <fa icon="pencil-alt" class="mr-2" />
+                  Редактировать
+                </router-link>
+                <div
+                  class="card-btn card-btn--right btn btn-outline-danger"
+                  @click="deleteHandle(item.id)"
+                >
+                  Удалить
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
+
       </div>
 
       <paginate

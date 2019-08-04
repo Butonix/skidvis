@@ -116,6 +116,7 @@
           v-if="getCoords"
           :coords="getCoords"
           :zoom="zoom"
+          :scroll-zoom="false"
           @click="onClick"
         >
           <ymap-marker
@@ -124,6 +125,11 @@
             :coords="[point.latitude, point.longitude]"
             :marker-id="key"
             :hint-content="point.name"
+            :callbacks="{
+              click: function(e) {
+                clickMarker(e, point, key)
+              }
+            }"
           />
         </yandex-map>
       </no-ssr>
@@ -241,6 +247,9 @@ export default {
     async onClick (e) {
       this.coords = e.get('coords')
       console.log(this.coords)
+    },
+    async clickMarker (e, point, key) {
+      console.log(e, point, key)
     },
     wishListChange (e) {
       if (this.wishlist.indexOf(this.productId) !== -1) {
