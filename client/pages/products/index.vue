@@ -6,8 +6,13 @@
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <div class="text-muted small mb-2">
-        Категории
+      <div class="d-flex justify-content-between">
+        <div class="text-muted small mb-2">
+          Категории
+        </div>
+        <div class="text-muted small mb-2 cursor-pointer">
+          Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+        </div>
       </div>
       <categories>
         <category
@@ -41,6 +46,7 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
+    'Chevron': () => import('~/components/Icons/Chevron'),
     'Flag': () => import('~/components/Flag'),
     'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
