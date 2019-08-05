@@ -26,7 +26,10 @@ const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.def
 const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
 
 const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
-const Profile = () => import('~/pages/profile/show').then(m => m.default || m)
+
+const ProfileHome = () => import('~/pages/profile/home').then(m => m.default || m)
+const ProfileShow = () => import('~/pages/profile/show').then(m => m.default || m)
+const ProfileWishlist = () => import('~/pages/profile/wishlist').then(m => m.default || m)
 // const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
@@ -123,8 +126,23 @@ const routes = [
   },
 
   { path: '/profile',
-    component: Profile,
-    name: 'profile.show'
+    component: ProfileHome,
+    children: [
+      { path: '',
+        name: 'profile.show',
+        meta: {
+          title: 'Мой профиль'
+        },
+        component: ProfileShow
+      },
+      { path: 'wishlist',
+        name: 'profile.wishlist',
+        meta: {
+          title: 'Избранное'
+        },
+        component: ProfileWishlist
+      }
+    ]
   },
 
   { path: '/management',

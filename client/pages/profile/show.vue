@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <h5>
-      Мой профиль
-    </h5>
+    123
 
   </div>
 </template>

@@ -39,7 +39,6 @@
 import { mapGetters } from 'vuex'
 import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
 import axios from 'axios'
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -47,13 +46,10 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 export default {
   components: {
     'Chevron': () => import('~/components/Icons/Chevron'),
-    'Flag': () => import('~/components/Flag'),
     'SearchInput': () => import('~/components/SearchInput'),
-    'CardLogo': () => import('~/components/Product/CardLogo'),
     'Category': () => import('~/components/Category'),
     'Categories': () => import('~/components/CategoriesScroll'),
-    'Products': () => import('~/components/Products'),
-    Paginate
+    'Products': () => import('~/components/Products')
   },
   middleware: [],
   head () {
@@ -75,7 +71,8 @@ export default {
     let params_ = getQueryData({ query,
       defaultData: {
         categories: [],
-        city_id: city.id
+        city_id: city.id,
+        perPage: 12
       }
     })
 

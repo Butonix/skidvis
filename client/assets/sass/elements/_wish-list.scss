@@ -15,7 +15,7 @@
     }
 
     &.active {
-      color: $blog;
+      color: $blog!important;
 
       svg {
         path {
@@ -56,7 +56,7 @@
           }
         }
         &.active {
-          color: $blog;
+          color: $blog!important;
           svg {
             path {
               stroke: $blog;

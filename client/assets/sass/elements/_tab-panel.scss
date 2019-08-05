@@ -5,9 +5,10 @@
   display: block;
   position: relative;
   $height: 4;
-  padding-bottom: rem($height + 6);
+  padding-bottom: #{$height + 6}px;
   margin-right: rem(52);
   margin-bottom: 1rem;
+  text-decoration: none!important;
   @media (max-width: 400px) {
     margin-right: 0;
   }
@@ -18,7 +19,7 @@
     left: 50%;
     right: 50%;
     width: 0;
-    height: rem($height);
+    height: #{$height}px;
     background: $primary;
     transition: .2s ease;
   }
@@ -44,6 +45,16 @@
     flex-wrap: wrap;
     @media (max-width: 400px) {
       justify-content: space-between;
+    }
+    &--slim{
+      .tab{
+        color: $body-color!important;
+        margin-right: rem(25);
+        padding-bottom: 6px;
+        &:before{
+          height: 2px;
+        }
+      }
     }
   }
 }
