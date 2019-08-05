@@ -113,7 +113,7 @@
       </div>
       <no-ssr>
         <yandex-map
-          v-if="getCoords"
+          v-if="getCoords && false"
           :coords="getCoords"
           :zoom="zoom"
           :scroll-zoom="false"
@@ -140,7 +140,7 @@
 
     </div>
 
-    <div class="container">
+    <div class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
           <div class="mb-4">
@@ -163,6 +163,20 @@
             :key="index"
             :review="review"
           />
+
+          <transition
+            v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
+            name="fade" mode="out-in">
+            <div class="text-center">
+              <div :class="{'btn-loading':loadingReview}"
+                   class="btn btn-outline-primary px-5"
+                   @click="loadMoreReviews"
+              >
+                Еще
+              </div>
+            </div>
+          </transition>
+
         </div>
       </div>
     </div>
@@ -234,6 +248,7 @@ export default {
     return res
   },
   data: () => ({
+    loadingReview: false,
     zoom: 10,
     tab: 'circs',
     search: '',
@@ -258,6 +273,9 @@ export default {
     },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
+    },
+    pageCountReviews () {
+      return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
     }
   },
   watch: {
@@ -311,6 +329,53 @@ export default {
         this.pushInWishlist(this.productId)
       }
     },
+    async loadMoreReviews () {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`products/${this.productId}/reviews`, {
+          params: {
+            page: this.reviews.current_page + 1,
+            perPage: this.reviews.per_page
+          }
+        })
+
+        if (data.list.data.length) {
+          for (let i in data.list.data) {
+            this.reviews.data.push(data.list.data[i])
+          }
+        }
+        this.reviews.current_page++
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Получить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
+    async fetchReviews ({ page = 1, perPage = this.reviews.per_page }) {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`products/${this.productId}/reviews`, {
+          params: {
+            page,
+            perPage
+          }
+        })
+
+        if (data.list) {
+          this.$set(this, 'reviews', data.list)
+        }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
     async fetchProduct () {
       if (this.productId && this.city.id) {
         try {
@@ -330,21 +395,16 @@ export default {
         console.log('error 404')
       }
     },
-    setDefaultReviewForm ({ cons = '', pros = '', text = '' }) {
+    setDefaultReviewForm () {
       this.review.form = new Form({
-        text: text,
-        pros: pros,
-        cons: cons
+        text: '',
+        pros: '',
+        cons: ''
       })
     },
     async sendReview () {
       try {
-        const { data } = await this.review.form.post(`products/${this.productId}/reviews`)
-
-        if (data.review) {
-          this.reviews.data.unshift(data.review)
-          this.reviews.total += 1
-        }
+        await this.review.form.post(`products/${this.productId}/reviews`)
 
         this.setDefaultReviewForm()
 
@@ -352,11 +412,14 @@ export default {
           type: 'success',
           text: 'Отзыв успешно сохранен'
         })
+
+        await this.fetchReviews({})
       } catch (e) {
         await this.$callToast({
           type: 'error',
           text: 'Отправить отзыв не удалось'
         })
+        console.log(e)
       }
     }
   }

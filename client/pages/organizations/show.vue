@@ -89,6 +89,20 @@
             :key="index"
             :review="review"
           />
+
+          <transition
+            v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
+            name="fade" mode="out-in">
+            <div class="text-center">
+              <div :class="{'btn-loading':loadingReview}"
+                   class="btn btn-outline-primary px-5"
+                   @click="loadMoreReviews"
+              >
+                Еще
+              </div>
+            </div>
+          </transition>
+
         </div>
       </div>
     </div>
@@ -133,7 +147,6 @@ export default {
     if (organizationId) {
       try {
         let { data } = await axios.get('organizations/' + organizationId)
-        console.log(data)
         res = {
           ...res,
           ...data
@@ -147,7 +160,9 @@ export default {
     }
     return res
   },
-  data: () => ({}),
+  data: () => ({
+    loadingReview: false
+  }),
   computed: {
     ...mapGetters({
       user: 'auth/user',
@@ -155,6 +170,9 @@ export default {
     }),
     pageProductsCount () {
       return (this.products && this.products.total) ? Math.ceil(this.products.total / this.products.per_page) : 0
+    },
+    pageCountReviews () {
+      return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
     }
   },
   beforeMount () {
@@ -163,37 +181,77 @@ export default {
     }
   },
   methods: {
-    setDefaultReviewForm ({ rating = 0, text = '' }) {
+    setDefaultReviewForm () {
       this.review.form = new Form({
-        text: text,
-        rating: rating
+        text: '',
+        rating: this.review.form.rating
       })
+    },
+    async loadMoreReviews () {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`organizations/${this.organizationId}/reviews`, {
+          params: {
+            page: this.reviews.current_page + 1,
+            perPage: this.reviews.per_page
+          }
+        })
+
+        if (data.list.data.length) {
+          for (let i in data.list.data) {
+            this.reviews.data.push(data.list.data[i])
+          }
+        }
+        this.reviews.current_page++
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Получить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
+    async fetchReviews ({ page = 1, perPage = this.reviews.per_page }) {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`organizations/${this.organizationId}/reviews`, {
+          params: {
+            page,
+            perPage
+          }
+        })
+
+        if (data.list) {
+          this.$set(this, 'reviews', data.list)
+        }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
     },
     async sendReview () {
       try {
-        const { data } = await this.review.form.post(`organizations/${this.organizationId}/reviews`)
+        await this.review.form.post(`organizations/${this.organizationId}/reviews`)
 
-        if (data.review) {
-          this.setDefaultReviewForm({
-            rating: data.review.rating
-          })
-          this.reviews.data.unshift(data.review)
-          this.reviews.total += 1
-        } else {
-          this.setDefaultReviewForm({
-            rating: this.review.form.rating
-          })
-        }
+        this.setDefaultReviewForm()
 
         await this.$callToast({
           type: 'success',
           text: 'Отзыв успешно сохранен'
         })
+
+        await this.fetchReviews({})
       } catch (e) {
         await this.$callToast({
           type: 'error',
           text: 'Отправить отзыв не удалось'
         })
+        console.log(e)
       }
     }
   }

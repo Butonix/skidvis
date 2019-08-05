@@ -60,7 +60,6 @@
                        class="card-footer__address__wrapper"
                   >
                     <div class="card-footer__address__text"
-                         :style="{'opacity':((activeAddresses === item.id)?0:1)}"
                          v-text="(item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):''"
                     />
                   </div>
@@ -91,6 +90,7 @@
                   <ul class="card-footer__list-address list-unstyled text-muted">
                     <li
                       v-for="(point, index) in item.points"
+                      v-if="index !== 0"
                       :key="'list-address__item-'+index"
                       :title="(point.street)?point.street:point.full_street"
                       class="card-footer__list-address__item"

@@ -20,6 +20,7 @@
         <div :class="{'active': !list.length}" class="preloader"/>
         <div class="select-ab__search">
           <search-input
+            ref="search"
             v-model="search"
             form-class=""
           />
@@ -41,6 +42,7 @@
 <script>
 import { getWindowParams } from '~/utils'
 import Fuse from 'fuse.js'
+import keycode from 'keycode'
 
 export default {
   name: 'SelectAlphabet',
@@ -83,6 +85,22 @@ export default {
     }
   },
   methods: {
+    changeStatus () {
+      if (!process.client) {
+        return
+      }
+      // TODO: Сделать переключение клавишами
+      this.$refs.search.focus()
+      // if (this.show) {
+      //   this.$refs.search.focus()
+      //   document.addEventListener('keyup', this.onKeyup)
+      // } else {
+      //   document.removeEventListener('keyup', this.onKeyup)
+      // }
+    },
+    onKeyup (e) {
+      console.log(keycode(e))
+    },
     makeFuse () {
       if (process.client && !(this.fuseList instanceof Fuse)) {
         this.fuseList = new Fuse(this.list, {
@@ -112,13 +130,16 @@ export default {
 
       this.show = !this.show
       this.$emit('click')
+      this.changeStatus()
     },
     closeCollapse () {
       this.show = false
+      this.changeStatus()
     },
     onSelect (item) {
       this.$emit('select', item)
       this.show = false
+      this.changeStatus()
     }
   }
 }

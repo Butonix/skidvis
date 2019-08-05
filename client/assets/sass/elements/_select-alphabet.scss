@@ -12,7 +12,7 @@
   color: $body-color;
   &__chevron{
     display: inline-block;
-    transition: .2s;
+    transition: transform .2s;
     transform-origin: center;
   }
 

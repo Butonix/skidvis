@@ -5,6 +5,7 @@
     ['search-input--'+typeStyle]: !!typeStyle
   }">
     <input
+      ref="input"
       :type="type"
       :value="value"
       :placeholder="placeholder"
@@ -15,6 +16,7 @@
       }"
       :autofocus="!!autofocus"
       @input="$emit('input', $event.target.value)"
+      @keyup="$emit('keyup', $event)"
     >
     <div class="search-input__line"/>
     <div class="search-input__lupe">
@@ -62,6 +64,13 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    focus () {
+      setTimeout(() => {
+        this.$refs.input.focus()
+      }, 300)
     }
   }
 }
