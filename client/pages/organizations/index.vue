@@ -83,7 +83,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { getQueryData, watchList } from '~/utils'
+import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
 import axios from 'axios'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
@@ -96,7 +96,7 @@ export default {
     'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     'Category': () => import('~/components/Category'),
-    'Categories': () => import('~/components/Categories'),
+    'Categories': () => import('~/components/CategoriesScroll'),
     Paginate
   },
   middleware: [],
@@ -113,6 +113,8 @@ export default {
     let collection = {}
     let categories = {}
     let city = app.store.getters['auth/city']
+
+    query = queryFixArrayParams(query, ['categories'])
 
     let params_ = getQueryData({ query,
       defaultData: {

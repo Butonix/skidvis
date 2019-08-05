@@ -1,6 +1,10 @@
 <template>
-  <div class="category-icons">
-    <slot/>
+  <div class="category-icons--scroll">
+    <perfect-scrollbar>
+      <div class="category-icons--scroll__wrapper">
+        <slot/>
+      </div>
+    </perfect-scrollbar>
   </div>
 </template>
 

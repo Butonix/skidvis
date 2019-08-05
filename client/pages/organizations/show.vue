@@ -228,7 +228,6 @@ export default {
             perPage
           }
         })
-        console.log(data)
         if (data.list) {
           this.$set(this, 'products', data.list)
         }

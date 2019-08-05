@@ -13,11 +13,6 @@
         <template v-if="timeHuman">
           Акция действует
           <div v-html="timeHuman"/>
-          <div class="mb-2">
-            <span class="text-primary link-dashed">
-              Кроме адресов
-            </span>
-          </div>
         </template>
       </template>
     </list-item-icon>

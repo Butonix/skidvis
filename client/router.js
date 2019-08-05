@@ -1,11 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {scrollBehavior} from '~/utils'
+import { scrollBehavior } from '~/utils'
 
 Vue.use(Router)
 
-const Home = () => import('~/pages/home').then(m => m.default || m)
-const Welcome = () => import('~/pages/welcome').then(m => m.default || m)
 const Business = () => import('~/pages/business/index').then(m => m.default || m)
 const Contacts = () => import('~/pages/contacts/index').then(m => m.default || m)
 const BlogIndex = () => import('~/pages/blog/index').then(m => m.default || m)
