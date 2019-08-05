@@ -158,12 +158,15 @@
             @inputcomment="review.form.text = $event"
             @send="sendReview"
           />
-          <review
+
+          <transition
             v-for="(review, index) in reviews.data"
             :key="index"
-            :review="review"
-          />
-
+            name="fade" mode="out-in">
+            <review
+              :review="review"
+            />
+          </transition>
           <transition
             v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
             name="fade" mode="out-in">

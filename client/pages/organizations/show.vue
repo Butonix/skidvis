@@ -64,11 +64,11 @@
     <products
       v-if="products.data.length"
       :items="products.data"
-      :page-count="pageProductsCount"
+      :page-count="pageCountProducts"
       :page="products.current_page"
       @setpage="products.current_page = $event"
     />
-    <div class="container">
+    <div class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
           <div class="mb-4">
@@ -84,11 +84,14 @@
             @inputcomment="review.form.text = $event"
             @send="sendReview"
           />
-          <review
+          <transition
             v-for="(review, index) in reviews.data"
             :key="index"
-            :review="review"
-          />
+            name="fade" mode="out-in">
+            <review
+              :review="review"
+            />
+          </transition>
 
           <transition
             v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
@@ -168,11 +171,16 @@ export default {
       user: 'auth/user',
       check: 'auth/check'
     }),
-    pageProductsCount () {
+    pageCountProducts () {
       return (this.products && this.products.total) ? Math.ceil(this.products.total / this.products.per_page) : 0
     },
     pageCountReviews () {
       return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
+    }
+  },
+  watch: {
+    'products.current_page': function (v) {
+      this.fetchProducts({ page: v })
     }
   },
   beforeMount () {
@@ -211,6 +219,26 @@ export default {
         console.log(e)
       }
       this.loadingReview = false
+    },
+    async fetchProducts ({ page = 1, perPage = this.products.per_page }) {
+      try {
+        let { data } = await axios.get(`organizations/${this.organizationId}/products`, {
+          params: {
+            page,
+            perPage
+          }
+        })
+        console.log(data)
+        if (data.list) {
+          this.$set(this, 'products', data.list)
+        }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить акции не удалось'
+        })
+        console.log(e)
+      }
     },
     async fetchReviews ({ page = 1, perPage = this.reviews.per_page }) {
       this.loadingReview = true
@@ -251,6 +279,12 @@ export default {
           type: 'error',
           text: 'Отправить отзыв не удалось'
         })
+        console.log(e)
+      }
+      try {
+        let { data } = await axios.get('organizations/' + this.organizationId)
+        this.organization = data.organization
+      } catch (e) {
         console.log(e)
       }
     }
