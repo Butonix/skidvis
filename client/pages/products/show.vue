@@ -143,8 +143,20 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
-          <div class="mb-4">
+          <div class="mb-4 d-flex justify-content-between align-items-start">
             <h5>Отзывы и рейтинг</h5>
+
+            <div class="">
+              <button class="btn btn-sm btn-gray">
+                Новые
+              </button>
+              <dropdown :options="arrayOfObjects"
+                        :selected="object"
+                        btn-class="btn btn-sm btn-gray"
+                        placeholder="Сортировка"
+                        @updateOption="methodToRunOnSelect"/>
+            </div>
+
           </div>
           <review-edit
             v-if="check"
@@ -195,6 +207,7 @@ import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/Sidebar'
+import Dropdown from '~/components/Dropdown'
 import Form from 'vform'
 
 export default {
@@ -202,6 +215,7 @@ export default {
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SearchInput': () => import('~/components/SearchInput'),
+    Dropdown,
     DynamicLabelInput,
     AddressesFrame,
     Sidebar,
@@ -251,6 +265,25 @@ export default {
     return res
   },
   data: () => ({
+    arrayOfObjects: [
+      {
+        id: 1,
+        name: 'Object Name 1'
+      },
+      {
+        id: 2,
+        name: 'Object Name 2'
+      },
+      {
+        id: 3,
+        name: 'Object Name 3'
+      }
+    ],
+    object: {
+      id: 1,
+      name: 'Object Name 1'
+    },
+
     loadingReview: false,
     zoom: 10,
     tab: 'circs',
@@ -299,6 +332,10 @@ export default {
       pushInWishlist: 'auth/pushInWishlist',
       removeFromWishlist: 'auth/removeFromWishlist'
     }),
+    methodToRunOnSelect (payload) {
+      console.log(payload)
+      this.object = payload
+    },
     addPointsToSearchArray () {
       this.fusePoints = new Fuse(this.product.points, {
         shouldSort: true,

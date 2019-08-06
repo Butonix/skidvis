@@ -1,5 +1,7 @@
 <template>
-  <div class="avatar" v-text="user.initials || 'АК'"/>
+  <div :style="(user.avatar && user.avatar.src)?`background-image: url(${user.avatar.src});`:null"
+       class="avatar"
+       v-text="(user.avatar && user.avatar.src)?'':user.initials || 'АК'"/>
 </template>
 
 <script>

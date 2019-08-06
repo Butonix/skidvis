@@ -14,14 +14,14 @@
     <div class="review-body">
 
       <div v-if="review.pros" class="row no-gutters mb-3">
-        <div class="col-auto d-flex align-items-center px-2 pb-2">
+        <div class="col-auto d-flex align-items-center px-2">
           <plus-bold class="mx-1" style="color: #049F5C"/>
         </div>
         <div class="col" v-text="review.pros"/>
       </div>
 
       <div v-if="review.cons" class="row no-gutters mb-4">
-        <div class="col-auto d-flex align-items-center px-2 pb-2">
+        <div class="col-auto d-flex align-items-center px-2">
           <minus-bold class="mx-1" style="color: #FF2E2E"/>
         </div>
         <div class="col" v-text="review.cons"/>
