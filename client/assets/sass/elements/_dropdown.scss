@@ -1,5 +1,61 @@
-.dropdown{
-  &-label{
+.dropdown {
+  &-group {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    .caret{
+      transform-origin: center;
+      transition: transform .2s;
+      font-size: .9rem;
+    }
+    &.show{
+      .caret{
+        transform: rotate(180deg);
+      }
+    }
+  }
 
+  &-menu {
+    display: block;
+    border-radius: 15px;
+    box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+    background: white;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    min-width: 130px;
+    padding: 0;
+    margin: 6px 0 0;
+    list-style: none;
+    text-align: left;
+    background-clip: padding-box;
+    &--right{
+      left: auto;
+      right: 0;
+    }
+    .nav-item{
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      margin: 0;
+      .nav-link{
+        color: $body-color!important;
+        background: white;
+        white-space: nowrap;
+        padding: 9px 16px;
+        &:active, &.active{
+          background: #E4E4E4;
+        }
+        &:hover{
+          background: #C6C6C6;
+        }
+      }
+    }
+  }
+
+  li {
+    list-style: none;
   }
 }

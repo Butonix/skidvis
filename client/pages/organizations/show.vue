@@ -71,8 +71,17 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
-          <div class="mb-4">
+          <div class="mb-4 d-flex justify-content-between align-items-start">
+
             <h5>Отзывы и рейтинг</h5>
+
+            <dropdown :options="reviewsOrderingArray"
+                      v-model="reviewsOrdering"
+                      btn-class="btn btn-sm btn-gray"
+                      h-align="right"
+                      placeholder="Сортировка"
+            />
+
           </div>
           <review-edit
             v-if="check"
@@ -124,6 +133,7 @@ export default {
     'FullSlider': () => import('~/components/FullSlider'),
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
+    'Dropdown': () => import('~/components/Dropdown'),
     'SocialLinks': () => import('~/components/Edit/SocialLinks')
   },
   head () {
@@ -164,6 +174,26 @@ export default {
     return res
   },
   data: () => ({
+    reviewsOrderingArray: [
+      {
+        id: 1,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        name: 'Новые'
+      },
+      {
+        id: 2,
+        ordering: 'created_at',
+        orderingDir: 'asc',
+        name: 'Старые'
+      }
+    ],
+    reviewsOrdering: {
+      id: 1,
+      ordering: 'created_at',
+      orderingDir: 'desc',
+      name: 'Новые'
+    },
     loadingReview: false
   }),
   computed: {
@@ -179,8 +209,11 @@ export default {
     }
   },
   watch: {
-    'products.current_page': function (v) {
-      this.fetchProducts({ page: v })
+    'products.current_page': async function (v) {
+      await this.fetchProducts({ page: v })
+    },
+    'reviewsOrdering': async function (v) {
+      await this.fetchReviews({})
     }
   },
   beforeMount () {
@@ -201,7 +234,9 @@ export default {
         let { data } = await axios.get(`organizations/${this.organizationId}/reviews`, {
           params: {
             page: this.reviews.current_page + 1,
-            perPage: this.reviews.per_page
+            perPage: this.reviews.per_page,
+            ordering: this.reviewsOrdering.ordering,
+            orderingDir: this.reviewsOrdering.orderingDir
           }
         })
 
@@ -239,13 +274,20 @@ export default {
         console.log(e)
       }
     },
-    async fetchReviews ({ page = 1, perPage = this.reviews.per_page }) {
+    async fetchReviews ({
+      page = 1,
+      perPage = this.reviews.per_page,
+      ordering = this.reviewsOrdering.ordering,
+      orderingDir = this.reviewsOrdering.orderingDir
+    }) {
       this.loadingReview = true
       try {
         let { data } = await axios.get(`organizations/${this.organizationId}/reviews`, {
           params: {
             page,
-            perPage
+            perPage,
+            ordering,
+            orderingDir
           }
         })
 

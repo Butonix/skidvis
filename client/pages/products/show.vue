@@ -16,14 +16,17 @@
           </div>
 
           <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
-            <div class="product__logo mr-4 mb-3">
+            <router-link
+              :to="{ name: 'organizations.show', params: { organizationId: product.organization_id } }"
+              :style="{backgroundColor: (product.organization_color)?product.organization_color:'#FFFFFF'}"
+              class="product__logo mr-4 mb-3">
               <img
                 v-lazy="product.organization_logo || '/placeholders/logo.svg'"
                 :alt="product.name"
                 :title="product.name"
                 src="/placeholders/96x35-1920x700.gif"
               >
-            </div>
+            </router-link>
             <h1 class="flex-grow-1 product__name ff-montserrat" v-html="product.name"/>
           </div>
 
@@ -146,16 +149,12 @@
           <div class="mb-4 d-flex justify-content-between align-items-start">
             <h5>Отзывы и рейтинг</h5>
 
-            <div class="">
-              <button class="btn btn-sm btn-gray">
-                Новые
-              </button>
-              <dropdown :options="arrayOfObjects"
-                        :selected="object"
-                        btn-class="btn btn-sm btn-gray"
-                        placeholder="Сортировка"
-                        @updateOption="methodToRunOnSelect"/>
-            </div>
+            <dropdown :options="reviewsOrderingArray"
+                      v-model="reviewsOrdering"
+                      btn-class="btn btn-sm btn-gray"
+                      h-align="right"
+                      placeholder="Сортировка"
+            />
 
           </div>
           <review-edit
@@ -207,7 +206,6 @@ import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
 import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/Sidebar'
-import Dropdown from '~/components/Dropdown'
 import Form from 'vform'
 
 export default {
@@ -215,7 +213,7 @@ export default {
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SearchInput': () => import('~/components/SearchInput'),
-    Dropdown,
+    'Dropdown': () => import('~/components/Dropdown'),
     DynamicLabelInput,
     AddressesFrame,
     Sidebar,
@@ -265,23 +263,25 @@ export default {
     return res
   },
   data: () => ({
-    arrayOfObjects: [
+    reviewsOrderingArray: [
       {
         id: 1,
-        name: 'Object Name 1'
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        name: 'Новые'
       },
       {
         id: 2,
-        name: 'Object Name 2'
-      },
-      {
-        id: 3,
-        name: 'Object Name 3'
+        ordering: 'created_at',
+        orderingDir: 'asc',
+        name: 'Старые'
       }
     ],
-    object: {
+    reviewsOrdering: {
       id: 1,
-      name: 'Object Name 1'
+      ordering: 'created_at',
+      orderingDir: 'desc',
+      name: 'Новые'
     },
 
     loadingReview: false,
@@ -315,8 +315,11 @@ export default {
     }
   },
   watch: {
-    'city': function (v) {
-      this.fetchProduct()
+    'city': async function (v) {
+      await this.fetchProduct()
+    },
+    'reviewsOrdering': async function (v) {
+      await this.fetchReviews({})
     }
   },
   async beforeMount () {
@@ -332,10 +335,6 @@ export default {
       pushInWishlist: 'auth/pushInWishlist',
       removeFromWishlist: 'auth/removeFromWishlist'
     }),
-    methodToRunOnSelect (payload) {
-      console.log(payload)
-      this.object = payload
-    },
     addPointsToSearchArray () {
       this.fusePoints = new Fuse(this.product.points, {
         shouldSort: true,
@@ -375,7 +374,9 @@ export default {
         let { data } = await axios.get(`products/${this.productId}/reviews`, {
           params: {
             page: this.reviews.current_page + 1,
-            perPage: this.reviews.per_page
+            perPage: this.reviews.per_page,
+            ordering: this.reviewsOrdering.ordering,
+            orderingDir: this.reviewsOrdering.orderingDir
           }
         })
 
@@ -394,13 +395,20 @@ export default {
       }
       this.loadingReview = false
     },
-    async fetchReviews ({ page = 1, perPage = this.reviews.per_page }) {
+    async fetchReviews ({
+      page = 1,
+      perPage = this.reviews.per_page,
+      ordering = this.reviewsOrdering.ordering,
+      orderingDir = this.reviewsOrdering.orderingDir
+    }) {
       this.loadingReview = true
       try {
         let { data } = await axios.get(`products/${this.productId}/reviews`, {
           params: {
             page,
-            perPage
+            perPage,
+            ordering,
+            orderingDir
           }
         })
 

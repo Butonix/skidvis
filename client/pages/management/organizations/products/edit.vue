@@ -78,14 +78,17 @@
           </div>
 
           <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
-            <div class="product__logo mr-4 mb-3">
+            <router-link
+              :to="{ name: 'organizations.show', params: { organizationId: form.organization_id } }"
+              :style="{backgroundColor: (form.organization_color)?form.organization_color:'#FFFFFF'}"
+              class="product__logo mr-4 mb-3">
               <img
                 v-lazy="form.organization_logo || '/placeholders/logo.svg'"
                 :alt="form.name"
                 :title="form.name"
                 src="/placeholders/96x35-1920x700.gif"
               >
-            </div>
+            </router-link>
             <div class="h1 flex-grow-1 product__name ff-montserrat">
               <material-textarea
                 v-model="form.name"
