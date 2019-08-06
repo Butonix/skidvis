@@ -1,0 +1,29 @@
+.card-step{
+  position: relative;
+  background: #FBFBFB;
+  border: 2px solid #7F00FF;
+  box-sizing: border-box;
+  box-shadow: 0 4px 35px rgba(127, 0, 255, 0);
+  border-radius: 15px;
+  max-width: rem(614);
+  flex-basis: 100%;
+  width: 100%;
+  min-height: rem(152);
+  display: flex;
+  padding: rem(22);
+  margin-bottom: rem(55);
+  transition: .2s;
+  &:hover{
+    box-shadow: 0 4px 35px rgba(127, 0, 255, 0.15);
+  }
+  &__number{
+    line-height: 1;
+    font-weight: 600;
+    width: 37px;
+    min-width: 37px;
+    font-size: 2.25rem;
+  }
+  &__text{
+    flex-grow: 1;
+  }
+}

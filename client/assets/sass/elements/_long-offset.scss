@@ -11,3 +11,17 @@
   }
   @include make-grid-columns-categories();
 }
+.business__container--long-offset{
+  @include media-breakpoint-up(lg)
+  {
+    @include make-container-categories(45px);
+  }
+  .row {
+    @include media-breakpoint-up(lg)
+    {
+      @include make-row-categories(45px);
+    }
+  }
+  @include make-grid-columns-categories($grid-columns, 45px);
+}
+

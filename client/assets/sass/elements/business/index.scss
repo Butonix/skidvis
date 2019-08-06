@@ -1,0 +1,30 @@
+.business{
+  &__kommersant{
+    background: url("/img/business/kommersant.svg") center no-repeat;
+    -webkit-background-size: contain;
+    background-size: contain;
+    width: 340px;
+    height: 127px;
+    font-weight: 600;
+  }
+  &__plus-item__col{
+    margin-bottom: 45px;
+  }
+  &__plus-item{
+    background: radial-gradient(341.12px at 96.49% 2.08%, #A852FF 0%, #7F00FF 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 20px 20px 20px 22px;
+  }
+  &__btn-bottom{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    transform-origin: center;
+    transform: translateY(-50%);
+    .btn{
+      background: white;
+    }
+  }
+}
