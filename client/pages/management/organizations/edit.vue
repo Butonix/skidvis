@@ -238,7 +238,6 @@ export default {
     let timezone = app.store.getters['variables/getDefaultTimezone']
     let organizationId = params.organizationId
 
-
     if (organizationId) {
       try {
         let { data } = await axios.get('management/organizations/' + organizationId + '/edit')
@@ -251,7 +250,6 @@ export default {
           timezone = data.organization.timezone
         }
         form = { ...data.organization, operationMode, timezone }
-
       } catch (e) {
         error({ statusCode: 404, message: 'Organization not found' })
       }

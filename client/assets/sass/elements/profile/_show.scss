@@ -1,0 +1,23 @@
+.profile-show{
+  &__form{
+    max-width: 291px;
+    &__avatar{
+      .thumbs-file-input__thumb{
+        width: 51px;
+        min-width: 51px;
+        min-height: 51px;
+        margin-bottom: 0;
+        margin-right: 0;
+      }
+      .preview-container{
+        border-radius: 50% !important;
+      }
+      .photo-input .picture-inner:before {
+        background-size: auto 40%;
+      }
+      .photo-input .picture-preview{
+        border: 0 !important;
+      }
+    }
+  }
+}
