@@ -219,7 +219,7 @@ export function fetchAddresses (axios) {
 
 export function queryFixArrayParams (query, params) {
   for (let i in params) {
-    if (query[params[i]] !== undefined && !(query[params[i]] instanceof Array)) {
+    if (query[params[i]] !== undefined && !(Array.isArray(query[params[i]]))) {
       query[params[i]] = [query[params[i]]]
     }
   }

@@ -8,17 +8,9 @@
            class="category-icons--scroll__wrapper">
         <category
           v-for="(category, key) in categories"
+          v-if="categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite"
           :key="'categories-'+key"
-          :active="categoriesActiveIds.indexOf(String(category.id)) !== -1"
-          :label="category.name"
-          :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-          :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-          @click="onClick(category)"
-        />
-        <category
-          v-for="(category, key) in categories"
-          :key="'categories1-'+key"
-          :active="categoriesActiveIds.indexOf(String(category.id)) !== -1"
+          :active="categoriesActiveIds.indexOf(category.id) !== -1"
           :label="category.name"
           :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
           :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
