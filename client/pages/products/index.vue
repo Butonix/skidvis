@@ -14,17 +14,11 @@
           Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
         </div>
       </div>
-      <categories>
-        <category
-          v-for="(category, key) in getCategories"
-          :key="'categories-'+key"
-          :active="params.categories.indexOf(String(category.id)) !== -1"
-          :label="category.name"
-          :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-          :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-          @click="filter('categories',category)"
-        />
-      </categories>
+      <categories
+        :categories="getCategories"
+        :categories-active-ids="params.categories"
+        @clickitem="filter('categories', $event)"
+      />
     </div>
     <products
       :items="items"
@@ -47,7 +41,6 @@ export default {
   components: {
     'Chevron': () => import('~/components/Icons/Chevron'),
     'SearchInput': () => import('~/components/SearchInput'),
-    'Category': () => import('~/components/Category'),
     'Categories': () => import('~/components/CategoriesScroll'),
     'Products': () => import('~/components/Products')
   },
