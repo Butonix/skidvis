@@ -1,381 +1,473 @@
 <template>
-  <form v-if="form" class="orgs-edit"
-        @submit.prevent @keydown="form.onKeydown($event)">
-    <full-slider
-      v-if="images"
-      :images="images"
-    />
-    <div class="overflow-hidden">
-      <div class="container">
-        <thumbs-file-input
-          v-if="images"
-          :images="images"
-          :images-loading="imagesLoading"
-          @change="setMainImage"
-          @delete="deleteMainImage"
+  <div>
+    <breadcrumbs/>
+    <div v-if="product" class="container">
+      <div class="row mb-4">
+        <div class="product__content">
+
+          <div class="order-2 order-lg-1 product__slider mb-3">
+            <full-slider
+              :images="product.images"
+            >
+              <div v-if="product.currency_id && product.value" class="product__slider__label">
+                {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
+              </div>
+            </full-slider>
+          </div>
+
+          <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
+            <router-link
+              :to="{ name: 'organizations.show', params: { organizationId: product.organization_id } }"
+              :style="{backgroundColor: (product.organization_color)?product.organization_color:'#FFFFFF'}"
+              class="product__logo mr-4 mb-3">
+              <img
+                v-lazy="product.organization_logo || '/placeholders/logo.svg'"
+                :alt="product.name"
+                :title="product.name"
+                src="/placeholders/96x35-1920x700.gif"
+              >
+            </router-link>
+            <h1 class="flex-grow-1 product__name ff-montserrat" v-html="product.name"/>
+          </div>
+
+          <div v-if="product.tags && product.tags.length" class="order-3 order-lg-3 mb-4">
+            Акции по тегам
+            <div
+              v-for="(tag, key) in product.tags"
+              :key="'tags-'+key"
+              class="tag mx-1 mb-2"
+              v-text="tag.name"
+            />
+          </div>
+
+          <sidebar
+            :wishlist-active="wishlist.indexOf(productId) !== -1"
+            :socials="product.socials"
+            :value="product.value"
+            :currency-id="product.currency_id"
+            :categories="product.categories"
+            :start-at="product.start_at"
+            :end-at="product.end_at"
+            :operation-mode-text="getOperationModeText"
+            box-class="order-4 order-lg-4 mb-4 mt-2"
+            box-mod="center"
+            @wishlistchange="wishListChange"
+          />
+
+          <div
+            v-if="product.conditions || product.description"
+            class="order-5 order-lg-5 tab-panel mt-3">
+            <div
+              v-if="product.conditions"
+              :class="{'active':(tab === 'circs')}"
+              class="tab"
+              @click="tab ='circs'">
+              Условия
+            </div>
+            <div
+              v-if="product.description"
+              :class="{'active':(tab === 'desc')}"
+              class="tab"
+              @click="tab ='desc'">
+              Описание
+            </div>
+            <div v-scroll-to="'#addresses'" class="tab">
+              Адрес
+            </div>
+            <div class="tab d-none d-sm-block">
+              Отзывы
+            </div>
+          </div>
+
+          <div
+            v-if="product.conditions || product.description"
+            class="order-6 order-lg-6 tab-content product__description mb-5">
+            <transition name="fade" mode="out-in">
+              <div v-if="tab === 'circs'" :key="'circs'" v-html="product.conditions"/>
+              <div v-if="tab === 'desc'" :key="'desc'" v-html="product.description"/>
+            </transition>
+          </div>
+
+          <div v-if="product.points" id="addresses" class="order-7 order-lg-7">
+            <h5>
+              Акция по адресам:
+            </h5>
+            <search-input
+              v-model="search"
+              type-style="lite"
+              placeholder="Введите адрес или метро"
+            />
+            <addresses-frame :addresses="getPoints"/>
+          </div>
+
+        </div>
+        <sidebar
+          :wishlist-active="wishlist.indexOf(productId) !== -1"
+          :socials="product.socials"
+          :value="product.value"
+          :currency-id="product.currency_id"
+          :categories="product.categories"
+          :start-at="product.start_at"
+          :end-at="product.end_at"
+          :operation-mode-text="getOperationModeText"
+          box-mod="right"
+          @wishlistchange="wishListChange"
         />
-        <div class="row justify-content-center">
-          <div class="col-lg-8 orgs-edit__editor">
-
-            <div class="row mt-xl-3">
-              <div class="col">
-
-                <div
-                  class="row">
-                  <div class="col-sm">
-                    <div class="orgs-edit__logo">
-                      <div class="text-center small pb-2">
-                        Логотип организации
-                      </div>
-                      <div
-                        :style="{color:form.logo.color || '#ffffff'}"
-                        class="orgs-edit__logo-file-input">
-                        <logo-file-input
-                          :src="logo"
-                          :loading="logoLoading"
-                          @change="setLogoSrc"
-                          @delete="deleteLogo"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-auto d-flex d-md-none flex-column">
-                    <div class="text-center small pb-2 pt-4 pt-sm-0">
-                      Цвет заливки логотипа
-                    </div>
-                    <div class="color-box__wrapper">
-                      <div
-                        :style="{backgroundColor: form.logo.color || '#ffffff'}"
-                        :class="{'active':isActiveClassColorBox}"
-                        class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
-                      />
-                      <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
-                      <no-ssr>
-                        <sketch-picker :value="form.logo.color || '#ffffff'" class="mx-auto" @input="setLogoColor" />
-                      </no-ssr>
-                    </div>
-                  </div>
-                </div>
-                <material-input
-                  v-model="form.link"
-                  form-class="mb-4"
-                  placeholder="Ссылка на ваш сайт"
-                />
-                <material-input
-                  v-model="form.name"
-                  placeholder="Введите название компании"
-                />
-                <material-input
-                  v-model="form.inn"
-                  placeholder="ИНН"
-                />
-              </div>
-              <div class="col-auto d-none d-md-block">
-                <div class="text-center small pb-2">
-                  Цвет заливки логотипа
-                </div>
-                <no-ssr>
-                  <sketch-picker :value="form.logo.color || '#ffffff'" @input="setLogoColor" />
-                </no-ssr>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+      <no-ssr>
+        <yandex-map
+          v-if="getCoords && false"
+          :coords="getCoords"
+          :zoom="zoom"
+          :scroll-zoom="false"
+          @click="onClick"
+        >
+          <ymap-marker
+            v-for="(point, key) in getPoints"
+            :key="key"
+            :properties="{
+              iconCaption: point.name
+            }"
+            :balloon-template="balloonTemplatePoint(point)"
+            :coords="[point.latitude, point.longitude]"
+            :marker-id="key"
+            :hint-content="point.name"
+            :callbacks="{
+              click: function(e) {
+                clickMarker(e, point, key)
+              }
+            }"
+          />
+        </yandex-map>
+      </no-ssr>
+
     </div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 orgs-edit__editor">
-          <material-textarea
-            v-model="form.description"
-            name="link"
-            placeholder="Почему к вам стоит прийти?"
-            data-align="center"
-            form-class="my-5"
-          />
-          <social-links
-            :links="form.socials"
-            @change="changeSocialsLink"
-            @add="addSocialsLink"
-            @delete="deleteSocialsLink"
-          />
-        </div>
-      </div>
+
+    <div class="container mt-5">
       <div class="row">
-        <div class="col-lg-6 mx-auto">
-          <div class="row mt-5 mb-4">
-            <div class="col-4 col-lg-4 col-xl-3">
-              Часовой пояс
-            </div>
-            <div class="col-6 col-lg-6 col-xl-6">
-              <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
-            </div>
+        <div class="col-lg-10 col-xl-8 mb-4">
+          <div class="mb-4 d-flex justify-content-between align-items-start">
+            <h5>Отзывы и рейтинг</h5>
+
+            <dropdown :options="reviewsOrderingArray"
+                      v-model="reviewsOrdering"
+                      btn-class="btn btn-sm btn-gray"
+                      h-align="right"
+                      placeholder="Сортировка"
+            />
+
           </div>
-          <div v-for="(value, index) in form.operationMode" class="row">
-            <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
-              {{ operationMode.data[index].label }}
-            </div>
-            <div class="col-lg-6 col-xl-7 py-1">
-              <v-select
-                :clearable="false"
-                v-model="value.start"
-                :options="operationMode.interval"
-                class="v-select--time mr-2"
-              />
-              <v-select
-                :clearable="false"
-                v-model="value.end"
-                :options="operationMode.interval"
-                class="v-select--time mr-5"
-              />
-              <div class="d-inline-block">
-                <checkbox v-model="value.active" />
+          <review-edit
+            v-if="check"
+            :form="review.form"
+            :user="user"
+            field-pros="pros"
+            field-cons="cons"
+            field-content="text"
+            @inputpros="review.form.pros = $event"
+            @inputcons="review.form.cons = $event"
+            @inputcomment="review.form.text = $event"
+            @send="sendReview"
+          />
+
+          <transition
+            v-for="(review, index) in reviews.data"
+            :key="index"
+            name="fade" mode="out-in">
+            <review
+              :review="review"
+            />
+          </transition>
+          <transition
+            v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
+            name="fade" mode="out-in">
+            <div class="text-center">
+              <div :class="{'btn-loading':loadingReview}"
+                   class="btn btn-outline-primary px-5"
+                   @click="loadMoreReviews"
+              >
+                Еще
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="text-center mt-5">
-        <div
-          class="btn btn-outline-primary"
-          @click="onSave"
-        >
-          Сохранить
-        </div>
-        <div
-          v-if="id"
-          class="btn btn-outline-danger ml-2"
-          @click="onDelete"
-        >
-          Удалить
+          </transition>
+
         </div>
       </div>
     </div>
-  </form>
+
+  </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import Form from 'vform'
+import { mapGetters, mapActions } from 'vuex'
+import Fuse from 'fuse.js'
 import axios from 'axios'
+import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
+import FullSlider from '~/components/FullSlider'
+import AddressesFrame from '~/components/AddressesFrame'
+import Sidebar from '~/components/Product/Sidebar'
+import Form from 'vform'
 
 export default {
   components: {
-    'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
-    'FullSlider': () => import('~/components/FullSlider'),
-    'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
-    'LogoFileInput': () => import('~/components/Edit/LogoFileInput'),
-    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
-    'vSelect': () => import('vue-select'),
-    'SocialLinks': () => import('~/components/Edit/SocialLinks')
+    'Review': () => import('~/components/Review'),
+    'ReviewEdit': () => import('~/components/ReviewEdit'),
+    'SearchInput': () => import('~/components/SearchInput'),
+    'Dropdown': () => import('~/components/Dropdown'),
+    DynamicLabelInput,
+    AddressesFrame,
+    Sidebar,
+    FullSlider
   },
   head () {
     return {
-      title: 'Редактирование организации',
+      title: 'Акция',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-default'
       }
     }
   },
-  middleware: 'auth',
   asyncData: async ({ params, error, app }) => {
-    let form, logo
-    let images = []
+    let productId = params.productId
+    let city = app.store.getters['auth/city']
+    let res = {
+      productId,
+      review: {
+        form: {
+          text: '',
+          pros: '',
+          cons: ''
+        }
+      }
+    }
 
-    await app.store.dispatch('variables/fetchTimezones')
-
-    let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
-    let timezone = app.store.getters['variables/getDefaultTimezone']
-    let organizationId = params.organizationId
-
-    if (organizationId) {
+    if (productId) {
+      res.productId = Number(productId)
       try {
-        let { data } = await axios.get('management/organizations/' + organizationId)
-        logo = data.organization.logo.src
-        images = data.organization.images
-        if (data.organization.operationMode) {
-          operationMode = data.organization.operationMode
+        let { data } = await axios.get(`products/${productId}`, {
+          params: {
+            city_id: city.id
+          }
+        })
+        res = {
+          ...res,
+          ...data
         }
-        if (data.organization.timezone) {
-          timezone = data.organization.timezone
-        }
-        form = { ...data.organization, operationMode, timezone }
       } catch (e) {
-        error({ statusCode: 404, message: 'Organization not found' })
+        error({ statusCode: 404, message: 'Product not found' })
       }
+    } else {
+      console.log('error 404')
     }
 
-    if (!form) {
-      form = {
-        operationMode,
-        images: [],
-        timezone,
-        link: '',
-        name: '',
-        inn: '',
-        description: '',
-        logo: {
-          color: '#FFFFFF',
-          src: ''
-        },
-        socials: []
-      }
-    }
-
-    return {
-      id: organizationId,
-      operationMode: { ...app.store.getters['variables/getOperationMode'] },
-      images,
-      logo,
-      form
-    }
+    return res
   },
-
   data: () => ({
-    isActiveClassColorBox: false,
-    logoLoading: false,
-    imagesLoading: {}
-  }),
+    reviewsOrderingArray: [
+      {
+        id: 1,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        name: 'Новые'
+      },
+      {
+        id: 2,
+        ordering: 'created_at',
+        orderingDir: 'asc',
+        name: 'Старые'
+      }
+    ],
+    reviewsOrdering: {
+      id: 1,
+      ordering: 'created_at',
+      orderingDir: 'desc',
+      name: 'Новые'
+    },
 
+    loadingReview: false,
+    zoom: 10,
+    tab: 'circs',
+    search: '',
+    fusePoints: null
+  }),
   computed: {
     ...mapGetters({
-      getTimezones: 'variables/getTimezones'
-    })
-  },
-
-  async beforeMount () {
-    if (!(this.form instanceof Form)) {
-      this.form = new Form(this.form)
+      wishlist: 'auth/wishlist',
+      check: 'auth/check',
+      user: 'auth/user',
+      city: 'auth/city'
+    }),
+    getCoords () {
+      let res = null
+      if (this.city && this.city.latitude && this.city.longitude) {
+        res = [this.city.latitude, this.city.longitude]
+      }
+      return res
+    },
+    getOperationModeText () {
+      return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
+    },
+    getPoints () {
+      return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
+    },
+    pageCountReviews () {
+      return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
     }
-    this.fetchTimezones()
+  },
+  watch: {
+    'city': async function (v) {
+      await this.fetchProduct()
+    },
+    'reviewsOrdering': async function (v) {
+      await this.fetchReviews({})
+    }
+  },
+  async beforeMount () {
+    if (!(this.product.points instanceof Fuse)) {
+      this.addPointsToSearchArray()
+    }
+    if (!(this.review.form instanceof Form)) {
+      this.review.form = new Form(this.review.form)
+    }
   },
   methods: {
     ...mapActions({
-      fetchTimezones: 'variables/fetchTimezones'
+      pushInWishlist: 'auth/pushInWishlist',
+      removeFromWishlist: 'auth/removeFromWishlist'
     }),
-    addSocialsLink (link) {
-      this.form.socials.push(link)
+    addPointsToSearchArray () {
+      this.fusePoints = new Fuse(this.product.points, {
+        shouldSort: true,
+        threshold: 0.6,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          'name', 'full_street'
+        ]
+      })
     },
-    setLogoColor (value) {
-      this.form.logo.color = `rgba(${value.rgba.r}, ${value.rgba.g}, ${value.rgba.b}, ${value.rgba.a})`
+    async onClick (e) {
+      this.coords = e.get('coords')
+      console.log(this.coords)
     },
-    async setLogoSrc (logo) {
-      this.logo = logo
-      this.logoLoading = true
-      try {
-        let { data } = await axios.post('management/organizations/logo', {
-          logo
-        })
-        if (!data.logo || !data.logo.src || !data.logo.id) {
-          throw new Error()
-        }
-        this.form.logo.src = data.logo.src
-        this.form.logo.id = data.logo.id
-        this.logoLoading = false
-      } catch (e) {
-        this.logo = null
-        this.logoLoading = false
-        await this.$callToast({
-          type: 'error',
-          text: 'Загрузить изображение не удалось'
-        })
-      }
+    async clickMarker (e, point, key) {
+      console.log(e, point, key)
     },
-    async setMainImage ({ image, index }) {
-      if (index !== undefined && this.images[index]) {
-        this.$set(this.images, index, {
-          src: image
-        })
+    balloonTemplatePoint (point) {
+      return `
+        <h5>${point.name}</h5>
+        <p>${point.full_street}</p>
+      `
+    },
+    wishListChange (e) {
+      if (this.wishlist.indexOf(this.productId) !== -1) {
+        this.removeFromWishlist(this.productId)
       } else {
-        this.images.push({
-          src: image
-        })
+        this.pushInWishlist(this.productId)
       }
-      this.imagesLoading[index] = true
+    },
+    async loadMoreReviews () {
+      this.loadingReview = true
       try {
-        let { data } = await axios.post('management/organizations/image', {
-          cover: image
+        let { data } = await axios.get(`products/${this.productId}/reviews`, {
+          params: {
+            page: this.reviews.current_page + 1,
+            perPage: this.reviews.per_page,
+            ordering: this.reviewsOrdering.ordering,
+            orderingDir: this.reviewsOrdering.orderingDir
+          }
         })
 
-        if (!data.mainImages || !data.mainImages.src || !data.mainImages.id) {
-          throw new Error()
+        if (data.list.data.length) {
+          for (let i in data.list.data) {
+            this.reviews.data.push(data.list.data[i])
+          }
         }
-
-        image = data.mainImages
-
-        if (index !== undefined && this.form.images[index]) {
-          this.$set(this.form.images, index, image)
-        } else {
-          this.form.images.push(image)
-        }
-        this.imagesLoading[index] = false
+        this.reviews.current_page++
       } catch (e) {
-        if (index !== undefined && this.images[index]) {
-          this.$delete(this.images, index)
-        } else {
-          this.$delete(this.images, this.images.length - 1)
-        }
-        this.imagesLoading[index] = false
         await this.$callToast({
           type: 'error',
-          text: 'Загрузить изображение не удалось'
+          text: 'Получить отзывы не удалось'
         })
+        console.log(e)
       }
+      this.loadingReview = false
     },
-    deleteLogo () {
-      this.form.logo.src = ''
-      this.$delete(this.form.logo, 'id')
-      this.logo = ''
-    },
-    deleteMainImage ({ index }) {
-      this.$delete(this.images, index)
-      this.$delete(this.form.images, index)
-    },
-    deleteSocialsLink (index) {
-      this.$delete(this.form.socials, index)
-    },
-    changeSocialsLink ({ index, value }) {
-      this.$set(this.form.socials, index, value)
-    },
-    async onDelete () {
-      if (!this.id) {
-        return
-      }
-      let res = await this.$confirmDelete()
-      if (res.value) {
-        try {
-          await axios.delete('management/organizations/' + this.id)
-          await this.$callToast({
-            type: 'success',
-            text: 'Организация успешно удалена'
-          })
-          this.$router.push({ name: 'management.organizations.index' })
-        } catch (e) {
-          await this.$callToast({
-            type: 'error',
-            text: 'Удалить не удалось'
-          })
-        }
-      }
-    },
-    async onSave () {
+    async fetchReviews ({
+      page = 1,
+      perPage = this.reviews.per_page,
+      ordering = this.reviewsOrdering.ordering,
+      orderingDir = this.reviewsOrdering.orderingDir
+    }) {
+      this.loadingReview = true
       try {
-        if (this.id) {
-          await this.form.patch('management/organizations/' + this.id)
-        } else {
-          const { data } = await this.form.post('management/organizations')
-          this.id = data.organization.id
-          this.$router.push({ name: 'management.organizations.edit', params: { organizationId: data.organization.id } })
+        let { data } = await axios.get(`products/${this.productId}/reviews`, {
+          params: {
+            page,
+            perPage,
+            ordering,
+            orderingDir
+          }
+        })
+
+        if (data.list) {
+          this.$set(this, 'reviews', data.list)
         }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
+    async fetchProduct () {
+      if (this.productId && this.city.id) {
+        try {
+          let { data } = await axios.get(`products/${this.productId}`, {
+            params: {
+              city_id: this.city.id
+            }
+          })
+          this.$set(this, 'product', data.product)
+          this.search = ''
+          this.zoom = 10
+          this.addPointsToSearchArray()
+        } catch (e) {
+          console.log(e)
+        }
+      } else {
+        console.log('error 404')
+      }
+    },
+    setDefaultReviewForm () {
+      this.review.form = new Form({
+        text: '',
+        pros: '',
+        cons: ''
+      })
+    },
+    async sendReview () {
+      try {
+        await this.review.form.post(`products/${this.productId}/reviews`)
+
+        this.setDefaultReviewForm()
+
         await this.$callToast({
           type: 'success',
-          text: 'Данные успешно сохранены'
+          text: 'Отзыв успешно сохранен'
         })
+
+        await this.fetchReviews({})
       } catch (e) {
         await this.$callToast({
           type: 'error',
-          text: 'Сохранить не удалось'
+          text: 'Отправить отзыв не удалось'
         })
+        console.log(e)
       }
     }
   }
@@ -383,7 +475,7 @@ export default {
 </script>
 
 <style>
-  .organizations-edit__logo-file-input .picture-preview{
-    background-color: currentColor!important;
+  .ymap-container{
+    height: 600px;
   }
 </style>

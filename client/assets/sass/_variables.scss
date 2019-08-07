@@ -35,6 +35,8 @@ $headings-color:              #000;
 
 $btn-font-size-sm: 1rem;
 
+$h2-font-size: rem(36);
+
 $btn-padding-y: 0.782rem;
 $btn-padding-x: 1.94rem;
 $btn-padding-y-sm: 0.282rem;
@@ -58,6 +60,7 @@ $blog: #FF2E00;
 $primary: #00C2FF;
 $secondary: #E4E4E4;
 $danger: #F41818;
+$dark: $body-color;
 $input-placeholder-color: #4D4D4D;
 $themes: (
     "default": (

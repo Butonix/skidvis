@@ -1,39 +1,56 @@
 <template>
-  <div>
-    <div class="container mb-5">
-      <h5 class="mb-2">
-        Мои организации
-      </h5>
-      <search-input
-        autofocus="autofocus"
-        :value="search"
-        @input="setSearch"
-      />
+  <div class="container contacts mt-5">
+    <div class="row">
+      <div class="col"/>
+      <div class="col-auto mb-4">
+        <a href="tel:89006433002" class="h2 text-dark">
+          8 900 643-30-02
+        </a>
+      </div>
+      <div class="col mb-4">
+        <div class="d-flex align-items-center justify-content-start">
+          <div class="mr-2">
+            <img src="/img/contacts/cat.jpg" alt="Ответит менеджер, Кот">
+          </div>
+          <div class="ml-1">
+            Ответит менеджер, Кот
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mb-5">
+      <a href="mailto:info@skidvis.ru" class="h2 text-dark">
+        info@skidvis.ru
+      </a>
     </div>
 
-    <div class="container container--long-offset">
-      <div class="row">
-        <div
-          v-for="(item, index) in items"
-          :key="index"
-          class="col-lg-4 mb-5"
-        >
-          <div class="card w-100">
-            <router-link :to="{ name: 'management.organizations.edit', params: { id: item.id } }" class="card-img-top d-block">
-              <div class="embed-responsive embed-responsive-1by1">
-                <div class="embed-responsive-item">
-                  <img :src="item.logo.src" class="w-100 h-100 img-cover" alt="Card image cap">
-                </div>
-              </div>
-            </router-link>
-            <div class="card-body">
-              <div class="d-flex justify-content-around mb-4">
-                <a href="#" class="btn btn-gray btn-sm px-4">Точки</a>
-                <a href="#" class="btn btn-gray btn-sm px-4">Акции</a>
-              </div>
-              <p class="card-text pt-3" v-text="item.description"/>
-            </div>
-          </div>
+    <div class="text-center">
+      <div class="btn btn-outline-primary mb-2">
+        Перезвоните мне
+      </div>
+      <div class="pt-1 mb-5 pb-5">
+        Ответим с 9 до 23 по мск
+      </div>
+      <div class="">
+        <img src="/img/contacts/lupe.svg" alt="Вакансия модератора">
+      </div>
+      <div class="mb-2">
+        Вакансия
+        <br>
+        модератора
+      </div>
+      <div class="contacts__text mb-4">
+        Нужно править текст на сайте,
+        <br>
+        пополнять арсенал тегов для поиска.
+        <br>
+        Работа с 10:00 до 18:00. Можно на дому.
+        <br>
+        Оплата 25 000 ₽ с развитием.
+      </div>
+      <div class="theme-blog">
+        <div class="btn btn-outline-primary">
+          Перезвоните мне
         </div>
       </div>
     </div>
@@ -41,26 +58,28 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import SearchInput from '~/components/SearchInput'
-
+import { mapGetters } from 'vuex'
 export default {
-  middleware: 'auth',
   components: {
-    SearchInput
+  },
+  head () {
+    return {
+      title: 'Праздник — отличный двигатель продаж',
+      bodyAttrs: {
+        class: 'theme-default'
+      }
+    }
   },
   computed: {
     ...mapGetters({
-      search: 'organizations/getSearch',
-      items: 'organizations/getItems'
+      check: 'auth/check'
     })
   },
   methods: {
-    ...mapActions({
-      setSearch: 'organizations/setSearch'
-    })
+    showModalLogin () {
+      this.$modal.push('login')
+    }
   }
-
 }
 </script>
 
