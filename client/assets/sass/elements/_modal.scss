@@ -7,6 +7,10 @@
   @media (max-width: 480px) {
     max-width: calc(100% - 10px);
     padding: 15px;
+    .category-icons{
+      margin-right: -8px;
+      margin-left: -8px;
+    }
   }
   &.modal{
     &--login{

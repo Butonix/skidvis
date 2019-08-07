@@ -10,8 +10,15 @@
         <div class="text-muted small mb-2">
           Категории
         </div>
-        <div class="text-muted small mb-2 cursor-pointer" @click="handleAllCats">
-          Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+        <div class=" mb-2">
+          <a v-if="params.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+             @click="clearSelectedCategories">
+            Сбросить
+          </a>
+          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
+             @click="handleAllCats">
+            Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+          </a>
         </div>
       </div>
       <categories-scroll
@@ -34,11 +41,19 @@
           <div class="">
             Выбрано {{ params.categories.length }} из {{ getCategories.length }}
             <div class="">
-              <search-input
-                v-model="categoriesSearch"
-                form-class="mb-4"
-                autofocus="autofocus"
-              />
+              <div class="d-flex">
+                <search-input
+                  v-model="categoriesSearch"
+                  form-class="mb-4 flex-grow-1"
+                  autofocus="autofocus"
+                />
+                <div v-if="params.categories.length" class="pl-3">
+                  <div class="btn btn-primary btn-sm"
+                       @click="clearSelectedCategories">
+                    Сбросить
+                  </div>
+                </div>
+              </div>
               <categories>
                 <category
                   v-for="(category, key) in categoriesSelected"
@@ -209,6 +224,10 @@ export default {
     }
   },
   methods: {
+    clearSelectedCategories () {
+      this.params.categories = []
+      this.categoriesSelected = {}
+    },
     async handleAllCats () {
       this.$modal.push('save-categories')
       if (!this.getCategories.length) {
