@@ -43,6 +43,18 @@ export default {
     scrollLeftCash: 0,
     scrollLeft: 0
   }),
+  watch: {
+    categories: function () {
+      if (this.sb) {
+        this.sb.updateMetrics()
+      }
+    },
+    categoriesActiveIds: function () {
+      if (this.sb) {
+        this.sb.updateMetrics()
+      }
+    }
+  },
   mounted () {
     this.sb = new ScrollBooster({
       viewport: this.$refs.viewport, // this parameter is required

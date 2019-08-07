@@ -28,7 +28,7 @@
     />
 
     <modal name="save-categories">
-      <div class="basic-modal">
+      <div class="basic-modal categories-modal">
         <div class="position-relative">
           <div :class="{'active': loadingCategories}" class="preloader"/>
           <div class="">
@@ -62,7 +62,7 @@
             </div>
           </div>
         </div>
-        <div class="text-center mt-5">
+        <div class="text-center mt-4 mt-xs-5">
           <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                   @click="$modal.pop()"
           >
@@ -141,10 +141,9 @@ export default {
           products: 1,
           favorites: 1,
           perPage: 100000,
-          whereIn: params_.categories
+          orWhereIn: params_.categories
         }
       })
-      console.log(data, params_.categories)
       favCategories = data
     } catch (e) {
       console.log(e)

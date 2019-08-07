@@ -2,4 +2,41 @@
   &__text{
     color: #FF4921!important;
   }
+  &__form{
+    .btn{
+      position: relative;
+      z-index: 3;
+      background: white;
+    }
+    display: inline-block;
+    position: relative;
+    &__wrapper{
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      background: #FFFFFF;
+      box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+      border-radius: 0 0 15px 15px;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s;
+    }
+    &__box{
+      padding: 21px 17px 14px 17px;
+
+    }
+    &:hover, &.active{
+
+      .contacts{
+        &__form{
+          &__wrapper{
+            max-height: 200px;
+          }
+        }
+      }
+
+    }
+  }
 }

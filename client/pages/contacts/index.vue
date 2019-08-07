@@ -25,11 +25,35 @@
     </div>
 
     <div class="text-center">
-      <div class="btn btn-outline-primary mb-2">
-        Перезвоните мне
-      </div>
-      <div class="pt-1 mb-5 pb-5">
+      <div class="pb-2">
         Ответим с 9 до 23 по мск
+      </div>
+      <div class="mb-5 pb-5">
+        <div class="contacts__form">
+          <div class="btn btn-outline-primary mb-2">
+            Перезвоните мне
+          </div>
+          <div class="contacts__form__wrapper">
+            <div class="contacts__form__box text-left">
+              <material-input
+                v-model="formDefault.name"
+                :form="formDefault"
+                field="name"
+                type-input="inline"
+                placeholder="Имя"
+                form-class="mb-4"
+              />
+              <material-input
+                v-model="formDefault.phone"
+                :form="formDefault"
+                field="phone"
+                type-input="inline"
+                placeholder="Телефон"
+                form-class="mb-0"
+              />
+            </div>
+          </div>
+        </div>
       </div>
       <div class="">
         <img src="/img/contacts/lupe.svg" alt="Вакансия модератора">
@@ -49,8 +73,30 @@
         Оплата 25 000 ₽ с развитием.
       </div>
       <div class="theme-blog">
-        <div class="btn btn-outline-primary">
-          Перезвоните мне
+        <div class="contacts__form">
+          <div class="btn btn-outline-primary">
+            Перезвоните мне
+          </div>
+          <div class="contacts__form__wrapper">
+            <div class="contacts__form__box text-left">
+              <material-input
+                v-model="formDefault.name"
+                :form="formDefault"
+                field="name"
+                type-input="inline"
+                placeholder="Имя"
+                form-class="mb-4"
+              />
+              <material-input
+                v-model="formDefault.phone"
+                :form="formDefault"
+                field="phone"
+                type-input="inline"
+                placeholder="Телефон"
+                form-class="mb-0"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -59,8 +105,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Form from 'vform'
+
 export default {
   components: {
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
   head () {
     return {
@@ -70,10 +119,21 @@ export default {
       }
     }
   },
+  data: () => ({
+    formDefault: {
+      name: '',
+      phone: ''
+    }
+  }),
   computed: {
     ...mapGetters({
       check: 'auth/check'
     })
+  },
+  beforeMount () {
+    if (!(this.formDefault instanceof Form)) {
+      this.formDefault = new Form(this.formDefault)
+    }
   },
   methods: {
     showModalLogin () {

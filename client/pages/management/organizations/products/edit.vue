@@ -253,7 +253,7 @@
               </div>
             </div>
           </div>
-          <div class="text-center mt-5">
+          <div class="text-center mt-4 mt-xs-5">
             <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                     @click="saveSelect('tags')"
             >
@@ -303,7 +303,7 @@
               </div>
             </div>
           </div>
-          <div class="text-center mt-5">
+          <div class="text-center mt-4 mt-xs-5">
             <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                     @click="saveSelect('categories')"
             >
@@ -326,7 +326,7 @@
             @add="addSocialsLink"
             @delete="deleteSocialsLink"
           />
-          <div class="text-center mt-5">
+          <div class="text-center mt-4 mt-xs-5">
             <button class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
                     @click="saveSocial"
             >
@@ -664,6 +664,8 @@ export default {
       try {
         let { data } = await axios.get(`categories`, {
           params: {
+            products: 1,
+            perPage: 100000000,
             search: this.selectSearch
           }
         })
