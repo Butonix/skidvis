@@ -29,32 +29,9 @@
         Ответим с 9 до 23 по мск
       </div>
       <div class="mb-5 pb-5">
-        <div class="contacts__form">
-          <div class="btn btn-outline-primary mb-2 px-5">
-            Перезвоните мне
-          </div>
-          <div class="contacts__form__wrapper">
-            <div class="contacts__form__box text-left">
-              <material-input
-                v-model="formDefault.name"
-                :form="formDefault"
-                field="name"
-                type-input="inline"
-                placeholder="Имя"
-                form-class="mb-4"
-              />
-              <material-input
-                v-model="formDefault.phone"
-                :form="formDefault"
-                type="tel"
-                field="phone"
-                type-input="inline"
-                placeholder="Телефон"
-                form-class="mb-0"
-              />
-            </div>
-          </div>
-        </div>
+        <call-me
+          :type-id="1"
+        />
       </div>
       <div class="">
         <img src="/img/contacts/lupe.svg" alt="Вакансия модератора">
@@ -74,32 +51,9 @@
         Оплата 25 000 ₽ с развитием.
       </div>
       <div class="theme-blog">
-        <div class="contacts__form">
-          <div class="btn btn-outline-primary px-5">
-            Перезвоните мне
-          </div>
-          <div class="contacts__form__wrapper">
-            <div class="contacts__form__box text-left">
-              <material-input
-                v-model="formDefault.name"
-                :form="formDefault"
-                field="name"
-                type-input="inline"
-                placeholder="Имя"
-                form-class="mb-4"
-              />
-              <material-input
-                v-model="formDefault.phone"
-                :form="formDefault"
-                type="tel"
-                field="phone"
-                type-input="inline"
-                placeholder="Телефон"
-                form-class="mb-0"
-              />
-            </div>
-          </div>
-        </div>
+        <call-me
+          :type-id="2"
+        />
       </div>
     </div>
   </div>
@@ -107,11 +61,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Form from 'vform'
 
 export default {
   components: {
-    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
+    'CallMe': () => import('~/components/Contacts/CallMe')
   },
   head () {
     return {
@@ -121,21 +75,10 @@ export default {
       }
     }
   },
-  data: () => ({
-    formDefault: {
-      name: '',
-      phone: ''
-    }
-  }),
   computed: {
     ...mapGetters({
       check: 'auth/check'
     })
-  },
-  beforeMount () {
-    if (!(this.formDefault instanceof Form)) {
-      this.formDefault = new Form(this.formDefault)
-    }
   },
   methods: {
     showModalLogin () {

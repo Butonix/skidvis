@@ -3,7 +3,7 @@
        @click="$emit('click', $event)">
     <input
       v-if="type === 'tel'"
-      v-mask="'+7(###)###-##-##'"
+      v-mask="'+7 ### ###-##-##'"
       ref="materialInput"
       :id="id"
       :class="inputClass_"

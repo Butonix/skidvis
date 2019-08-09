@@ -27,8 +27,7 @@
       padding: 21px 17px 14px 17px;
 
     }
-    &:hover, &.active{
-
+    &.active {
       .contacts{
         &__form{
           &__wrapper{
@@ -36,7 +35,6 @@
           }
         }
       }
-
     }
   }
 }

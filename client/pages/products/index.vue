@@ -131,6 +131,7 @@ export default {
         categories: [],
         city_id: city.id,
         ordering: 'start_at',
+        is_active: 1,
         perPage: 12
       }
     })

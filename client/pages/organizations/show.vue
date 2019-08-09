@@ -147,7 +147,9 @@ export default {
   },
   asyncData: async ({ params, error, app }) => {
     let organizationId = params.organizationId
+    let city = app.store.getters['auth/city']
     let res = {
+      city,
       organizationId,
       review: {
         form: {
@@ -160,7 +162,12 @@ export default {
 
     if (organizationId) {
       try {
-        let { data } = await axios.get('organizations/' + organizationId)
+        let { data } = await axios.get('organizations/' + organizationId, {
+          params: {
+            ordering: 'start_at',
+            is_active: 1
+          }
+        })
         res = {
           ...res,
           ...data
@@ -260,6 +267,9 @@ export default {
       try {
         let { data } = await axios.get(`organizations/${this.organizationId}/products`, {
           params: {
+            city_id: this.city.id,
+            ordering: 'start_at',
+            is_active: 1,
             page,
             perPage
           }
