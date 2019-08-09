@@ -42,8 +42,8 @@
             <div class="col pl-2">
               <div class="text-primary">
                 {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
-                <span class="sli sli--edit" @click="onEdit(key)"><fa icon="pencil-alt" /></span>
-                <span class="sli sli--delete" @click="onDelete(key)"><fa :icon="['far', 'trash-alt']"/></span>
+                <span class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
+                <span class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
               </div>
               {{ item.operationModeText }}
               <div class="font-weight-bolder d-block d-md-none">
@@ -170,7 +170,7 @@
           :form="form"
           field="name"
           type-input="inline"
-          placeholder="Название точки"
+          placeholder="Название адреса"
           form-class="mb-4 mt-5"
         />
 
@@ -185,6 +185,7 @@
 
         <material-input
           v-model="form.phone"
+          type="tel"
           :form="form"
           field="phone"
           type-input="inline"
@@ -263,7 +264,7 @@ export default {
   middleware: ['auth'],
   head () {
     return {
-      title: 'Мои точки',
+      title: 'Мои адреса',
       bodyAttrs: {
         class: 'theme-business'
       }
@@ -403,7 +404,7 @@ export default {
           await axios.delete(`management/organizations/${this.organizationId}/points/${this.items[key].id}`)
           await this.$callToast({
             type: 'success',
-            text: 'Точка успешно удалена'
+            text: 'Адрес успешно удален'
           })
           this.reloadList()
         } catch (e) {
@@ -439,6 +440,8 @@ export default {
       }
 
       this.address = ''
+      this.showAddresses = false
+      this.addresses = []
 
       this.form.name = name
       this.form.street = ''
@@ -477,7 +480,7 @@ export default {
         this.reloadList()
         await this.$callToast({
           type: 'success',
-          text: 'Точка успешно добавлена',
+          text: 'Адрес успешно добавлен',
           duration: 3000
         })
         this.setDefaultFormData()
@@ -494,7 +497,7 @@ export default {
         this.reloadList()
         await this.$callToast({
           type: 'success',
-          text: 'Точка успешно изменена',
+          text: 'Адрес успешно изменен',
           duration: 3000
         })
       } catch (e) {

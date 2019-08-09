@@ -1,6 +1,6 @@
 <template>
   <div class="review review--edit">
-    <div class="review-header">
+    <div v-if="check" class="review-header">
       <avatar-with-name
         :user="user"
       />
@@ -16,7 +16,7 @@
       </div>
 
     </div>
-    <div class="review-body">
+    <div v-if="check" class="review-body">
       <div class="review-body__desc">
         <material-textarea
           :value="form[fieldContent]"
@@ -71,6 +71,14 @@
         </div>
       </div>
     </div>
+    <div v-else class="review-login text-center">
+      <div class="btn btn-outline-primary mb-3" @click="$modal.push('login')">
+        Войти
+      </div>
+      <div class="h6">
+        После входа можно оставить отзыв
+      </div>
+    </div>
   </div>
 </template>
 
@@ -85,6 +93,10 @@ export default {
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea')
   },
   props: {
+    check: {
+      type: Boolean,
+      required: true
+    },
     fieldRating: {
       type: String,
       default: null

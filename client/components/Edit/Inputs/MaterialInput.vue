@@ -2,12 +2,27 @@
   <div :class="formClass_"
        @click="$emit('click', $event)">
     <input
+      v-if="type === 'tel'"
+      v-mask="'+7(###)###-##-##'"
       ref="materialInput"
       :id="id"
       :class="inputClass_"
       :value="value"
       :name="name"
-      :type="type"
+      :type="getType"
+      :readonly="readonly"
+      :autocomplete="autocomplete"
+      required
+      @input="$emit('input', $event.target.value)"
+    >
+    <input
+      v-else
+      ref="materialInput"
+      :id="id"
+      :class="inputClass_"
+      :value="value"
+      :name="name"
+      :type="getType"
       :readonly="readonly"
       :autocomplete="autocomplete"
       required
@@ -21,8 +36,12 @@
 </template>
 
 <script>
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: {
+    mask
+  },
   props: {
     autofocus: {
       type: Boolean,
@@ -50,10 +69,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'text',
-      validator: function (value) {
-        return ['text', 'password'].indexOf(value) !== -1
-      }
+      default: 'text'
     },
     typeInput: {
       type: String,
@@ -82,6 +98,15 @@ export default {
     }
   }),
   computed: {
+    getType () {
+      let res = 'text'
+
+      if (this.type === 'password') {
+        res = 'password'
+      }
+
+      return res
+    },
     id () {
       return ((this.name) ? this.name + '-' : '') + Math.ceil(Math.random() * 100000000)
     },

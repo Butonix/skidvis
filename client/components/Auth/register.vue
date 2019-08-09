@@ -8,7 +8,7 @@
     <div class="text-center font-weight-light mb-3">
       Через социальные сети
     </div>
-    <login-with-social :store="store" :router="router"/>
+    <login-with-social :store="store" :route="route" :router="router"/>
     <div class="text-center font-weight-light mb-4">
       Или заполните форму
     </div>
@@ -40,6 +40,7 @@
       />
       <material-input
         v-model="form.phone"
+        type="tel"
         :form="form"
         field="phone"
         type-input="inline"
@@ -102,6 +103,10 @@ export default {
       required: true
     },
     router: {
+      type: Object,
+      required: true
+    },
+    route: {
       type: Object,
       required: true
     }

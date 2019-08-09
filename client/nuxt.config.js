@@ -32,6 +32,7 @@ module.exports = {
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
     appLocale: process.env.APP_LOCALE || 'ru',
     daDataApi: process.env.DADATA_API || '',
+    apiMapsYandex: process.env.API_MAPS_YANDEX || '',
     apiVerId: process.env.API_VER_ID || 1,
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
@@ -51,11 +52,12 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { src: `https://cdn.polyfill.io/v2/polyfill.min.js?features=${polyfills.join(',')}` }
+      { src: `https://cdn.polyfill.io/v2/polyfill.min.js?features=${polyfills.join(',')}` },
+      // { src: `https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=89a7d311-e67b-4813-b088-3e94dfcb80f9&mode=release&coordorder=latlong` }
     ]
   },
 
-  loading: { color: '#007bff' },
+  loading: { color: '#00C2FF' },
 
   router: {
     middleware: ['locale', 'check-auth']
@@ -81,18 +83,19 @@ module.exports = {
     { src: '~plugins/color-picker', ssr: false },
     { src: '~plugins/vue-click-outside', ssr: false },
     { src: '~plugins/vue-quill-editor', ssr: false },
+    { src: '~plugins/yandex-maps', ssr: false },
     { src: '~plugins/vue-picture-input', ssr: false }
     // '~plugins/nuxt-client-init',
     // { src: '~plugins/bootstrap', ssr: false }
   ],
 
   modules: [
-    ['vue-yandex-maps/nuxt', {
-      apiKey: '',
-      lang: 'ru_RU',
-      coordorder: 'latlong',
-      version: '2.1'
-    }],
+    // ['vue-yandex-maps/nuxt', {
+    //   apiKey: '89a7d311-e67b-4813-b088-3e94dfcb80f9',
+    //   lang: 'ru_RU',
+    //   coordorder: 'latlong',
+    //   version: '2.1'
+    // }],
     '@nuxtjs/router',
     'vue-scrollto/nuxt',
     'vue-sweetalert2/nuxt',

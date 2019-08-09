@@ -31,7 +31,7 @@
               </router-link>
               <div class="card-body">
                 <div class="d-flex justify-content-around mb-4">
-                  <a href="#" class="btn btn-gray btn-sm px-4">Точки</a>
+                  <a href="#" class="btn btn-gray btn-sm px-4">Адреса</a>
                   <a href="#" class="btn btn-gray btn-sm px-4">Акции</a>
                 </div>
                 <p class="card-text pt-3" v-text="item.description"/>

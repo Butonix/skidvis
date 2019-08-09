@@ -63,7 +63,7 @@
                   <router-link
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4">
-                    <span class="px-2">Точки</span>
+                    <span class="px-2">Адреса</span>
                   </router-link>
                   <router-link
                     :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
@@ -71,8 +71,6 @@
                     <span class="px-2">Акции</span>
                   </router-link>
                 </div>
-                <p v-if="item.short_description" class="card-text pt-3"
-                   v-html="item.short_description.replaceAll('\n', '<br>')" />
               </div>
               <div class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"

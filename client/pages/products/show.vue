@@ -116,7 +116,7 @@
       </div>
       <no-ssr>
         <yandex-map
-          v-if="getCoords && false"
+          v-if="getCoords"
           :coords="getCoords"
           :zoom="zoom"
           :scroll-zoom="false"
@@ -158,7 +158,7 @@
 
           </div>
           <review-edit
-            v-if="check"
+            :check="check"
             :form="review.form"
             :user="user"
             field-pros="pros"

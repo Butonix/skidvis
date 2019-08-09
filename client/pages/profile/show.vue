@@ -42,6 +42,7 @@
       <material-input
         v-model="form.phone"
         :form="form"
+        type="tel"
         field="phone"
         type-input="inline"
         placeholder="Телефон"
@@ -90,7 +91,6 @@ export default {
     }
   },
   asyncData: async ({ params, error, app }) => {
-
     let user = app.store.getters['auth/user']
     let avatar = {
       src: user.avatar.src

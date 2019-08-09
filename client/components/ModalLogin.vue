@@ -2,7 +2,7 @@
   <modal name="login" @closed="closeModalLogin">
     <div class="modal--login">
       <div :class="{'d-none': (slide !== 'login')}">
-        <login :store="$store" :router="$router" @login="login"/>
+        <login :store="$store" :route="$route" :router="$router" @login="login"/>
         <div class="text-center">
           <div class="btn btn-link" @click="slide = 'password'">
             Забыл пароль
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div :class="{'d-none': (slide !== 'register')}">
-        <register :store="$store" :router="$router" @register="register"/>
+        <register :store="$store" :route="$route" :router="$router" @register="register"/>
         <div class="text-center">
           <div class="btn btn-gray btn-sm" @click="slide = 'login'">
             <&nbsp;Назад

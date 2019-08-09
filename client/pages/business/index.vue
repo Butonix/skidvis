@@ -21,7 +21,7 @@
           <div class="business__kommersant p-4">
             Больше половины россиян покупают товары только по акции
           </div>
-          <a href="/" class="link-solid-on-span">
+          <a href="/" class="link-solid-on-span d-inline-block">
             <span>
               Коммерсантъ
             </span>
@@ -45,32 +45,11 @@
           </p>
         </div>
 
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
-        </plus-item>
-
-        <plus-item>
-          Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.
+        <plus-item v-for="(item, key) in items" :key="key">
+          <div class="mb-3">
+            <img :src="item.img" :alt="item.text">
+          </div>
+          <span v-html="(item.html)?item.html:item.text"/>
         </plus-item>
 
       </div>
@@ -134,6 +113,35 @@ export default {
       }
     }
   },
+  data: () => ({
+    items: [
+      {
+        img: '/img/business/1.svg',
+        text: 'Выслушиваем вашу критику и пожелания. Делаем сервис эффективнее для всех.'
+      },
+      {
+        img: '/img/business/2.svg',
+        text: 'Простой интерфейс. Создать одну акцию можно за 5 минут.'
+      },
+      {
+        img: '/img/business/3.svg',
+        text: 'Изучаем поведение на сайте и статистику. Так мы делаем сервис удобнее.'
+      },
+      {
+        img: '/img/business/4.svg',
+        text: 'Упаковываем акции в приятный дизайн. Сайт отзывчивый.'
+      },
+      {
+        img: '/img/business/5.svg',
+        text: 'Два способа купить рекламу на «Скидвисе»: статья в блоге и закрепленная карточка акции.'
+      },
+      {
+        img: '/img/business/6.svg',
+        text: 'Всегда на связи',
+        html: 'Всегда на связи:<br><a class="link-dashed" href="tel:89006433000">8 900 643-30-00</a><br><a class="link-dashed pt-2 d-inline-block" href="mailto:info@skidvis.ru">info@skidvis.ru</a>'
+      }
+    ]
+  }),
   computed: {
     ...mapGetters({
       check: 'auth/check'

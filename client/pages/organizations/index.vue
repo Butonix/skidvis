@@ -44,20 +44,24 @@
             >
               <router-link
                 :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
-                :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
-                class="orgs__col__box">
-                <div v-if="(item.logo && item.logo.src)?item.logo.src:null"
-                     class="orgs__col__box__wrapper">
-                  <img
-                    v-lazy="(item.logo && item.logo.src)?item.logo.src:''"
-                    :alt="item.name"
-                    :title="item.name"
-                    :data-id="item.id"
-                    data-type="logo"
-                    src="/placeholders/96x35-1920x700.gif"
-                  >
+                class="d-block text-dark">
+                <div class="orgs__col__box mb-2"
+                     :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
+                >
+                  <div v-if="(item.logo && item.logo.src)?item.logo.src:null"
+                       class="orgs__col__box__wrapper">
+                    <img
+                      v-lazy="(item.logo && item.logo.src)?item.logo.src:''"
+                      :alt="item.name"
+                      :title="item.name"
+                      :data-id="item.id"
+                      data-type="logo"
+                      src="/placeholders/96x35-1920x700.gif"
+                    >
+                  </div>
+                  <div v-else class="bg-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
                 </div>
-                <div v-else class="bg-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
+                <p class="text-center" v-text="item.name"/>
               </router-link>
             </div>
           </transition>

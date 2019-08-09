@@ -106,14 +106,6 @@
               data-align="center"
               form-class="mt-5 mb-4"
             />
-            <material-textarea
-              v-model="form.short_description"
-              :form="form"
-              field="short_description"
-              placeholder="Короткое описание"
-              data-align="left"
-              form-class="mb-5"
-            />
             <social-links
               :links="form.socials"
               @change="changeSocialsLink"
@@ -132,7 +124,7 @@
                 <v-select :clearable="false" v-model="form.timezone" :reduce="item => item.value" :options="getTimezones" label="label"/>
               </div>
             </div>
-            <div v-for="(value, index) in form.operationMode" class="row">
+            <div v-for="(value, index) in form.operationMode" :key="index" class="row">
               <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
                 {{ operationMode.data[index].label }}
               </div>
@@ -191,7 +183,7 @@
         <router-link
           :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
           class="btn btn-gray btn-sm px-4 mr-2">
-          <span class="px-2">Точки</span>
+          <span class="px-2">Адреса</span>
         </router-link>
         <router-link
           :to="{ name: 'management.organizations.products.index', params: { organizationId } }"

@@ -8,8 +8,9 @@
       <div class="row justify-content-center">
         <div class="col-12 col-md"/>
         <div class="orgs-show__logo mb-4 pb-2">
-          <router-link
-            :to="{ name: 'organizations.show', params: { organizationId: organization.id } }"
+          <a
+            :href="organization.link || 'javascript:void(0)'"
+            :target="(organization.link)?'_blank':false"
             :style="{backgroundColor: (organization.logo && organization.logo.color)?organization.logo.color:'#FFFFFF'}"
             class="orgs-show__logo__box">
             <div v-if="(organization.logo && organization.logo.src)?organization.logo.src:null"
@@ -24,10 +25,10 @@
               >
             </div>
             <div v-else class="bg-cover w-100 h-100" style="background-image: url('/placeholders/logo.svg');" />
-          </router-link>
+          </a>
         </div>
         <div class="col-12 col-md mb-4">
-          <div class="orgs-show__social">
+          <div v-if="organization.socials.length" class="orgs-show__social">
             <p>Компания в соц сетях</p>
             <social
               v-for="(link, index) in organization.socials"
@@ -84,8 +85,8 @@
 
           </div>
           <review-edit
-            v-if="check"
             :form="review.form"
+            :check="check"
             :user="user"
             field-rating="rating"
             field-content="text"

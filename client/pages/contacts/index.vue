@@ -30,7 +30,7 @@
       </div>
       <div class="mb-5 pb-5">
         <div class="contacts__form">
-          <div class="btn btn-outline-primary mb-2">
+          <div class="btn btn-outline-primary mb-2 px-5">
             Перезвоните мне
           </div>
           <div class="contacts__form__wrapper">
@@ -46,6 +46,7 @@
               <material-input
                 v-model="formDefault.phone"
                 :form="formDefault"
+                type="tel"
                 field="phone"
                 type-input="inline"
                 placeholder="Телефон"
@@ -74,7 +75,7 @@
       </div>
       <div class="theme-blog">
         <div class="contacts__form">
-          <div class="btn btn-outline-primary">
+          <div class="btn btn-outline-primary px-5">
             Перезвоните мне
           </div>
           <div class="contacts__form__wrapper">
@@ -90,6 +91,7 @@
               <material-input
                 v-model="formDefault.phone"
                 :form="formDefault"
+                type="tel"
                 field="phone"
                 type-input="inline"
                 placeholder="Телефон"

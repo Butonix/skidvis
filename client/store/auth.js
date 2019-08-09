@@ -9,6 +9,8 @@ export const state = () => ({
     city: { id: 3, name: 'Санкт-Петербург' },
     wishlist: []
   },
+  isAdministrator: false,
+  isManagement: false,
   token: null,
   cities: []
 })
@@ -21,7 +23,9 @@ export const getters = {
   wishlist: state => (state.user.wishlist) ? state.user.wishlist : [],
   wishCount: state => (state.user.wishlist) ? state.user.wishlist.length : 0,
   cities: state => state.cities,
-  check: state => !!state.user.id
+  check: state => !!state.user.id,
+  isAdministrator: state => state.isAdministrator,
+  isManagement: state => state.isManagement
 }
 
 // mutations
@@ -38,6 +42,23 @@ export const mutations = {
 
   FETCH_USER_SUCCESS (state, user) {
     state.user = user
+    state.isAdministrator = false
+    state.isManagement = false
+    for (let i in user.roles) {
+      let role = user.roles[i]
+      switch (role.name) {
+        case 'super_administrator':
+          state.isAdministrator = true
+          state.isManagement = true
+          break
+        case 'administrator':
+          state.isAdministrator = true
+          break
+        case 'management':
+          state.isManagement = true
+          break
+      }
+    }
   },
 
   FETCH_USER_FAILURE (state) {
@@ -48,6 +69,8 @@ export const mutations = {
     state.user.wishlist = []
     state.user.id = null
     state.token = null
+    state.isAdministrator = false
+    state.isManagement = false
   },
 
   UPDATE_USER (state, { user }) {

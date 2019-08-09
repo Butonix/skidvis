@@ -7,40 +7,36 @@
   &__row {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     margin-left: -20px;
     margin-right: -20px;
   }
 
   &__col {
-    $width: 186;
-    $height: 93;
-    width: #{$width}px;
-    flex: 0 0 #{$width}px;
-    max-width: #{$width}px;
-    height: #{$height}px;
-    border-radius: 15px;
+    width: 186px;
+    flex: 0 0 186px;
+    max-width: 186px;
     display: block;
     -webkit-box-flex: 0;
     margin-bottom: 1rem;
     margin-left: 10px;
     margin-right: 10px;
-    @include media-breakpoint-down(xxl){
-      $width: 140;
-      $height: 70;
-      width: #{$width}px;
-      flex: 0 0 #{$width}px;
-      max-width: #{$width}px;
-      height: #{$height}px;
+    @include media-breakpoint-down(xxs){
+      width: 140px;
+      flex: 0 0 140px;
+      max-width: 140px;
     }
     &__box {
       display: block;
       position: relative;
       border-radius: 15px;
       width: 100%;
-      height: 100%;
+      height: 93px;
       overflow: hidden;
+      @include media-breakpoint-down(xxs){
+        height: 70px;
+      }
 
       &__wrapper {
         position: absolute;

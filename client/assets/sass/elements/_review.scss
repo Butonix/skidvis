@@ -4,6 +4,9 @@
   border-radius: 15px;
   padding: 12px;
   margin-bottom: 35px;
+  &-login{
+    padding: 28px;
+  }
   &-header{
     padding: 16px 12px 12px;
     @include media-breakpoint-up(xs){

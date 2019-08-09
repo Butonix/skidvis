@@ -79,7 +79,7 @@
 
           <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
             <router-link
-              :to="{ name: 'organizations.show', params: { organizationId: form.organization_id } }"
+              :to="{ name: 'organizations.show', params: { organizationId } }"
               :style="{backgroundColor: (form.organization_color)?form.organization_color:'#FFFFFF'}"
               class="product__logo mr-4 mb-3">
               <img
@@ -107,7 +107,7 @@
               v-model="form.short_description"
               :form="form"
               field="short_description"
-              placeholder="Сокращенное описание для карточки"
+              placeholder="Краткое описание для карточки"
               data-align="left"
               form-class="mb-4 mt-0"
               size="sm"
@@ -415,7 +415,7 @@ export default {
   },
   data: () => ({
     editorOptionCircs: {
-      placeholder: 'Рекомендуем писать сжато, до 700 знаков. Так клиент легче соглашается на прочтение, и не откладывает вкладку, прочитать позже (никогда). \n\r\n\rИспользуйте абзацы, так легче читать.',
+      placeholder: 'Рекомендуем писать сжато, до 700 знаков. Так клиент легче соглашается на прочтение, и не откладывает вкладку, чтобы прочитать позже (никогда). \n\r\n\rИспользуйте абзацы, так легче читать.',
       modules: {
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'], // toggled buttons

@@ -130,6 +130,7 @@ export default {
       defaultData: {
         categories: [],
         city_id: city.id,
+        ordering: 'start_at',
         perPage: 12
       }
     })

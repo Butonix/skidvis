@@ -31,6 +31,10 @@ export default {
     router: {
       type: Object,
       required: true
+    },
+    route: {
+      type: Object,
+      required: true
     }
   },
 
@@ -95,7 +99,13 @@ export default {
         token: e.data.token
       })
 
-      this.router.push({ name: 'home' })
+      if (this.route.name === 'welcome') {
+        this.router.push({ name: 'products.index' })
+      } else {
+        this.router.push({ name: 'welcome' })
+      }
+
+      this.$modal.pop()
     }
   }
 }

@@ -158,7 +158,7 @@
 
           </div>
           <review-edit
-            v-if="check"
+            :check="check"
             :form="review.form"
             :user="user"
             field-pros="pros"

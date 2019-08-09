@@ -2,7 +2,7 @@
   <div class="container pt-3">
     <div class="row">
       <div class="custom-col login-col mx-auto">
-        <login :store="$store" :router="$router" @login="login"/>
+        <login :store="$store" :route="$route" :router="$router" @login="login"/>
         <div class="text-center mt-4">
           <router-link :to="{ name: 'password.request' }" class="btn btn-link">
             Забыл пароль
