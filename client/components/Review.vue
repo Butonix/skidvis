@@ -28,6 +28,7 @@
       </div>
 
       <div v-text="review.text"/>
+      <div class="review-body__data" v-text="$moment(review.created_at).format('LL').replace(' г.', '')"/>
     </div>
   </div>
 </template>

@@ -8,6 +8,7 @@
       />
     </div>
     <products
+      :loading-list="loadingList"
       :items="items"
       :page-count="pageCount"
       :page="params.page"
@@ -64,6 +65,9 @@ export default {
       indexApiUrl
     }
   },
+  data: () => ({
+    loadingList: false
+  }),
   computed: {
     ...mapGetters({
       wishlist: 'auth/wishlist',

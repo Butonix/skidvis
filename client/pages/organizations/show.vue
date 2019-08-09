@@ -64,6 +64,7 @@
     </div>
     <products
       v-if="products.data.length"
+      :loading-list="loadingList"
       :items="products.data"
       :page-count="pageCountProducts"
       :page="products.current_page"
@@ -182,6 +183,7 @@ export default {
     return res
   },
   data: () => ({
+    loadingList: false,
     reviewsOrderingArray: [
       {
         id: 1,

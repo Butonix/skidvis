@@ -26,14 +26,22 @@
         :categories-active-ids="params.categories"
         @clickitem="filter('categories', $event)"
       />
+      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-start">
+        <dropdown :options="orderingArray"
+                  v-model="ordering"
+                  btn-class="btn btn-sm btn-gray"
+                  h-align="right"
+                  placeholder="Сортировка"
+        />
+      </div>
     </div>
     <products
+      :loading-list="loadingList"
       :items="items"
       :page-count="pageCount"
       :page="params.page"
       @setpage="params.page = $event"
     />
-
     <modal name="save-categories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
@@ -106,6 +114,7 @@ export default {
     'SearchInput': () => import('~/components/SearchInput'),
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'Categories': () => import('~/components/Categories'),
+    'Dropdown': () => import('~/components/Dropdown'),
     'Products': () => import('~/components/Products')
   },
   middleware: [],
@@ -130,7 +139,8 @@ export default {
       defaultData: {
         categories: [],
         city_id: city.id,
-        ordering: 'start_at',
+        ordering: 'created_at',
+        orderingDir: 'desc',
         is_active: 1,
         perPage: 12
       }
@@ -186,6 +196,40 @@ export default {
     }
   },
   data: () => ({
+    loadingList: false,
+    orderingArray: [
+      {
+        id: 1,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        name: 'Новые'
+      },
+      {
+        id: 2,
+        ordering: 'popularity',
+        orderingDir: 'desc',
+        name: 'По популярности'
+      },
+      {
+        id: 3,
+        ordering: 'reviews_count',
+        orderingDir: 'desc',
+        name: 'По отзывам'
+      },
+      {
+        id: 4,
+        ordering: 'name',
+        orderingDir: 'asc',
+        name: 'По названию'
+      }
+    ],
+    ordering: {
+      id: 1,
+      ordering: 'created_at',
+      orderingDir: 'desc',
+      name: 'Новые'
+    },
+
     categories: {},
     fuseCategories: null,
     categoriesSearch: '',
@@ -217,12 +261,18 @@ export default {
   watch: {
     'params.search': listWatchInstanceSearch,
     'params.categories': listWatchInstanceSearch,
+    'params.ordering': listWatchInstanceSearch,
     'params.page': listWatchInstancePage,
     'city': function (v) {
       if (v.id) {
         this.params.city_id = v.id
         listWatchInstanceSearch.call(this)
       }
+    },
+    'ordering': function (v) {
+      console.log(v)
+      this.params.ordering = v.ordering
+      this.params.orderingDir = v.orderingDir
     }
   },
   methods: {

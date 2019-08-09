@@ -90,6 +90,7 @@ export function watchList (axios, keyApiUrl, type) {
       this.$route.back()
       return
     }
+    this.loadingList = true
     axios.get(this[keyApiUrl], {
       params,
       cancelToken: new CancelToken(function executor (c) {
@@ -116,6 +117,7 @@ export function watchList (axios, keyApiUrl, type) {
           break
       }
       this.$set(this, 'collection', data)
+      this.loadingList = false
     }).catch((e) => {
     })
   }

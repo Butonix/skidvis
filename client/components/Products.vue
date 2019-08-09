@@ -4,7 +4,10 @@
       v-if="getItems.length"
       name="fade" mode="out-in">
       <div
-        class="row">
+        class="row position-relative">
+        <div :class="{'active': loadingList}"
+             class="loading-list"
+        />
         <transition v-for="(item, index) in getItems"
                     :key="'product-'+index"
                     name="fade" mode="out-in">
@@ -16,10 +19,10 @@
             >
               <router-link :to="{ name: 'products.show', params: { productId: item.id } }"
                            :class="{
-                         'with-logo':item.organization_logo,
-                         'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
-                         'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
-                       }"
+                             'with-logo':item.organization_logo,
+                             'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
+                             'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
+                           }"
                            class="card-img-top d-block" >
                 <div v-if="item.currency_id && item.value" class="card-img-top__label">
                   {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
@@ -28,9 +31,9 @@
                   <div class="embed-responsive-item">
                     <div
                       v-lazy:background-image="{
-                    src: item.images[0].src,
-                    loading: '/placeholders/cover.jpg'
-                  }"
+                        src: item.images[0].src,
+                        loading: '/placeholders/cover.jpg'
+                      }"
                       v-if="item.images && item.images[0] && item.images[0].src"
                       data-loading="/placeholders/cover.jpg"
                       class="card-img-top__cover bg-cover"
@@ -83,8 +86,8 @@
                   v-if="item.points[1]"
                   :class="{'active': activeAddresses === item.id}"
                   :style="{
-                maxHeight: (activeAddresses === item.id)? (3 + 2.5 * (item.points.length)) + 'rem': '3rem'
-              }"
+                    maxHeight: (activeAddresses === item.id)? (3 + 2.5 * (item.points.length)) + 'rem': '3rem'
+                  }"
                   class="card-footer__list-address__wrapper"
                 >
                   <ul class="card-footer__list-address list-unstyled text-muted">
@@ -141,6 +144,10 @@ export default {
     Paginate
   },
   props: {
+    loadingList: {
+      type: Boolean,
+      default: false
+    },
     pageCount: {
       type: Number,
       default: 0

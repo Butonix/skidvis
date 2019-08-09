@@ -17,7 +17,7 @@
     }
   }
   &-body{
-    padding: 12px 12px 22px;
+    padding: 12px 12px 12px;
     &__desc{
       @include media-breakpoint-down(sm){
         margin-bottom: 12px;
@@ -41,6 +41,11 @@
         max-width: 100%;
         padding-left: 20px;
       }
+    }
+    &__data{
+      margin-top: 1rem;
+      font-size: 14px;
+      color: #8C8C8C;
     }
   }
   &--edit{

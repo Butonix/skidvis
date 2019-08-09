@@ -116,11 +116,13 @@
       </div>
       <no-ssr>
         <yandex-map
+          ref="map"
           v-if="getCoords"
           :coords="getCoords"
           :zoom="zoom"
           :scroll-zoom="false"
           @click="onClick"
+          @map-was-initialized="onMapWasInitialized"
         >
           <ymap-marker
             v-for="(point, key) in getPoints"
@@ -288,7 +290,8 @@ export default {
     zoom: 10,
     tab: 'circs',
     search: '',
-    fusePoints: null
+    fusePoints: null,
+    map: null
   }),
   computed: {
     ...mapGetters({
@@ -350,7 +353,14 @@ export default {
     },
     async onClick (e) {
       this.coords = e.get('coords')
-      console.log(this.coords)
+      if(this.map){
+        console.log(this.map.getBounds())
+      }
+      // console.log(this.$refs.map.getBounds())
+    },
+    async onMapWasInitialized (payload) {
+      this.map = payload
+      // console.log(payload._bounds)
     },
     async clickMarker (e, point, key) {
       console.log(e, point, key)
