@@ -24,4 +24,33 @@
   }
   @include make-grid-columns-categories($grid-columns, 45px);
 }
+.blog__container--long-offset{
+  @include media-breakpoint-up(lg)
+  {
+    @include make-container-categories(40px);
+  }
+  .row {
+    @include media-breakpoint-up(lg)
+    {
+      @include make-row-categories(40px);
+    }
+  }
+  @include make-grid-columns-categories($grid-columns, 40px);
+  .col-pr{
+    @include media-breakpoint-up(lg){
+      padding-right: 30px;
+    }
+    @include media-breakpoint-up(xl){
+      padding-right: 40px;
+    }
+  }
+  .col-pl{
+    @include media-breakpoint-up(lg){
+      padding-left: 30px;
+    }
+    @include media-breakpoint-up(xl){
+      padding-left: 40px;
+    }
+  }
+}
 

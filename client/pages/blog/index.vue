@@ -1,37 +1,160 @@
 <template>
   <div>
-    <div class="container mb-5">
+    <div class="container">
       <search-input
         v-model="params.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <div class="d-flex justify-content-between">
-        <div class="text-muted small mb-2">
-          Категории
+      <h5 class="mb-3">
+        Популярные категории
+      </h5>
+      <div class="d-flex flex-wrap justify-content-center pb-4">
+        <div class="btn btn-blog mx-1 mb-2">
+          Свадьба
         </div>
-        <div class="text-muted small mb-2 cursor-pointer">
-          Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+        <div class="btn btn-blog mx-1 mb-2">
+          День рождения
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          8 марта
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          Свадьба
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          День рождения
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          8 марта
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          Свадьба
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          День рождения
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          8 марта
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          Свадьба
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          День рождения
+        </div>
+        <div class="btn btn-blog mx-1 mb-2">
+          8 марта
+        </div>
+        <div class="btn btn-blog mx-1 mb-2 hover">
+          Все категории
         </div>
       </div>
-      <categories>
-        <category
-          v-for="(category, key) in getCategories"
-          :key="'categories-'+key"
-          :active="params.categories.indexOf(String(category.id)) !== -1"
-          :label="category.name"
-          :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-          :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-          @click="filter('categories',category)"
-        />
-      </categories>
     </div>
-    <products
-      :items="items"
-      :page-count="pageCount"
-      :page="params.page"
-      @setpage="params.page = $event"
-    />
+    <div class="container blog__container--long-offset">
+      <div class="row">
+        <div class="col-md-6 col-lg-8 col-pr">
+          <h5 class="mb-3">
+            Свежее
+          </h5>
+          <card
+            type="new"
+          />
+          <card
+            type="new"
+          />
+          <card
+            type="new"
+          />
+          <div class="row d-none d-lg-flex">
+            <div class="col-lg-6">
+              <card
+              />
+            </div>
+            <div class="col-lg-6">
+              <card
+              />
+            </div>
+            <div class="col-lg-6">
+              <card
+              />
+            </div>
+            <div class="col-lg-6">
+              <card
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 col-pl">
+          <h5 class="mb-3">
+            Актуальное
+          </h5>
+          <card
+            type="actual"
+          />
+          <card
+            type="actual"
+          />
+          <card
+            type="actual"
+          />
+          <card
+            type="actual"
+          />
+          <card
+            type="actual"
+          />
+        </div>
+      </div>
+
+      <h5 class="mb-3">
+        Ранее
+      </h5>
+      <div class="row d-lg-none">
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <card
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,11 +168,8 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
-    'Chevron': () => import('~/components/Icons/Chevron'),
+    'Card': () => import('~/components/Blog/Card'),
     'SearchInput': () => import('~/components/SearchInput'),
-    'Category': () => import('~/components/Category'),
-    'Categories': () => import('~/components/CategoriesScroll'),
-    'Products': () => import('~/components/Products')
   },
   middleware: [],
   head () {
@@ -149,5 +269,5 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 </style>
