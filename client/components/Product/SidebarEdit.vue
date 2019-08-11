@@ -51,22 +51,41 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon class-box="mb-4">
+    <list-item-icon v-if="form.id" class-box="mb-4">
       <template slot="icon">
         <relations />
       </template>
       <template slot="text">
-        <div v-if="socials.length" class="d-flex flex-wrap justify-content-start align-items-center mb-2">
-          <social
-            v-for="(social, key) in socials"
-            :key="'socials-'+key"
-            :type="social.type"
-            :link="social.link"
-            class="mx-1"
-          />
-        </div>
-        <div class="btn btn-outline-gray btn-sm btn-block mb-2"
-             @click="$emit('onEditSocial')" v-text="(socials.length)?'+ изменить соц. сети':'+ указать соц. сети'"/>
+        <social-sharing
+          :url="baseUrl + '/products/' + form.id"
+          :title="form.name || form.short_description"
+          :description="form.short_description"
+          class="d-flex flex-wrap justify-content-start align-items-start"
+          inline-template>
+          <div>
+            <network network="facebook" class="outline-none">
+              <social
+                mode="shadow"
+                type="facebook"
+                class="mx-1"
+              />
+            </network>
+            <network network="vk" class="outline-none">
+              <social
+                mode="shadow"
+                type="vk"
+                class="mx-1"
+              />
+            </network>
+            <network network="odnoklassniki" class="outline-none">
+              <social
+                mode="shadow"
+                type="ok"
+                class="mx-1"
+              />
+            </network>
+          </div>
+        </social-sharing>
       </template>
     </list-item-icon>
 
@@ -155,6 +174,7 @@ export default {
     }
   },
   data: () => ({
+    baseUrl: process.env.baseUrl,
     monthRussian: {
       '01': 'января',
       '02': 'февраля',

@@ -339,7 +339,7 @@ export default {
         try {
           let { data } = await axios.get('categories', {
             params: {
-              products: 1,
+              articles: 1,
               perPage: 1000000,
               page: 1
             }

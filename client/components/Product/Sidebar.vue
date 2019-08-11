@@ -36,21 +36,41 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="socials.length" class-box="mb-4">
+    <list-item-icon v-if="product" class-box="mb-4">
       <template slot="icon">
         <relations />
       </template>
       <template slot="text">
-        <div class="d-flex flex-wrap justify-content-start align-items-center mb-2">
-          <social
-            v-for="(social, key) in socials"
-            :key="'socials-'+key"
-            :type="social.type"
-            :link="social.link"
-            mode="shadow"
-            class="mx-1"
-          />
-        </div>
+        <social-sharing
+          :url="baseUrl + '/products/' + product.id"
+          :title="product.name || product.short_description"
+          :description="product.short_description"
+          class="d-flex flex-wrap justify-content-start align-items-start"
+          inline-template>
+          <div>
+            <network network="facebook" class="outline-none">
+              <social
+                mode="shadow"
+                type="facebook"
+                class="mx-1"
+              />
+            </network>
+            <network network="vk" class="outline-none">
+              <social
+                mode="shadow"
+                type="vk"
+                class="mx-1"
+              />
+            </network>
+            <network network="odnoklassniki" class="outline-none">
+              <social
+                mode="shadow"
+                type="ok"
+                class="mx-1"
+              />
+            </network>
+          </div>
+        </social-sharing>
       </template>
     </list-item-icon>
 
@@ -98,6 +118,10 @@ export default {
     Percent
   },
   props: {
+    product: {
+      type: Object,
+      default: null
+    },
     wishlistActive: {
       type: Boolean,
       default: false
@@ -140,6 +164,7 @@ export default {
     }
   },
   data: () => ({
+    baseUrl: process.env.baseUrl,
     monthRussian: {
       '01': 'января',
       '02': 'февраля',

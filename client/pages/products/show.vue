@@ -41,6 +41,7 @@
           </div>
 
           <sidebar
+            :product="product"
             :wishlist-active="wishlist.indexOf(productId) !== -1"
             :socials="product.socials"
             :value="product.value"
@@ -102,6 +103,7 @@
 
         </div>
         <sidebar
+          :product="product"
           :wishlist-active="wishlist.indexOf(productId) !== -1"
           :socials="product.socials"
           :value="product.value"
