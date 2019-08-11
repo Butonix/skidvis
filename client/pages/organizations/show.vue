@@ -35,7 +35,7 @@
               :key="index"
               :link="link.link"
               :type="link.type"
-              class-box="ml-2 mb-2"
+              class="ml-2 mb-2"
             />
           </div>
         </div>

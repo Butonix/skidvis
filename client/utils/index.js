@@ -42,7 +42,7 @@ export function scrollBehavior (to, from, savedPosition) {
   return position
 }
 
-export function getQueryData ({ query, defaultData }) {
+export function getQueryData ({ query, defaultData, ignoreData }) {
   let res = {
     page: 1,
     perPage: 11,
@@ -66,6 +66,12 @@ export function getQueryData ({ query, defaultData }) {
   }
   if (query.orderingDir) {
     res.orderingDir = query.orderingDir
+  }
+  if (ignoreData) {
+    for (let i in ignoreData) {
+      let ignoreKey = ignoreData[i]
+      delete res[ignoreKey]
+    }
   }
   return res
 }

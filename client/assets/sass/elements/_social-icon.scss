@@ -1,4 +1,4 @@
-a.social-icon, div.social-icon{
+a.social-icon, div.social-icon, span.social-icon{
   cursor: pointer;
   display: inline-block;
   $height: rem(40);
@@ -12,7 +12,7 @@ a.social-icon, div.social-icon{
   text-align: center;
   vertical-align: middle;
   text-decoration: none!important;
-  &-lg{
+  &--lg{
     line-height: $height-lg;
     height: $height-lg;
     width: $height-lg;
@@ -37,76 +37,73 @@ a.social-icon, div.social-icon{
   &[data-type='instagram']{
     background: $social_instagram_grad;
   }
-  &s__shared{
-    .social-icon{
-      color: $body-color;
+  &--shadow{
+    color: $body-color;
+    background: #FFFFFF;
+    box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
+    border-radius: 50%;
+    transform-origin: center;
+    transform: translateY(0);
+    transition: .2s linear;
+    &:hover{
+      box-shadow: 0 2px 11px rgba(216, 216, 216, 0.6);
+      transform: translateY(1px);
+    }
+    &:active{
+      box-shadow: 0 0 11px rgba(216, 216, 216, 0.6);
+      transform: translateY(3px);
+    }
+    &[data-type]{
       background: #FFFFFF;
-      box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
-      border-radius: 50%;
-      transform-origin: center;
-      transform: translateY(0);
-      transition: .2s linear;
-      &:hover{
-        box-shadow: 0 2px 11px rgba(216, 216, 216, 0.6);
-        transform: translateY(1px);
-      }
-      &:active{
-        box-shadow: 0 0 11px rgba(216, 216, 216, 0.6);
-        transform: translateY(3px);
-      }
-      &[data-type='vk']{
-        color: $social_vk;
-      }
-      &[data-type='ok']{
-        color: $social_ok;
-      }
-      &[data-type='odnoklassniki']{
-        color: $social_ok;
-      }
-      &[data-type='facebook']{
-        color: $social_facebook;
-      }
-      &[data-type='google']{
-        color: $social_google;
-      }
-      &[data-type='instagram']{
-        color: $social_instagram;
-      }
+    }
+    &[data-type='vk']{
+      color: $social_vk;
+    }
+    &[data-type='ok']{
+      color: $social_ok;
+    }
+    &[data-type='odnoklassniki']{
+      color: $social_ok;
+    }
+    &[data-type='facebook']{
+      color: $social_facebook;
+    }
+    &[data-type='google']{
+      color: $social_google;
+    }
+    &[data-type='instagram']{
+      color: $social_instagram;
     }
   }
   &--outline{
     color: black;
     border: 2px solid black;
-    background: transparent;
+    &[data-type]{
+      background: transparent;
+    }
     &[data-type='vk']{
       color: $social_vk;
       border-color: $social_vk;
-      background: transparent;
     }
     &[data-type='ok']{
       color: $social_ok;
       border-color: $social_ok;
-      background: transparent;
     }
     &[data-type='odnoklassniki']{
       color: $social_ok;
       border-color: $social_ok;
-      background: transparent;
     }
     &[data-type='facebook']{
       color: $social_facebook;
       border-color: $social_facebook;
-      background: transparent;
     }
     &[data-type='google']{
       color: $social_google;
       border-color: $social_google;
-      background: transparent;
     }
     &[data-type='instagram']{
       color: $social_instagram;
       border-color: $social_instagram;
-      background: transparent;
     }
   }
 }

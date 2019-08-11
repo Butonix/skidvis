@@ -16,8 +16,8 @@
     <div class="row">
       <div class="col-lg-2"/>
       <div class="col-lg-8">
-        <div class="mb-4" v-html="article.content"/>
-        <div v-if="article.categories && article.categories.length" class="mb-3">
+        <div class="mb-3" v-html="article.content"/>
+        <div v-if="article.categories && article.categories.length" class="mb-4">
           <div
             v-for="(tag, key) in article.categories"
             :key="'tags-'+key"
@@ -25,7 +25,12 @@
             v-text="tag.name"
           />
         </div>
-        <share-box/>
+        <share-box
+          :url="baseUrl + '/blog/' + articleId"
+          :title="article.name || article.short_description || article.author"
+          :description="article.short_description || article.author"
+        />
+
       </div>
       <div class="col-lg-2"/>
     </div>
@@ -74,6 +79,7 @@ export default {
     return res
   },
   data: () => ({
+    baseUrl: process.env.baseUrl,
   }),
   computed: {
     ...mapGetters({

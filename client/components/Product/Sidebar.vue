@@ -41,13 +41,14 @@
         <relations />
       </template>
       <template slot="text">
-        <div class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center mb-2">
+        <div class="d-flex flex-wrap justify-content-start align-items-center mb-2">
           <social
             v-for="(social, key) in socials"
             :key="'socials-'+key"
             :type="social.type"
             :link="social.link"
-            class-box="mx-1"
+            mode="shadow"
+            class="mx-1"
           />
         </div>
       </template>

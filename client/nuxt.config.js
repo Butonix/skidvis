@@ -27,6 +27,7 @@ module.exports = {
     host: process.env.APP_HOST || process.env.APP_HOST_DEV || 'localhost' // default: localhost
   },
   env: {
+    baseUrl: process.env.BASE_URL || 'http://laravel-nuxt.test',
     apiUrl: process.env.APP_URL || 'http://api.laravel-nuxt.test',
     apiOrigin: process.env.APP_ORIGIN || 'http://api.laravel-nuxt.test',
     appName: process.env.APP_NAME || 'Laravel-Nuxt',
@@ -86,6 +87,7 @@ module.exports = {
     '~plugins/asyncComputed',
     '~plugins/vue-textarea-autosize',
     '~plugins/moment',
+    '~plugins/social-sharing',
     { src: '~plugins/toast', ssr: false },
     { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },

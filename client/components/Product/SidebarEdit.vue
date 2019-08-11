@@ -56,13 +56,13 @@
         <relations />
       </template>
       <template slot="text">
-        <div v-if="socials.length" class="social-icons__shared d-flex flex-wrap justify-content-start align-items-center mb-2">
+        <div v-if="socials.length" class="d-flex flex-wrap justify-content-start align-items-center mb-2">
           <social
             v-for="(social, key) in socials"
             :key="'socials-'+key"
             :type="social.type"
             :link="social.link"
-            class-box="mx-1"
+            class="mx-1"
           />
         </div>
         <div class="btn btn-outline-gray btn-sm btn-block mb-2"

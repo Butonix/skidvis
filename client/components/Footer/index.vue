@@ -26,7 +26,8 @@
           <div class="mb-3 d-flex flex-wrap justify-content-center">
             <social
               type="vk"
-              class-box="social-icon-lg m-1 cursor-pointer"
+              size="lg"
+              class="m-1 cursor-pointer"
               @mouseenter="border = 'vk'"
               @mouseleave="border = ''"
               @mousedown="fill = '1'"
@@ -34,7 +35,8 @@
             />
             <social
               type="odnoklassniki"
-              class-box="social-icon-lg m-1 cursor-pointer"
+              size="lg"
+              class="m-1 cursor-pointer"
               @mouseenter="border = 'ok'"
               @mouseleave="border = ''"
               @mousedown="fill = '1'"
@@ -42,7 +44,8 @@
             />
             <social
               type="google"
-              class-box="social-icon-lg m-1 cursor-pointer"
+              size="lg"
+              class="m-1 cursor-pointer"
               @mouseenter="border = 'google'"
               @mouseleave="border = ''"
               @mousedown="fill = '1'"
@@ -50,7 +53,8 @@
             />
             <social
               type="facebook"
-              class-box="social-icon-lg m-1 cursor-pointer"
+              size="lg"
+              class="m-1 cursor-pointer"
               @mouseenter="border = 'facebook'"
               @mouseleave="border = ''"
               @mousedown="fill = '1'"
@@ -58,7 +62,8 @@
             />
             <social
               type="instagram"
-              class-box="social-icon-lg m-1 cursor-pointer"
+              size="lg"
+              class="m-1 cursor-pointer"
               @mouseenter="border = 'instagram'"
               @mouseleave="border = ''"
               @mousedown="fill = '1'"

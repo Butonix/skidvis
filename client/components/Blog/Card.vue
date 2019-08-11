@@ -2,9 +2,9 @@
   <router-link
     :disabled="disabled"
     :to="{ name: 'blog.show', params: { articleId: article.id } }"
-               :class="{
-                 'article-card': true,
-                 ['article-card--'+type]: !!type
+    :class="{
+      'article-card': true,
+      ['article-card--'+type]: !!type
   }">
     <div class="article-card__wrapper">
       <div class="article-card__img">

@@ -7,7 +7,7 @@
     >
       <social
         :type="link.type"
-        class-box="mr-2"
+        class="mr-2"
       />
       <label class="social-links-edit__item__link">
         <a v-if="!isEdit(index)" :href="link.link" class="text-break" target="_blank" v-text="link.link"/>

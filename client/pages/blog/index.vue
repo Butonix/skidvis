@@ -141,42 +141,23 @@
           />
         </div>
       </div>
-      <div v-if="params.page > 1" class="row">
-        <div class="col-md-6 col-lg-4">
+      <div v-if="simplePage > 1" class="row">
+        <div
+          v-for="(item, index) in simpleItems"
+          v-if="index >= 6"
+          :key="'article-'+index"
+          class="col-md-6 col-lg-4">
           <card
-            v-if="simpleItems[6]"
-            :article="simpleItems[6]"
+            :article="item"
           />
         </div>
-        <div class="col-md-6 col-lg-4">
-          <card
-            v-if="simpleItems[7]"
-            :article="simpleItems[7]"
-          />
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <card
-            v-if="simpleItems[8]"
-            :article="simpleItems[8]"
-          />
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <card
-            v-if="simpleItems[9]"
-            :article="simpleItems[9]"
-          />
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <card
-            v-if="simpleItems[10]"
-            :article="simpleItems[10]"
-          />
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <card
-            v-if="simpleItems[11]"
-            :article="simpleItems[11]"
-          />
+      </div>
+      <div v-if="pageCount > 1 && pageCount > simplePage" class="pt-4 text-center">
+        <div class="btn btn-primary px-5"
+             :class="{'btn-loading':loadingArticles}"
+             @click="loadMoreArticles"
+        >
+          Загрузить еще
         </div>
       </div>
     </div>
@@ -188,7 +169,6 @@ import { mapGetters } from 'vuex'
 import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
 import axios from 'axios'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
@@ -199,9 +179,9 @@ export default {
   middleware: [],
   head () {
     return {
-      title: 'Все акции',
+      title: 'Блог',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-blog'
       }
     }
   },
@@ -217,7 +197,8 @@ export default {
         categories: [],
         ordering: 'created_at',
         perPage: 12
-      }
+      },
+      ignoreData: ['page']
     })
 
     indexApiUrl = 'articles'
@@ -246,11 +227,10 @@ export default {
       indexApiUrl
     }
   },
+  data: () => ({
+    loadingArticles: false
+  }),
   computed: {
-    ...mapGetters({
-      wishlist: 'auth/wishlist',
-      city: 'auth/city'
-    }),
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
     },
@@ -270,22 +250,54 @@ export default {
       }
       return data
     },
+    simplePage () {
+      let data = 0
+      try {
+        data = this.collection.articles.simple.list.current_page
+      } catch (e) {
+      }
+      return data
+    },
     pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
+      let data = 0
+      try {
+        data = Math.ceil(this.collection.articles.simple.list.total / 12)
+      } catch (e) {
+      }
+      return data
     }
   },
   watch: {
     'params.search': listWatchInstanceSearch,
-    'params.categories': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage,
-    'city': function (v) {
-      if (v.id) {
-        this.params.city_id = v.id
-        listWatchInstanceSearch.call(this)
-      }
-    }
+    'params.categories': listWatchInstanceSearch
   },
   methods: {
+    async loadMoreArticles () {
+      this.loadingArticles = true
+      try {
+        let { data } = await axios.get('articles', {
+          params: {
+            page: this.collection.articles.simple.list.current_page + 1,
+            perPage: 12,
+            categories: [],
+            ordering: 'created_at',
+          }
+        })
+        if (data.articles.simple.list.data.length) {
+          for (let i in data.articles.simple.list.data) {
+            this.collection.articles.simple.list.data.push(data.articles.simple.list.data[i])
+          }
+        }
+        this.collection.articles.simple.list.current_page++
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Получить статьи не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingArticles = false
+    },
     filter (type, item) {
       switch (type) {
         case 'categories':

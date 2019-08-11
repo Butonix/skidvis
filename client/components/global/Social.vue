@@ -1,10 +1,12 @@
 <template>
   <a
+    v-if="link"
     :href="link"
     :data-type="type"
     :class="{
-      [classBox]:!!classBox,
       ['social-icon--outline']:outline,
+      ['social-icon--'+mode]:!!mode,
+      ['social-icon--'+size]:!!size,
     }"
     class="social-icon"
     target="_blank"
@@ -16,6 +18,23 @@
   >
     <fa :icon="icon" />
   </a>
+  <span
+    v-else
+    :data-type="type"
+    :class="{
+      ['social-icon--outline']:outline,
+      ['social-icon--'+mode]:!!mode,
+      ['social-icon--'+size]:!!size,
+    }"
+    class="social-icon"
+    @click="onClick"
+    @mouseleave="$emit('mouseleave', $event)"
+    @mouseenter="$emit('mouseenter', $event)"
+    @mousedown="$emit('mousedown', $event)"
+    @mouseup="$emit('mouseup', $event)"
+  >
+    <fa :icon="icon" />
+  </span>
 </template>
 
 <script>
@@ -25,14 +44,24 @@ export default {
   props: {
     link: {
       type: String,
-      default: '#'
+      default: ''
     },
     type: {
       type: String,
       required: true
     },
-    classBox: {
+    size: {
       type: String,
+      validator: function (value) {
+        return ['', 'lg'].indexOf(value) !== -1
+      },
+      default: ''
+    },
+    mode: {
+      type: String,
+      validator: function (value) {
+        return ['', 'outline', 'shadow'].indexOf(value) !== -1
+      },
       default: ''
     },
     outline: {
