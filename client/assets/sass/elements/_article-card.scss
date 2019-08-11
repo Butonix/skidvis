@@ -1,7 +1,29 @@
 .article-card{
+  display: block;
   background: radial-gradient(471.70px at 100% 0%, #00C2FF 0%, #0096FF 100%);
   border-radius: 15px;
   margin-bottom: 38px;
+  box-shadow: 0 3px 19px rgba(#00C2FF, 0);
+  text-decoration: none!important;
+  &:hover{
+    box-shadow: 0 3px 19px rgba(#00C2FF, 0.7);
+  }
+  transition: .2s box-shadow;
+  &[disabled]{
+    cursor: default;
+  }
+  &__label{
+    position: absolute;
+    right: 24px;
+    top: 21px;
+    text-align: right;
+    color: transparent;
+    font-size: 13px;
+    transition: .2s;
+    &:hover{
+      color: white;
+    }
+  }
   &__img{
     border-radius: 15px 15px 0 0;
     position: relative;
@@ -52,11 +74,14 @@
     }
   }
   &--new{
+    box-shadow: 0 12px 22px rgba(255, 73, 33, 0);
+    &:hover{
+      box-shadow: 0 12px 22px rgba(255, 73, 33, 0.54);
+    }
     background: linear-gradient(19.94deg, #FF4921 33.98%, #FF6B3D 68.5%);
     border-radius: 15px;
     @include media-breakpoint-up(lg){
       position: relative;
-      display: block;
       width: 100%;
       padding: 0;
       overflow: hidden;
@@ -114,6 +139,10 @@
     }
   }
   &--actual{
+    box-shadow: 0 3px 19px rgba(216, 216, 216, 0);
+    &:hover{
+      box-shadow: 0 3px 19px rgba(216, 216, 216, 0.7);
+    }
     background: white;
     .article-card{
       &__body{

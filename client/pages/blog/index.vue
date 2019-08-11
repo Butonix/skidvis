@@ -58,29 +58,43 @@
             Свежее
           </h5>
           <card
+            v-if="simpleItems[0]"
+            :article="simpleItems[0]"
             type="new"
           />
           <card
+            v-if="simpleItems[1]"
+            :article="simpleItems[1]"
             type="new"
           />
           <card
+            v-if="simpleItems[2]"
+            :article="simpleItems[2]"
             type="new"
           />
           <div class="row d-none d-lg-flex">
             <div class="col-lg-6">
               <card
+                v-if="simpleItems[3]"
+                :article="simpleItems[3]"
               />
             </div>
             <div class="col-lg-6">
               <card
+                v-if="simpleItems[4]"
+                :article="simpleItems[4]"
               />
             </div>
             <div class="col-lg-6">
               <card
+                v-if="simpleItems[5]"
+                :article="simpleItems[5]"
               />
             </div>
             <div class="col-lg-6">
               <card
+                v-if="simpleItems[6]"
+                :article="simpleItems[6]"
               />
             </div>
           </div>
@@ -90,67 +104,78 @@
             Актуальное
           </h5>
           <card
-            type="actual"
-          />
-          <card
-            type="actual"
-          />
-          <card
-            type="actual"
-          />
-          <card
-            type="actual"
-          />
-          <card
+            v-for="(item, index) in actualItems"
+            :key="index"
+            :article="item"
             type="actual"
           />
         </div>
       </div>
 
-      <h5 class="mb-3">
+      <h5 class="mb-3 d-lg-none">
         Ранее
       </h5>
       <div class="row d-lg-none">
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[3]"
+            :article="simpleItems[3]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[4]"
+            :article="simpleItems[4]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[4]"
+            :article="simpleItems[4]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[5]"
+            :article="simpleItems[5]"
           />
         </div>
       </div>
-      <div class="row">
+      <div v-if="params.page > 1" class="row">
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[6]"
+            :article="simpleItems[6]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[7]"
+            :article="simpleItems[7]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[8]"
+            :article="simpleItems[8]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[9]"
+            :article="simpleItems[9]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[10]"
+            :article="simpleItems[10]"
           />
         </div>
         <div class="col-md-6 col-lg-4">
           <card
+            v-if="simpleItems[11]"
+            :article="simpleItems[11]"
           />
         </div>
       </div>
@@ -169,7 +194,7 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 export default {
   components: {
     'Card': () => import('~/components/Blog/Card'),
-    'SearchInput': () => import('~/components/SearchInput'),
+    'SearchInput': () => import('~/components/SearchInput')
   },
   middleware: [],
   head () {
@@ -184,23 +209,18 @@ export default {
     let indexApiUrl
     let collection = {}
     let categories = {}
-    let city = app.store.getters['auth/city']
 
     query = queryFixArrayParams(query, ['categories'])
 
     let params_ = getQueryData({ query,
       defaultData: {
         categories: [],
-        city_id: city.id,
+        ordering: 'created_at',
         perPage: 12
       }
     })
 
-    if (Number(params_.city_id) !== Number(city.id)) {
-      await app.store.dispatch('auth/setCity', params_.city_id)
-    }
-
-    indexApiUrl = 'products'
+    indexApiUrl = 'articles'
     try {
       let { data } = await axios.get(indexApiUrl, {
         params: params_
@@ -234,8 +254,21 @@ export default {
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
     },
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
+    actualItems () {
+      let data = []
+      try {
+        data = this.collection.articles.actual.list.data
+      } catch (e) {
+      }
+      return data
+    },
+    simpleItems () {
+      let data = []
+      try {
+        data = this.collection.articles.simple.list.data
+      } catch (e) {
+      }
+      return data
     },
     pageCount () {
       return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0

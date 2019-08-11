@@ -74,4 +74,39 @@ a.social-icon, div.social-icon{
       }
     }
   }
+  &--outline{
+    color: black;
+    border: 2px solid black;
+    background: transparent;
+    &[data-type='vk']{
+      color: $social_vk;
+      border-color: $social_vk;
+      background: transparent;
+    }
+    &[data-type='ok']{
+      color: $social_ok;
+      border-color: $social_ok;
+      background: transparent;
+    }
+    &[data-type='odnoklassniki']{
+      color: $social_ok;
+      border-color: $social_ok;
+      background: transparent;
+    }
+    &[data-type='facebook']{
+      color: $social_facebook;
+      border-color: $social_facebook;
+      background: transparent;
+    }
+    &[data-type='google']{
+      color: $social_google;
+      border-color: $social_google;
+      background: transparent;
+    }
+    &[data-type='instagram']{
+      color: $social_instagram;
+      border-color: $social_instagram;
+      background: transparent;
+    }
+  }
 }

@@ -2,9 +2,13 @@
   <a
     :href="link"
     :data-type="type"
-    :class="'social-icon' + ((classBox !== '') ? ' ' + classBox : '')"
-    @click="onClick"
+    :class="{
+      [classBox]:!!classBox,
+      ['social-icon--outline']:outline,
+    }"
+    class="social-icon"
     target="_blank"
+    @click="onClick"
     @mouseleave="$emit('mouseleave', $event)"
     @mouseenter="$emit('mouseenter', $event)"
     @mousedown="$emit('mousedown', $event)"
@@ -30,6 +34,10 @@ export default {
     classBox: {
       type: String,
       default: ''
+    },
+    outline: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({

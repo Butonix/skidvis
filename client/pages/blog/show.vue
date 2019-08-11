@@ -1,254 +1,65 @@
 <template>
-  <div>
-    <breadcrumbs/>
-    <div v-if="product" class="container">
-      <div class="row mb-4">
-        <div class="product__content">
+  <div v-if="article" class="container">
 
-          <div class="order-2 order-lg-1 product__slider mb-3">
-            <full-slider
-              :images="product.images"
-            >
-              <div v-if="product.currency_id && product.value" class="product__slider__label">
-                {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
-              </div>
-            </full-slider>
-          </div>
-
-          <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
-            <router-link
-              :to="{ name: 'organizations.show', params: { organizationId: product.organization_id } }"
-              :style="{backgroundColor: (product.organization_color)?product.organization_color:'#FFFFFF'}"
-              class="product__logo mr-4 mb-3">
-              <img
-                v-lazy="product.organization_logo || '/placeholders/logo.svg'"
-                :alt="product.name"
-                :title="product.name"
-                src="/placeholders/96x35-1920x700.gif"
-              >
-            </router-link>
-            <h1 class="flex-grow-1 product__name ff-montserrat" v-html="product.name"/>
-          </div>
-
-          <div v-if="product.tags && product.tags.length" class="order-3 order-lg-3 mb-4">
-            Акции по тегам
-            <div
-              v-for="(tag, key) in product.tags"
-              :key="'tags-'+key"
-              class="tag mx-1 mb-2"
-              v-text="tag.name"
-            />
-          </div>
-
-          <sidebar
-            :wishlist-active="wishlist.indexOf(productId) !== -1"
-            :socials="product.socials"
-            :value="product.value"
-            :currency-id="product.currency_id"
-            :categories="product.categories"
-            :start-at="product.start_at"
-            :end-at="product.end_at"
-            :operation-mode-text="getOperationModeText"
-            box-class="order-4 order-lg-4 mb-4 mt-2"
-            box-mod="center"
-            @wishlistchange="wishListChange"
-          />
-
-          <div
-            v-if="product.conditions || product.description"
-            class="order-5 order-lg-5 tab-panel mt-3">
-            <div
-              v-if="product.conditions"
-              :class="{'active':(tab === 'circs')}"
-              class="tab"
-              @click="tab ='circs'">
-              Условия
-            </div>
-            <div
-              v-if="product.description"
-              :class="{'active':(tab === 'desc')}"
-              class="tab"
-              @click="tab ='desc'">
-              Описание
-            </div>
-            <div v-scroll-to="'#addresses'" class="tab">
-              Адрес
-            </div>
-            <div class="tab d-none d-sm-block">
-              Отзывы
-            </div>
-          </div>
-
-          <div
-            v-if="product.conditions || product.description"
-            class="order-6 order-lg-6 tab-content product__description mb-5">
-            <transition name="fade" mode="out-in">
-              <div v-if="tab === 'circs'" :key="'circs'" v-html="product.conditions"/>
-              <div v-if="tab === 'desc'" :key="'desc'" v-html="product.description"/>
-            </transition>
-          </div>
-
-          <div v-if="product.points" id="addresses" class="order-7 order-lg-7">
-            <h5>
-              Акция по адресам:
-            </h5>
-            <search-input
-              v-model="search"
-              type-style="lite"
-              placeholder="Введите адрес или метро"
-            />
-            <addresses-frame :addresses="getPoints"/>
-          </div>
-
-        </div>
-        <sidebar
-          :wishlist-active="wishlist.indexOf(productId) !== -1"
-          :socials="product.socials"
-          :value="product.value"
-          :currency-id="product.currency_id"
-          :categories="product.categories"
-          :start-at="product.start_at"
-          :end-at="product.end_at"
-          :operation-mode-text="getOperationModeText"
-          box-mod="right"
-          @wishlistchange="wishListChange"
+    <div class="row mb-4">
+      <div class="col-lg-2"/>
+      <div class="col-lg-8">
+        <card
+          :article="article"
+          :disabled="true"
+          type="new"
         />
       </div>
-      <no-ssr>
-        <yandex-map
-          v-if="getCoords && false"
-          :coords="getCoords"
-          :zoom="zoom"
-          :scroll-zoom="false"
-          @click="onClick"
-        >
-          <ymap-marker
-            v-for="(point, key) in getPoints"
-            :key="key"
-            :properties="{
-              iconCaption: point.name
-            }"
-            :balloon-template="balloonTemplatePoint(point)"
-            :coords="[point.latitude, point.longitude]"
-            :marker-id="key"
-            :hint-content="point.name"
-            :callbacks="{
-              click: function(e) {
-                clickMarker(e, point, key)
-              }
-            }"
-          />
-        </yandex-map>
-      </no-ssr>
-
+      <div class="col-lg-2"/>
     </div>
 
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-lg-10 col-xl-8 mb-4">
-          <div class="mb-4 d-flex justify-content-between align-items-start">
-            <h5>Отзывы и рейтинг</h5>
-
-            <dropdown :options="reviewsOrderingArray"
-                      v-model="reviewsOrdering"
-                      btn-class="btn btn-sm btn-gray"
-                      h-align="right"
-                      placeholder="Сортировка"
-            />
-
-          </div>
-          <review-edit
-            :check="check"
-            :form="review.form"
-            :user="user"
-            field-pros="pros"
-            field-cons="cons"
-            field-content="text"
-            @inputpros="review.form.pros = $event"
-            @inputcons="review.form.cons = $event"
-            @inputcomment="review.form.text = $event"
-            @send="sendReview"
+    <div class="row">
+      <div class="col-lg-2"/>
+      <div class="col-lg-8">
+        <div class="mb-4" v-html="article.content"/>
+        <div v-if="article.categories && article.categories.length" class="mb-3">
+          <div
+            v-for="(tag, key) in article.categories"
+            :key="'tags-'+key"
+            class="tag mx-1 mb-2"
+            v-text="tag.name"
           />
-
-          <transition
-            v-for="(review, index) in reviews.data"
-            :key="index"
-            name="fade" mode="out-in">
-            <review
-              :review="review"
-            />
-          </transition>
-          <transition
-            v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
-            name="fade" mode="out-in">
-            <div class="text-center">
-              <div :class="{'btn-loading':loadingReview}"
-                   class="btn btn-outline-primary px-5"
-                   @click="loadMoreReviews"
-              >
-                Еще
-              </div>
-            </div>
-          </transition>
-
         </div>
+        <share-box/>
       </div>
+      <div class="col-lg-2"/>
     </div>
 
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import Fuse from 'fuse.js'
+import { mapGetters } from 'vuex'
 import axios from 'axios'
-import DynamicLabelInput from '~/components/Edit/Inputs/DynamicLabelInput'
-import FullSlider from '~/components/FullSlider'
-import AddressesFrame from '~/components/AddressesFrame'
-import Sidebar from '~/components/Product/Sidebar'
-import Form from 'vform'
 
 export default {
   components: {
-    'Review': () => import('~/components/Review'),
-    'ReviewEdit': () => import('~/components/ReviewEdit'),
-    'SearchInput': () => import('~/components/SearchInput'),
-    'Dropdown': () => import('~/components/Dropdown'),
-    DynamicLabelInput,
-    AddressesFrame,
-    Sidebar,
-    FullSlider
+    'Card': () => import('~/components/Blog/Card'),
+    'ShareBox': () => import('~/components/ShareBox')
   },
   head () {
     return {
-      title: 'Акция',
+      title: 'Статья',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-blog'
       }
     }
   },
   asyncData: async ({ params, error, app }) => {
-    let productId = params.productId
-    let city = app.store.getters['auth/city']
+    let articleId = params.articleId
     let res = {
-      productId,
-      review: {
-        form: {
-          text: '',
-          pros: '',
-          cons: ''
-        }
-      }
+      articleId
     }
 
-    if (productId) {
-      res.productId = Number(productId)
+    if (articleId) {
+      res.articleId = Number(articleId)
       try {
-        let { data } = await axios.get(`products/${productId}`, {
-          params: {
-            city_id: city.id
-          }
-        })
+        let { data } = await axios.get(`articles/${articleId}`)
         res = {
           ...res,
           ...data
@@ -263,219 +74,17 @@ export default {
     return res
   },
   data: () => ({
-    reviewsOrderingArray: [
-      {
-        id: 1,
-        ordering: 'created_at',
-        orderingDir: 'desc',
-        name: 'Новые'
-      },
-      {
-        id: 2,
-        ordering: 'created_at',
-        orderingDir: 'asc',
-        name: 'Старые'
-      }
-    ],
-    reviewsOrdering: {
-      id: 1,
-      ordering: 'created_at',
-      orderingDir: 'desc',
-      name: 'Новые'
-    },
-
-    loadingReview: false,
-    zoom: 10,
-    tab: 'circs',
-    search: '',
-    fusePoints: null
   }),
   computed: {
     ...mapGetters({
-      wishlist: 'auth/wishlist',
       check: 'auth/check',
-      user: 'auth/user',
-      city: 'auth/city'
-    }),
-    getCoords () {
-      let res = null
-      if (this.city && this.city.latitude && this.city.longitude) {
-        res = [this.city.latitude, this.city.longitude]
-      }
-      return res
-    },
-    getOperationModeText () {
-      return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
-    },
-    getPoints () {
-      return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
-    },
-    pageCountReviews () {
-      return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
-    }
-  },
-  watch: {
-    'city': async function (v) {
-      await this.fetchProduct()
-    },
-    'reviewsOrdering': async function (v) {
-      await this.fetchReviews({})
-    }
-  },
-  async beforeMount () {
-    if (!(this.product.points instanceof Fuse)) {
-      this.addPointsToSearchArray()
-    }
-    if (!(this.review.form instanceof Form)) {
-      this.review.form = new Form(this.review.form)
-    }
+      user: 'auth/user'
+    })
   },
   methods: {
-    ...mapActions({
-      pushInWishlist: 'auth/pushInWishlist',
-      removeFromWishlist: 'auth/removeFromWishlist'
-    }),
-    addPointsToSearchArray () {
-      this.fusePoints = new Fuse(this.product.points, {
-        shouldSort: true,
-        threshold: 0.6,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: [
-          'name', 'full_street'
-        ]
-      })
-    },
-    async onClick (e) {
-      this.coords = e.get('coords')
-      console.log(this.coords)
-    },
-    async clickMarker (e, point, key) {
-      console.log(e, point, key)
-    },
-    balloonTemplatePoint (point) {
-      return `
-        <h5>${point.name}</h5>
-        <p>${point.full_street}</p>
-      `
-    },
-    wishListChange (e) {
-      if (this.wishlist.indexOf(this.productId) !== -1) {
-        this.removeFromWishlist(this.productId)
-      } else {
-        this.pushInWishlist(this.productId)
-      }
-    },
-    async loadMoreReviews () {
-      this.loadingReview = true
-      try {
-        let { data } = await axios.get(`products/${this.productId}/reviews`, {
-          params: {
-            page: this.reviews.current_page + 1,
-            perPage: this.reviews.per_page,
-            ordering: this.reviewsOrdering.ordering,
-            orderingDir: this.reviewsOrdering.orderingDir
-          }
-        })
-
-        if (data.list.data.length) {
-          for (let i in data.list.data) {
-            this.reviews.data.push(data.list.data[i])
-          }
-        }
-        this.reviews.current_page++
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Получить отзывы не удалось'
-        })
-        console.log(e)
-      }
-      this.loadingReview = false
-    },
-    async fetchReviews ({
-      page = 1,
-      perPage = this.reviews.per_page,
-      ordering = this.reviewsOrdering.ordering,
-      orderingDir = this.reviewsOrdering.orderingDir
-    }) {
-      this.loadingReview = true
-      try {
-        let { data } = await axios.get(`products/${this.productId}/reviews`, {
-          params: {
-            page,
-            perPage,
-            ordering,
-            orderingDir
-          }
-        })
-
-        if (data.list) {
-          this.$set(this, 'reviews', data.list)
-        }
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Обновить отзывы не удалось'
-        })
-        console.log(e)
-      }
-      this.loadingReview = false
-    },
-    async fetchProduct () {
-      if (this.productId && this.city.id) {
-        try {
-          let { data } = await axios.get(`products/${this.productId}`, {
-            params: {
-              city_id: this.city.id
-            }
-          })
-          this.$set(this, 'product', data.product)
-          this.search = ''
-          this.zoom = 10
-          this.addPointsToSearchArray()
-        } catch (e) {
-          console.log(e)
-        }
-      } else {
-        console.log('error 404')
-      }
-    },
-    setDefaultReviewForm () {
-      this.review.form = new Form({
-        text: '',
-        pros: '',
-        cons: ''
-      })
-    },
-    async sendReview () {
-      try {
-        await this.review.form.post(`products/${this.productId}/reviews`)
-
-        this.setDefaultReviewForm()
-
-        await this.$callToast({
-          type: 'success',
-          text: 'Отзыв успешно сохранен'
-        })
-
-        await this.fetchReviews({})
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Отправить отзыв не удалось'
-        })
-        console.log(e)
-      }
-    }
   }
 }
 </script>
 
 <style>
-  .ymap-container{
-    height: 600px;
-  }
 </style>
