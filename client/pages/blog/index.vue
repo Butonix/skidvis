@@ -1,55 +1,32 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container mb-4">
       <search-input
         v-model="params.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <h5 class="mb-3">
-        Популярные категории
-      </h5>
-      <div class="d-flex flex-wrap justify-content-center pb-4">
-        <div class="btn btn-blog mx-1 mb-2">
-          Свадьба
+      <div class="d-flex justify-content-between">
+        <div class="text-muted small mb-2">
+          Популярные категории
         </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          День рождения
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          8 марта
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          Свадьба
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          День рождения
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          8 марта
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          Свадьба
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          День рождения
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          8 марта
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          Свадьба
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          День рождения
-        </div>
-        <div class="btn btn-blog mx-1 mb-2">
-          8 марта
-        </div>
-        <div class="btn btn-blog mx-1 mb-2 hover">
-          Все категории
+        <div class=" mb-2">
+          <a v-if="params.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+             @click="clearSelectedCategories">
+            Сбросить
+          </a>
+          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
+             @click="handleAllCats">
+            Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+          </a>
         </div>
       </div>
+      <categories-scroll
+        :categories="getFavCategories"
+        :categories-active-ids="params.categories"
+        type="blog"
+        @clickitem="filter('categories', $event)"
+      />
     </div>
     <div class="container blog__container--long-offset">
       <div class="row">
@@ -153,19 +130,66 @@
         </div>
       </div>
       <div v-if="pageCount > 1 && pageCount > simplePage" class="pt-4 text-center">
-        <div class="btn btn-primary px-5"
-             :class="{'btn-loading':loadingArticles}"
+        <div :class="{'btn-loading':loadingArticles}"
+             class="btn btn-primary px-5"
              @click="loadMoreArticles"
         >
           Загрузить еще
         </div>
       </div>
     </div>
+    <modal name="save-categories">
+      <div class="basic-modal categories-modal">
+        <div class="position-relative">
+          <div :class="{'active': loadingCategories}" class="preloader"/>
+          <div class="">
+            Выбрано {{ params.categories.length }} из {{ getCategories.length }}
+            <div class="">
+              <div class="d-flex">
+                <search-input
+                  v-model="categoriesSearch"
+                  form-class="mb-4 flex-grow-1"
+                  autofocus="autofocus"
+                />
+                <div v-if="params.categories.length" class="pl-3">
+                  <div class="btn btn-primary btn-sm"
+                       @click="clearSelectedCategories">
+                    Сбросить
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-start flex-wrap">
+                <div v-for="(category, key) in categoriesSelected"
+                     :key="'categories-selected-'+key"
+                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
+                     @click="filter('categories', category)"
+                     v-text="category.name"
+                />
+                <div v-for="(category, key) in getCategoriesSearchable"
+                     v-if="!categoriesSelected[category.id]"
+                     :key="'categories-'+key"
+                     class="btn btn-blog mx-1 mb-2 text-nowrap"
+                     @click="filter('categories', category)"
+                     v-text="category.name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4 mt-xs-5">
+          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                  @click="$modal.pop()"
+          >
+            Готово
+          </button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import Fuse from 'fuse.js'
 import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
 import axios from 'axios'
 
@@ -174,6 +198,8 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 export default {
   components: {
     'Card': () => import('~/components/Blog/Card'),
+    'Chevron': () => import('~/components/Icons/Chevron'),
+    'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'SearchInput': () => import('~/components/SearchInput')
   },
   middleware: [],
@@ -188,7 +214,8 @@ export default {
   asyncData: async ({ params, error, app, query }) => {
     let indexApiUrl
     let collection = {}
-    let categories = {}
+    let favCategories = {}
+    let categoriesSelected = {}
 
     query = queryFixArrayParams(query, ['categories'])
 
@@ -213,26 +240,56 @@ export default {
 
     try {
       let { data } = await axios.get('categories', {
-        // params: params_
+        params: {
+          articles: 1,
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: params_.categories
+        }
       })
-      categories = data
+      favCategories = data
+    } catch (e) {
+      console.log(e)
+    }
+
+    try {
+      for (let i in favCategories.list.data) {
+        let item = favCategories.list.data[i]
+        if (params_.categories.indexOf(item.id) !== -1) {
+          categoriesSelected[item.id] = { ...item }
+        }
+      }
     } catch (e) {
       console.log(e)
     }
 
     return {
-      categories,
+      categoriesSelected,
+      favCategories,
       collection,
       params: params_,
       indexApiUrl
     }
   },
   data: () => ({
-    loadingArticles: false
+    loadingArticles: false,
+
+    categories: {},
+    fuseCategories: null,
+    categoriesSearch: '',
+    loadingCategories: true,
+    categoriesTotal: 0
   }),
   computed: {
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
+    },
+    getCategoriesSearchable () {
+      return (this.fuseCategories && this.categoriesSearch.length > 0) ? this.fuseCategories.search(this.categoriesSearch) : this.getCategories
+    },
+    getFavCategories () {
+      return (this.getCategories.length) ? this.getCategories
+        : ((this.favCategories.list && this.favCategories.list.data) ? this.favCategories.list.data : [])
     },
     actualItems () {
       let data = []
@@ -272,6 +329,59 @@ export default {
     'params.categories': listWatchInstanceSearch
   },
   methods: {
+    clearSelectedCategories () {
+      this.params.categories = []
+      this.categoriesSelected = {}
+    },
+    async handleAllCats () {
+      this.$modal.push('save-categories')
+      if (!this.getCategories.length) {
+        try {
+          let { data } = await axios.get('categories', {
+            params: {
+              products: 1,
+              perPage: 1000000,
+              page: 1
+            }
+          })
+          this.categories = data
+          this.fuseCategories = new Fuse(this.getCategories, {
+            shouldSort: true,
+            threshold: 0.6,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: [
+              'name'
+            ]
+          })
+          this.loadingCategories = false
+        } catch (e) {
+          console.log(e)
+          await this.$callToast({
+            type: 'error',
+            text: 'Загрузить все категории не удалось'
+          })
+          this.$modal.pop()
+        }
+      }
+    },
+    filter (type, item) {
+      switch (type) {
+        case 'categories':
+          let id = Number(item.id)
+          let index = this.params.categories.indexOf(id)
+          if (index === -1) {
+            this.params.categories.push(id)
+            this.categoriesSelected[id] = { ...item }
+          } else {
+            this.$delete(this.params.categories, index)
+            this.$delete(this.categoriesSelected, id)
+          }
+          break
+      }
+    },
     async loadMoreArticles () {
       this.loadingArticles = true
       try {
@@ -280,7 +390,7 @@ export default {
             page: this.collection.articles.simple.list.current_page + 1,
             perPage: 12,
             categories: [],
-            ordering: 'created_at',
+            ordering: 'created_at'
           }
         })
         if (data.articles.simple.list.data.length) {
@@ -297,18 +407,6 @@ export default {
         console.log(e)
       }
       this.loadingArticles = false
-    },
-    filter (type, item) {
-      switch (type) {
-        case 'categories':
-          let index = this.params.categories.indexOf(String(item.id))
-          if (index === -1) {
-            this.params.categories.push(String(item.id))
-          } else {
-            this.$delete(this.params.categories, index)
-          }
-          break
-      }
     }
   }
 }

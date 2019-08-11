@@ -3,7 +3,7 @@
     <div ref="viewport"
          class="category-icons--scroll__viewport"
          @mousedown="onMousedown">
-      <div ref="content"
+      <div v-if="type === ''" ref="content"
            :style="`transform: translateX(${scrollLeft}px)`"
            class="category-icons--scroll__wrapper">
         <category
@@ -15,6 +15,18 @@
           :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
           :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
           @click="onClick(category)"
+        />
+      </div>
+      <div v-if="type === 'blog'" ref="content"
+           :style="`transform: translateX(${scrollLeft}px)`"
+           class="category-icons--scroll__wrapper">
+        <div v-for="(category, key) in categories"
+             v-if="categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite"
+             :key="'categories-'+key"
+             :class="{'active':categoriesActiveIds.indexOf(category.id) !== -1}"
+             class="btn btn-blog mx-1 mb-2 text-nowrap"
+             @click="onClick(category)"
+             v-text="category.name"
         />
       </div>
     </div>
@@ -29,6 +41,13 @@ export default {
     'Category': () => import('~/components/Category')
   },
   props: {
+    type: {
+      type: String,
+      default: '',
+      validator: function (value) {
+        return ['', 'blog'].indexOf(value) !== -1
+      }
+    },
     categories: {
       type: Array,
       default: () => ([])
