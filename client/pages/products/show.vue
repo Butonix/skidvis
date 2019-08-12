@@ -310,7 +310,7 @@ export default {
       return res
     },
     getOperationModeText () {
-      return (this.product.operationModeText) ? this.product.operationModeText.replace(', ', ', <br>') : ''
+      return (this.product.operationModeText) ? this.product.operationModeText.replaceAll(', ', ', <br>') : ''
     },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points

@@ -42,12 +42,28 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="!!value && Number(currencyId) === 1">
+    <list-item-icon>
       <template slot="icon">
         <percent />
       </template>
       <template slot="text">
-        <span class="text-line-through text-muted">{{ getFullPrice }} ₽</span> {{ getPrice }}
+        <span v-if="form.origin_price">
+          <span class="text-line-through text-muted">{{ getFullPrice }}&nbsp;₽</span> <span v-html="getPrice"/>
+        </span>
+        <span v-else>
+          Цена не указана
+        </span>
+        <material-input
+          :value="form.origin_price"
+          :form="form"
+          type="number"
+          field="origin_price"
+          placeholder="Цена от"
+          data-align="left"
+          form-class="my-4"
+          size="sm"
+          @input="$emit('onInputOriginPrice', $event)"
+        />
       </template>
     </list-item-icon>
 
@@ -121,6 +137,7 @@ import { Russian } from 'flatpickr/dist/l10n/ru'
 
 export default {
   components: {
+    'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
     flatPickr,
     Hourglass,
     Clock,
@@ -201,30 +218,19 @@ export default {
       let value = Number(this.value)
 
       if (currencyId === 1) {
-        let price_ = 1000 * value / 100
-        let price = 1000 - price_
-        return price + ' ₽, экономия ' + price_ + ' ₽'
+        let price_ = this.getFullPrice * value / 100
+        let price = this.getFullPrice - price_
+        return price + '&nbsp;₽, экономия&nbsp;' + price_ + '&nbsp;₽'
       } else {
         if (value && !isNaN(value)) {
-          return (this.getFullPrice - value) + ' ₽, экономия ' + value + ' ₽'
+          return (this.getFullPrice - value) + '&nbsp;₽, экономия&nbsp;' + value + '&nbsp;₽'
         } else {
-          return '0 ₽, экономия 0 ₽'
+          return '0&nbsp;₽, экономия&nbsp;0&nbsp;₽'
         }
       }
     },
     getFullPrice () {
-      let currencyId = Number(this.currencyId)
-      let value = Number(this.value)
-
-      if (currencyId === 1) {
-        return 1000
-      } else {
-        if (value && !isNaN(value)) {
-          return Math.ceil(value / 1000) * 1000
-        } else {
-          return 1000
-        }
-      }
+      return this.form.origin_price || 0
     },
     timeHuman () {
       return this.getTimeHuman(this.startAt, this.endAt, this.monthRussian)

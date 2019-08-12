@@ -533,6 +533,14 @@ export default {
         }
         return
       }
+
+      if (source.indexOf('data:') === -1) {
+        if (source.indexOf('?') !== -1) {
+          source += '&_=' + (new Date().getTime())
+        } else {
+          source += '?_=' + (new Date().getTime())
+        }
+      }
       let headers = new Headers()
       headers.append('Accept', 'image/*')
       fetch(source, {
@@ -546,10 +554,9 @@ export default {
           let e = { target: { files: [] } }
           const fileName = options.fileName || source.split('/').slice(-1)[0]
           let mediaType = options.mediaType || ('image/' + (options.fileType || fileName.split('.').slice(-1)[0]))
+          mediaType = mediaType.split('?')[0]
           mediaType = mediaType.replace('jpg', 'jpeg')
-          if (mediaType === 'image/svg') {
-            mediaType = 'image/svg+xml'
-          }
+          mediaType = mediaType.replace('image/svg', 'image/svg+xml')
           e.target.files[0] = new File([imageBlob], fileName, { type: mediaType })
           this.onFileChange(e, true)
         })

@@ -2,8 +2,22 @@
   <div :class="formClass_"
        @click="$emit('click', $event)">
     <input
-      v-if="type === 'tel'"
       v-mask="'+7 ### ###-##-##'"
+      v-if="type === 'tel'"
+      ref="materialInput"
+      :id="id"
+      :class="inputClass_"
+      :value="value"
+      :name="name"
+      :type="getType"
+      :readonly="readonly"
+      :autocomplete="autocomplete"
+      required
+      @input="$emit('input', $event.target.value)"
+    >
+    <input
+      v-mask="'#####################'"
+      v-else-if="type === 'number'"
       ref="materialInput"
       :id="id"
       :class="inputClass_"

@@ -49,7 +49,8 @@
             <div v-click-outside="closeCollapse" v-if="check" :class="{'active': openCollapse}"
                  class="auth-collapse"
                  @click="openCollapse = !openCollapse">
-              <button v-if="user.avatar && user.avatar.src" :style="`background-image: url(${user.avatar.src});`"
+              <button v-if="user.avatar && user.avatar.src"
+                      :style="`background-image: url(${user.avatar.src});`"
                       class="btn btn-outline-primary btn-auth btn-auth--active bg-cover"/>
               <button v-else class="btn btn-outline-primary btn-auth btn-auth--active text-uppercase">
                 {{ user.initials || 'АК' }}

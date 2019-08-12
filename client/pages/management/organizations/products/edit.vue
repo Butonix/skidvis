@@ -138,6 +138,7 @@
             :operation-mode-text="getOperationModeText"
             box-class="order-4 order-lg-4 mb-4 mt-2"
             box-mod="center"
+            @onInputOriginPrice="form.origin_price = $event"
             @onEditSelect="onEditSelect($event)"
             @onEditSocial="onEditSocial"
             @onInputDate="onInputDate"
@@ -215,6 +216,7 @@
           :end-at="form.end_at"
           :operation-mode-text="getOperationModeText"
           box-mod="right"
+          @onInputOriginPrice="form.origin_price = $event"
           @onEditSelect="onEditSelect($event)"
           @onEditSocial="onEditSocial"
           @onInputDate="onInputDate"
@@ -381,6 +383,7 @@ export default {
     let productId = params.productId
     let organizationId = params.organizationId
     let form = {
+      origin_price: 0,
       currency_id: 1,
       is_published: false,
       tags: [],

@@ -167,7 +167,7 @@ export const actions = {
     let city = state.user.city
     let wishlist = state.user.wishlist
 
-    let user = (data.user) ? data.user : data
+    let user = { ...((data.user) ? data.user : data) }
 
     if (city) {
       user.city = city

@@ -27,7 +27,7 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="!!value && Number(currencyId) === 1">
+    <list-item-icon v-if="product.origin_price">
       <template slot="icon">
         <percent />
       </template>
@@ -186,8 +186,8 @@ export default {
       let value = Number(this.value)
 
       if (currencyId === 1) {
-        let price_ = 1000 * value / 100
-        let price = 1000 - price_
+        let price_ = this.getFullPrice * value / 100
+        let price = this.getFullPrice - price_
         return price + '&nbsp;₽, экономия&nbsp;' + price_ + '&nbsp;₽'
       } else {
         if (value && !isNaN(value)) {
@@ -198,18 +198,7 @@ export default {
       }
     },
     getFullPrice () {
-      let currencyId = Number(this.currencyId)
-      let value = Number(this.value)
-
-      if (currencyId === 1) {
-        return 1000
-      } else {
-        if (value && !isNaN(value)) {
-          return Math.ceil(value / 1000) * 1000
-        } else {
-          return 1000
-        }
-      }
+      return this.product.origin_price || 0
     },
     timeHuman () {
       return this.getTimeHuman(this.startAt, this.endAt, this.monthRussian)
