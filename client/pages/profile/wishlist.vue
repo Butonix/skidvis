@@ -43,20 +43,44 @@ export default {
     let indexApiUrl
     let collection = {}
 
+    let check = app.store.getters['auth/check']
+    let wishlist = app.store.getters['auth/wishlist']
+
     let params_ = getQueryData({ query,
       defaultData: {
-        perPage: 12
+        perPage: 12,
+        ordering: 'created_at',
+        orderingDir: 'desc'
       }
     })
 
-    indexApiUrl = 'user/wishlist'
-    try {
-      let { data } = await axios.get(indexApiUrl, {
-        params: params_
-      })
-      collection = data
-    } catch (e) {
-      error({ statusCode: 500, message: 'Упс' })
+    if (check) {
+      indexApiUrl = 'user/wishlist'
+    } else {
+      indexApiUrl = 'products'
+
+      params_.whereIn = [...wishlist]
+    }
+
+    if (!check && wishlist.length === 0) {
+      collection = {
+        current_page: 1,
+        data: [],
+        from: 1,
+        last_page: 1,
+        per_page: 12,
+        to: 1,
+        total: 0
+      }
+    } else {
+      try {
+        let { data } = await axios.get(indexApiUrl, {
+          params: params_
+        })
+        collection = data
+      } catch (e) {
+        error({ statusCode: 500, message: 'Упс' })
+      }
     }
 
     return {
@@ -71,6 +95,7 @@ export default {
   computed: {
     ...mapGetters({
       wishlist: 'auth/wishlist',
+      check: 'auth/check',
       city: 'auth/city'
     }),
     items () {
@@ -81,38 +106,64 @@ export default {
     }
   },
   watch: {
-    'params.search': listWatchInstanceSearch,
-    'wishlist': function (v) {
-      this.clearWishlist(v)
+    'params.search': function () {
+      if (!(!this.check && this.wishlist.length === 0)) {
+        listWatchInstanceSearch.call(this)
+      }
     },
-    'params.page': listWatchInstancePage
+    'wishlist': async function (v) {
+      await this.clearWishlist(v)
+    },
+    'params.page': function () {
+      if (!(!this.check && this.wishlist.length === 0)) {
+        listWatchInstancePage.call(this)
+      }
+    }
   },
   methods: {
-    clearWishlist (arrayIds) {
+    async clearWishlist (arrayIds) {
       this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
       this.collection.list.total--
 
       if (this.params.page > 1 && this.items.length === 0) {
         this.params.page--
-        this.fetchProducts({})
+        await this.fetchProducts({})
       }
     },
-    async fetchProducts ({ page = this.params.page, perPage = this.params.perPage }) {
-      try {
-        let { data } = await axios.get('user/wishlist', {
-          params: {
-            page,
-            perPage
-          }
-        })
-        this.$set(this, 'collection', data)
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Обновить акции не удалось'
-        })
-        console.log(e)
+    async fetchProducts () {
+      this.loadingList = true
+      if (!this.check && this.wishlist.length === 0) {
+        this.collection = {
+          current_page: 1,
+          data: [],
+          from: 1,
+          last_page: 1,
+          per_page: 12,
+          to: 1,
+          total: 0
+        }
+      } else {
+        if (this.check) {
+          this.indexApiUrl = 'user/wishlist'
+        } else {
+          this.indexApiUrl = 'products'
+
+          this.params.whereIn = [...this.wishlist]
+        }
+        try {
+          let { data } = await axios.get(this.indexApiUrl, {
+            params: { ...this.params }
+          })
+          this.$set(this, 'collection', data)
+        } catch (e) {
+          await this.$callToast({
+            type: 'error',
+            text: 'Обновить акции не удалось'
+          })
+          console.log(e)
+        }
       }
+      this.loadingList = false
     }
   }
 }

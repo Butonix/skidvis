@@ -82,6 +82,7 @@ export default {
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
     'ThumbFileInput': () => import('~/components/Edit/ThumbsFileInput/Thumb')
   },
+  middleware: ['auth'],
   head () {
     return {
       title: 'Профиль',

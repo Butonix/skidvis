@@ -5,7 +5,7 @@
         <h5 v-html="$route.meta.title">
           Мой профиль
         </h5>
-        <div class="tab-panel tab-panel--slim mt-3">
+        <div v-if="check" class="tab-panel tab-panel--slim mt-3">
           <router-link :to="{ name: 'profile.show' }" :class="{'active': $route.name === 'profile.show'}"
                        class="tab"
           >
@@ -24,10 +24,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
-  middleware: ['auth'],
-  mounted () {
+  // middleware: ['auth'],
+  computed: {
+    ...mapGetters({
+      check: 'auth/check'
+    })
   }
 }
 </script>
