@@ -336,6 +336,7 @@ export default {
     async handleAllCats () {
       this.$modal.push('save-categories')
       if (!this.getCategories.length) {
+        this.loadingCategories = true
         try {
           let { data } = await axios.get('categories', {
             params: {
@@ -356,7 +357,6 @@ export default {
               'name'
             ]
           })
-          this.loadingCategories = false
         } catch (e) {
           console.log(e)
           await this.$callToast({
@@ -365,6 +365,7 @@ export default {
           })
           this.$modal.pop()
         }
+        this.loadingCategories = false
       }
     },
     filter (type, item) {

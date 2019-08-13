@@ -7,6 +7,7 @@
         <card
           :article="article"
           :disabled="true"
+          class="mb-0"
           type="new"
         />
       </div>
@@ -16,7 +17,7 @@
     <div class="row">
       <div class="col-lg-2"/>
       <div class="col-lg-8">
-        <div class="mb-3" v-html="article.content"/>
+        <div class="mb-3 article-content" v-html="article.content"/>
         <div v-if="article.categories && article.categories.length" class="mb-4">
           <div
             v-for="(tag, key) in article.categories"
@@ -79,7 +80,7 @@ export default {
     return res
   },
   data: () => ({
-    baseUrl: process.env.baseUrl,
+    baseUrl: process.env.baseUrl
   }),
   computed: {
     ...mapGetters({

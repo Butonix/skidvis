@@ -1,0 +1,39 @@
+.article{
+  &-content{
+    h5{
+      margin-bottom: 0;
+    }
+    h6{
+      font-weight: 600;
+      margin-bottom: .5rem;
+    }
+    p{
+      margin-bottom: 0;
+    }
+    ul, ul > li {
+      padding-left: 0;
+      list-style-type: none;
+    }
+    ul > li::before{
+      content: '\2022';
+
+      margin-right: .2rem;
+      text-align: right;
+
+      font-size: 1.6em;
+      color: inherit;
+      line-height: 1;
+      position: relative;
+      top: .15em;
+    }
+    img{
+      border-radius: 15px;
+    }
+    .ql-align-center{
+      text-align: center;
+    }
+    .ql-size-small{
+      font-size: $small-font-size;
+    }
+  }
+}

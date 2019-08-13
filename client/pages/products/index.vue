@@ -27,6 +27,13 @@
         @clickitem="filter('categories', $event)"
       />
       <div class="d-flex flex-column flex-xs-row justify-content-end align-items-start">
+        <div class="btn btn-outline-primary btn-sm mr-2"
+             @click="onOpenMap"
+        >
+          <span class="d-inline-block px-3">
+            <map-icon/>&nbsp;На&nbsp;карте
+          </span>
+        </div>
         <dropdown :options="orderingArray"
                   v-model="ordering"
                   btn-class="btn btn-sm btn-gray"
@@ -94,7 +101,43 @@
         </div>
       </div>
     </modal>
-
+    <modal name="map">
+      <div class="basic-modal map-modal">
+        <div :class="{'active': loadingPoints}"
+             class="loading-list"
+        />
+        <div class="close-modal" @click="$modal.pop()">
+          <div class="close-modal__arrows">
+            <chevron class="close-modal__arrows--left"/>
+            <chevron class="close-modal__arrows--right"/>
+          </div>
+        </div>
+        <no-ssr>
+          <yandex-map
+            v-if="getCoords"
+            ref="map"
+            :controls="[]"
+            :coords="getCoords"
+            :zoom="zoom"
+            :scroll-zoom="true"
+            @click="onClickMap"
+            @map-was-initialized="onMapWasInitialized"
+          >
+            <ymap-marker
+              v-for="(point, key) in getPoints"
+              :key="point.id"
+              :coords="[point.latitude, point.longitude]"
+              :marker-id="point.id"
+              :callbacks="{
+                click: function(e) {
+                  clickMarker(e, point, key)
+                }
+              }"
+            />
+          </yandex-map>
+        </no-ssr>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -104,11 +147,14 @@ import Fuse from 'fuse.js'
 import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
 import axios from 'axios'
 
+const CancelToken = axios.CancelToken
+
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
+    'MapIcon': () => import('~/components/Icons/MapIcon.vue'),
     'Category': () => import('~/components/Category'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'SearchInput': () => import('~/components/SearchInput'),
@@ -196,6 +242,12 @@ export default {
     }
   },
   data: () => ({
+    loadingPoints: false,
+    cancelRequestPoints: null,
+    map: null,
+    zoom: 10,
+    points: null,
+
     loadingList: false,
     orderingArray: [
       {
@@ -241,6 +293,26 @@ export default {
       wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
+    async clickMarker (e, point, key) {
+      console.log(e, point, key)
+    },
+    getPoints () {
+      let res = []
+      try {
+        if (this.points && this.points.list && this.points.list.data) {
+          res = this.points.list.data
+        }
+      } catch (e) {
+      }
+      return res
+    },
+    getCoords () {
+      let res = null
+      if (this.city && this.city.latitude && this.city.longitude) {
+        res = [this.city.latitude, this.city.longitude]
+      }
+      return res
+    },
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
     },
@@ -276,6 +348,59 @@ export default {
     }
   },
   methods: {
+    async fetchPoints () {
+      let bounds = this.map.getBounds()
+      console.log(bounds)
+      let vm = this
+      if (vm.cancelRequestPoints) {
+        vm.cancelRequestPoints()
+      }
+      this.loadingPoints = true
+      try {
+        let { data } = await axios.get('points/map', {
+          params: {
+            latitudeMax: bounds[1][0],
+            longitudeMax: bounds[1][1],
+            latitudeMin: bounds[0][0],
+            longitudeMin: bounds[0][1]
+          },
+          cancelToken: new CancelToken(function executor (c) {
+            // An executor function receives a cancel function as a parameter
+            vm.cancelRequestPoints = c
+          })
+        })
+        console.log(data)
+        this.points = data
+      } catch (e) {
+        console.log('error', e)
+        if (!axios.isCancel(e)) {
+          await this.$callToast({
+            type: 'error',
+            text: 'Загрузить карту не удалось'
+          })
+          this.$modal.pop()
+        }
+      }
+      this.loadingPoints = false
+
+      // console.log(this.$refs.map.getBounds())
+    },
+    async onClickMap (e) {
+      // this.coords = e.get('coords')
+      // if (this.map) {
+      //   console.log(this.map.getBounds())
+      // }
+      // console.log(this.$refs.map.getBounds())
+    },
+    async onMapWasInitialized (payload) {
+      this.map = payload
+      this.map.events.add('boundschange', this.fetchPoints)
+      await this.fetchPoints()
+    },
+    onOpenMap () {
+      console.log('onOpenMap')
+      this.$modal.push('map')
+    },
     clearSelectedCategories () {
       this.params.categories = []
       this.categoriesSelected = {}
@@ -283,6 +408,7 @@ export default {
     async handleAllCats () {
       this.$modal.push('save-categories')
       if (!this.getCategories.length) {
+        this.loadingCategories = true
         try {
           let { data } = await axios.get('categories', {
             params: {
@@ -303,7 +429,6 @@ export default {
               'name'
             ]
           })
-          this.loadingCategories = false
         } catch (e) {
           console.log(e)
           await this.$callToast({
@@ -312,6 +437,7 @@ export default {
           })
           this.$modal.pop()
         }
+        this.loadingCategories = false
       }
     },
     filter (type, item) {
