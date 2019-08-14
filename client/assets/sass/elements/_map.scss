@@ -10,6 +10,31 @@
     height: 100%;
   }
   position: relative;
+  [class*=balloon]{
+    box-shadow: none;
+  }
+  [class*=balloon__close-button]{
+    height: 30px;
+  }
+  [class*=balloon__layout]{
+    border: 0;
+    border-radius: 15px;
+  }
+  [class*=balloon__content]{
+    padding: 0;
+    border: 0;
+    border-radius: 15px;
+  }
+  [class*=balloon__close]{
+    float: none;
+    margin-bottom: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  [class*=balloon__close] + [class*=balloon__content]{
+    margin-right: 0;
+  }
 }
 .close-modal{
   cursor: pointer;

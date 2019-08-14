@@ -17,7 +17,8 @@
           </a>
           <a href="javascript:void(0)" class="text-muted small cursor-pointer"
              @click="handleAllCats">
-            Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
+            Все
+            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
           </a>
         </div>
       </div>
@@ -31,7 +32,7 @@
              @click="onOpenMap"
         >
           <span class="d-inline-block px-3">
-            <map-icon/>&nbsp;На&nbsp;карте
+            <map-icon />&nbsp;На&nbsp;карте
           </span>
         </div>
         <dropdown :options="orderingArray"
@@ -52,7 +53,7 @@
     <modal name="save-categories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
-          <div :class="{'active': loadingCategories}" class="preloader"/>
+          <div :class="{'active': loadingCategories}" class="preloader" />
           <div class="">
             Выбрано {{ params.categories.length }} из {{ getCategories.length }}
             <div class="">
@@ -108,8 +109,8 @@
         />
         <div class="close-modal" @click="$modal.pop()">
           <div class="close-modal__arrows">
-            <chevron class="close-modal__arrows--left"/>
-            <chevron class="close-modal__arrows--right"/>
+            <chevron class="close-modal__arrows--left" />
+            <chevron class="close-modal__arrows--right" />
           </div>
         </div>
         <no-ssr>
@@ -126,6 +127,7 @@
             <ymap-marker
               v-for="(point, key) in getPoints"
               :key="point.id"
+              :balloon-template="balloonTemplatePoint(point)"
               :coords="[point.latitude, point.longitude]"
               :marker-id="point.id"
               :callbacks="{
@@ -181,7 +183,8 @@ export default {
 
     query = queryFixArrayParams(query, ['categories'])
 
-    let params_ = getQueryData({ query,
+    let params_ = getQueryData({
+      query,
       defaultData: {
         categories: [],
         city_id: city.id,
@@ -347,6 +350,30 @@ export default {
   methods: {
     async clickMarker (e, point, key) {
       console.log(e, point, key)
+    },
+    balloonTemplatePoint (point) {
+      let res = ''
+      for (let i = 0; i < 6; i++) {
+        // let product = point.products[i]
+        res += `<div class="map-point__product">
+  <div class="map-point__logo">
+    <img src="/placeholders/logo-example.svg" alt="logo">
+  </div>
+  <a href="/" target="_blank" class="map-point__name">
+  20% скидка в день рождения в кинотеатре «Мираж Синема» в ТРК «Балкания NOVA-2»
+  </a>
+  </div>`
+      }
+      return `<div class="map-point">
+  <div class="map-point__sale">20%</div>
+  <div class="map-point__price">28 990 ₽</div>
+<div class="map-point__left"></div>
+<div class="map-point__right"></div>
+<div class="map-point__products">
+${res}
+</div>
+<div class="map-point__products-count">1/4&#160;акций</div>
+</div>`
     },
     async fetchPoints () {
       let bounds = this.map.getBounds()
