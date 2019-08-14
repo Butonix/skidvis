@@ -3,8 +3,16 @@
        class="container">
     <ol
       v-if="breadcrumbs.length"
+      :class="{[brsClass]:!!brsClass}"
       class="breadcrumb"
     >
+      <li class="breadcrumb-item">
+        <router-link
+          :to="{ name: 'welcome'}"
+        >
+          Главная
+        </router-link>
+      </li>
       <li
         v-for="(crumb, i) in breadcrumbs"
         v-if="crumb.meta.breadcrumb"
@@ -32,6 +40,10 @@ export default {
   name: 'Breadcrumbs',
   props: {
     boxClass: {
+      type: String,
+      default: ''
+    },
+    brsClass: {
       type: String,
       default: ''
     }

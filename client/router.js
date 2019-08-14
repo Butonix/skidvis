@@ -66,7 +66,9 @@ const routes = [
       { path: ':articleId',
         name: 'blog.show',
         meta: {
-          breadcrumb: 'Статья'
+          breadcrumb: {
+            name: 'articleId'
+          }
         },
         component: BlogShow
       }

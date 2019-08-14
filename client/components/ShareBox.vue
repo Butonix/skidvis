@@ -12,7 +12,7 @@
       <div>
         <network network="facebook">
           <social
-            :mode="btnMode"
+            mode="outline"
             type="facebook"
             size="lg"
             class="mx-1"
@@ -20,7 +20,7 @@
         </network>
         <network network="vk">
           <social
-            :mode="btnMode"
+            mode="outline"
             type="vk"
             size="lg"
             class="mx-1"
@@ -28,7 +28,7 @@
         </network>
         <network network="odnoklassniki">
           <social
-            :mode="btnMode"
+            mode="outline"
             type="ok"
             size="lg"
             class="mx-1"
@@ -42,10 +42,6 @@
 <script>
 export default {
   props: {
-    btnMode: {
-      type: String,
-      default: 'outline'
-    },
     url: {
       type: String,
       required: true

@@ -9,7 +9,7 @@
 
 
       @each $color, $value in $theme-colors_ {
-        @if($btns-primary && $color == 'primary'){
+        @if($btns-primary and $color == 'primary'){
           .btn-#{$color} {
             @include button-variant($btns-primary, $btns-primary);
           }

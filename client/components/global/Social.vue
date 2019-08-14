@@ -4,7 +4,6 @@
     :href="link"
     :data-type="type"
     :class="{
-      ['social-icon--outline']:outline,
       ['social-icon--'+mode]:!!mode,
       ['social-icon--'+size]:!!size,
     }"
@@ -22,7 +21,6 @@
     v-else
     :data-type="type"
     :class="{
-      ['social-icon--outline']:outline,
       ['social-icon--'+mode]:!!mode,
       ['social-icon--'+size]:!!size,
     }"
@@ -63,10 +61,6 @@ export default {
         return ['', 'outline', 'shadow'].indexOf(value) !== -1
       },
       default: ''
-    },
-    outline: {
-      type: Boolean,
-      default: false
     }
   },
   data: () => ({

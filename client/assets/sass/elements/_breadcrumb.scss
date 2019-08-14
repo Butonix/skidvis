@@ -1,3 +1,20 @@
+.breadcrumb{
+  font-weight: 300;
+  font-size: 12px;
+  &--blog{
+    color: #B5B5B5;
+    font-weight: 400;
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: "/";
+      color: #B5B5B5!important;
+    }
+    .breadcrumb-item{
+      a{
+        color: #B5B5B5!important;
+      }
+    }
+  }
+}
 .breadcrumb-item{
   a{
     color: $body-color!important;
