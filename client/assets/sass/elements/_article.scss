@@ -1,39 +1,100 @@
-.article{
-  &-content{
-    h5{
-      margin-bottom: 0;
-    }
-    h6{
-      font-weight: 600;
-      margin-bottom: .5rem;
-    }
-    p{
-      margin-bottom: 0;
-    }
-    ul, ul > li {
-      padding-left: 0;
-      list-style-type: none;
-    }
-    ul > li::before{
-      content: '\2022';
+.article-content{
+  h5{
+    margin-bottom: 0;
+  }
+  h6{
+    font-weight: 600;
+    margin-bottom: .5rem;
+  }
+  p{
+    margin-bottom: 0;
+  }
+  ul, ul > li {
+    padding-left: 0;
+    list-style-type: none;
+  }
+  ul > li::before{
+    content: '\2022';
 
-      margin-right: .2rem;
-      text-align: right;
+    margin-right: .2rem;
+    text-align: right;
 
-      font-size: 1.6em;
-      color: inherit;
-      line-height: 1;
+    font-size: 1.6em;
+    color: inherit;
+    line-height: 1;
+    position: relative;
+    top: .15em;
+  }
+  img{
+    border-radius: 15px;
+  }
+  .ql-align-center{
+    text-align: center;
+  }
+  .ql-size-small{
+    font-size: $small-font-size;
+  }
+}
+.article-next{
+  color: #FF4921 !important;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none!important;
+  outline: none!important;
+  &__one, &__two{
+    position: relative;
+    display: inline-block;
+    padding-bottom: .13em;
+    margin-bottom: .13em;
+    &:before, &:after{
+      content: attr(data-text);
+    }
+    &:before{
       position: relative;
-      top: .15em;
+      z-index: 1;
     }
-    img{
-      border-radius: 15px;
+    &:after{
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      height: 100%;
+      color: white !important;
+      background: #FF4921 !important;
     }
-    .ql-align-center{
-      text-align: center;
+  }
+  &__one{
+    &:after{
+      transition: .4s .4s;
     }
-    .ql-size-small{
-      font-size: $small-font-size;
+  }
+  &__two{
+    &:after{
+      transition: .4s;
+    }
+  }
+  &:hover{
+    .article-next{
+      &__one, &__two{
+        &:after{
+          width: 100%;
+        }
+      }
+      &__one{
+        &:after{
+          transition: .4s;
+        }
+      }
+      &__two{
+        &:after{
+          transition: .4s .4s;
+        }
+      }
     }
   }
 }

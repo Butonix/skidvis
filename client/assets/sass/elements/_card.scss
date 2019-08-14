@@ -352,7 +352,7 @@
           max-height: 3rem;
           margin-top: -3rem;
           z-index: 11;
-          box-shadow: 0 14px 19px rgba(216, 216, 216, 0.7);
+          box-shadow: 0 14px 19px rgba(216, 216, 216, 0);
           border-radius:  0 0 15px 15px;
           background: white;
           overflow: hidden;
@@ -360,6 +360,7 @@
           transition: .4s;
           &.active{
             pointer-events: auto;
+            box-shadow: 0 14px 19px rgba(216, 216, 216, 0.7);
           }
         }
         &__item{

@@ -129,7 +129,7 @@
               :coords="[point.latitude, point.longitude]"
               :marker-id="point.id"
               :callbacks="{
-                click: function(e) {
+                click: (e) => {
                   clickMarker(e, point, key)
                 }
               }"
@@ -293,9 +293,6 @@ export default {
       wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
-    async clickMarker (e, point, key) {
-      console.log(e, point, key)
-    },
     getPoints () {
       let res = []
       try {
@@ -348,6 +345,9 @@ export default {
     }
   },
   methods: {
+    async clickMarker (e, point, key) {
+      console.log(e, point, key)
+    },
     async fetchPoints () {
       let bounds = this.map.getBounds()
       console.log(bounds)
@@ -373,13 +373,6 @@ export default {
         this.points = data
       } catch (e) {
         console.log('error', e)
-        if (!axios.isCancel(e)) {
-          await this.$callToast({
-            type: 'error',
-            text: 'Загрузить карту не удалось'
-          })
-          this.$modal.pop()
-        }
       }
       this.loadingPoints = false
 

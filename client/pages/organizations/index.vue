@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="start">
     <div class="container orgs mb-5">
       <search-input
         v-model="params.search"
@@ -44,7 +44,8 @@
             >
               <router-link
                 :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
-                class="d-block text-dark">
+                class="d-block text-dark"
+                @click.native="onClickLinkScrollToBody">
                 <div class="orgs__col__box mb-2"
                      :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
                 >
@@ -85,7 +86,9 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none"/>
+        next-class="d-none"
+        @click.native="onClickLink"
+      />
 
     </div>
 
@@ -345,6 +348,16 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
+    },
+    onClickLink () {
+      this.$scrollTo(this.$refs.start, 500, {
+        offset: -60,
+        x: false,
+        y: true
+      })
+    },
+    onClickLinkScrollToBody () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }

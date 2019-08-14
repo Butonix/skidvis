@@ -57,6 +57,7 @@ $input-border-radius-sm: $border-radius;
 
 $business: #7F00FF;
 $blog: #FF2E00;
+$blog_liter: #FF4921;
 $primary: #00C2FF;
 $secondary: #E4E4E4;
 $danger: #F41818;
@@ -66,17 +67,20 @@ $themes: (
     "default": (
         "theme-colors": (
             "primary": $primary,
-        )
+        ),
+        "btns-primary": $primary
     ),
     "business": (
         "theme-colors": (
             "primary": $business,
-        )
+        ),
+        "btns-primary": $business
     ),
     "blog": (
         "theme-colors": (
             "primary": $blog,
-        )
+        ),
+        "btns-primary": $blog_liter
     )
 );
 

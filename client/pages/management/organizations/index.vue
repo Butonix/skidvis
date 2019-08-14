@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="start">
     <breadcrumbs/>
     <div class="container mb-5">
       <h5 class="mb-2">
@@ -37,6 +37,7 @@
                 'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
               }"
                 class="card-img-top d-block"
+                @click.native="onClickLinkScrollToBody"
               >
                 <div v-if="!item.is_published" class="card-img-top__message">
                   <div>
@@ -62,19 +63,22 @@
                 <div class="d-flex justify-content-around mb-4">
                   <router-link
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
-                    class="btn btn-gray btn-sm px-4">
+                    class="btn btn-gray btn-sm px-4"
+                    @click.native="onClickLinkScrollToBody">
                     <span class="px-2">Адреса</span>
                   </router-link>
                   <router-link
                     :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
-                    class="btn btn-gray btn-sm px-4">
+                    class="btn btn-gray btn-sm px-4"
+                    @click.native="onClickLinkScrollToBody">
                     <span class="px-2">Акции</span>
                   </router-link>
                 </div>
               </div>
               <div class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
-                             class="card-btn card-btn--left text-muted btn btn-outline-secondary">
+                             class="card-btn card-btn--left text-muted btn btn-outline-secondary"
+                             @click.native="onClickLinkScrollToBody">
                   <fa icon="pencil-alt" class="mr-2" />
                   Редактировать
                 </router-link>
@@ -101,7 +105,9 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none" />
+        next-class="d-none"
+        @click.native="onClickLink"
+      />
 
     </div>
   </div>
@@ -187,6 +193,16 @@ export default {
           listWatchInstanceDelete.call(this)
         }
       }
+    },
+    onClickLink () {
+      this.$scrollTo(this.$refs.start, 500, {
+        offset: -60,
+        x: false,
+        y: true
+      })
+    },
+    onClickLinkScrollToBody () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 

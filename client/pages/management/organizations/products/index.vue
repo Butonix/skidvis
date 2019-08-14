@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="start">
     <breadcrumbs/>
     <div class="container mb-5">
       <h5 class="mb-2">
@@ -37,7 +37,8 @@
                              'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
                              'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
                            }"
-                           class="card-img-top d-block" >
+                           class="card-img-top d-block"
+                           @click.native="onClickLinkScrollToBody">
                 <div v-if="!item.is_published" class="card-img-top__message">
                   <div>
                     Не опубликован
@@ -76,7 +77,9 @@
               </router-link>
               <label class="card-body pb-2 pt-4" v-html="(item.short_description)?item.short_description.replaceAll('\n', '<br>'):''"/>
               <div class="card-buttons mt-auto text-nowrap">
-                <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }" class="card-btn card-btn--full btn btn-outline-primary" >
+                <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }"
+                             class="card-btn card-btn--full btn btn-outline-primary"
+                             @click.native="onClickLinkScrollToBody">
                   <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
                 </router-link>
                 <div class="card-buttons__controls">
@@ -106,7 +109,9 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none"/>
+        next-class="d-none"
+        @click.native="onClickLink"
+      />
 
     </div>
   </div>
@@ -204,6 +209,16 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
+    },
+    onClickLink () {
+      this.$scrollTo(this.$refs.start, 500, {
+        offset: -60,
+        x: false,
+        y: true
+      })
+    },
+    onClickLinkScrollToBody () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }

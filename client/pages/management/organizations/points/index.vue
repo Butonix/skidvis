@@ -85,7 +85,9 @@
         :container-class="'pagination'"
         :page-class="'page-item'"
         prev-class="d-none"
-        next-class="d-none"/>
+        next-class="d-none"
+        @click.native="onClickLink"
+      />
 
     </div>
     <modal name="save-point">
@@ -510,6 +512,9 @@ export default {
 
     close () {
       this.$modal.pop()
+    },
+    onClickLink () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 

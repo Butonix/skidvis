@@ -1,5 +1,5 @@
 <template>
-  <div v-if="article" class="container">
+  <div v-if="article" ref="start" class="container">
 
     <div class="row mb-4">
       <div class="col-lg-2"/>
@@ -16,7 +16,7 @@
 
     <div class="row">
       <div class="col-lg-2"/>
-      <div class="col-lg-8">
+      <div class="col-lg-8 mb-5">
         <div class="mb-3 article-content" v-html="article.content"/>
         <div v-if="article.categories && article.categories.length" class="mb-4">
           <div
@@ -34,6 +34,24 @@
 
       </div>
       <div class="col-lg-2"/>
+      <div v-if="article.nextArticle" class="col-lg-5 col-xl-5 d-flex align-items-center justify-content-center">
+        <router-link
+          :to="{ name: 'blog.show', params: { articleId: article.nextArticle.id } }"
+          class="article-next"
+          @click.native="onClickLink"
+        >
+          <div class="article-next__one" data-text="Следующая"/>
+          <br>
+          <div class="article-next__two" data-text="статья"/>
+        </router-link>
+      </div>
+      <div v-if="article.nextArticle" class="col-lg-7 col-xl-7">
+        <card
+          :article="article.nextArticle"
+          class="mb-0"
+          type="next"
+        />
+      </div>
     </div>
 
   </div>
@@ -89,6 +107,9 @@ export default {
     })
   },
   methods: {
+    onClickLink () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
+    }
   }
 }
 </script>

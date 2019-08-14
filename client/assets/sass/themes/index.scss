@@ -2,18 +2,30 @@
 
 @each $theme, $themeValue in $themes {
   $theme-colors_: map_get($themeValue, "theme-colors");
+  $btns-primary: map_get($themeValue, "btns-primary");
   @if($theme-colors_){
     .theme-#{$theme}{
 
 
 
       @each $color, $value in $theme-colors_ {
-        .btn-#{$color} {
-          @include button-variant($value, $value);
-        }
+        @if($btns-primary && $color == 'primary'){
+          .btn-#{$color} {
+            @include button-variant($btns-primary, $btns-primary);
+          }
 
-        .btn-outline-#{$color} {
-          @include button-outline-variant($value);
+          .btn-outline-#{$color} {
+            @include button-outline-variant($btns-primary);
+          }
+        }
+        @else {
+          .btn-#{$color} {
+            @include button-variant($value, $value);
+          }
+
+          .btn-outline-#{$color} {
+            @include button-outline-variant($value);
+          }
         }
 
         @include text-emphasis-variant(".text-#{$color}", $value);
@@ -49,29 +61,29 @@
         //Form
         .material-input{
           textarea, input{
-            caret-color: $primary_;
+            caret-color: $btns-primary;
             &:focus{
-              border-color: $primary_;
-              box-shadow: 0 0 0 0.1rem rgba($primary_, 0.5);
+              border-color: $btns-primary;
+              box-shadow: 0 0 0 0.1rem rgba($btns-primary, 0.5);
               ~{
                 label{
-                  color: $primary_;
+                  color: $btns-primary;
                 }
                 .material-input__icon{
-                  color: $primary_;
+                  color: $btns-primary;
                 }
               }
             }
           }
           &__line{
             &:before{
-              background: $primary_;
+              background: $btns-primary;
             }
           }
         }
 
         //Links
-        $link-color: $primary_;
+        $link-color: $btns-primary;
         $link-hover-color: darken($link-color, 15%);
         a {
           &:not(.btn):not(.nav-link):not(.social-icon){
@@ -88,14 +100,14 @@
             &:focus{
               ~{
                 .search-input__lupe{
-                  color: $primary_;
+                  color: $btns-primary;
                 }
               }
             }
           }
           &__line{
             &:before{
-              background: $primary_;
+              background: $btns-primary;
             }
           }
         }
@@ -103,8 +115,8 @@
         .tag{
           &--edit{
             &.active{
-              border-color: $primary_;
-              background: $primary_;
+              border-color: $btns-primary;
+              background: $btns-primary;
             }
           }
         }
@@ -112,19 +124,19 @@
         .category-icon {
           &__wrapper{
             &:before{
-              border-color: $primary_;
+              border-color: $btns-primary;
             }
           }
           &__img{
             &--active{
-              background-color: $primary_;
+              background-color: $btns-primary;
             }
           }
         }
         .tab{
-          color: $primary_;
+          color: $btns-primary;
           &:before{
-            background: $primary_;
+            background: $btns-primary;
           }
         }
 
@@ -153,12 +165,11 @@
 
   @if($theme-colors_){
 
-    $primary_: map_get($theme-colors_, "primary");
-    @if($primary_){
+    @if($btns-primary){
 
       .nav-link--#{$theme}{
         @include hover {
-          color: $primary_;
+          color: $btns-primary;
         }
       }
 
@@ -166,7 +177,7 @@
         .navbar{
           .nav-link--#{$theme}{
             @include hover {
-              color: $primary_;
+              color: $btns-primary;
             }
           }
         }

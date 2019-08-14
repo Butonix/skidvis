@@ -1,5 +1,5 @@
 <template>
-  <div class="container container--long-offset">
+  <div class="container container--long-offset" ref="start">
     <transition
       v-if="getItems.length"
       name="fade" mode="out-in">
@@ -23,7 +23,8 @@
                              'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
                              'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
                            }"
-                           class="card-img-top d-block" >
+                           class="card-img-top d-block"
+                           @click.native="onClickLinkScrollToBody">
                 <div v-if="item.currency_id && item.value" class="card-img-top__label">
                   {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
                 </div>
@@ -115,7 +116,6 @@
         Ничего не нашлось :(
       </h5>
     </transition>
-
     <paginate
       v-if="pageCount && pageCount > 1"
       :page="page"
@@ -128,6 +128,7 @@
       prev-class="d-none"
       next-class="d-none"
       @input="$emit('setpage', $event)"
+      @click.native="onClickLink"
     />
 
   </div>
@@ -197,6 +198,16 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
+    },
+    onClickLink () {
+      this.$scrollTo(this.$refs.start, 500, {
+        offset: -60,
+        x: false,
+        y: true
+      })
+    },
+    onClickLinkScrollToBody () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }

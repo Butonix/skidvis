@@ -153,4 +153,42 @@
       }
     }
   }
+  &--next{
+    box-shadow: none;
+    &:hover{
+      box-shadow: none;
+    }
+    background: white;
+    .article-card{
+      &__wrapper{
+        position: relative;
+      }
+      &__body{
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 6rem;
+        border: 0;
+        color: white;
+        padding: rem(40) 0 rem(28) rem(25);
+      }
+      &__img{
+        border-radius: 15px;
+        &:before{
+          padding-top: 47.90%;
+        }
+        &__content{
+          &:before{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(39, 39, 39, 0.92) 0%, rgba(39, 39, 39, 0.41625) 47.4%, rgba(39, 39, 39, 0) 100%);
+          }
+        }
+      }
+    }
+  }
 }

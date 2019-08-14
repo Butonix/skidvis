@@ -5,21 +5,23 @@
     :class="{
       'article-card': true,
       ['article-card--'+type]: !!type
-  }">
+    }"
+    @click.native="onClickLink"
+  >
     <div class="article-card__wrapper">
       <div class="article-card__img">
-        <div :style="`background-image: url('${article.mainImage}');`" class="article-card__img__content bg-cover">
-          <div v-if="type === 'new' && article.label && article.label.src" class="article-card__label">
+        <div :style="`background-image: url('${article.mainImage||'/placeholders/cover.jpg'}');`" class="article-card__img__content bg-cover">
+          <div v-if="(type === 'new' || type === 'next') && article.label && article.label.src" class="article-card__label">
             <div class="mb-1"><img :src="article.label.src" :alt="article.label.name"></div>
             {{ article.label.name }}
           </div>
         </div>
       </div>
       <div class="article-card__body">
-        <div v-if="type === 'new'" class="article-card__body__name" v-html="article.name"/>
-        <div v-if="type === 'new'" class="article-card__body__small" v-html="(article.author)?article.author:'Содержание:'"/>
-        <div class="article-card__body__text" v-html="(type !== 'new')?article.name:article.short_description"/>
-        <div class="article-card__body__data">
+        <div v-if="type === 'new' || type === 'next'" class="article-card__body__name" v-html="article.name"/>
+        <div v-if="type === 'new' || type === 'next'" class="article-card__body__small" v-html="(article.author)?article.author:'Содержание:'"/>
+        <div class="article-card__body__text" v-html="(type !== 'new' && type !== 'next')?article.name:article.short_description"/>
+        <div v-if="type !== 'next'" class="article-card__body__data">
           <div>
             <eye/> {{ article.views || 0 }}
           </div>
@@ -43,7 +45,7 @@ export default {
     type: {
       type: String,
       validator: function (value) {
-        return ['actual', 'new', ''].indexOf(value) !== -1
+        return ['actual', 'new', 'next', ''].indexOf(value) !== -1
       },
       default: ''
     },
@@ -54,6 +56,11 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    onClickLink () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }
