@@ -234,3 +234,66 @@ export function queryFixArrayParams (query, params) {
 
   return query
 }
+
+export function mapPointSlide ({ inc = 1, id, count, key }) {
+  let pageE = document.getElementById('mp-slide-' + id)
+  let page = 1
+  if (pageE) {
+    page = Number(pageE.innerText)
+    if (Number.isNaN(page)) {
+      page = 1
+    }
+  }
+
+  page += inc
+  if (page < 1 || page > count) {
+    return
+  }
+
+  try {
+    let saleE = document.getElementById('mp-sale-' + id)
+    let priceE = document.getElementById('mp-price-' + id)
+    let boxE = document.getElementById('mp-products-box-' + id)
+    let slideE = document.getElementById('mp-slide-' + id)
+    let leftE = document.getElementById('mp-left-' + id)
+    let rightE = document.getElementById('mp-right-' + id)
+
+    boxE.style.setProperty('left', (-1 * 160 * (page - 1)) + 'px')
+
+    if (page === 1) {
+      leftE.classList.remove('active')
+      rightE.classList.add('active')
+    } else if (page === count) {
+      leftE.classList.add('active')
+      rightE.classList.remove('active')
+    } else {
+      leftE.classList.add('active')
+      rightE.classList.add('active')
+    }
+
+    slideE.innerHTML = page
+
+    let point = window.APPIVPS.list.data[key]
+
+    let product = point.products[page - 1]
+    if (product.value) {
+      saleE.innerHTML = product.currency_id === 1 ? product.value + '%' : product.value + '₽'
+    }
+
+    if (product.origin_price) {
+      let price = (product.origin_price).toLocaleString('ru') + '&nbsp;₽'
+      price = price.replaceAll(' ', '&nbsp;')
+      priceE.innerHTML = price
+    }
+
+    console.log('APPIVPS', window.APPIVPS.list.data[key])
+
+  } catch (e) {
+  }
+
+
+
+  console.log(key)
+  console.log(id)
+  console.log('mapPointSlide')
+}

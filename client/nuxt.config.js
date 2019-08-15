@@ -76,6 +76,7 @@ module.exports = {
   ],
 
   plugins: [
+    { src: '~plugins/utils', ssr: false },
     '~plugins/modifiedUtils',
     '~components/global',
     '~plugins/i18n',

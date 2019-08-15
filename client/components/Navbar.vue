@@ -24,26 +24,32 @@
 
             <div>
               <ul class="navbar__nav list-unstyled">
-                <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default">
+                <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default"
+                          @click.native="openMenu = false">
                   Все акции
                 </nav-item>
-                <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default">
+                <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default"
+                          @click.native="openMenu = false">
                   Все компании
                 </nav-item>
-                <nav-item :to="{ name: 'business' }" class-link="nav-link--business">
+                <nav-item :to="{ name: 'business' }" class-link="nav-link--business"
+                          @click.native="openMenu = false">
                   Бизнесу
                 </nav-item>
-                <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog">
+                <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog"
+                          @click.native="openMenu = false">
                   Блог
                 </nav-item>
-                <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default">
+                <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default"
+                          @click.native="openMenu = false">
                   Контакты
                 </nav-item>
               </ul>
             </div>
           </div>
           <div class="order-3 order-lg-2 ml-lg-auto">
-            <flag :count="wishCount"/>
+            <flag :count="wishCount"
+                  @click.native="openMenu = false"/>
           </div>
           <div class="order-1 order-lg-3 ml-lg-4 mb-3 mb-lg-0">
             <div v-click-outside="closeCollapse" v-if="check" :class="{'active': openCollapse}"
@@ -57,14 +63,17 @@
               </button>
               <div class="auth-collapse__wrapper">
                 <ul class="auth-collapse__list list-unstyled">
-                  <nav-item :to="{ name: 'profile.show' }">
+                  <nav-item :to="{ name: 'profile.show' }"
+                            @click.native="openMenu = false">
                     Профиль
                   </nav-item>
-                  <nav-item v-if="isAdministrator || isManagement" :to="{ name: 'management.organizations.index' }">
+                  <nav-item v-if="isAdministrator || isManagement" :to="{ name: 'management.organizations.index' }"
+                            @click.native="openMenu = false">
                     Организации
                   </nav-item>
                   <li class="nav-item">
-                    <div class="nav-link cursor-pointer" @click.prevent="logout">
+                    <div class="nav-link cursor-pointer" @click.prevent="logout"
+                         @click.native="openMenu = false">
                       Выйти
                     </div>
                   </li>

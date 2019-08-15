@@ -4,6 +4,9 @@
   font-family: 'Open Sans', #{$font-family-sans-serif};
   line-height: 1.5;
   width: 215px;
+  @media (max-width: 401px) {
+    width: 100%;
+  }
   &__products-count{
     font-size: 10px;
     line-height: 1.5;
@@ -14,23 +17,39 @@
   &__products{
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
     width: 160px;
     max-width: 160px;
     overflow: hidden;
     margin: auto;
   }
+  &__products-box{
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    left: 0;
+    transition: .5s ease;
+  }
   &__product{
     width: 160px;
     min-width: 160px;
     min-height: 48px;
+    display: flex;
+    flex-direction: column;
   }
   &__logo{
     padding-top: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 20px;
+    user-select: none;
+    &__wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 20px;
+      border-radius: 5px;
+      padding: 4px;
+    }
     img{
       max-width: 62px;
       max-height: 62px;
@@ -40,8 +59,13 @@
     display: block;
     font-size: 10px;
     color: $body-color!important;
-    padding-top: 4px;
+    padding-top: 2px;
     padding-bottom: 4px;
+    user-select: none;
+    margin-bottom: auto;
+    margin-top: auto;
+    max-height: 100px;
+    overflow: auto;
   }
   &__sale{
     position: absolute;
@@ -79,6 +103,16 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s;
+    &.active{
+      opacity: .7;
+      pointer-events: auto;
+      &:hover{
+        opacity: 1;
+      }
+    }
   }
   &__left{
     left: 6px;

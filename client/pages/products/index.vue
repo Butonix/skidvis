@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container mb-5">
+    <div class="container mb-4">
       <search-input
         v-model="params.search"
         autofocus="autofocus"
@@ -27,8 +27,8 @@
         :categories-active-ids="params.categories"
         @clickitem="filter('categories', $event)"
       />
-      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-start">
-        <div class="btn btn-outline-primary btn-sm mr-2"
+      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-center align-items-xs-start">
+        <div class="btn btn-outline-primary btn-sm mr-xs-2 mb-3"
              @click="onOpenMap"
         >
           <span class="d-inline-block px-3">
@@ -37,6 +37,7 @@
         </div>
         <dropdown :options="orderingArray"
                   v-model="ordering"
+                  class="mb-3"
                   btn-class="btn btn-sm btn-gray"
                   h-align="right"
                   placeholder="Сортировка"
@@ -127,7 +128,7 @@
             <ymap-marker
               v-for="(point, key) in getPoints"
               :key="point.id"
-              :balloon-template="balloonTemplatePoint(point)"
+              :balloon-template="balloonTemplatePoint(point, key)"
               :coords="[point.latitude, point.longitude]"
               :marker-id="point.id"
               :callbacks="{
@@ -351,28 +352,60 @@ export default {
     async clickMarker (e, point, key) {
       console.log(e, point, key)
     },
-    balloonTemplatePoint (point) {
+    balloonTemplatePoint (point, key) {
+      if (!point.products || point.products.length === 0) {
+        return '<div class="map-point">Акций не найдено</div>'
+      }
+
+      console.log('balloonTemplatePoint')
+
+      let id = Math.ceil(1e8 * Math.random())
       let res = ''
-      for (let i = 0; i < 6; i++) {
-        // let product = point.products[i]
+      for (let i in point.products) {
+        let product = point.products[i]
+        let logo = '<div class="map-point__logo__wrapper"></div>'
+        if (product.organization_logo) {
+          logo = `<div class="map-point__logo__wrapper" style="background-color: ${product.organization_color || 'white'};">
+          <img src="${product.organization_logo}">
+        </div>`
+        }
         res += `<div class="map-point__product">
   <div class="map-point__logo">
-    <img src="/placeholders/logo-example.svg" alt="logo">
+    ${logo}
   </div>
-  <a href="/" target="_blank" class="map-point__name">
-  20% скидка в день рождения в кинотеатре «Мираж Синема» в ТРК «Балкания NOVA-2»
-  </a>
+  <a href="/products/${product.id}" target="_blank" class="map-point__name">${product.name}</a>
   </div>`
       }
-      return `<div class="map-point">
-  <div class="map-point__sale">20%</div>
-  <div class="map-point__price">28 990 ₽</div>
-<div class="map-point__left"></div>
-<div class="map-point__right"></div>
-<div class="map-point__products">
-${res}
-</div>
-<div class="map-point__products-count">1/4&#160;акций</div>
+
+      let product = point.products[0]
+      let saleHtml = ''
+      if (product.value) {
+        let sale = product.currency_id === 1 ? product.value + '%' : product.value + '₽'
+
+        saleHtml = `<div id="mp-sale-${id}" class="map-point__sale">${sale}</div>`
+      }
+
+      let priceHtml = ''
+      if (product.origin_price) {
+        let price = (product.origin_price).toLocaleString('ru') + '&nbsp;₽'
+        price = price.replaceAll(' ', '&nbsp;')
+        priceHtml = `<div id="mp-price-${id}" class="map-point__price">${price}</div>`
+      }
+
+      let count = point.products.length
+
+      let arrowsHtml = ''
+      let countHtml = ''
+
+      if (count > 1) {
+        arrowsHtml = `<div id="mp-left-${id}" class="map-point__left" onclick="AV01UMPS({ inc: -1, id: ${id}, count: ${count}, key: ${key} })"></div>
+<div id="mp-right-${id}" class="map-point__right active" onclick="AV01UMPS({ inc: 1, id: ${id}, count: ${count}, key: ${key} })"></div>`
+        countHtml = `<span id="mp-slide-${id}">1</span>/${count}&#160;акций`
+      }
+
+      return `<div class="map-point">${saleHtml}${priceHtml}${arrowsHtml}
+<div id="mp-products-${id}" class="map-point__products"><div id="mp-products-box-${id}" class="map-point__products-box">${res}</div></div>
+<div class="map-point__products-count">${countHtml}</div>
 </div>`
     },
     async fetchPoints () {
@@ -398,6 +431,8 @@ ${res}
         })
         console.log(data)
         this.points = data
+        window.appPageProductsIndexVarPoints = this.points
+        window.APPIVPS = window.appPageProductsIndexVarPoints
       } catch (e) {
         console.log('error', e)
       }
