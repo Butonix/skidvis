@@ -12,7 +12,10 @@
     </div>
 
     <div class="container container--long-offset">
-      <div class="row">
+      <div class="row position-relative">
+        <div :class="{'active': loadingList}"
+             class="loading-list"
+        />
         <div
           class="col-md-6 col-lg-4 mb-4 mb-sm-5 text-right"
         >
@@ -32,10 +35,10 @@
           >
             <div class="card w-100 h-100">
               <router-link
-                :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
+                :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
                 :class="{
-                'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
-              }"
+                  'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
+                }"
                 class="card-img-top d-block"
                 @click.native="onClickLinkScrollToBody"
               >
@@ -153,6 +156,7 @@ export default {
     }
   },
   data: () => ({
+    loadingList: false,
     errorsImages: {}
   }),
   computed: {

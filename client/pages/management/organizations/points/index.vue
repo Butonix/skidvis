@@ -29,7 +29,10 @@
     <transition
       v-if="items.length"
       name="fade" mode="out-in">
-      <div class="container" style="min-height: 400px">
+      <div class="container position-relative" style="min-height: 400px">
+        <div :class="{'active': loadingList}"
+             class="loading-list"
+        />
         <transition
           v-for="(item, index) in items"
           :key="index"
@@ -323,6 +326,7 @@ export default {
     }
   },
   data: () => ({
+    loadingList: false,
     address: '',
     showAddresses: false,
     addresses: [],

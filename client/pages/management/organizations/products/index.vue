@@ -12,7 +12,10 @@
     </div>
 
     <div class="container container--long-offset">
-      <div class="row">
+      <div class="row position-relative">
+        <div :class="{'active': loadingList}"
+             class="loading-list"
+        />
         <div
           class="col-md-6 col-lg-4 mb-4 mb-sm-5 text-right"
         >
@@ -169,6 +172,7 @@ export default {
     }
   },
   data: () => ({
+    loadingList: false,
     errorsImages: {}
   }),
   computed: {
