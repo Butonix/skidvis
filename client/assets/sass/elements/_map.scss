@@ -16,6 +16,9 @@
   [class*=balloon__close-button]{
     height: 30px;
   }
+  [class*=balloon_layout_panel]{
+    background: rgba(0, 0, 0, 0.31);
+  }
   [class*=balloon__layout]{
     border: 0;
     border-radius: 15px;
@@ -24,12 +27,15 @@
     padding: 0;
     border: 0;
     border-radius: 15px;
+    width: 215px;
+    left: 50%;
+    transform: translateX(-50%);
   }
   [class*=balloon__close]{
     float: none;
     margin-bottom: 0;
     position: absolute;
-    right: 0;
+    right: calc(50% - 52px);
     bottom: 0;
   }
   [class*=balloon__close] + [class*=balloon__content]{

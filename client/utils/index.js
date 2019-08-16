@@ -273,7 +273,7 @@ export function mapPointSlide ({ inc = 1, id, count, key }) {
 
     slideE.innerHTML = page
 
-    let point = window.APPIVPS.list.data[key]
+    let point = window.APPIVPS[key]
 
     let product = point.products[page - 1]
     if (product.value) {
@@ -285,15 +285,6 @@ export function mapPointSlide ({ inc = 1, id, count, key }) {
       price = price.replaceAll(' ', '&nbsp;')
       priceE.innerHTML = price
     }
-
-    console.log('APPIVPS', window.APPIVPS.list.data[key])
-
   } catch (e) {
   }
-
-
-
-  console.log(key)
-  console.log(id)
-  console.log('mapPointSlide')
 }

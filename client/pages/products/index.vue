@@ -132,6 +132,9 @@
               :coords="[point.latitude, point.longitude]"
               :marker-id="point.id"
               :callbacks="{
+                balloonopen: (e) => {
+                  balloonopenMarker(e, point, key)
+                },
                 click: (e) => {
                   clickMarker(e, point, key)
                 }
@@ -248,9 +251,13 @@ export default {
   data: () => ({
     loadingPoints: false,
     cancelRequestPoints: null,
+    balloonopening: false,
+    placemark: null,
+    placemarkId: null,
+    placemarkClear: true,
     map: null,
     zoom: 10,
-    points: null,
+    points: [],
 
     loadingList: false,
     orderingArray: [
@@ -298,14 +305,7 @@ export default {
       city: 'auth/city'
     }),
     getPoints () {
-      let res = []
-      try {
-        if (this.points && this.points.list && this.points.list.data) {
-          res = this.points.list.data
-        }
-      } catch (e) {
-      }
-      return res
+      return this.points
     },
     getCoords () {
       let res = null
@@ -350,7 +350,13 @@ export default {
   },
   methods: {
     async clickMarker (e, point, key) {
-      console.log(e, point, key)
+      // console.log(e, point, key)
+    },
+    async balloonopenMarker (e, point, key) {
+      this.balloonopening = true
+      setTimeout(() => {
+        this.balloonopening = false
+      }, 600)
     },
     balloonTemplatePoint (point, key) {
       if (!point.products || point.products.length === 0) {
@@ -403,19 +409,20 @@ export default {
         countHtml = `<span id="mp-slide-${id}">1</span>/${count}&#160;акций`
       }
 
-      return `<div class="map-point">${saleHtml}${priceHtml}${arrowsHtml}
+      return `<div class="map-point__wrapper"><div class="map-point">${saleHtml}${priceHtml}${arrowsHtml}
 <div id="mp-products-${id}" class="map-point__products"><div id="mp-products-box-${id}" class="map-point__products-box">${res}</div></div>
 <div class="map-point__products-count">${countHtml}</div>
-</div>`
+</div></div>`
     },
     async fetchPoints () {
       let bounds = this.map.getBounds()
-      console.log(bounds)
+      console.log('fetchPoints')
       let vm = this
       if (vm.cancelRequestPoints) {
         vm.cancelRequestPoints()
       }
       this.loadingPoints = true
+      this.placemarkClear = false
       try {
         let { data } = await axios.get('points/map', {
           params: {
@@ -429,13 +436,20 @@ export default {
             vm.cancelRequestPoints = c
           })
         })
-        console.log(data)
-        this.points = data
+        this.points = data.list.data
         window.appPageProductsIndexVarPoints = this.points
         window.APPIVPS = window.appPageProductsIndexVarPoints
       } catch (e) {
         console.log('error', e)
       }
+      // if (this.placemarkId) {
+      //   console.log('placemark')
+      //   this.map.objects.balloon.open(this.placemarkId)
+      //   this.placemark = null
+      //   this.placemarkId = null
+      //   this.placemarkClear = true
+      // }
+
       this.loadingPoints = false
 
       // console.log(this.$refs.map.getBounds())
@@ -449,11 +463,17 @@ export default {
     },
     async onMapWasInitialized (payload) {
       this.map = payload
-      this.map.events.add('boundschange', this.fetchPoints)
+      // this.map.events.add('boundschange', this.fetchPoints)
+      this.map.events.add('boundschange', (e) => {
+        if (!this.balloonopening) {
+          this.fetchPoints()
+        }
+      })
       await this.fetchPoints()
     },
     onOpenMap () {
       console.log('onOpenMap')
+      this.placemark = null
       this.$modal.push('map')
     },
     clearSelectedCategories () {

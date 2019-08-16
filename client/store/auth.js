@@ -6,7 +6,12 @@ import Cookies from 'js-cookie'
 // state
 export const state = () => ({
   user: {
-    city: { id: 3, name: 'Санкт-Петербург' },
+    city: {
+      id: 3,
+      name: 'Санкт-Петербург',
+      latitude: 59.939131,
+      longitude: 30.3159
+    },
     wishlist: []
   },
   isAdministrator: false,
