@@ -128,6 +128,7 @@
         >
           <ymap-marker
             v-for="(point, key) in getPoints"
+            :layout="'islands#blueDiscountIcon'"
             :key="key"
             :properties="{
               iconCaption: point.name

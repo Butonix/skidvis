@@ -127,8 +127,11 @@
           >
             <ymap-marker
               v-for="(point, key) in getPoints"
-              :layout="'islands#blueIcon'"
+              :layout="'islands#blueDiscountIcon'"
               :key="point.id"
+              :properties="{
+                iconCaption: point.name
+              }"
               :balloon-template="balloonTemplatePoint(point, key)"
               :coords="[point.latitude, point.longitude]"
               :marker-id="point.id"
