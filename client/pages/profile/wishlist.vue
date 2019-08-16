@@ -12,6 +12,7 @@
       :items="items"
       :page-count="pageCount"
       :page="params.page"
+      type="wishlist"
       @setpage="params.page = $event"
     />
   </div>

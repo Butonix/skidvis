@@ -1,13 +1,13 @@
 <template>
-  <div class="container contacts mt-5">
+  <div class="container contacts mt-4 mt-md-5">
     <div class="row">
-      <div class="col"/>
-      <div class="col-auto mb-4">
+      <div class="col-12 col-md"/>
+      <div class="col-12 col-md-auto mb-4 text-center">
         <a href="tel:89006433002" class="h2 text-dark">
           8 900 643-30-02
         </a>
       </div>
-      <div class="col mb-4">
+      <div class="col-12 col-md mb-4 d-flex justify-content-center justify-content-md-start">
         <div class="d-flex align-items-center justify-content-start">
           <div class="mr-2">
             <img src="/img/contacts/cat.jpg" alt="Ответит менеджер, Кот">
@@ -28,7 +28,7 @@
       <div class="pb-2">
         Ответим с 9 до 23 по мск
       </div>
-      <div class="mb-5 pb-5">
+      <div class="mb-3 mb-md-5 pb-5">
         <call-me
           :type-id="1"
         />

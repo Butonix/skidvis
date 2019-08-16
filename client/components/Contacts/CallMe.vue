@@ -2,8 +2,8 @@
   <div v-click-outside="onClickOutside"
        :class="{'active': active}"
        class="contacts__form"
-       @mouseenter="active = true"
-       @mouseleave="active = false">
+       @mouseenter="mouseenter"
+       @mouseleave="mouseleave">
     <div
       :class="{'btn-loading':form.busy || false}"
       class="btn btn-outline-primary mb-2 px-5"
@@ -48,6 +48,7 @@ export default {
     }
   },
   data: () => ({
+    actived: false,
     active: false,
     form: {
       typeId: 1,
@@ -62,6 +63,14 @@ export default {
     }
   },
   methods: {
+    mouseenter () {
+      this.active = true
+      setTimeout(() => { this.actived = true }, 400)
+    },
+    mouseleave () {
+      this.active = false
+      this.actived = false
+    },
     async send () {
       try {
         let { data } = await this.form.post('feedbacks')
@@ -78,10 +87,13 @@ export default {
       }
     },
     async onClick () {
-      if (this.active) {
+      console.log('onClick', this.active, this.actived)
+      if (this.actived) {
+        console.log('send')
         await this.send()
       }
       this.active = true
+      this.actived = true
     },
     onClickOutside () {
       this.active = false

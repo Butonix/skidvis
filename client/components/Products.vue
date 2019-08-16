@@ -112,7 +112,21 @@
     <transition
       v-else
       name="fade" mode="out-in">
-      <h5 class="text-center py-5">
+      <div v-if="type === 'wishlist'" class="text-center py-5">
+        <h5 class="mb-4">
+          Пусто
+        </h5>
+        <h5>
+          Чтобы отложить акцию,<br> кликаем по иконке закладки
+        </h5>
+        <flag :active="wishlistActive" class-box="mb-5" :title="(wishlistActive)?'Удалить из избранного':'Добавить в избранное'"
+              @click="wishlistActive = !wishlistActive"
+        />
+        <p>
+          Сохраняем избранное<br> даже если не зарегистрировались
+        </p>
+      </div>
+      <h5 v-else class="text-center py-5">
         Ничего не нашлось :(
       </h5>
     </transition>
@@ -145,6 +159,10 @@ export default {
     Paginate
   },
   props: {
+    type: {
+      type: String,
+      default: 'default'
+    },
     loadingList: {
       type: Boolean,
       default: false
@@ -163,6 +181,7 @@ export default {
     }
   },
   data: () => ({
+    wishlistActive: false,
     errorsImages: {},
     activeAddresses: 0
   }),
