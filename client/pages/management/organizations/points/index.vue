@@ -190,18 +190,34 @@
 
         <material-input
           v-model="form.phone"
-          type="tel"
           :form="form"
+          type="tel"
           field="phone"
           type-input="inline"
           placeholder="Телефон"
           form-class="mb-5"
         />
 
-        <div class="">
-          Режим работы по адресу
+        <div class="d-flex mb-3">
+          <div class="mr-3">
+            Режим работы по адресу:
+          </div>
+          <div class="btn-group">
+            <div :class="{'active':!form.own_schedule}"
+                 class="btn btn-outline-primary btn-sm"
+                 @click="form.own_schedule = false"
+            >
+              Организации
+            </div>
+            <div :class="{'active':form.own_schedule}"
+                 class="btn btn-outline-primary btn-sm"
+                 @click="form.own_schedule = true"
+            >
+              Свой
+            </div>
+          </div>
         </div>
-        <div class="mb-5">
+        <div v-if="form.own_schedule" class="mb-5" title="Собственный режим работы">
           <div v-for="(value, index) in form.operationMode" :key="index" class="row">
             <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
               {{ operationMode.data[index].label }}
@@ -221,6 +237,30 @@
               />
               <div class="d-inline-block">
                 <checkbox v-model="value.active" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="mb-5 half-hidden" title="Режим работы организации">
+          <div v-for="(value, index) in data.organization.operationMode" :key="index" class="row">
+            <div class="col-lg-4 col-xl-3 d-flex align-items-center py-1">
+              {{ operationMode.data[index].label }}
+            </div>
+            <div class="col-lg-6 col-xl-7 py-1">
+              <v-select
+                :clearable="false"
+                :value="value.start"
+                :options="operationMode.interval"
+                class="v-select--time mr-2"
+              />
+              <v-select
+                :clearable="false"
+                :value="value.end"
+                :options="operationMode.interval"
+                class="v-select--time mr-5"
+              />
+              <div class="d-inline-block">
+                <checkbox :value="value.active" />
               </div>
             </div>
           </div>
@@ -320,6 +360,7 @@ export default {
         latitude: '',
         longitude: '',
         payload: null,
+        own_schedule: false,
         email: '',
         phone: ''
       }
@@ -422,6 +463,7 @@ export default {
       }
     },
     onEdit (key) {
+      this.form.own_schedule = this.items[key].own_schedule
       this.form.name = this.items[key].name
       this.form.street = this.items[key].street
       this.form.full_street = this.items[key].full_street
@@ -449,6 +491,7 @@ export default {
       this.showAddresses = false
       this.addresses = []
 
+      this.form.own_schedule = false
       this.form.name = name
       this.form.street = ''
       this.form.full_street = ''

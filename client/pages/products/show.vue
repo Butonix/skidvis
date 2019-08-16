@@ -371,6 +371,7 @@ export default {
       return `
         <h5>${point.name}</h5>
         <p>${point.full_street}</p>
+        <p>${point.operationModeText}</p>
       `
     },
     wishListChange (e) {

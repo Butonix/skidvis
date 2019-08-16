@@ -8,6 +8,7 @@
         </div>
         <div v-if="!selectedAddresses" class="col pl-2">
           <div class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
+          {{ address.operationModeText }}
         </div>
         <div v-if="selectedAddresses" class="col-12 pl-2 pr-2">
           <checkbox

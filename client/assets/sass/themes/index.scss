@@ -55,6 +55,17 @@
         //  }
         //}
 
+        .custom-control-input:checked ~ .custom-control-label::before{
+          border-color: $primary_;
+          background-color: $primary_;
+        }
+        .custom-control-input:focus:not(:checked) ~ .custom-control-label::before{
+          border-color: $primary_;
+        }
+        .custom-control-input:focus ~ .custom-control-label::before{
+          box-shadow: 0 0 0 0.2rem rgba($primary_, 0.25);
+        }
+
         .select-ab{
           &__item{
             &:active, &.active{

@@ -217,3 +217,7 @@ h6, .h6{
 .outline-none{
   outline: none!important;
 }
+.half-hidden{
+  opacity: .3;
+  pointer-events: none;
+}
