@@ -87,9 +87,7 @@ export default {
       }
     },
     async onClick () {
-      console.log('onClick', this.active, this.actived)
       if (this.actived) {
-        console.log('send')
         await this.send()
       }
       this.active = true

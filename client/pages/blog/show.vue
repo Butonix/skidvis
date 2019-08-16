@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
 
@@ -105,7 +106,8 @@ export default {
       title: 'Статья',
       bodyAttrs: {
         class: 'theme-blog'
-      }
+      },
+      ...getFavicon('blog')
     }
   },
   asyncData: async ({ params, error, app }) => {

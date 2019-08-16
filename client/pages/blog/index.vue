@@ -204,7 +204,7 @@
 
 <script>
 import Fuse from 'fuse.js'
-import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
+import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
 import axios from 'axios'
 
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -222,7 +222,8 @@ export default {
       title: 'Блог',
       bodyAttrs: {
         class: 'theme-blog'
-      }
+      },
+      ...getFavicon('blog')
     }
   },
   asyncData: async ({ params, error, app, query }) => {

@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { cloneDeep } from 'lodash'
 import axios from 'axios'
 import Form from 'vform'
@@ -88,7 +89,8 @@ export default {
       title: 'Профиль',
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app }) => {

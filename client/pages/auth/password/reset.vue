@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import Form from 'vform'
 
 export default {
@@ -72,7 +73,10 @@ export default {
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput')
   },
   head () {
-    return { title: this.$t('reset_password') }
+    return {
+      title: this.$t('reset_password'),
+      ...getFavicon()
+    }
   },
   middleware: 'authRoutes',
   data: () => ({

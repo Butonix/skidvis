@@ -99,7 +99,7 @@ export default {
       // }
     },
     onKeyup (e) {
-      console.log(keycode(e))
+      // console.log(keycode(e))
     },
     makeFuse () {
       if (process.client && !(this.fuseList instanceof Fuse)) {

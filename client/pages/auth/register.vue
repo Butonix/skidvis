@@ -14,10 +14,14 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 
 export default {
   head () {
-    return { title: this.$t('register') }
+    return {
+      title: this.$t('register'),
+      ...getFavicon()
+    }
   },
   middleware: 'authRoutes',
   components: {

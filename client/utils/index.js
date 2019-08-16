@@ -288,3 +288,56 @@ export function mapPointSlide ({ inc = 1, id, count, key }) {
   } catch (e) {
   }
 }
+
+export function getFavicon (type) {
+  switch (type) {
+    case 'blog':
+      return {
+        meta: [
+          { name: 'msapplication-TileColor', content: '#ffffff' },
+          { name: 'msapplication-config', content: '/favicon/blog/browserconfig.xml' },
+          { name: 'theme-color', content: '#ffffff' }
+        ],
+        link: [
+          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/blog/apple-touch-icon.png' },
+          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/blog/favicon-32x32.png' },
+          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/blog/favicon-16x16.png' },
+          { rel: 'manifest', href: '/favicon/blog/site.webmanifest' },
+          { rel: 'mask-icon', href: '/favicon/blog/safari-pinned-tab.svg', color: '#00c2ff' },
+          { rel: 'shortcut icon', href: '/favicon/blog/favicon.ico' }
+        ]
+      }
+    case 'business':
+      return {
+        meta: [
+          { name: 'msapplication-TileColor', content: '#ffffff' },
+          { name: 'msapplication-config', content: '/favicon/business/browserconfig.xml' },
+          { name: 'theme-color', content: '#ffffff' }
+        ],
+        link: [
+          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/business/apple-touch-icon.png' },
+          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/business/favicon-32x32.png' },
+          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/business/favicon-16x16.png' },
+          { rel: 'manifest', href: '/favicon/business/site.webmanifest' },
+          { rel: 'mask-icon', href: '/favicon/business/safari-pinned-tab.svg', color: '#00c2ff' },
+          { rel: 'shortcut icon', href: '/favicon/business/favicon.ico' }
+        ]
+      }
+    default:
+      return {
+        meta: [
+          { name: 'msapplication-TileColor', content: '#ffffff' },
+          { name: 'msapplication-config', content: '/favicon/default/browserconfig.xml' },
+          { name: 'theme-color', content: '#ffffff' }
+        ],
+        link: [
+          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/default/apple-touch-icon.png' },
+          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/default/favicon-32x32.png' },
+          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/default/favicon-16x16.png' },
+          { rel: 'manifest', href: '/favicon/default/site.webmanifest' },
+          { rel: 'mask-icon', href: '/favicon/default/safari-pinned-tab.svg', color: '#00c2ff' },
+          { rel: 'shortcut icon', href: '/favicon/default/favicon.ico' }
+        ]
+      }
+  }
+}

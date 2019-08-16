@@ -99,7 +99,9 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
+
 export default {
   components: {
     'CardStep': () => import('~/components/CardStep'),
@@ -110,7 +112,8 @@ export default {
       title: 'Праздник — отличный двигатель продаж',
       bodyAttrs: {
         class: 'theme-business'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   data: () => ({

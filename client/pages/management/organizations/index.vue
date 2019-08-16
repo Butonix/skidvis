@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { getQueryData, watchList } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
@@ -136,7 +136,8 @@ export default {
       title: 'Мои организации',
       bodyAttrs: {
         class: 'theme-business'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   asyncData: async ({ query }) => {

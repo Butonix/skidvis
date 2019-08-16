@@ -20,7 +20,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQueryData, watchList } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
@@ -37,7 +37,8 @@ export default {
       title: 'Избранное',
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app, query }) => {

@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { getQueryData, watchList } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 import SearchInput from '~/components/SearchInput'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
@@ -142,7 +142,8 @@ export default {
       title: 'Мои акции',
       bodyAttrs: {
         class: 'theme-business'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   asyncData: async ({ params, error, app, query }) => {

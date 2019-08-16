@@ -349,6 +349,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { sortBy, remove, cloneDeep } from 'lodash'
 import Fuse from 'fuse.js'
 import axios from 'axios'
@@ -376,7 +377,8 @@ export default {
       title: 'Акция',
       bodyAttrs: {
         class: 'theme-business'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   asyncData: async ({ params, error, app }) => {

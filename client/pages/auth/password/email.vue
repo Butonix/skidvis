@@ -10,10 +10,14 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 
 export default {
   head () {
-    return { title: this.$t('reset_password') }
+    return {
+      title: this.$t('reset_password'),
+      ...getFavicon()
+    }
   },
   middleware: 'authRoutes',
   components: {

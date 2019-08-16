@@ -197,6 +197,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { cloneDeep } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import Form from 'vform'
@@ -217,7 +218,8 @@ export default {
       title: 'Редактирование организации',
       bodyAttrs: {
         class: 'theme-business navbar-fixed'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   middleware: ['auth'],

@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -72,7 +73,8 @@ export default {
       title: 'Контакты',
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   computed: {

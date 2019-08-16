@@ -124,6 +124,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
 import Form from 'vform'
 import axios from 'axios'
@@ -143,7 +144,8 @@ export default {
       title: 'Организация',
       bodyAttrs: {
         class: 'theme-default navbar-fixed'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app }) => {
@@ -177,7 +179,7 @@ export default {
         error({ statusCode: 404, message: 'Organization not found' })
       }
     }
-    if (res.organization.rating_user) {
+    if (res.organization && res.organization.rating_user) {
       res.review.form.rating = res.organization.rating_user
     }
     return res

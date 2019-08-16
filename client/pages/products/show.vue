@@ -203,6 +203,7 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
 import { mapGetters, mapActions } from 'vuex'
 import Fuse from 'fuse.js'
 import axios from 'axios'
@@ -228,7 +229,8 @@ export default {
       title: 'Акция',
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app }) => {
@@ -356,7 +358,7 @@ export default {
     async onClick (e) {
       this.coords = e.get('coords')
       if(this.map){
-        console.log(this.map.getBounds())
+        // console.log(this.map.getBounds())
       }
       // console.log(this.$refs.map.getBounds())
     },
@@ -365,7 +367,7 @@ export default {
       // console.log(payload._bounds)
     },
     async clickMarker (e, point, key) {
-      console.log(e, point, key)
+      // console.log(e, point, key)
     },
     balloonTemplatePoint (point) {
       return `

@@ -127,6 +127,7 @@
           >
             <ymap-marker
               v-for="(point, key) in getPoints"
+              :layout="'islands#blueIcon'"
               :key="point.id"
               :balloon-template="balloonTemplatePoint(point, key)"
               :coords="[point.latitude, point.longitude]"
@@ -150,7 +151,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Fuse from 'fuse.js'
-import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
+import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
 import axios from 'axios'
 
 const CancelToken = axios.CancelToken
@@ -175,7 +176,8 @@ export default {
       title: this.$route.meta.title,
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app, query }) => {
@@ -363,13 +365,11 @@ export default {
         return '<div class="map-point">Акций не найдено</div>'
       }
 
-      console.log('balloonTemplatePoint')
-
       let id = Math.ceil(1e8 * Math.random())
       let res = ''
       for (let i in point.products) {
         let product = point.products[i]
-        let logo = '<div class="map-point__logo__wrapper"></div>'
+        let logo = ''
         if (product.organization_logo) {
           logo = `<div class="map-point__logo__wrapper" style="background-color: ${product.organization_color || 'white'};">
           <img src="${product.organization_logo}">
@@ -416,7 +416,6 @@ export default {
     },
     async fetchPoints () {
       let bounds = this.map.getBounds()
-      console.log('fetchPoints')
       let vm = this
       if (vm.cancelRequestPoints) {
         vm.cancelRequestPoints()
@@ -426,6 +425,7 @@ export default {
       try {
         let { data } = await axios.get('points/map', {
           params: {
+            is_active: 1,
             latitudeMax: bounds[1][0],
             longitudeMax: bounds[1][1],
             latitudeMin: bounds[0][0],
@@ -442,17 +442,9 @@ export default {
       } catch (e) {
         console.log('error', e)
       }
-      // if (this.placemarkId) {
-      //   console.log('placemark')
-      //   this.map.objects.balloon.open(this.placemarkId)
-      //   this.placemark = null
-      //   this.placemarkId = null
-      //   this.placemarkClear = true
-      // }
 
       this.loadingPoints = false
 
-      // console.log(this.$refs.map.getBounds())
     },
     async onClickMap (e) {
       // this.coords = e.get('coords')
@@ -472,7 +464,6 @@ export default {
       await this.fetchPoints()
     },
     onOpenMap () {
-      console.log('onOpenMap')
       this.placemark = null
       this.$modal.push('map')
     },

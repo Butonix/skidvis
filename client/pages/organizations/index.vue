@@ -151,7 +151,7 @@
 <script>
 import Fuse from 'fuse.js'
 import { mapGetters, mapActions } from 'vuex'
-import { getQueryData, watchList, queryFixArrayParams } from '~/utils'
+import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
 import axios from 'axios'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
@@ -175,7 +175,8 @@ export default {
       title: 'Все компании',
       bodyAttrs: {
         class: 'theme-default'
-      }
+      },
+      ...getFavicon()
     }
   },
   asyncData: async ({ params, error, app, query }) => {

@@ -289,10 +289,10 @@
 </template>
 
 <script>
-import { getQueryData, watchList, fetchAddresses } from '~/utils'
+import { getQueryData, watchList, fetchAddresses, getFavicon } from '~/utils'
 import Form from 'vform'
 import axios from 'axios'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 let fetchAddressesInstance = fetchAddresses(axios)
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
@@ -312,7 +312,8 @@ export default {
       title: 'Мои адреса',
       bodyAttrs: {
         class: 'theme-business'
-      }
+      },
+      ...getFavicon('business')
     }
   },
   asyncData: async ({ params, error, app, query }) => {
