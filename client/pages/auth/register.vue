@@ -19,7 +19,7 @@ import { getFavicon } from '~/utils'
 export default {
   head () {
     return {
-      title: this.$t('register'),
+      title: 'Регистрация',
       ...getFavicon()
     }
   },

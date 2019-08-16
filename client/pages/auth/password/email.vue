@@ -15,7 +15,7 @@ import { getFavicon } from '~/utils'
 export default {
   head () {
     return {
-      title: this.$t('reset_password'),
+      title: 'Сброс пароля',
       ...getFavicon()
     }
   },
