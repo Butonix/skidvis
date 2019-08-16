@@ -69,7 +69,7 @@ export default {
   },
   head () {
     return {
-      title: 'Праздник — отличный двигатель продаж',
+      title: 'Контакты',
       bodyAttrs: {
         class: 'theme-default'
       }

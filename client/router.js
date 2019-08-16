@@ -43,7 +43,13 @@ const ManagementOrganizationsProductsEdit = () => import('~/pages/management/org
 const ManagementOrganizationsPointsIndex = () => import('~/pages/management/organizations/points/index').then(m => m.default || m)
 
 const routes = [
-  { path: '/', name: 'welcome', component: ProductsIndex },
+  { path: '/',
+    name: 'welcome',
+    component: ProductsIndex,
+    meta: {
+      title: 'Главная'
+    }
+  },
   // { path: '/home', name: 'home', component: Home },
 
   { path: '/login', name: 'login', component: Login },
@@ -103,7 +109,10 @@ const routes = [
     children: [
       { path: '',
         name: 'products.index',
-        component: ProductsIndex
+        component: ProductsIndex,
+        meta: {
+          title: 'Акции'
+        }
       },
       { path: ':productId',
         name: 'products.show',

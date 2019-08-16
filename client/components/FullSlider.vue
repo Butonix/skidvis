@@ -3,7 +3,7 @@
     <div v-if="!sliderReady" :style="(images.length > 0)?{backgroundImage:`url(${images[0].src})`}:''"
          class="full-slider__preloader">
       <div v-if="images.length === 0" class="full-slider__placeholder full-slider__slide">
-        Загрузите фотографии своей компании
+        {{ isEdit?emptyTextEdit:emptyTextShow }}
       </div>
     </div>
     <hooper :wheel-control="false"
@@ -11,7 +11,7 @@
             @slide.once="initSlider">
       <slide v-if="images.length === 0">
         <div class="full-slider__placeholder full-slider__slide">
-          Загрузите фотографии своей компании
+          {{ isEdit?emptyTextEdit:emptyTextShow }}
         </div>
       </slide>
       <slide v-for="(image, index) in images" v-else
@@ -37,12 +37,18 @@ export default {
     HooperPagination
   },
   props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
     images: {
       type: Array,
       default: () => ([])
     }
   },
   data: () => ({
+    emptyTextEdit: 'Загрузите фотографии своей компании',
+    emptyTextShow: 'Компания еще не загрузила фотографии',
     sliderReady: false
   }),
 

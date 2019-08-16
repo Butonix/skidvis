@@ -41,6 +41,7 @@
 
           <div class="order-2 order-lg-1 product__slider mb-3">
             <full-slider
+              :is-edit="true"
               :images="images"
             >
               <div class="product__slider__label">

@@ -4,6 +4,7 @@
           @submit.prevent @keydown="form.onKeydown($event)">
       <full-slider
         v-if="images"
+        :is-edit="true"
         :images="images"
       />
       <div class="overflow-hidden">

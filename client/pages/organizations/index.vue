@@ -172,7 +172,7 @@ export default {
   middleware: [],
   head () {
     return {
-      title: 'Все организации',
+      title: 'Все компании',
       bodyAttrs: {
         class: 'theme-default'
       }

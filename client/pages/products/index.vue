@@ -172,7 +172,7 @@ export default {
   middleware: [],
   head () {
     return {
-      title: 'Все акции',
+      title: this.$route.meta.title,
       bodyAttrs: {
         class: 'theme-default'
       }
