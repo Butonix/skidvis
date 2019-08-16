@@ -21,10 +21,6 @@ const Register = () => import('~/pages/auth/register').then(m => m.default || m)
 const PasswordReset = () => import('~/pages/auth/password/reset').then(m => m.default || m)
 const PasswordRequest = () => import('~/pages/auth/password/email').then(m => m.default || m)
 
-const Settings = () => import('~/pages/settings/index').then(m => m.default || m)
-const SettingsProfile = () => import('~/pages/settings/profile').then(m => m.default || m)
-const SettingsPassword = () => import('~/pages/settings/password').then(m => m.default || m)
-
 const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
 
 const ProfileHome = () => import('~/pages/profile/home').then(m => m.default || m)
@@ -73,7 +69,8 @@ const routes = [
         name: 'blog.show',
         meta: {
           breadcrumb: {
-            name: 'articleId'
+            name: 'articleId',
+            length: 100
           }
         },
         component: BlogShow
@@ -124,15 +121,6 @@ const routes = [
         },
         component: ProductsShow
       }
-    ]
-  },
-
-  { path: '/settings',
-    component: Settings,
-    children: [
-      { path: '', redirect: { name: 'settings.profile' } },
-      { path: 'profile', name: 'settings.profile', component: SettingsProfile },
-      { path: 'password', name: 'settings.password', component: SettingsPassword }
     ]
   },
 

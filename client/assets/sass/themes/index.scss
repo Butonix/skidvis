@@ -6,6 +6,11 @@
   @if($theme-colors_){
     .theme-#{$theme}{
 
+      .loading-list{
+        &:after {
+          background: url("/placeholders/fav-#{$theme}.svg") center no-repeat;
+        }
+      }
 
 
       @each $color, $value in $theme-colors_ {
