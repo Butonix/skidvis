@@ -2,6 +2,7 @@ import axios from 'axios'
 import Vue from 'vue'
 import { isEqual } from 'lodash'
 import Cookies from 'js-cookie'
+import moment from 'moment'
 
 // state
 export const state = () => ({
@@ -17,11 +18,13 @@ export const state = () => ({
   isAdministrator: false,
   isManagement: false,
   token: null,
-  cities: []
+  cities: [],
+  articles: {}
 })
 
 // getters
 export const getters = {
+  articles: state => state.articles,
   user: state => state.user,
   token: state => state.token,
   city: state => state.user.city,
@@ -35,6 +38,12 @@ export const getters = {
 
 // mutations
 export const mutations = {
+  SET_ARTICLES (state, articles) {
+    state.articles = articles
+  },
+  ADD_ARTICLE (state, id) {
+    state.articles[id] = Number(moment().format('x'))
+  },
   SET_CITY (state, city) {
     state.user.city = city
   },
@@ -97,6 +106,35 @@ export const mutations = {
 
 // actions
 export const actions = {
+  getArticlesArray ({ getters, dispatch }) {
+    let articlesObj = {}
+    let articles = []
+    for (let i in getters.articles) {
+      try {
+        if (getters.articles[i] >= (Number(moment().format('x')) - 86400000)) {
+          articlesObj[i] = getters.articles[i]
+          let id = Number(i)
+          if (!Number.isNaN(id)) {
+            articles.push(id)
+          }
+        }
+      } catch (e) {
+      }
+    }
+    dispatch('saveArticle', articlesObj)
+    return articles
+  },
+  addArticle ({ commit, getters, dispatch }, id) {
+    commit('ADD_ARTICLE', id)
+    dispatch('saveArticle')
+  },
+  saveArticle ({ commit, getters, dispatch }, articles) {
+    if (!articles) {
+      articles = getters.articles
+    }
+    commit('SET_ARTICLES', articles)
+    Cookies.set('articles', articles, { expires: 1 })
+  },
   async postWishlist ({ getters }) {
     Cookies.set('wishlist', getters.wishlist, { expires: 365 })
   },

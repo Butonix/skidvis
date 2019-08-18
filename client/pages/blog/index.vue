@@ -152,6 +152,13 @@
     <h5 v-else class="text-center py-5">
       Ничего не нашлось :(
     </h5>
+
+    <div class="container">
+      <visited-slider
+        :articles="getVisitedArticles"
+      />
+    </div>
+
     <modal name="save-categories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
@@ -211,6 +218,7 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 
 export default {
   components: {
+    'VisitedSlider': () => import('~/components/Blog/VisitedSlider'),
     'Card': () => import('~/components/Blog/Card'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
@@ -278,7 +286,42 @@ export default {
       console.log(e)
     }
 
+    let visitedArticles = []
+    let visitedArticlesIds = await app.store.dispatch('auth/getArticlesArray')
+    let visitedArticlesTimes = await app.store.getters['auth/articles']
+
+    if (visitedArticlesIds.length) {
+      try {
+        let { data } = await axios.get('articles', {
+          params: {
+            responseTypeId: 2,
+            ordering: 'created_at',
+            perPage: 100000000,
+            whereIn: visitedArticlesIds
+          }
+        })
+        for (let i in data.articles.simple.list.data) {
+          let article = data.articles.simple.list.data[i]
+          article.visitedTime = visitedArticlesTimes[article.id] || 0
+          visitedArticles.push(article)
+          visitedArticles = visitedArticles.sort((a, b) => {
+            if (a.visitedTime < b.visitedTime) {
+              return 1
+            }
+            if (a.visitedTime > b.visitedTime) {
+              return -1
+            }
+            return 0
+          })
+        }
+      } catch (e) {
+        error({ statusCode: 500, message: 'Упс' })
+      }
+    }
+
     return {
+      visitedArticles,
+      visitedArticlesIds,
       categoriesSelected,
       favCategories,
       collection,
@@ -337,6 +380,9 @@ export default {
       } catch (e) {
       }
       return data
+    },
+    getVisitedArticles () {
+      return this.visitedArticles
     }
   },
   watch: {

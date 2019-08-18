@@ -18,6 +18,11 @@ export const actions = {
       commit('auth/SET_WISHLIST', wishlist)
     }
 
+    let articles = cookieFromRequest(req, 'articles', true)
+    if (articles) {
+      commit('auth/SET_ARTICLES', articles)
+    }
+
     const locale = cookieFromRequest(req, 'locale')
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
@@ -38,6 +43,11 @@ export const actions = {
     const wishlist = Cookies.getJSON('wishlist')
     if (wishlist) {
       commit('auth/SET_WISHLIST', wishlist)
+    }
+
+    const articles = Cookies.getJSON('articles')
+    if (articles) {
+      commit('auth/SET_ARTICLES', articles)
     }
 
     const locale = Cookies.get('locale')

@@ -87,17 +87,22 @@
         </div>
       </div>
 
+      <visited-slider
+        :articles="getVisitedArticles"
+      />
+
     </div>
   </div>
 </template>
 
 <script>
 import { getFavicon } from '~/utils'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
 export default {
   components: {
+    'VisitedSlider': () => import('~/components/Blog/VisitedSlider'),
     'Card': () => import('~/components/Blog/Card'),
     'ShareBox': () => import('~/components/ShareBox')
   },
@@ -110,10 +115,12 @@ export default {
       ...getFavicon('blog')
     }
   },
-  asyncData: async ({ params, error, app }) => {
+  asyncData: async ({ params, error, app, query }) => {
     let articleId = params.articleId
     let res = {
-      articleId
+      articleId,
+      visitedArticles: [],
+      visitedArticlesIds: await app.store.dispatch('auth/getArticlesArray')
     }
 
     if (articleId) {
@@ -131,6 +138,37 @@ export default {
       console.log('error 404')
     }
 
+    let visitedArticlesTimes = await app.store.getters['auth/articles']
+
+    if (res.visitedArticlesIds.length) {
+      try {
+        let { data } = await axios.get('articles', {
+          params: {
+            responseTypeId: 2,
+            ordering: 'created_at',
+            perPage: 100000000,
+            whereIn: res.visitedArticlesIds
+          }
+        })
+        for (let i in data.articles.simple.list.data) {
+          let article = data.articles.simple.list.data[i]
+          article.visitedTime = visitedArticlesTimes[article.id] || 0
+          res.visitedArticles.push(article)
+        }
+        res.visitedArticles = res.visitedArticles.sort((a, b) => {
+          if (a.visitedTime < b.visitedTime) {
+            return 1
+          }
+          if (a.visitedTime > b.visitedTime) {
+            return -1
+          }
+          return 0
+        })
+      } catch (e) {
+        error({ statusCode: 500, message: 'Упс' })
+      }
+    }
+
     return res
   },
   data: () => ({
@@ -140,9 +178,18 @@ export default {
     ...mapGetters({
       check: 'auth/check',
       user: 'auth/user'
-    })
+    }),
+    getVisitedArticles () {
+      return this.visitedArticles
+    }
+  },
+  async mounted () {
+    await this.addArticle(this.articleId)
   },
   methods: {
+    ...mapActions({
+      'addArticle': 'auth/addArticle'
+    }),
     onClickLink () {
       this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
