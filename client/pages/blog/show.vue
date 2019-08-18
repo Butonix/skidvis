@@ -150,8 +150,8 @@ export default {
             whereIn: res.visitedArticlesIds
           }
         })
-        for (let i in data.articles.simple.list.data) {
-          let article = data.articles.simple.list.data[i]
+        for (let i in data.list.data) {
+          let article = data.list.data[i]
           article.visitedTime = visitedArticlesTimes[article.id] || 0
           res.visitedArticles.push(article)
         }
@@ -165,6 +165,7 @@ export default {
           return 0
         })
       } catch (e) {
+        console.log(e)
         error({ statusCode: 500, message: 'Упс' })
       }
     }

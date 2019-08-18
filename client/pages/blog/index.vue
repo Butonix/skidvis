@@ -300,8 +300,8 @@ export default {
             whereIn: visitedArticlesIds
           }
         })
-        for (let i in data.articles.simple.list.data) {
-          let article = data.articles.simple.list.data[i]
+        for (let i in data.list.data) {
+          let article = data.list.data[i]
           article.visitedTime = visitedArticlesTimes[article.id] || 0
           visitedArticles.push(article)
           visitedArticles = visitedArticles.sort((a, b) => {
@@ -315,6 +315,7 @@ export default {
           })
         }
       } catch (e) {
+        console.log(e)
         error({ statusCode: 500, message: 'Упс' })
       }
     }
