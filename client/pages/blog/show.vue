@@ -5,12 +5,13 @@
     />
     <div v-if="article" ref="start" class="container">
 
-      <div class="row mb-4">
+      <div class="row">
         <div class="col-lg-2"/>
         <div class="col-lg-8">
           <card
             :article="article"
             :disabled="true"
+            card-class="mb-3"
             class="mb-0"
             type="new-xl"
           />
@@ -49,7 +50,7 @@
       <div class="row">
         <div class="col-lg-2"/>
         <div class="col-lg-8 mb-5">
-          <div class="mb-3 article-content" v-html="article.content"/>
+          <div class="mb-3 article-content" v-html="getArticleContent"/>
           <div v-if="article.categories && article.categories.length" class="mb-4">
             <div
               v-for="(tag, key) in article.categories"
@@ -183,6 +184,9 @@ export default {
     }),
     getVisitedArticles () {
       return this.visitedArticles
+    },
+    getArticleContent () {
+      return this.article.content.replaceAll('contenteditable="true"', '')
     }
   },
   async mounted () {

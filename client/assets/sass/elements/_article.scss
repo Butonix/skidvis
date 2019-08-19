@@ -1,13 +1,73 @@
 .article-content{
+  .cdx-button{
+    display: none;
+  }
+  .image-tool__caption{
+    text-align: center;
+  }
+  .image-tool{
+    padding-top: rem(10);
+    padding-bottom: rem(20);
+  }
+  .cdx-quote{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-top: .5rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 0;
+    @include media-breakpoint-down(xs){
+      flex-direction: column;
+    }
+    &__text{
+      position: relative;
+      border: 3px solid $blog_liter;
+      border-radius: 15px;
+      padding: 20px 20px 25px 33px;
+      margin-bottom: .5rem;
+      @include media-breakpoint-up(sm){
+        margin-left: 19px;
+        order: 2;
+        max-width: 479px;
+        margin-bottom: 6px;
+      }
+      &:before{
+        @include media-breakpoint-up(sm){
+          content: '';
+          position: absolute;
+          left: -25px;
+          bottom: -3px;
+          //background-color: white;
+          background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDQiIGhlaWdodD0iMzMiIHZpZXdCb3g9IjAgMCA0NCAzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNDEgMzEuNUg3LjU4NjM2QzYuNDE3MjUgMzEuNSA2LjA5NDIyIDI5LjQ4MyA3LjE2MzY0IDI5LjAxMDdDMjEuMzUxIDIyLjc0MzcgMjQgMTIuMDQ3MyAyNCA0IiBzdHJva2U9IiNGRjQ5MjEiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTQyLjUgMjkuNUwyNS42IDJMMjUuNSA3LjYyNjI5TDI1LjMgOS41TDI1IDExLjVMMjQuNCAxNEwyMy45IDE1LjVMMjMgMTcuNUwyMS41IDIwTDE3IDI5LjVINDIuNVoiIGZpbGw9IndoaXRlIiBzdHJva2U9IndoaXRlIi8+PC9zdmc+);
+          background-repeat: no-repeat;
+          background-position: left bottom;
+          background-size: auto;
+          width: 46px;
+          height: 32px;
+        }
+      }
+    }
+    &__caption{
+      color: $blog_liter;
+      padding-right: 8px;
+      @include media-breakpoint-up(sm){
+        order: 1;
+      }
+    }
+  }
   h5{
     margin-bottom: 0;
+    padding-top: rem(10);
+    padding-bottom: rem(18);
   }
   h6{
     font-weight: 600;
-    margin-bottom: .5rem;
-  }
-  p{
     margin-bottom: 0;
+    padding-top: rem(10);
+    padding-bottom: rem(18);
+  }
+  p, .ce-paragraph{
+    margin-bottom: 1rem;
   }
   ul, ul > li {
     padding-left: 0;
@@ -22,7 +82,7 @@
   ul > li::before{
     content: '\2022';
 
-    margin-right: .2rem;
+    margin-right: .4rem;
     text-align: right;
 
     font-size: 1.6em;
