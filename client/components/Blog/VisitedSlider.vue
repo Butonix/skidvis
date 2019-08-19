@@ -14,13 +14,16 @@
            @mousedown="onMousedown">
         <div ref="content"
              :style="`transform: translateX(${scrollLeft}px)`"
-             class="category-icons--scroll__wrapper">
+             class="category-icons--scroll__wrapper align-items-stretch">
           <card
             v-for="(item, index) in articles"
+            :disabled="true"
             :key="index"
             :article="item"
             type="small"
+            card-class="mb-0 cursor-pointer"
             class="mr-4"
+            @click="onClick(item)"
           />
         </div>
       </div>
@@ -71,6 +74,13 @@ export default {
   methods: {
     onMousedown () {
       this.scrollLeftCash = this.scrollLeft
+    },
+    onClick (article) {
+      let cash = this.scrollLeftCash - this.scrollLeft
+      if ((cash >= 0 && cash < 30) || (cash <= 0 && cash > -30)) {
+        this.$router.push({ name: 'blog.show', params: { articleId: article.id } })
+        this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
+      }
     }
   }
 }

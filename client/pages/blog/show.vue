@@ -115,6 +115,7 @@ export default {
       ...getFavicon('blog')
     }
   },
+  middleware: ['article'],
   asyncData: async ({ params, error, app, query }) => {
     let articleId = params.articleId
     let res = {
@@ -185,7 +186,8 @@ export default {
     }
   },
   async mounted () {
-    await this.addArticle(this.articleId)
+    // await this.addArticle(this.articleId)
+    // console.log(this.articleId)
   },
   methods: {
     ...mapActions({

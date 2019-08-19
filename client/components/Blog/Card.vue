@@ -1,65 +1,42 @@
 <template>
-  <router-link
-    :disabled="disabled"
-    :to="{ name: 'blog.show', params: { articleId: article.id } }"
-    :class="{
-      'article-card': true,
-      ['article-card--'+type]: !!type
-    }"
-    @click.native="onClickLink"
-  >
-    <div class="article-card__wrapper">
-      <div class="article-card__img">
-
-        <div
-          v-lazy:background-image="{
-            src: article.mainImage,
-            loading: '/placeholders/cover.jpg'
-          }"
-          v-if="article.mainImage"
-          data-loading="/placeholders/cover.jpg"
-          class="article-card__img__content bg-cover"
-          role="img">
-          <div v-if="(type === 'new-xl' || type === 'new' || type === 'next') && article.label && article.label.src && type !== 'small'" class="article-card__label">
-            <div class="mb-1"><img :src="article.label.src" :alt="article.label.name"></div>
-            {{ article.label.name }}
-          </div>
-        </div>
-        <div
-          v-else
-          style="background-image: url('/placeholders/cover.jpg');"
-          class="article-card__img__content bg-cover"
-          role="img">
-          <div v-if="(type === 'new-xl' || type === 'new' || type === 'next') && article.label && article.label.src && type !== 'small'" class="article-card__label">
-            <div class="mb-1"><img :src="article.label.src" :alt="article.label.name"></div>
-            {{ article.label.name }}
-          </div>
-        </div>
-
-      </div>
-      <div class="article-card__body">
-        <div v-if="type === 'new-xl' || type === 'new' || type === 'next'" class="article-card__body__name" v-html="article.name"/>
-        <div v-if="(type === 'new-xl' || type === 'new' || type === 'next') && type !== 'small'" class="article-card__body__small" v-html="(article.author)?article.author:'Содержание:'"/>
-        <div class="article-card__body__text" v-html="(type !== 'new-xl' && type !== 'new' && type !== 'next')?article.name:article.short_description"/>
-        <div v-if="type !== 'next' && type !== 'small'" class="article-card__body__data">
-          <div>
-            <eye/> {{ article.views || 0 }}
-          </div>
-          <div v-if="(type === 'new-xl' || type === 'new') && article.readTime">
-            <eye-clock/> Читать {{ article.readTime }} минут
-          </div>
-        </div>
-      </div>
+  <div>
+    <div
+      v-if="disabled"
+      :class="{
+        [cardClass]: !!cardClass,
+        'article-card': true,
+        ['article-card--'+type]: !!type
+      }"
+      @click="$emit('click')"
+    >
+      <card-index
+        :type="type"
+        :article="article"
+      />
     </div>
-  </router-link>
+    <router-link
+      v-else
+      :to="{ name: 'blog.show', params: { articleId: article.id } }"
+      :class="{
+        [cardClass]: !!cardClass,
+        'article-card': true,
+        ['article-card--'+type]: !!type
+      }"
+      @click.native="onClickLink"
+    >
+      <card-index
+        :type="type"
+        :article="article"
+      />
+    </router-link>
+  </div>
 </template>
 
 <script>
 
 export default {
   components: {
-    'Eye': () => import('~/components/Icons/Eye'),
-    'EyeClock': () => import('~/components/Icons/EyeClock')
+    'CardIndex': () => import('~/components/Blog/CardIndex')
   },
   props: {
     type: {
@@ -72,6 +49,10 @@ export default {
     article: {
       type: Object,
       required: true
+    },
+    cardClass: {
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
