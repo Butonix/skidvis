@@ -3,19 +3,24 @@
     <div class="footer__content">
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
-          <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default">
+          <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default"
+                    @click.native="onClickLink">
             Все акции
           </nav-item>
-          <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default">
+          <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default"
+                    @click.native="onClickLink">
             Все компании
           </nav-item>
-          <nav-item :to="{ name: 'business' }" class-link="nav-link--business">
+          <nav-item :to="{ name: 'business' }" class-link="nav-link--business"
+                    @click.native="onClickLink">
             Бизнесу
           </nav-item>
-          <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog">
+          <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog"
+                    @click.native="onClickLink">
             Блог
           </nav-item>
-          <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default">
+          <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default"
+                    @click.native="onClickLink">
             Контакты
           </nav-item>
         </ul>
@@ -73,13 +78,14 @@
         </div>
       </div>
       <div class="text-center">
-        <a href="/" class="nav-link">
+        <router-link :to="{ name: 'policy' }" class="nav-link"
+        @click.native="onClickLink">
           Политика конфиденциальности
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="footer__develop">
-      <a href="https://batyukovstudio.com">
+      <a href="https://batyukovstudio.com" target="_blank">
         <img draggable="false" class="img-fluid" src="/img/footer/logo.svg" alt="Footer logo">
       </a>
     </div>
@@ -92,7 +98,12 @@ export default {
   data: () => ({
     border: '',
     fill: '0'
-  })
+  }),
+  methods: {
+    onClickLink () {
+      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
+    }
+  }
 }
 </script>
 

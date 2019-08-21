@@ -1,14 +1,14 @@
 <template>
   <div class="category-icons--scroll">
-    <div ref="viewport"
+    <div v-if="type === ''" ref="viewport"
          class="category-icons--scroll__viewport"
          @mousedown="onMousedown">
-      <div v-if="type === ''" ref="content"
+      <div ref="content"
            :style="`transform: translateX(${scrollLeft}px)`"
            class="category-icons--scroll__wrapper">
         <category
           v-for="(category, key) in categories"
-          v-if="categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite"
+          v-if="(categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite)"
           :key="'categories-'+key"
           :active="categoriesActiveIds.indexOf(category.id) !== -1"
           :label="category.name"
@@ -17,11 +17,15 @@
           @click="onClick(category)"
         />
       </div>
-      <div v-if="type === 'blog'" ref="content"
+    </div>
+    <div v-if="type === 'blog'" ref="viewport"
+         class="category-icons--scroll__viewport"
+         @mousedown="onMousedown">
+      <div ref="content"
            :style="`transform: translateX(${scrollLeft}px)`"
            class="category-icons--scroll__wrapper">
         <div v-for="(category, key) in categories"
-             v-if="categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite"
+             v-if="(categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite)"
              :key="'categories-'+key"
              :class="{'active':categoriesActiveIds.indexOf(category.id) !== -1}"
              class="btn btn-blog mx-1 mb-2 text-nowrap"
@@ -66,23 +70,20 @@ export default {
     categories: function () {
       if (this.sb) {
         this.sb.updateMetrics()
+      } else {
+        this.createScrollBooster()
       }
     },
     categoriesActiveIds: function () {
       if (this.sb) {
         this.sb.updateMetrics()
+      } else {
+        this.createScrollBooster()
       }
     }
   },
   mounted () {
-    this.sb = new ScrollBooster({
-      viewport: this.$refs.viewport, // this parameter is required
-      content: this.$refs.content, // scrollable element
-      mode: 'x', // scroll only in horizontal dimension
-      onUpdate: (data) => {
-        this.scrollLeft = -1 * data.position.x
-      }
-    })
+    this.createScrollBooster()
   },
   beforeDestroy () {
     if (this.sb) {
@@ -90,6 +91,19 @@ export default {
     }
   },
   methods: {
+    createScrollBooster () {
+      if (!this.$refs.viewport || !this.$refs.content) {
+        return
+      }
+      this.sb = new ScrollBooster({
+        viewport: this.$refs.viewport, // this parameter is required
+        content: this.$refs.content, // scrollable element
+        mode: 'x', // scroll only in horizontal dimension
+        onUpdate: (data) => {
+          this.scrollLeft = -1 * data.position.x
+        }
+      })
+    },
     onMousedown () {
       this.scrollLeftCash = this.scrollLeft
     },

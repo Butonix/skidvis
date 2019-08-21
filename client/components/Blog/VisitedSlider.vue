@@ -53,18 +53,13 @@ export default {
     articles: function () {
       if (this.sb) {
         this.sb.updateMetrics()
+      } else {
+        this.createScrollBooster()
       }
     }
   },
   mounted () {
-    this.sb = new ScrollBooster({
-      viewport: this.$refs.viewport, // this parameter is required
-      content: this.$refs.content, // scrollable element
-      mode: 'x', // scroll only in horizontal dimension
-      onUpdate: (data) => {
-        this.scrollLeft = -1 * data.position.x
-      }
-    })
+    this.createScrollBooster()
   },
   beforeDestroy () {
     if (this.sb) {
@@ -72,6 +67,19 @@ export default {
     }
   },
   methods: {
+    createScrollBooster () {
+      if (!this.$refs.viewport || !this.$refs.content) {
+        return
+      }
+      this.sb = new ScrollBooster({
+        viewport: this.$refs.viewport, // this parameter is required
+        content: this.$refs.content, // scrollable element
+        mode: 'x', // scroll only in horizontal dimension
+        onUpdate: (data) => {
+          this.scrollLeft = -1 * data.position.x
+        }
+      })
+    },
     onMousedown () {
       this.scrollLeftCash = this.scrollLeft
     },
