@@ -4,6 +4,7 @@ import { scrollBehavior } from '~/utils'
 
 Vue.use(Router)
 
+const Policy = () => import('~/pages/policy/index').then(m => m.default || m)
 const Business = () => import('~/pages/business/index').then(m => m.default || m)
 const Contacts = () => import('~/pages/contacts/index').then(m => m.default || m)
 const BlogIndex = () => import('~/pages/blog/index').then(m => m.default || m)
@@ -53,6 +54,7 @@ const routes = [
   { path: '/password/reset', name: 'password.request', component: PasswordRequest },
   { path: '/password/reset/:token', name: 'password.reset', component: PasswordReset },
 
+  { path: '/policy', name: 'policy', component: Policy },
   { path: '/business', name: 'business', component: Business },
   { path: '/contacts', name: 'contacts', component: Contacts },
   { path: '/blog',

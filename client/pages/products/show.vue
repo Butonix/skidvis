@@ -75,7 +75,7 @@
             <div v-scroll-to="'#addresses'" class="tab">
               Адрес
             </div>
-            <div class="tab d-none d-sm-block">
+            <div v-scroll-to="'#reviews'" class="tab d-none d-sm-block">
               Отзывы
             </div>
           </div>
@@ -118,8 +118,8 @@
       </div>
       <no-ssr>
         <yandex-map
-          ref="map"
           v-if="getCoords"
+          ref="map"
           :coords="getCoords"
           :zoom="zoom"
           :scroll-zoom="false"
@@ -148,7 +148,7 @@
 
     </div>
 
-    <div class="container mt-5">
+    <div id="reviews" class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
           <div class="mb-4 d-flex justify-content-between align-items-start">
@@ -358,7 +358,7 @@ export default {
     },
     async onClick (e) {
       this.coords = e.get('coords')
-      if(this.map){
+      if (this.map) {
         // console.log(this.map.getBounds())
       }
       // console.log(this.$refs.map.getBounds())

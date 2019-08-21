@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="footer__develop">
-      <a href="/">
+      <a href="https://batyukovstudio.com">
         <img draggable="false" class="img-fluid" src="/img/footer/logo.svg" alt="Footer logo">
       </a>
     </div>

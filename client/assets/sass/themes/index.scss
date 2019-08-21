@@ -55,6 +55,11 @@
         //  }
         //}
 
+
+        mark, .mark{
+          background: rgba($primary_, 0.2);
+        }
+
         .custom-control-input:checked ~ .custom-control-label::before{
           border-color: $primary_;
           background-color: $primary_;
