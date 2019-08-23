@@ -123,7 +123,7 @@
               @click="wishlistActive = !wishlistActive"
         />
         <p>
-          Сохраняем избранное<br> даже если не зарегистрировались
+          Сохраняем избранное,<br> даже если не зарегистрировались
         </p>
       </div>
       <h5 v-else class="text-center py-5">

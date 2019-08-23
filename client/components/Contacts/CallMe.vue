@@ -45,6 +45,10 @@ export default {
     typeId: {
       type: Number,
       default: 1
+    },
+    isActive: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -60,6 +64,10 @@ export default {
     this.form.typeId = this.typeId
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
+    }
+    if (this.isActive) {
+      this.active = true
+      this.actived = true
     }
   },
   methods: {

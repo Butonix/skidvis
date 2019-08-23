@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">
     <div>
       <div class="container">
-        <h5 v-html="$route.meta.title">
+        <h5 v-html="(check)?'Мой профиль':$route.meta.title">
           Мой профиль
         </h5>
         <div v-if="check" class="tab-panel tab-panel--slim mt-3">

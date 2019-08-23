@@ -46,8 +46,8 @@
                 :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
                 class="d-block text-dark"
                 @click.native="onClickLinkScrollToBody">
-                <div class="orgs__col__box mb-2"
-                     :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
+                <div :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
+                     class="orgs__col__box mb-2"
                 >
                   <div v-if="(item.logo && item.logo.src)?item.logo.src:null"
                        class="orgs__col__box__wrapper">
@@ -90,6 +90,13 @@
         @click.native="onClickLink"
       />
 
+    </div>
+
+    <div class="container text-center theme-business mt-5">
+      <router-link :to="{ name: 'business' }" class="btn btn-primary mb-3 px-5">
+        Стать партнером
+      </router-link>
+      <p>Продвигаем бизнес каждый день</p>
     </div>
 
     <modal name="save-categories">

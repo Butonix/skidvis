@@ -116,6 +116,9 @@ export default {
     'wishlist': async function (v) {
       await this.clearWishlist(v)
     },
+    'check': async function (v) {
+      await this.fetchProducts(v)
+    },
     'params.page': function () {
       if (!(!this.check && this.wishlist.length === 0)) {
         listWatchInstancePage.call(this)
@@ -124,12 +127,15 @@ export default {
   },
   methods: {
     async clearWishlist (arrayIds) {
-      this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
-      this.collection.list.total--
+      try {
+        this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
+        this.collection.list.total--
 
-      if (this.params.page > 1 && this.items.length === 0) {
-        this.params.page--
-        await this.fetchProducts({})
+        if (this.params.page > 1 && this.items.length === 0) {
+          this.params.page--
+          await this.fetchProducts({})
+        }
+      } catch (e) {
       }
     },
     async fetchProducts () {

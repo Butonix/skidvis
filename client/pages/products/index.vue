@@ -348,7 +348,6 @@ export default {
       }
     },
     'ordering': function (v) {
-      console.log(v)
       this.params.ordering = v.ordering
       this.params.orderingDir = v.orderingDir
     }

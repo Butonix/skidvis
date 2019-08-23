@@ -10,10 +10,10 @@
       <div class="col-12 col-md mb-4 d-flex justify-content-center justify-content-md-start">
         <div class="d-flex align-items-center justify-content-start">
           <div class="mr-2">
-            <img src="/img/contacts/cat.jpg" alt="Ответит менеджер, Кот">
+            <img class="rounded-circle" src="/img/contacts/avatar.jpg" alt="Ответит менеджер, Алиса">
           </div>
           <div class="ml-1">
-            Ответит менеджер, Кот
+            Ответит менеджер, Алиса
           </div>
         </div>
       </div>
@@ -31,9 +31,10 @@
       <div class="mb-3 mb-md-5 pb-5">
         <call-me
           :type-id="1"
+          :is-active="true"
         />
       </div>
-      <div class="">
+      <div class="pt-5">
         <img src="/img/contacts/lupe.svg" alt="Вакансия модератора">
       </div>
       <div class="mb-2">

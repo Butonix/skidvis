@@ -100,11 +100,14 @@ export default {
 
       this.store.dispatch('auth/saveToken', {
         token: e.data.token
+      }).then(() => {
+        this.store.dispatch('auth/fetchUser').then(() => {
+          this.$emit('success')
+        })
       })
 
-      if (this.route.name === 'welcome') {
-        this.router.push({ name: 'products.index' })
-      } else {
+      if (this.route.name === 'login' || this.route.name === 'register' ||
+        this.route.name === 'password.request' || this.route.name === 'password.reset') {
         this.router.push({ name: 'welcome' })
       }
 

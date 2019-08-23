@@ -15,8 +15,6 @@
         .search-input__line{
           &:before{
             width: 100%;
-            left: 0;
-            right: 0;
           }
         }
         .search-input__lupe{
@@ -44,8 +42,7 @@
       content: '';
       position: absolute;
       top: -1px;
-      left: 50%;
-      right: 50%;
+      left: 0;
       width: 0;
       height: 3px;
       background: $business;

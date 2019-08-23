@@ -95,8 +95,7 @@
       content: '';
       position: absolute;
       top: -1px;
-      left: 50%;
-      right: 50%;
+      left: 0;
       width: 0;
       height: 3px;
       background: $business;
@@ -125,8 +124,6 @@
           }
           .material-input__line{
             &:before{
-              left: 0;
-              right: 0;
               width: 100%;
             }
           }

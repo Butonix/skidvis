@@ -158,8 +158,16 @@ export default {
       // Log out the user.
       await this.$store.dispatch('auth/logout')
 
+      console.log(this.$route)
+      this.$route.matched.forEach((v) => {
+        if (v.meta.guard && v.meta.guard === 'auth') {
+          this.$router.push({ name: 'welcome' })
+        }
+      })
       // Redirect to login.
-      this.$router.push({ name: 'login' })
+      // let route = { ...this.$route }
+      // this.$router.push(route)
+      // console.log(route)
     }
   }
 }

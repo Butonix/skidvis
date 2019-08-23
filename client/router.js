@@ -132,6 +132,7 @@ const routes = [
       { path: '',
         name: 'profile.show',
         meta: {
+          guard: 'auth',
           title: 'Мой профиль'
         },
         component: ProfileShow
@@ -149,6 +150,7 @@ const routes = [
   { path: '/management',
     component: ManagementHome,
     meta: {
+      guard: 'auth',
       breadcrumb: 'Управление'
     },
     children: [

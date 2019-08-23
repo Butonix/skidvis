@@ -1,8 +1,12 @@
 .btn{
   cursor: pointer;
 }
+.btn-sm{
+  border-width: 1px!important;
+}
 .btn-sm--sm{
   @include media-breakpoint-down(xs){
+    border-width: 1px!important;
     @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
   }
 }
@@ -36,7 +40,7 @@
 }
 
 .btn-gray{
-  border: 1px solid #E4E4E4;
+  border: 2px solid #E4E4E4;
   background: #E4E4E4;
   position: relative;
   color: $body-color;
@@ -114,13 +118,13 @@
 }
 
 .btn-outline-gray{
-  border: 1px dashed #929292;
+  border: 2px dashed #929292;
   background: transparent;
   position: relative;
   color: #949494;
   transition: 0.2s ease;
   @include hover {
-    border: 1px solid #929292;
+    border: 2px solid #929292;
     color: #949494;
     background: transparent;
   }
@@ -134,7 +138,7 @@
   &:not(:disabled):not(.disabled).active,
   .show > &.dropdown-toggle {
     color: white;
-    border: 1px solid #C6C6C6;
+    border: 2px solid #C6C6C6;
     background: #C6C6C6;
     &:focus,
     &.focus {

@@ -21,10 +21,8 @@
           <div class="business__kommersant p-4">
             Больше половины россиян покупают товары только по акции
           </div>
-          <a href="/" class="link-solid-on-span d-inline-block">
-            <span>
-              Коммерсантъ
-            </span>
+          <a href="https://www.kommersant.ru/doc/3999091" target="_blank" class="link-solid-on-span d-inline-block">
+            <span>Коммерсантъ</span>
             <br>
             <small>
               13 июня 2019

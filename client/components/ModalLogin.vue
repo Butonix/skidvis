@@ -87,8 +87,8 @@ export default {
 
         this.$modal.pop()
 
-        if (this.$route.name === 'login') {
-          // Redirect home.
+        if (this.$route.name === 'login' || this.$route.name === 'register' ||
+          this.$route.name === 'password.request' || this.$route.name === 'password.reset') {
           this.$router.push({ name: 'welcome' })
         }
       } catch (e) {

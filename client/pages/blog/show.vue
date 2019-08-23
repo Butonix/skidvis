@@ -189,10 +189,6 @@ export default {
       return this.article.content.replaceAll('contenteditable="true"', '')
     }
   },
-  async mounted () {
-    // await this.addArticle(this.articleId)
-    // console.log(this.articleId)
-  },
   methods: {
     ...mapActions({
       'addArticle': 'auth/addArticle'

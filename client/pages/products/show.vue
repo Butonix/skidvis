@@ -358,9 +358,9 @@ export default {
     },
     async onClick (e) {
       this.coords = e.get('coords')
-      if (this.map) {
+      // if (this.map) {
         // console.log(this.map.getBounds())
-      }
+      // }
       // console.log(this.$refs.map.getBounds())
     },
     async onMapWasInitialized (payload) {
