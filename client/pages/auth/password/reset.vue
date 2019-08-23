@@ -78,7 +78,7 @@ export default {
       ...getFavicon()
     }
   },
-  middleware: 'authRoutes',
+  middleware: ['authRoutes', 'reactData'],
   data: () => ({
     status: '',
     form: new Form({

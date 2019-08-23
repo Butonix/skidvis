@@ -36,7 +36,7 @@
                           @click.native="openMenu = false">
                   Бизнесу
                 </nav-item>
-                <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog"
+                <nav-item :to="{ name: 'blog.index' }" :class-link="'nav-link--blog' + ((blog.status)?' icon-blog':'')"
                           @click.native="openMenu = false">
                   Блог
                 </nav-item>
@@ -120,6 +120,7 @@ export default {
   }),
 
   computed: mapGetters({
+    blog: 'auth/blog',
     user: 'auth/user',
     check: 'auth/check',
     isAdministrator: 'auth/isAdministrator',
@@ -158,16 +159,11 @@ export default {
       // Log out the user.
       await this.$store.dispatch('auth/logout')
 
-      console.log(this.$route)
       this.$route.matched.forEach((v) => {
         if (v.meta.guard && v.meta.guard === 'auth') {
           this.$router.push({ name: 'welcome' })
         }
       })
-      // Redirect to login.
-      // let route = { ...this.$route }
-      // this.$router.push(route)
-      // console.log(route)
     }
   }
 }

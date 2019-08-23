@@ -15,7 +15,7 @@
                     @click.native="onClickLink">
             Бизнесу
           </nav-item>
-          <nav-item :to="{ name: 'blog.index' }" class-link="nav-link--blog icon-blog"
+          <nav-item :to="{ name: 'blog.index' }" :class-link="'nav-link--blog' + ((blog.status)?' icon-blog':'')"
                     @click.native="onClickLink">
             Блог
           </nav-item>
@@ -93,11 +93,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
   data: () => ({
     border: '',
     fill: '0'
+  }),
+  computed: mapGetters({
+    blog: 'auth/blog'
   }),
   methods: {
     onClickLink () {

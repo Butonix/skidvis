@@ -27,7 +27,7 @@ export default {
       ...getFavicon()
     }
   },
-  middleware: 'authRoutes',
+  middleware: ['authRoutes', 'reactData'],
   components: {
     'login': () => import('~/components/Auth/login')
   },

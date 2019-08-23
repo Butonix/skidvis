@@ -19,7 +19,7 @@ export default {
       ...getFavicon()
     }
   },
-  middleware: 'authRoutes',
+  middleware: ['authRoutes', 'reactData'],
   components: {
     'email': () => import('~/components/Auth/password/email')
   }

@@ -19,11 +19,16 @@ export const state = () => ({
   isManagement: false,
   token: null,
   cities: [],
-  articles: {}
+  articles: {},
+  blog: {
+    time: null,
+    status: false
+  }
 })
 
 // getters
 export const getters = {
+  blog: state => state.blog,
   articles: state => state.articles,
   user: state => state.user,
   token: state => state.token,
@@ -101,11 +106,32 @@ export const mutations = {
 
   REMOVE_FROM_WISHLIST (state, index) {
     Vue.delete(state.user.wishlist, index)
+  },
+
+  SET_BLOG (state, blog) {
+    state.blog = blog
   }
 }
 
 // actions
 export const actions = {
+  async fetchBlog ({ getters, commit }) {
+    let blog = getters.blog
+
+    let today = Number(moment().format('x'))
+
+    if (!blog.time || (blog.time && blog.time < (today - (86400000 * 3)))) {
+      try {
+        let { data } = await axios.get(`articles/latest`)
+        commit('SET_BLOG', {
+          status: data.status,
+          time: today
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
   getArticlesArray ({ getters, dispatch }) {
     let articlesObj = {}
     let articles = []

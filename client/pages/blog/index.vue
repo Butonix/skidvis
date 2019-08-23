@@ -224,7 +224,6 @@ export default {
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'SearchInput': () => import('~/components/SearchInput')
   },
-  middleware: [],
   head () {
     return {
       title: 'Блог',

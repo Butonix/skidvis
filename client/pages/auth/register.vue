@@ -23,7 +23,7 @@ export default {
       ...getFavicon()
     }
   },
-  middleware: 'authRoutes',
+  middleware: ['authRoutes', 'reactData'],
   components: {
     'register': () => import('~/components/Auth/register')
   },

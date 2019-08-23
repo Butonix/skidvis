@@ -63,12 +63,15 @@
 <script>
 import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
+import blog from '~/mixins/blog'
 
 export default {
   components: {
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
     'CallMe': () => import('~/components/Contacts/CallMe')
   },
+  mixins: [blog],
+  middleware: ['reactData'],
   head () {
     return {
       title: 'Контакты',

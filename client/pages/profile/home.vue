@@ -25,9 +25,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import blog from '~/mixins/blog'
 
 export default {
-  // middleware: ['auth'],
+  middleware: ['reactData'],
+  mixins: [blog],
   computed: {
     ...mapGetters({
       check: 'auth/check'

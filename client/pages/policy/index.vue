@@ -308,7 +308,21 @@
 </template>
 
 <script>
+import { getFavicon } from '~/utils'
+import blog from '~/mixins/blog'
+
 export default {
+  mixins: [blog],
+  head () {
+    return {
+      title: 'Политика конфиденциальности',
+      bodyAttrs: {
+        class: 'theme-default'
+      },
+      ...getFavicon()
+    }
+  },
+  middleware: ['reactData']
 }
 </script>
 

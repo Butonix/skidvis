@@ -99,12 +99,14 @@
 <script>
 import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
+import blog from '~/mixins/blog'
 
 export default {
   components: {
     'CardStep': () => import('~/components/CardStep'),
     'PlusItem': () => import('~/components/PlusItem')
   },
+  mixins: [blog],
   head () {
     return {
       title: 'Праздник — отличный двигатель продаж',
@@ -114,6 +116,7 @@ export default {
       ...getFavicon('business')
     }
   },
+  middleware: ['reactData'],
   data: () => ({
     items: [
       {
