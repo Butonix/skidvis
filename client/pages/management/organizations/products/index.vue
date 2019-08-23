@@ -161,7 +161,7 @@ export default {
         })
         collection = data
       } catch (e) {
-        error({ statusCode: 404, message: 'Organization not found' })
+        error({ statusCode: e.response.status })
       }
     }
 

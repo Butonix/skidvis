@@ -134,7 +134,7 @@ export default {
           ...data
         }
       } catch (e) {
-        error({ statusCode: 404, message: 'Product not found' })
+        error({ statusCode: e.response.status })
       }
     } else {
       console.log('error 404')

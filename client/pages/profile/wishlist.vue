@@ -81,7 +81,7 @@ export default {
         })
         collection = data
       } catch (e) {
-        error({ statusCode: 500, message: 'Упс' })
+        error({ statusCode: e.response.status })
       }
     }
 

@@ -65,12 +65,14 @@
               <div class="card-body pb-3">
                 <div class="d-flex justify-content-around mb-4">
                   <router-link
+                    v-if="isAdministrator"
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4"
                     @click.native="onClickLinkScrollToBody">
                     <span class="px-2">Адреса</span>
                   </router-link>
                   <router-link
+                    v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4"
                     @click.native="onClickLinkScrollToBody">
@@ -78,7 +80,7 @@
                   </router-link>
                 </div>
               </div>
-              <div class="card-buttons mt-auto text-nowrap">
+              <div v-if="isAdministrator" class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
                              class="card-btn card-btn--left text-muted btn btn-outline-secondary"
                              @click.native="onClickLinkScrollToBody">
@@ -117,6 +119,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 
@@ -140,7 +143,7 @@ export default {
       ...getFavicon('business')
     }
   },
-  asyncData: async ({ query }) => {
+  asyncData: async ({ query, error }) => {
     let indexApiUrl = 'management/organizations'
     let collection = {}
     let params = getQueryData({ query })
@@ -149,6 +152,7 @@ export default {
       const { data } = await axios.get(indexApiUrl, { params })
       collection = data
     } catch (e) {
+      error({ statusCode: e.response.status })
     }
     return {
       indexApiUrl,
@@ -161,6 +165,10 @@ export default {
     errorsImages: {}
   }),
   computed: {
+    ...mapGetters({
+      isAdministrator: 'auth/isAdministrator',
+      isManagement: 'auth/isManagement'
+    }),
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },

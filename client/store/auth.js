@@ -21,7 +21,6 @@ export const state = () => ({
   cities: [],
   articles: {},
   blog: {
-    time: null,
     status: false
   }
 })
@@ -116,20 +115,13 @@ export const mutations = {
 // actions
 export const actions = {
   async fetchBlog ({ getters, commit }) {
-    let blog = getters.blog
-
-    let today = Number(moment().format('x'))
-
-    if (!blog.time || (blog.time && blog.time < (today - (86400000 * 3)))) {
-      try {
-        let { data } = await axios.get(`articles/latest`)
-        commit('SET_BLOG', {
-          status: data.status,
-          time: today
-        })
-      } catch (e) {
-        console.log(e)
-      }
+    try {
+      let { data } = await axios.get(`articles/latest`)
+      commit('SET_BLOG', {
+        status: data.status
+      })
+    } catch (e) {
+      console.log(e)
     }
   },
   getArticlesArray ({ getters, dispatch }) {
@@ -279,6 +271,14 @@ export const actions = {
         await axios.post('user/wishlist', {
           products: newUser.wishlist
         })
+        const res = await axios.get('user/wishlist', {
+          params: {
+            responseTypeId: 2
+          }
+        })
+        if (res.data.list) {
+          commit('SET_WISHLIST', res.data.list)
+        }
       } catch (e) {
         console.log(e)
       }

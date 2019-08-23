@@ -176,7 +176,7 @@ export default {
           ...data
         }
       } catch (e) {
-        error({ statusCode: 404, message: 'Organization not found' })
+        error({ statusCode: e.response.status })
       }
     }
     if (res.organization && res.organization.rating_user) {

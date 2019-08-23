@@ -408,7 +408,7 @@ export default {
         form = { ...form, ...data.product }
         images = cloneDeep(data.product.images)
       } catch (e) {
-        error({ statusCode: 404, message: 'Product not found' })
+        error({ statusCode: e.response.status })
       }
     }
 
