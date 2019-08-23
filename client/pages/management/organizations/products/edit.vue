@@ -684,6 +684,7 @@ export default {
       try {
         let { data } = await axios.get(`tags`, {
           params: {
+            perPage: 100000000,
             search: this.selectSearch
           }
         })
