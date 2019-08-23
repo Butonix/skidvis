@@ -65,7 +65,7 @@
               <div class="card-body pb-3">
                 <div class="d-flex justify-content-around mb-4">
                   <router-link
-                    v-if="isAdministrator"
+                    v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4"
                     @click.native="onClickLinkScrollToBody">

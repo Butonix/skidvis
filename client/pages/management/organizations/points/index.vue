@@ -19,7 +19,7 @@
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <div class="btn btn-outline-primary btn-sm" @click="onAdd">
+          <div v-if="isAdministrator" class="btn btn-outline-primary btn-sm" @click="onAdd">
             + Добавить адрес
           </div>
         </div>
@@ -45,8 +45,8 @@
             <div class="col pl-2">
               <div class="text-primary">
                 {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
-                <span class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
-                <span class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
+                <span v-if="isAdministrator" class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
+                <span v-if="isAdministrator" class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
               </div>
               {{ item.operationModeText }}
               <div class="font-weight-bolder d-block d-md-none">
@@ -266,7 +266,7 @@
           </div>
         </div>
 
-        <div class="text-center mt-5">
+        <div v-if="isAdministrator" class="text-center mt-5">
           <button v-if="updateId" class="btn btn-outline-primary mr-2"
                   @click="savePoint"
           >
@@ -374,6 +374,19 @@ export default {
     addresses: [],
     updateId: null
   }),
+  computed: {
+    ...mapGetters({
+      getReactData: 'variables/getReactData',
+      isAdministrator: 'auth/isAdministrator',
+      isManagement: 'auth/isManagement'
+    }),
+    items () {
+      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
+    },
+    pageCount () {
+      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
+    }
+  },
   watch: {
     'params.search': listWatchInstanceSearch,
     'params.page': listWatchInstancePage
@@ -381,17 +394,6 @@ export default {
   async beforeMount () {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
-    }
-  },
-  computed: {
-    ...mapGetters({
-      getReactData: 'variables/getReactData'
-    }),
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
     }
   },
   methods: {
