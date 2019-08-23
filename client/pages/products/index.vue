@@ -23,7 +23,7 @@
         </div>
       </div>
       <categories-scroll
-        :categories="getFavCategories"
+        :categories="getFavCategoriesSorted"
         :categories-active-ids="params.categories"
         @clickitem="filter('categories', $event)"
       />
@@ -192,6 +192,10 @@ export default {
 
     query = queryFixArrayParams(query, ['categories'])
 
+    if (query.categories && query.categories.length) {
+      query.categories = query.categories.map(Number)
+    }
+
     let params_ = getQueryData({
       query,
       defaultData: {
@@ -328,6 +332,23 @@ export default {
     getFavCategories () {
       return (this.getCategories.length) ? this.getCategories
         : ((this.favCategories.list && this.favCategories.list.data) ? this.favCategories.list.data : [])
+    },
+    getFavCategoriesSorted () {
+      let active = []
+      let noActive = []
+      if (this.params.categories && this.params.categories.length && this.getFavCategories.length) {
+        for (let i in this.getFavCategories) {
+          let cat = this.getFavCategories[i]
+          if (this.params.categories.indexOf(cat.id) !== -1) {
+            active.push(cat)
+          } else {
+            noActive.push(cat)
+          }
+        }
+        return active.concat(noActive)
+      } else {
+        return this.getFavCategories
+      }
     },
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []

@@ -58,7 +58,7 @@
           :form="form"
           type="number"
           field="origin_price"
-          placeholder="Цена от"
+          placeholder="Цена"
           data-align="left"
           form-class="my-4"
           size="sm"
