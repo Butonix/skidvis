@@ -47,7 +47,6 @@ const routes = [
       title: 'Главная'
     }
   },
-  // { path: '/home', name: 'home', component: Home },
 
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },

@@ -28,7 +28,7 @@
         type="holidays"
         @clickitem="filter('holidays', $event)"
       />
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between mt-3">
         <div class="text-muted small mb-2">
           Кому
         </div>
@@ -50,7 +50,7 @@
         type="auditories"
         @clickitem="filter('auditories', $event)"
       />
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between mt-3">
         <div class="text-muted small mb-2">
           Категории
         </div>
@@ -71,7 +71,7 @@
         :categories-active-ids="params.categories"
         @clickitem="filter('categories', $event)"
       />
-      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-center align-items-xs-start">
+      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-center align-items-xs-start mt-3">
         <div class="btn btn-outline-primary btn-sm mr-xs-2 mb-3"
              @click="onOpenMap"
         >
