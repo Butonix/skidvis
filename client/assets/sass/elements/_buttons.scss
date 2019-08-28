@@ -116,6 +116,100 @@
   }
 }
 
+.btn-holidays{
+  border: 2px dashed #3ACAFF;
+  background: transparent!important;
+  position: relative;
+  color: #00A2E8;
+  transition: 0.2s ease;
+  &:before{
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: $btn-border-radius;
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(106.12px at 92.86% -16.67%, #3ACAFF 0%, #00A2E8 100%);
+    transition: 0.2s ease;
+  }
+  &:hover, &.hover{
+    color: #00A2E8;
+    border-style: solid;
+    border-color: #3ACAFF;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 0.1rem rgba(#3ACAFF, 0.5);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: white;
+    border-color: transparent;
+    &:focus,
+    &.focus {
+      box-shadow: 0 0 0 0.1rem rgba(#3ACAFF, 0.5);
+    }
+    &:before{
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+.btn-auditories{
+  border: 2px dashed #929292;
+  background: transparent!important;
+  position: relative;
+  color: #272727;
+  transition: 0.2s ease;
+  &:before{
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: $btn-border-radius;
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(106.12px at 92.86% -16.67%, #929292 0%, #272727 100%);
+    transition: 0.2s ease;
+  }
+  &:hover, &.hover{
+    color: #272727;
+    border-style: solid;
+    border-color: #929292;
+  }
+
+  &:focus,
+  &.focus {
+    box-shadow: 0 0 0 0.1rem rgba(#929292, 0.5);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active,
+  .show > &.dropdown-toggle {
+    color: white;
+    border-color: transparent;
+    &:focus,
+    &.focus {
+      box-shadow: 0 0 0 0.1rem rgba(#929292, 0.5);
+    }
+    &:before{
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
 .btn-outline-gray{
   border: 2px dashed #929292;
   background: transparent;

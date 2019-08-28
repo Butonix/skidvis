@@ -18,7 +18,7 @@
         />
       </div>
     </div>
-    <div v-if="type === 'blog'" ref="viewport"
+    <div v-if="type !== ''" ref="viewport"
          class="category-icons--scroll__viewport"
          @mousedown="onMousedown">
       <div ref="content"
@@ -27,8 +27,8 @@
         <div v-for="(category, key) in categories"
              v-if="(categoriesActiveIds.indexOf(category.id) !== -1 || category.favorite)"
              :key="'categories-'+key"
-             :class="{'active':categoriesActiveIds.indexOf(category.id) !== -1}"
-             class="btn btn-blog mx-1 mb-2 text-nowrap"
+             :class="{['btn-'+type]:true,'active':categoriesActiveIds.indexOf(category.id) !== -1}"
+             class="btn mx-1 mb-2 text-nowrap"
              @click="onClick(category)"
              v-text="category.name"
         />
@@ -47,10 +47,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: '',
-      validator: function (value) {
-        return ['', 'blog'].indexOf(value) !== -1
-      }
+      default: ''
     },
     categories: {
       type: Array,

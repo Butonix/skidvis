@@ -25,7 +25,7 @@
       <categories-scroll
         :categories="getFavHolidaysSorted"
         :categories-active-ids="params.holidays"
-        type="blog"
+        type="holidays"
         @clickitem="filter('holidays', $event)"
       />
       <div class="d-flex justify-content-between">
@@ -47,7 +47,7 @@
       <categories-scroll
         :categories="getFavAuditoriesSorted"
         :categories-active-ids="params.auditories"
-        type="blog"
+        type="auditories"
         @clickitem="filter('auditories', $event)"
       />
       <div class="d-flex justify-content-between">
@@ -215,14 +215,14 @@
               <div class="d-flex justify-content-start align-items-start flex-wrap">
                 <div v-for="(auditory, key) in auditoriesSelected"
                      :key="'auditories-selected-'+key"
-                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
+                     class="btn btn-auditories active mx-1 mb-2 text-nowrap"
                      @click="filter('auditories', auditory)"
                      v-text="auditory.name"
                 />
                 <div v-for="(auditory, key) in getAuditoriesSearchable"
                      v-if="!auditoriesSelected[auditory.id]"
                      :key="'auditories-'+key"
-                     class="btn btn-blog mx-1 mb-2 text-nowrap"
+                     class="btn btn-auditories mx-1 mb-2 text-nowrap"
                      @click="filter('auditories', auditory)"
                      v-text="auditory.name"
                 />
@@ -262,14 +262,14 @@
               <div class="d-flex justify-content-start align-items-start flex-wrap">
                 <div v-for="(holiday, key) in holidaysSelected"
                      :key="'holidays-selected-'+key"
-                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
+                     class="btn btn-holidays active mx-1 mb-2 text-nowrap"
                      @click="filter('holidays', holiday)"
                      v-text="holiday.name"
                 />
                 <div v-for="(holiday, key) in getHolidaysSearchable"
                      v-if="!holidaysSelected[holiday.id]"
                      :key="'holidays-'+key"
-                     class="btn btn-blog mx-1 mb-2 text-nowrap"
+                     class="btn btn-holidays mx-1 mb-2 text-nowrap"
                      @click="filter('holidays', holiday)"
                      v-text="holiday.name"
                 />
