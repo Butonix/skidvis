@@ -125,6 +125,7 @@ export function watchList (axios, keyApiUrl, type) {
       this.$set(this, 'collection', data)
       this.loadingList = false
     }).catch((e) => {
+      console.log(e)
     })
   }
 }

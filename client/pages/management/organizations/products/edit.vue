@@ -115,16 +115,46 @@
               rows="1"
             />
 
-            Акции по тегам
-            <div
-              v-for="(tag, key) in form.tags"
-              :key="'tags-'+key"
-              class="tag mx-1 mb-2"
-              v-text="tag.name"
-            />
-            <div class="btn btn-outline-gray btn-sm px-4 mx-1"
-                 @click="onEditSelect('tags')">
-              + добавить тег
+            <div class="mb-3">
+              Акции по тегам
+              <div
+                v-for="(tag, key) in form.tags"
+                :key="'tags-'+key"
+                class="tag mx-1 mb-2"
+                v-text="tag.name"
+              />
+              <div class="btn btn-outline-gray btn-sm px-4 mx-1"
+                   @click="onEditSelect('tags')">
+                + добавить тег
+              </div>
+            </div>
+
+            <div class="mb-3">
+              Акции по аудитории
+              <div
+                v-for="(auditory, key) in form.auditories"
+                :key="'auditories-'+key"
+                class="tag mx-1 mb-2"
+                v-text="auditory.name"
+              />
+              <div class="btn btn-outline-gray btn-sm px-4 mx-1"
+                   @click="onEditSelect('auditories')">
+                + добавить аудиторию
+              </div>
+            </div>
+
+            <div class="mb-3">
+              Акции по праздникам
+              <div
+                v-for="(holiday, key) in form.holidays"
+                :key="'holidays-'+key"
+                class="tag mx-1 mb-2"
+                v-text="holiday.name"
+              />
+              <div class="btn btn-outline-gray btn-sm px-4 mx-1"
+                   @click="onEditSelect('holidays')">
+                + добавить праздник
+              </div>
             </div>
           </div>
 
@@ -271,6 +301,100 @@
         </div>
       </modal>
 
+      <modal name="save-holidays">
+        <div class="basic-modal">
+          <div class="position-relative">
+            <div :class="{'active': loading}" class="preloader"/>
+            <div class="">
+              Добавлено {{ holidaysSelected.length }} из {{ holidaysTotal }}
+              <div class="">
+                <search-input
+                  v-model="selectSearch"
+                  form-class="mb-4"
+                  autofocus="autofocus"
+                />
+                <div class="tags__select">
+                  <div
+                    v-for="(holiday, key) in getHolidaysSelected"
+                    :key="'holiday-selected-'+key"
+                    class="tag tag--edit active mx-1 mb-2"
+                    @click="removeFromSelect(holiday.id, 'holidays')"
+                    v-text="holiday.name"
+                  />
+                  <div
+                    v-for="(holiday, key) in getHolidays"
+                    v-if="!holidaysSelectedId[holiday.id]"
+                    :key="'get-holidays-'+key"
+                    class="tag tag--edit mx-1 mb-2"
+                    @click="addToSelect(holiday, 'holidays')"
+                    v-text="holiday.name"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-4 mt-xs-5">
+            <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="saveSelect('holidays')"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="$modal.pop()"
+            >
+              Отменить
+            </button>
+          </div>
+        </div>
+      </modal>
+
+      <modal name="save-auditories">
+        <div class="basic-modal">
+          <div class="position-relative">
+            <div :class="{'active': loading}" class="preloader"/>
+            <div class="">
+              Добавлено {{ auditoriesSelected.length }} из {{ auditoriesTotal }}
+              <div class="">
+                <search-input
+                  v-model="selectSearch"
+                  form-class="mb-4"
+                  autofocus="autofocus"
+                />
+                <div class="tags__select">
+                  <div
+                    v-for="(auditory, key) in getAuditoriesSelected"
+                    :key="'auditory-selected-'+key"
+                    class="tag tag--edit active mx-1 mb-2"
+                    @click="removeFromSelect(auditory.id, 'auditories')"
+                    v-text="auditory.name"
+                  />
+                  <div
+                    v-for="(auditory, key) in getAuditories"
+                    v-if="!auditoriesSelectedId[auditory.id]"
+                    :key="'get-auditories-'+key"
+                    class="tag tag--edit mx-1 mb-2"
+                    @click="addToSelect(auditory, 'auditories')"
+                    v-text="auditory.name"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-4 mt-xs-5">
+            <button v-if="!loading" class="btn btn-outline-primary mr-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="saveSelect('auditories')"
+            >
+              Сохранить
+            </button>
+            <button class="btn btn-outline-danger ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                    @click="$modal.pop()"
+            >
+              Отменить
+            </button>
+          </div>
+        </div>
+      </modal>
+
       <modal name="save-categories">
         <div class="basic-modal">
           <div class="position-relative">
@@ -390,6 +514,8 @@ export default {
       currency_id: 1,
       is_published: false,
       tags: [],
+      auditories: [],
+      holidays: [],
       categories: [],
       name: '',
       value: '',
@@ -438,11 +564,23 @@ export default {
     selectSearch: '',
     selectName: '',
     // Tags
-    tagsMax: 10,
+    tagsMax: 10000,
     tagsTotal: 0,
     tags: {},
     tagsSelected: [],
     tagsSelectedId: {},
+    // Auditories
+    auditoriesMax: 5,
+    auditoriesTotal: 0,
+    auditories: {},
+    auditoriesSelected: [],
+    auditoriesSelectedId: {},
+    // Holidays
+    holidaysMax: 5,
+    holidaysTotal: 0,
+    holidays: {},
+    holidaysSelected: [],
+    holidaysSelectedId: {},
     // Categories
     categories: {},
     categoriesMax: 3,
@@ -453,34 +591,6 @@ export default {
     socials: [],
     // Addresses
     addresses: [],
-    // {
-    //   id: 123,
-    //   name: '',
-    //   images: {
-    //     default: {
-    //       normal: 'http://lorempixel.com/1920/700',
-    //       active: 'http://lorempixel.com/1920/700'
-    //     },
-    //     business: {
-    //       normal: 'http://lorempixel.com/1920/700',
-    //       active: 'http://lorempixel.com/1920/700'
-    //     }
-    //   }
-    // },
-    // {
-    //   id: 321,
-    //   name: '',
-    //   images: {
-    //     default: {
-    //       normal: 'http://lorempixel.com/1920/700',
-    //       active: 'http://lorempixel.com/1920/700'
-    //     },
-    //     business: {
-    //       normal: 'http://lorempixel.com/1920/700',
-    //       active: 'http://lorempixel.com/1920/700'
-    //     }
-    //   }
-    // }
     fuseAddresses: null
   }),
   computed: {
@@ -492,6 +602,18 @@ export default {
     },
     getTags () {
       return (this.tags.data) ? this.tags.data : []
+    },
+    getHolidaysSelected () {
+      return sortBy(this.holidaysSelected, 'name')
+    },
+    getHolidays () {
+      return (this.holidays.data) ? this.holidays.data : []
+    },
+    getAuditoriesSelected () {
+      return sortBy(this.auditoriesSelected, 'name')
+    },
+    getAuditories () {
+      return (this.auditories.data) ? this.auditories.data : []
     },
     getCategoriesSelected () {
       return sortBy(this.categoriesSelected, 'name')
@@ -649,6 +771,12 @@ export default {
         case 'tags':
           res = `Ограничение сотавляет ${this[name + 'Max']} тегов`
           break
+        case 'holidays':
+          res = `Ограничение сотавляет ${this[name + 'Max']} праздников`
+          break
+        case 'auditories':
+          res = `Ограничение сотавляет ${this[name + 'Max']} аудиторий`
+          break
         case 'categories':
           res = `Ограничение сотавляет ${this[name + 'Max']} категории`
           break
@@ -689,6 +817,32 @@ export default {
           }
         })
         this.tags = data.list
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async holidaysFetch () {
+      try {
+        let { data } = await axios.get(`holidays`, {
+          params: {
+            perPage: 100000000,
+            search: this.selectSearch
+          }
+        })
+        this.holidays = data.list
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async auditoriesFetch () {
+      try {
+        let { data } = await axios.get(`auditories`, {
+          params: {
+            perPage: 100000000,
+            search: this.selectSearch
+          }
+        })
+        this.auditories = data.list
       } catch (e) {
         console.log(e)
       }

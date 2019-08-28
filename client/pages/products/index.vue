@@ -8,6 +8,50 @@
       />
       <div class="d-flex justify-content-between">
         <div class="text-muted small mb-2">
+          К празднику
+        </div>
+        <div class=" mb-2">
+          <a v-if="params.holidays.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+             @click="clearSelectedHolidays">
+            Сбросить
+          </a>
+          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
+             @click="handleAllHolidays">
+            Все
+            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
+          </a>
+        </div>
+      </div>
+      <categories-scroll
+        :categories="getFavHolidaysSorted"
+        :categories-active-ids="params.holidays"
+        type="blog"
+        @clickitem="filter('holidays', $event)"
+      />
+      <div class="d-flex justify-content-between">
+        <div class="text-muted small mb-2">
+          Кому
+        </div>
+        <div class=" mb-2">
+          <a v-if="params.auditories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+             @click="clearSelectedAuditories">
+            Сбросить
+          </a>
+          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
+             @click="handleAllAuditories">
+            Все
+            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
+          </a>
+        </div>
+      </div>
+      <categories-scroll
+        :categories="getFavAuditoriesSorted"
+        :categories-active-ids="params.auditories"
+        type="blog"
+        @clickitem="filter('auditories', $event)"
+      />
+      <div class="d-flex justify-content-between">
+        <div class="text-muted small mb-2">
           Категории
         </div>
         <div class=" mb-2">
@@ -16,7 +60,7 @@
             Сбросить
           </a>
           <a href="javascript:void(0)" class="text-muted small cursor-pointer"
-             @click="handleAllCats">
+             @click="handleAllCategories">
             Все
             <chevron style="transform-origin: center; transform: rotate(-90deg)" />
           </a>
@@ -51,6 +95,51 @@
       :page="params.page"
       @setpage="params.page = $event"
     />
+    <modal name="map">
+      <div class="basic-modal map-modal">
+        <div :class="{'active': loadingPoints}"
+             class="loading-list"
+        />
+        <div class="close-modal" @click="$modal.pop()">
+          <div class="close-modal__arrows">
+            <chevron class="close-modal__arrows--left" />
+            <chevron class="close-modal__arrows--right" />
+          </div>
+        </div>
+        <no-ssr>
+          <yandex-map
+            v-if="getCoords"
+            ref="map"
+            :controls="[]"
+            :coords="getCoords"
+            :zoom="zoom"
+            :scroll-zoom="true"
+            @click="onClickMap"
+            @map-was-initialized="onMapWasInitialized"
+          >
+            <ymap-marker
+              v-for="(point, key) in getPoints"
+              :layout="'islands#blueDiscountIcon'"
+              :key="point.id"
+              :properties="{
+                iconCaption: point.name
+              }"
+              :balloon-template="balloonTemplatePoint(point, key)"
+              :coords="[point.latitude, point.longitude]"
+              :marker-id="point.id"
+              :callbacks="{
+                balloonopen: (e) => {
+                  balloonopenMarker(e, point, key)
+                },
+                click: (e) => {
+                  clickMarker(e, point, key)
+                }
+              }"
+            />
+          </yandex-map>
+        </no-ssr>
+      </div>
+    </modal>
     <modal name="save-categories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
@@ -103,49 +192,98 @@
         </div>
       </div>
     </modal>
-    <modal name="map">
-      <div class="basic-modal map-modal">
-        <div :class="{'active': loadingPoints}"
-             class="loading-list"
-        />
-        <div class="close-modal" @click="$modal.pop()">
-          <div class="close-modal__arrows">
-            <chevron class="close-modal__arrows--left" />
-            <chevron class="close-modal__arrows--right" />
+    <modal name="save-auditories">
+      <div class="basic-modal categories-modal">
+        <div class="position-relative">
+          <div :class="{'active': loadingAuditories}" class="preloader"/>
+          <div class="">
+            Выбрано {{ params.auditories.length }} из {{ getAuditories.length }}
+            <div class="">
+              <div class="d-flex">
+                <search-input
+                  v-model="auditoriesSearch"
+                  form-class="mb-4 flex-grow-1"
+                  autofocus="autofocus"
+                />
+                <div v-if="params.auditories.length" class="pl-3">
+                  <div class="btn btn-primary btn-sm"
+                       @click="clearSelectedAuditories">
+                    Сбросить
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-start flex-wrap">
+                <div v-for="(auditory, key) in auditoriesSelected"
+                     :key="'auditories-selected-'+key"
+                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
+                     @click="filter('auditories', auditory)"
+                     v-text="auditory.name"
+                />
+                <div v-for="(auditory, key) in getAuditoriesSearchable"
+                     v-if="!auditoriesSelected[auditory.id]"
+                     :key="'auditories-'+key"
+                     class="btn btn-blog mx-1 mb-2 text-nowrap"
+                     @click="filter('auditories', auditory)"
+                     v-text="auditory.name"
+                />
+              </div>
+            </div>
           </div>
         </div>
-        <no-ssr>
-          <yandex-map
-            v-if="getCoords"
-            ref="map"
-            :controls="[]"
-            :coords="getCoords"
-            :zoom="zoom"
-            :scroll-zoom="true"
-            @click="onClickMap"
-            @map-was-initialized="onMapWasInitialized"
+        <div class="text-center mt-4 mt-xs-5">
+          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                  @click="$modal.pop()"
           >
-            <ymap-marker
-              v-for="(point, key) in getPoints"
-              :layout="'islands#blueDiscountIcon'"
-              :key="point.id"
-              :properties="{
-                iconCaption: point.name
-              }"
-              :balloon-template="balloonTemplatePoint(point, key)"
-              :coords="[point.latitude, point.longitude]"
-              :marker-id="point.id"
-              :callbacks="{
-                balloonopen: (e) => {
-                  balloonopenMarker(e, point, key)
-                },
-                click: (e) => {
-                  clickMarker(e, point, key)
-                }
-              }"
-            />
-          </yandex-map>
-        </no-ssr>
+            Готово
+          </button>
+        </div>
+      </div>
+    </modal>
+    <modal name="save-holidays">
+      <div class="basic-modal categories-modal">
+        <div class="position-relative">
+          <div :class="{'active': loadingHolidays}" class="preloader"/>
+          <div class="">
+            Выбрано {{ params.holidays.length }} из {{ getHolidays.length }}
+            <div class="">
+              <div class="d-flex">
+                <search-input
+                  v-model="holidaysSearch"
+                  form-class="mb-4 flex-grow-1"
+                  autofocus="autofocus"
+                />
+                <div v-if="params.holidays.length" class="pl-3">
+                  <div class="btn btn-primary btn-sm"
+                       @click="clearSelectedHolidays">
+                    Сбросить
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-start align-items-start flex-wrap">
+                <div v-for="(holiday, key) in holidaysSelected"
+                     :key="'holidays-selected-'+key"
+                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
+                     @click="filter('holidays', holiday)"
+                     v-text="holiday.name"
+                />
+                <div v-for="(holiday, key) in getHolidaysSearchable"
+                     v-if="!holidaysSelected[holiday.id]"
+                     :key="'holidays-'+key"
+                     class="btn btn-blog mx-1 mb-2 text-nowrap"
+                     @click="filter('holidays', holiday)"
+                     v-text="holiday.name"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4 mt-xs-5">
+          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
+                  @click="$modal.pop()"
+          >
+            Готово
+          </button>
+        </div>
       </div>
     </modal>
   </div>
@@ -188,18 +326,32 @@ export default {
     let collection = {}
     let favCategories = {}
     let categoriesSelected = {}
+    let favAuditories = {}
+    let auditoriesSelected = {}
+    let favHolidays = {}
+    let holidaysSelected = {}
     let city = app.store.getters['auth/city']
 
-    query = queryFixArrayParams(query, ['categories'])
+    query = queryFixArrayParams(query, ['categories', 'auditories', 'holidays'])
 
     if (query.categories && query.categories.length) {
       query.categories = query.categories.map(Number)
+    }
+
+    if (query.auditories && query.auditories.length) {
+      query.auditories = query.auditories.map(Number)
+    }
+
+    if (query.holidays && query.holidays.length) {
+      query.holidays = query.holidays.map(Number)
     }
 
     let params_ = getQueryData({
       query,
       defaultData: {
         categories: [],
+        holidays: [],
+        auditories: [],
         city_id: city.id,
         ordering: 'created_at',
         orderingDir: 'desc',
@@ -211,8 +363,6 @@ export default {
     if (Number(params_.city_id) !== Number(city.id)) {
       await app.store.dispatch('auth/setCity', params_.city_id)
     }
-
-    params_.categories = params_.categories.map(v => Number(v))
 
     indexApiUrl = 'products'
     try {
@@ -239,6 +389,32 @@ export default {
     }
 
     try {
+      let { data } = await axios.get('holidays', {
+        params: {
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: params_.holidays
+        }
+      })
+      favHolidays = data
+    } catch (e) {
+      console.log(e)
+    }
+
+    try {
+      let { data } = await axios.get('auditories', {
+        params: {
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: params_.auditories
+        }
+      })
+      favAuditories = data
+    } catch (e) {
+      console.log(e)
+    }
+
+    try {
       for (let i in favCategories.list.data) {
         let item = favCategories.list.data[i]
         if (params_.categories.indexOf(item.id) !== -1) {
@@ -249,9 +425,35 @@ export default {
       console.log(e)
     }
 
+    try {
+      for (let i in favHolidays.list.data) {
+        let item = favHolidays.list.data[i]
+        if (params_.holidays.indexOf(item.id) !== -1) {
+          holidaysSelected[item.id] = { ...item }
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
+    try {
+      for (let i in favAuditories.list.data) {
+        let item = favAuditories.list.data[i]
+        if (params_.auditories.indexOf(item.id) !== -1) {
+          auditoriesSelected[item.id] = { ...item }
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
+
     return {
       categoriesSelected,
       favCategories,
+      auditoriesSelected,
+      favAuditories,
+      holidaysSelected,
+      favHolidays,
       collection,
       params: params_,
       indexApiUrl
@@ -306,7 +508,19 @@ export default {
     fuseCategories: null,
     categoriesSearch: '',
     loadingCategories: true,
-    categoriesTotal: 0
+    categoriesTotal: 0,
+
+    auditories: {},
+    fuseAuditories: null,
+    auditoriesSearch: '',
+    loadingAuditories: true,
+    auditoriesTotal: 0,
+
+    holidays: {},
+    fuseHolidays: null,
+    holidaysSearch: '',
+    loadingHolidays: true,
+    holidaysTotal: 0
   }),
   computed: {
     ...mapGetters({
@@ -323,6 +537,7 @@ export default {
       }
       return res
     },
+    // Categories
     getCategories () {
       return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
     },
@@ -350,6 +565,62 @@ export default {
         return this.getFavCategories
       }
     },
+    // Auditories
+    getAuditories () {
+      return (this.auditories.list && this.auditories.list.data) ? this.auditories.list.data : []
+    },
+    getAuditoriesSearchable () {
+      return (this.fuseAuditories && this.auditoriesSearch.length > 0) ? this.fuseAuditories.search(this.auditoriesSearch) : this.getAuditories
+    },
+    getFavAuditories () {
+      return (this.getAuditories.length) ? this.getAuditories
+        : ((this.favAuditories.list && this.favAuditories.list.data) ? this.favAuditories.list.data : [])
+    },
+    getFavAuditoriesSorted () {
+      let active = []
+      let noActive = []
+      if (this.params.auditories && this.params.auditories.length && this.getFavAuditories.length) {
+        for (let i in this.getFavAuditories) {
+          let cat = this.getFavAuditories[i]
+          if (this.params.auditories.indexOf(cat.id) !== -1) {
+            active.push(cat)
+          } else {
+            noActive.push(cat)
+          }
+        }
+        return active.concat(noActive)
+      } else {
+        return this.getFavAuditories
+      }
+    },
+    // Holidays
+    getHolidays () {
+      return (this.holidays.list && this.holidays.list.data) ? this.holidays.list.data : []
+    },
+    getHolidaysSearchable () {
+      return (this.fuseHolidays && this.holidaysSearch.length > 0) ? this.fuseHolidays.search(this.holidaysSearch) : this.getHolidays
+    },
+    getFavHolidays () {
+      return (this.getHolidays.length) ? this.getHolidays
+        : ((this.favHolidays.list && this.favHolidays.list.data) ? this.favHolidays.list.data : [])
+    },
+    getFavHolidaysSorted () {
+      let active = []
+      let noActive = []
+      if (this.params.holidays && this.params.holidays.length && this.getFavHolidays.length) {
+        for (let i in this.getFavHolidays) {
+          let cat = this.getFavHolidays[i]
+          if (this.params.holidays.indexOf(cat.id) !== -1) {
+            active.push(cat)
+          } else {
+            noActive.push(cat)
+          }
+        }
+        return active.concat(noActive)
+      } else {
+        return this.getFavHolidays
+      }
+    },
     items () {
       return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
     },
@@ -360,6 +631,8 @@ export default {
   watch: {
     'params.search': listWatchInstanceSearch,
     'params.categories': listWatchInstanceSearch,
+    'params.auditories': listWatchInstanceSearch,
+    'params.holidays': listWatchInstanceSearch,
     'params.ordering': listWatchInstanceSearch,
     'params.page': listWatchInstancePage,
     'city': function (v) {
@@ -467,7 +740,6 @@ export default {
       }
 
       this.loadingPoints = false
-
     },
     async onClickMap (e) {
       // this.coords = e.get('coords')
@@ -494,7 +766,15 @@ export default {
       this.params.categories = []
       this.categoriesSelected = {}
     },
-    async handleAllCats () {
+    clearSelectedAuditories () {
+      this.params.auditories = []
+      this.auditoriesSelected = {}
+    },
+    clearSelectedHolidays () {
+      this.params.holidays = []
+      this.holidaysSelected = {}
+    },
+    async handleAllCategories () {
       this.$modal.push('save-categories')
       if (!this.getCategories.length) {
         this.loadingCategories = true
@@ -529,17 +809,112 @@ export default {
         this.loadingCategories = false
       }
     },
+    async handleAllAuditories () {
+      this.$modal.push('save-auditories')
+      if (!this.getAuditories.length) {
+        this.loadingAuditories = true
+        try {
+          let { data } = await axios.get('auditories', {
+            params: {
+              perPage: 1000000,
+              page: 1
+            }
+          })
+          this.auditories = data
+          this.fuseAuditories = new Fuse(this.getAuditories, {
+            shouldSort: true,
+            threshold: 0.6,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: [
+              'name'
+            ]
+          })
+        } catch (e) {
+          console.log(e)
+          await this.$callToast({
+            type: 'error',
+            text: 'Загрузить все аудитории не удалось'
+          })
+          this.$modal.pop()
+        }
+        this.loadingAuditories = false
+      }
+    },
+    async handleAllHolidays () {
+      this.$modal.push('save-holidays')
+      if (!this.getHolidays.length) {
+        this.loadingHolidays = true
+        try {
+          let { data } = await axios.get('holidays', {
+            params: {
+              perPage: 1000000,
+              page: 1
+            }
+          })
+          this.holidays = data
+          this.fuseHolidays = new Fuse(this.getHolidays, {
+            shouldSort: true,
+            threshold: 0.6,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: [
+              'name'
+            ]
+          })
+        } catch (e) {
+          console.log(e)
+          await this.$callToast({
+            type: 'error',
+            text: 'Загрузить все праздники не удалось'
+          })
+          this.$modal.pop()
+        }
+        this.loadingHolidays = false
+      }
+    },
     filter (type, item) {
+      console.log(type)
       switch (type) {
         case 'categories':
-          let id = Number(item.id)
-          let index = this.params.categories.indexOf(id)
-          if (index === -1) {
-            this.params.categories.push(id)
-            this.categoriesSelected[id] = { ...item }
+          console.log('categories')
+          let categoriesId = Number(item.id)
+          let categoriesIndex = this.params.categories.indexOf(categoriesId)
+          if (categoriesIndex === -1) {
+            this.params.categories.push(categoriesId)
+            this.categoriesSelected[categoriesId] = { ...item }
           } else {
-            this.$delete(this.params.categories, index)
-            this.$delete(this.categoriesSelected, id)
+            this.$delete(this.params.categories, categoriesIndex)
+            this.$delete(this.categoriesSelected, categoriesId)
+          }
+          break
+        case 'auditories':
+          console.log('auditories')
+          let auditoriesId = Number(item.id)
+          let auditoriesIndex = this.params.auditories.indexOf(auditoriesId)
+          if (auditoriesIndex === -1) {
+            this.params.auditories.push(auditoriesId)
+            this.auditoriesSelected[auditoriesId] = { ...item }
+          } else {
+            this.$delete(this.params.auditories, auditoriesIndex)
+            this.$delete(this.auditoriesSelected, auditoriesId)
+          }
+          break
+        case 'holidays':
+          console.log('holidays')
+          let holidaysId = Number(item.id)
+          let holidaysIndex = this.params.holidays.indexOf(holidaysId)
+
+          if (holidaysIndex === -1) {
+            this.params.holidays.push(holidaysId)
+            this.holidaysSelected[holidaysId] = { ...item }
+          } else {
+            this.$delete(this.params.holidays, holidaysIndex)
+            this.$delete(this.holidaysSelected, holidaysId)
           }
           break
       }
