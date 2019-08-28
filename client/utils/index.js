@@ -6,6 +6,8 @@
  * @param  {String} key
  * @return {String|undefined}
  */
+import queryString from 'query-string'
+
 export function cookieFromRequest (req, key, json) {
   if (!req.headers.cookie) {
     return
@@ -76,6 +78,14 @@ export function getQueryData ({ query, defaultData, ignoreData }) {
   return res
 }
 
+export function goTo (title, url) {
+  if (typeof history.pushState !== 'undefined') {
+    history.pushState(null, title, url)
+  } else {
+    window.location.assign(url)
+  }
+}
+
 export function watchList (axios, keyApiUrl, type) {
   const CancelToken = axios.CancelToken
   let cancelRequest
@@ -89,9 +99,9 @@ export function watchList (axios, keyApiUrl, type) {
         break
     }
     let params = getQueryData({ query: this.params, defaultData: this.params })
-    this.$router.push({ name: this.$route.name,
-      query: params
-    })
+    goTo(document.title, window.location.href.split('?')[0] + '?' + queryString.stringify(params))
+    // this.$router.push({ query: params })
+
     if (!this[keyApiUrl]) {
       this.$route.back()
       return

@@ -85,7 +85,6 @@ module.exports = {
     '~plugins/fontawesome',
     // '~plugins/tooltip',
     '~plugins/modal',
-    '~plugins/asyncComputed',
     '~plugins/vue-textarea-autosize',
     '~plugins/moment',
     '~plugins/social-sharing',

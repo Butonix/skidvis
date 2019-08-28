@@ -140,7 +140,7 @@
         </no-ssr>
       </div>
     </modal>
-    <modal name="save-categories">
+    <modal name="modal-categories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
           <div :class="{'active': loadingCategories}" class="preloader" />
@@ -192,7 +192,7 @@
         </div>
       </div>
     </modal>
-    <modal name="save-auditories">
+    <modal name="modal-auditories">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
           <div :class="{'active': loadingAuditories}" class="preloader"/>
@@ -239,7 +239,7 @@
         </div>
       </div>
     </modal>
-    <modal name="save-holidays">
+    <modal name="modal-holidays">
       <div class="basic-modal categories-modal">
         <div class="position-relative">
           <div :class="{'active': loadingHolidays}" class="preloader"/>
@@ -527,6 +527,40 @@ export default {
       wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
+    getParams () {
+      let query = this.$route.query
+      query = queryFixArrayParams(query, ['categories', 'auditories', 'holidays'])
+
+      if (query.categories && query.categories.length) {
+        query.categories = query.categories.map(Number)
+      }
+
+      if (query.auditories && query.auditories.length) {
+        query.auditories = query.auditories.map(Number)
+      }
+
+      if (query.holidays && query.holidays.length) {
+        query.holidays = query.holidays.map(Number)
+      }
+
+      let city = this.$store.getters['auth/city']
+
+      let params_ = getQueryData({
+        query,
+        defaultData: {
+          categories: [],
+          holidays: [],
+          auditories: [],
+          city_id: city.id,
+          ordering: 'created_at',
+          orderingDir: 'desc',
+          is_active: 1,
+          perPage: 12
+        }
+      })
+      console.log(params_)
+      return params_
+    },
     getPoints () {
       return this.points
     },
@@ -775,7 +809,7 @@ export default {
       this.holidaysSelected = {}
     },
     async handleAllCategories () {
-      this.$modal.push('save-categories')
+      this.$modal.push('modal-categories')
       if (!this.getCategories.length) {
         this.loadingCategories = true
         try {
@@ -810,7 +844,7 @@ export default {
       }
     },
     async handleAllAuditories () {
-      this.$modal.push('save-auditories')
+      this.$modal.push('modal-auditories')
       if (!this.getAuditories.length) {
         this.loadingAuditories = true
         try {
@@ -844,7 +878,7 @@ export default {
       }
     },
     async handleAllHolidays () {
-      this.$modal.push('save-holidays')
+      this.$modal.push('modal-holidays')
       if (!this.getHolidays.length) {
         this.loadingHolidays = true
         try {
@@ -878,10 +912,8 @@ export default {
       }
     },
     filter (type, item) {
-      console.log(type)
       switch (type) {
         case 'categories':
-          console.log('categories')
           let categoriesId = Number(item.id)
           let categoriesIndex = this.params.categories.indexOf(categoriesId)
           if (categoriesIndex === -1) {
@@ -893,7 +925,6 @@ export default {
           }
           break
         case 'auditories':
-          console.log('auditories')
           let auditoriesId = Number(item.id)
           let auditoriesIndex = this.params.auditories.indexOf(auditoriesId)
           if (auditoriesIndex === -1) {
@@ -905,7 +936,6 @@ export default {
           }
           break
         case 'holidays':
-          console.log('holidays')
           let holidaysId = Number(item.id)
           let holidaysIndex = this.params.holidays.indexOf(holidaysId)
 
