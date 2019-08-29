@@ -65,9 +65,11 @@
     transform: rotate(-45deg);
     &--left{
       transform: rotate(90deg);
+      margin-left: -.15em;
     }
     &--right{
       transform: rotate(-90deg);
+      margin-right: -.15em;
     }
   }
 }

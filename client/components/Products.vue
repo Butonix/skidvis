@@ -1,5 +1,5 @@
 <template>
-  <div class="container container--long-offset" ref="start">
+  <div ref="start" class="container container--long-offset">
     <transition
       v-if="getItems.length"
       name="fade" mode="out-in">
@@ -56,7 +56,7 @@
                 </div>
               </router-link>
               <label class="card-body pb-2 pt-4"
-                     v-html="((item.short_description)?item.short_description.replaceAll('\n', '<br>'):((item.name)?item.name.replaceAll('\n', '<br>'):''))"
+                     v-html="((item.short_description)?splitReplaceShort(item.short_description, 94):((item.name)?splitReplaceShort(item.name, 94):''))"
               />
               <div class="card-footer">
                 <div class="card-footer__address">
@@ -119,7 +119,7 @@
         <h5>
           Чтобы отложить акцию,<br> кликаем по иконке закладки
         </h5>
-        <flag :active="wishlistActive" class-box="mb-5" :title="(wishlistActive)?'Удалить из избранного':'Добавить в избранное'"
+        <flag :active="wishlistActive" :title="(wishlistActive)?'Удалить из избранного':'Добавить в избранное'" class-box="mb-5"
               @click="wishlistActive = !wishlistActive"
         />
         <p>
@@ -204,6 +204,22 @@ export default {
       pushInWishlist: 'auth/pushInWishlist',
       removeFromWishlist: 'auth/removeFromWishlist'
     }),
+    splitReplaceShort (str, length) {
+      if (!str) {
+        return str
+      }
+      let arrStr = str.split('\n')
+      if (arrStr.length > 3) {
+        str = arrStr[0] + ((arrStr[1]) ? '<br>' + arrStr[1] : '') + ((arrStr[2]) ? '<br>' + arrStr[2] : '') + '...'
+      } else {
+        if (str.length > length) {
+          str = str.slice(0, length).trim()
+          str += '...'
+        }
+        str.replaceAll('\n', '<br>')
+      }
+      return str
+    },
     onGetItems () {
       this.activeAddresses = 0
     },

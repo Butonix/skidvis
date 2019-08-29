@@ -68,14 +68,14 @@
                   <router-link
                     v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
-                    class="btn btn-gray btn-sm px-4"
+                    class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
                     @click.native="onClickLinkScrollToBody">
                     <span class="px-2">Адреса</span>
                   </router-link>
                   <router-link
                     v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
-                    class="btn btn-gray btn-sm px-4"
+                    class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
                     @click.native="onClickLinkScrollToBody">
                     <span class="px-2">Акции</span>
                   </router-link>

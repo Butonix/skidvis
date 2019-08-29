@@ -102,8 +102,8 @@
         />
         <div class="close-modal" @click="$modal.pop()">
           <div class="close-modal__arrows">
-            <chevron class="close-modal__arrows--left" />
             <chevron class="close-modal__arrows--right" />
+            <chevron class="close-modal__arrows--left" />
           </div>
         </div>
         <no-ssr>

@@ -32,17 +32,9 @@
                           @click.native="openMenu = false">
                   Все компании
                 </nav-item>
-                <nav-item :to="{ name: 'business' }" class-link="nav-link--business"
-                          @click.native="openMenu = false">
-                  Бизнесу
-                </nav-item>
                 <nav-item :to="{ name: 'blog.index' }" :class-link="'nav-link--blog' + ((blog.status)?' icon-blog':'')"
                           @click.native="openMenu = false">
                   Блог
-                </nav-item>
-                <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default"
-                          @click.native="openMenu = false">
-                  Контакты
                 </nav-item>
               </ul>
             </div>

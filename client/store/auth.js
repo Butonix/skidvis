@@ -354,7 +354,6 @@ export const actions = {
           }
         })
         if (res.data.list) {
-          console.log(res.data.list)
           commit('SET_BOOKMARKS', res.data.list)
         }
       } catch (e) {
