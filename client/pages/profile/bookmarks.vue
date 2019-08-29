@@ -15,14 +15,12 @@
              class="loading-list"
         />
         <div class="row">
-          <div
+          <card
             v-for="(item, index) in items"
             :key="'article-'+index"
-            class="col-md-6 col-lg-4">
-            <card
-              :article="item"
-            />
-          </div>
+            :article="item"
+            class="col-md-6 col-lg-4"
+          />
         </div>
       </div>
       <div class="container">

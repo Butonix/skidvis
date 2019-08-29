@@ -56,30 +56,26 @@
               type="new"
             />
             <div class="row d-none d-lg-flex">
-              <div class="col-lg-6">
-                <card
-                  v-if="simpleItems[3]"
-                  :article="simpleItems[3]"
-                />
-              </div>
-              <div class="col-lg-6">
-                <card
-                  v-if="simpleItems[4]"
-                  :article="simpleItems[4]"
-                />
-              </div>
-              <div class="col-lg-6">
-                <card
-                  v-if="simpleItems[5]"
-                  :article="simpleItems[5]"
-                />
-              </div>
-              <div class="col-lg-6">
-                <card
-                  v-if="simpleItems[6]"
-                  :article="simpleItems[6]"
-                />
-              </div>
+              <card
+                v-if="simpleItems[3]"
+                :article="simpleItems[3]"
+                class="col-lg-6"
+              />
+              <card
+                v-if="simpleItems[4]"
+                :article="simpleItems[4]"
+                class="col-lg-6"
+              />
+              <card
+                v-if="simpleItems[5]"
+                :article="simpleItems[5]"
+                class="col-lg-6"
+              />
+              <card
+                v-if="simpleItems[6]"
+                :article="simpleItems[6]"
+                class="col-lg-6"
+              />
             </div>
           </div>
           <div class="col-md-6 col-lg-4 col-pl">
@@ -103,41 +99,35 @@
         <div
           v-if="simpleItems[3]"
           class="row d-lg-none">
-          <div class="col-md-6 col-lg-4">
-            <card
-              v-if="simpleItems[3]"
-              :article="simpleItems[3]"
-            />
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <card
-              v-if="simpleItems[4]"
-              :article="simpleItems[4]"
-            />
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <card
-              v-if="simpleItems[4]"
-              :article="simpleItems[4]"
-            />
-          </div>
-          <div class="col-md-6 col-lg-4">
-            <card
-              v-if="simpleItems[5]"
-              :article="simpleItems[5]"
-            />
-          </div>
+          <card
+            v-if="simpleItems[3]"
+            :article="simpleItems[3]"
+            class="col-md-6 col-lg-4"
+          />
+          <card
+            v-if="simpleItems[4]"
+            :article="simpleItems[4]"
+            class="col-md-6 col-lg-4"
+          />
+          <card
+            v-if="simpleItems[4]"
+            :article="simpleItems[4]"
+            class="col-md-6 col-lg-4"
+          />
+          <card
+            v-if="simpleItems[5]"
+            :article="simpleItems[5]"
+            class="col-md-6 col-lg-4"
+          />
         </div>
         <div v-if="simplePage > 1" class="row">
-          <div
+          <card
             v-for="(item, index) in simpleItems"
             v-if="index >= 6"
             :key="'article-'+index"
-            class="col-md-6 col-lg-4">
-            <card
-              :article="item"
-            />
-          </div>
+            :article="item"
+            class="col-md-6 col-lg-4"
+          />
         </div>
       </div>
       <div v-if="pageCount > 1 && pageCount > simplePage" class="pt-4 text-center container">
