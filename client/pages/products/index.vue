@@ -292,7 +292,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Fuse from 'fuse.js'
-import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 
 const CancelToken = axios.CancelToken
@@ -331,20 +331,6 @@ export default {
     let favHolidays = {}
     let holidaysSelected = {}
     let city = app.store.getters['auth/city']
-
-    query = queryFixArrayParams(query, ['categories', 'auditories', 'holidays'])
-
-    if (query.categories && query.categories.length) {
-      query.categories = query.categories.map(Number)
-    }
-
-    if (query.auditories && query.auditories.length) {
-      query.auditories = query.auditories.map(Number)
-    }
-
-    if (query.holidays && query.holidays.length) {
-      query.holidays = query.holidays.map(Number)
-    }
 
     let params_ = getQueryData({
       query,
@@ -529,19 +515,6 @@ export default {
     }),
     getParams () {
       let query = this.$route.query
-      query = queryFixArrayParams(query, ['categories', 'auditories', 'holidays'])
-
-      if (query.categories && query.categories.length) {
-        query.categories = query.categories.map(Number)
-      }
-
-      if (query.auditories && query.auditories.length) {
-        query.auditories = query.auditories.map(Number)
-      }
-
-      if (query.holidays && query.holidays.length) {
-        query.holidays = query.holidays.map(Number)
-      }
 
       let city = this.$store.getters['auth/city']
 
@@ -558,7 +531,6 @@ export default {
           perPage: 12
         }
       })
-      console.log(params_)
       return params_
     },
     getPoints () {

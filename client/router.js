@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { scrollBehavior } from '~/utils'
+import qs from 'qs'
+import { scrollBehavior, parseReqObjs } from '~/utils'
 
 Vue.use(Router)
 
@@ -245,11 +246,18 @@ const routes = [
   }
 
 ]
-
 export function createRouter () {
   return new Router({
     routes,
     scrollBehavior,
-    mode: 'history'
+    mode: 'history',
+    parseQuery (query) {
+      return parseReqObjs(qs.parse(query))
+    },
+    stringifyQuery (query) {
+      let result = qs.stringify(query, { encode: false })
+
+      return result ? ('?' + result) : ''
+    }
   })
 }

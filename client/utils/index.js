@@ -1,4 +1,27 @@
 
+export function isObject (v) {
+  return v && typeof v === 'object' && v.constructor === Object
+}
+export function isString (v) {
+  return typeof v === 'string' || v instanceof String
+}
+export function parseNum (n) {
+  let pF = parseFloat(n)
+  return (pF === n >>> 0) ? pF : n
+}
+export function parseReqObjs (v) {
+  if (isObject(v) || Array.isArray(v)) {
+    for (let i in v) {
+      v[i] = parseReqObjs(v[i])
+    }
+    return v
+  }
+  if (isString(v)) {
+    return parseNum(v)
+  }
+  return v
+}
+
 /**
  * Get cookie from request.
  *
@@ -6,7 +29,6 @@
  * @param  {String} key
  * @return {String|undefined}
  */
-import queryString from 'query-string'
 
 export function cookieFromRequest (req, key, json) {
   if (!req.headers.cookie) {
@@ -85,6 +107,7 @@ export function goTo (title, url) {
     window.location.assign(url)
   }
 }
+import qs from 'qs'
 
 export function watchList (axios, keyApiUrl, type) {
   const CancelToken = axios.CancelToken
@@ -99,7 +122,12 @@ export function watchList (axios, keyApiUrl, type) {
         break
     }
     let params = getQueryData({ query: this.params, defaultData: this.params })
-    goTo(document.title, window.location.href.split('?')[0] + '?' + queryString.stringify(params))
+
+    let queryString = qs.stringify(params, { encode: false })
+
+    queryString = queryString ? ('?' + queryString) : ''
+    goTo(document.title, window.location.href.split('?')[0] + queryString)
+
     // this.$router.push({ query: params })
 
     if (!this[keyApiUrl]) {
@@ -234,16 +262,6 @@ export function fetchAddresses (axios) {
       return []
     }
   }
-}
-
-export function queryFixArrayParams (query, params) {
-  for (let i in params) {
-    if (query[params[i]] !== undefined && !(Array.isArray(query[params[i]]))) {
-      query[params[i]] = [query[params[i]]]
-    }
-  }
-
-  return query
 }
 
 export function mapPointSlide ({ inc = 1, id, count, key }) {

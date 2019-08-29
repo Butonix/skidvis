@@ -158,7 +158,7 @@
 <script>
 import Fuse from 'fuse.js'
 import { mapGetters, mapActions } from 'vuex'
-import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
@@ -192,12 +192,6 @@ export default {
     let favCategories = {}
     let categoriesSelected = {}
     let city = app.store.getters['auth/city']
-
-    query = queryFixArrayParams(query, ['categories'])
-
-    if (query.categories && query.categories.length) {
-      query.categories = query.categories.map(Number)
-    }
 
     let params_ = getQueryData({ query,
       defaultData: {

@@ -211,7 +211,7 @@
 
 <script>
 import Fuse from 'fuse.js'
-import { getQueryData, watchList, queryFixArrayParams, getFavicon } from '~/utils'
+import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
 
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -238,12 +238,6 @@ export default {
     let collection = {}
     let favCategories = {}
     let categoriesSelected = {}
-
-    query = queryFixArrayParams(query, ['categories'])
-
-    if (query.categories && query.categories.length) {
-      query.categories = query.categories.map(Number)
-    }
 
     let params_ = getQueryData({ query,
       defaultData: {
