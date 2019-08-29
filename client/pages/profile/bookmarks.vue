@@ -7,14 +7,43 @@
         form-class="mb-4"
       />
     </div>
-    <products
-      :loading-list="loadingList"
-      :items="items"
-      :page-count="pageCount"
-      :page="params.page"
-      type="wishlist"
-      @setpage="params.page = $event"
-    />
+    <div
+      v-if="items.length">
+      <div
+        class="container blog__container--long-offset position-relative">
+        <div :class="{'active': loadingList}"
+             class="loading-list"
+        />
+        <div class="row">
+          <div
+            v-for="(item, index) in items"
+            :key="'article-'+index"
+            class="col-md-6 col-lg-4">
+            <card
+              :article="item"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <paginate
+          v-if="pageCount && pageCount > 1"
+          v-model="params.page"
+          :page-count="pageCount"
+          :page-range="3"
+          :margin-pages="1"
+          :hide-prev-next="true"
+          :container-class="'pagination'"
+          :page-class="'page-item'"
+          prev-class="d-none"
+          next-class="d-none"
+          @click.native="onClickLink"
+        />
+      </div>
+    </div>
+    <h5 v-else class="text-center py-5">
+      Ничего не нашлось :(
+    </h5>
   </div>
 </template>
 
@@ -22,6 +51,7 @@
 import { mapGetters } from 'vuex'
 import { getQueryData, watchList, getFavicon } from '~/utils'
 import axios from 'axios'
+import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
 let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
@@ -29,7 +59,8 @@ let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
 export default {
   components: {
     'SearchInput': () => import('~/components/SearchInput'),
-    'Products': () => import('~/components/Products')
+    'Card': () => import('~/components/Blog/Card'),
+    Paginate
   },
   middleware: [],
   head () {
@@ -46,7 +77,7 @@ export default {
     let collection = {}
 
     let check = app.store.getters['auth/check']
-    let wishlist = app.store.getters['auth/wishlist']
+    let bookmarks = app.store.getters['auth/bookmarks']
 
     let params_ = getQueryData({ query,
       defaultData: {
@@ -57,14 +88,15 @@ export default {
     })
 
     if (check) {
-      indexApiUrl = 'user/wishlist'
+      indexApiUrl = 'user/bookmarks'
     } else {
-      indexApiUrl = 'products'
+      indexApiUrl = 'articles'
 
-      params_.whereIn = [...wishlist]
+      params_.responseTypeId = 2
+      params_.whereIn = [...bookmarks]
     }
 
-    if (!check && wishlist.length === 0) {
+    if (!check && bookmarks.length === 0) {
       collection = {
         current_page: 1,
         data: [],
@@ -96,7 +128,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
-      wishlist: 'auth/wishlist',
+      bookmarks: 'auth/bookmarks',
       check: 'auth/check'
     }),
     items () {
@@ -108,38 +140,45 @@ export default {
   },
   watch: {
     'params.search': function () {
-      if (!(!this.check && this.wishlist.length === 0)) {
+      if (!(!this.check && this.bookmarks.length === 0)) {
         listWatchInstanceSearch.call(this)
       }
     },
-    'wishlist': async function (v) {
-      await this.clearWishlist(v)
+    'bookmarks': async function (v) {
+      await this.clearBookmarks(v)
     },
     'check': async function (v) {
       await this.fetchProducts(v)
     },
     'params.page': function () {
-      if (!(!this.check && this.wishlist.length === 0)) {
+      if (!(!this.check && this.bookmarks.length === 0)) {
         listWatchInstancePage.call(this)
       }
     }
   },
   methods: {
-    async clearWishlist (arrayIds) {
+    onClickLink () {
+      this.$scrollTo(this.$refs.start, 500, {
+        offset: -60,
+        x: false,
+        y: true
+      })
+    },
+    async clearBookmarks (arrayIds) {
       try {
         this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
         this.collection.list.total--
 
         if (this.params.page > 1 && this.items.length === 0) {
           this.params.page--
-          await this.fetchProducts({})
+          await this.fetchArticles({})
         }
       } catch (e) {
       }
     },
-    async fetchProducts () {
+    async fetchArticles () {
       this.loadingList = true
-      if (!this.check && this.wishlist.length === 0) {
+      if (!this.check && this.bookmarks.length === 0) {
         this.collection = {
           current_page: 1,
           data: [],
@@ -151,11 +190,13 @@ export default {
         }
       } else {
         if (this.check) {
-          this.indexApiUrl = 'user/wishlist'
+          this.indexApiUrl = 'user/bookmarks'
         } else {
-          this.indexApiUrl = 'products'
+          this.indexApiUrl = 'articles'
 
-          this.params.whereIn = [...this.wishlist]
+          this.params.responseTypeId = 2
+
+          this.params.whereIn = [...this.bookmarks]
         }
         try {
           let { data } = await axios.get(this.indexApiUrl, {
@@ -165,7 +206,7 @@ export default {
         } catch (e) {
           await this.$callToast({
             type: 'error',
-            text: 'Обновить акции не удалось'
+            text: 'Обновить статьи не удалось'
           })
           console.log(e)
         }

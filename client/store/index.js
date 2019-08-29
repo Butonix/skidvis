@@ -18,6 +18,11 @@ export const actions = {
       commit('auth/SET_WISHLIST', wishlist)
     }
 
+    let bookmarks = cookieFromRequest(req, 'bookmarks', true)
+    if (bookmarks) {
+      commit('auth/SET_BOOKMARKS', bookmarks)
+    }
+
     let articles = cookieFromRequest(req, 'articles', true)
     if (articles) {
       commit('auth/SET_ARTICLES', articles)
@@ -43,6 +48,11 @@ export const actions = {
     const wishlist = Cookies.getJSON('wishlist')
     if (wishlist) {
       commit('auth/SET_WISHLIST', wishlist)
+    }
+
+    const bookmarks = Cookies.getJSON('bookmarks')
+    if (bookmarks) {
+      commit('auth/SET_BOOKMARKS', bookmarks)
     }
 
     const articles = Cookies.getJSON('articles')

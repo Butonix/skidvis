@@ -15,12 +15,12 @@
     }
 
     &.active {
-      color: $blog!important;
+      color: $primary;
 
       svg {
         path {
-          stroke: $blog;
-          fill: $blog;
+          stroke: $primary;
+          fill: $primary;
         }
       }
     }
@@ -56,11 +56,11 @@
           }
         }
         &.active {
-          color: $blog!important;
+          color: $primary;
           svg {
             path {
-              stroke: $blog;
-              fill: $blog;
+              stroke: $primary;
+              fill: $primary;
             }
           }
         }

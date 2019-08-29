@@ -28,6 +28,7 @@ const ManagementHome = () => import('~/pages/management/home').then(m => m.defau
 const ProfileHome = () => import('~/pages/profile/home').then(m => m.default || m)
 const ProfileShow = () => import('~/pages/profile/show').then(m => m.default || m)
 const ProfileWishlist = () => import('~/pages/profile/wishlist').then(m => m.default || m)
+const ProfileBookmarks = () => import('~/pages/profile/bookmarks').then(m => m.default || m)
 // const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
@@ -143,6 +144,13 @@ const routes = [
           title: 'Избранное'
         },
         component: ProfileWishlist
+      },
+      { path: 'bookmarks',
+        name: 'profile.bookmarks',
+        meta: {
+          title: 'Закладки'
+        },
+        component: ProfileBookmarks
       }
     ]
   },

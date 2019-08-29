@@ -13,7 +13,8 @@ export const state = () => ({
       latitude: 59.939131,
       longitude: 30.3159
     },
-    wishlist: []
+    wishlist: [],
+    bookmarks: [],
   },
   isAdministrator: false,
   isManagement: false,
@@ -34,6 +35,8 @@ export const getters = {
   city: state => state.user.city,
   wishlist: state => (state.user.wishlist) ? state.user.wishlist : [],
   wishCount: state => (state.user.wishlist) ? state.user.wishlist.length : 0,
+  bookmarks: state => (state.user.bookmarks) ? state.user.bookmarks : [],
+  bookmarksCount: state => (state.user.bookmarks) ? state.user.bookmarks.length : 0,
   cities: state => state.cities,
   check: state => !!state.user.id,
   isAdministrator: state => state.isAdministrator,
@@ -85,6 +88,7 @@ export const mutations = {
 
   LOGOUT (state) {
     state.user.wishlist = []
+    state.user.bookmarks = []
     state.user.id = null
     state.token = null
     state.isAdministrator = false
@@ -99,12 +103,24 @@ export const mutations = {
     Vue.set(state.user, 'wishlist', wishlist)
   },
 
+  SET_BOOKMARKS (state, bookmarks) {
+    Vue.set(state.user, 'bookmarks', bookmarks)
+  },
+
   PUSH_IN_WISHLIST (state, id) {
     state.user.wishlist.push(id)
   },
 
+  PUSH_IN_BOOKMARKS (state, id) {
+    state.user.bookmarks.push(id)
+  },
+
   REMOVE_FROM_WISHLIST (state, index) {
     Vue.delete(state.user.wishlist, index)
+  },
+
+  REMOVE_FROM_BOOKMARKS (state, index) {
+    Vue.delete(state.user.bookmarks, index)
   },
 
   SET_BLOG (state, blog) {
@@ -156,6 +172,9 @@ export const actions = {
   async postWishlist ({ getters }) {
     Cookies.set('wishlist', getters.wishlist, { expires: 365 })
   },
+  async postBookmarks ({ getters }) {
+    Cookies.set('bookmarks', getters.bookmarks, { expires: 365 })
+  },
   async pushInWishlist ({ commit, getters, dispatch }, id) {
     if (getters.wishlist.indexOf(id) === -1) {
       commit('PUSH_IN_WISHLIST', id)
@@ -164,6 +183,20 @@ export const actions = {
       if (getters.check) {
         try {
           await axios.post(`products/${id}/marked`)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+  },
+  async pushInBookmarks ({ commit, getters, dispatch }, id) {
+    if (getters.bookmarks.indexOf(id) === -1) {
+      commit('PUSH_IN_BOOKMARKS', id)
+      dispatch('postBookmarks')
+
+      if (getters.check) {
+        try {
+          await axios.post(`articles/${id}/marked`)
         } catch (e) {
           console.log(e)
         }
@@ -180,6 +213,22 @@ export const actions = {
       if (getters.check) {
         try {
           await axios.delete(`products/${id}/marked`)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+  },
+  async removeFromBookmarks ({ commit, getters, dispatch }, id) {
+    let index = getters.bookmarks.indexOf(id)
+
+    if (index !== -1) {
+      commit('REMOVE_FROM_BOOKMARKS', index)
+      dispatch('postBookmarks')
+
+      if (getters.check) {
+        try {
+          await axios.delete(`articles/${id}/marked`)
         } catch (e) {
           console.log(e)
         }
@@ -227,8 +276,9 @@ export const actions = {
   beforeSaveUpdateUser ({ commit, dispatch, state }, { data }) {
     let city = state.user.city
     let wishlist = state.user.wishlist
+    let bookmarks = state.user.bookmarks
 
-    let user = { ...((data.user) ? data.user : data) }
+    let user = { ...data }
 
     if (city) {
       user.city = city
@@ -238,12 +288,20 @@ export const actions = {
       user.wishlist = wishlist
     }
 
+    if (bookmarks && bookmarks.length) {
+      user.bookmarks = bookmarks
+    }
+
     if (!user.city) {
       user.city = { id: 3, name: 'Санкт-Петербург' }
     }
 
     if (!user.wishlist) {
       user.wishlist = []
+    }
+
+    if (!user.bookmarks) {
+      user.bookmarks = []
     }
 
     if (data.user) {
@@ -255,7 +313,8 @@ export const actions = {
   },
 
   async afterSaveUpdateUser ({ commit, dispatch }, { newData, data }) {
-    let newUser = (newData.user) ? newData.user : newData
+
+    let newUser = { ...newData }
 
     if (data.city.id !== newUser.city.id) {
       try {
@@ -278,6 +337,25 @@ export const actions = {
         })
         if (res.data.list) {
           commit('SET_WISHLIST', res.data.list)
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    if (!isEqual(data.bookmarks, newUser.bookmarks)) {
+      try {
+        await axios.post('user/bookmarks', {
+          articles: newUser.bookmarks
+        })
+        const res = await axios.get('user/bookmarks', {
+          params: {
+            responseTypeId: 2
+          }
+        })
+        if (res.data.list) {
+          console.log(res.data.list)
+          commit('SET_BOOKMARKS', res.data.list)
         }
       } catch (e) {
         console.log(e)
@@ -329,6 +407,7 @@ export const actions = {
 
     Cookies.remove('token')
     Cookies.remove('wishlist')
+    Cookies.remove('bookmarks')
 
     commit('LOGOUT')
   },

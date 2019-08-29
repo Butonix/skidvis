@@ -1,7 +1,6 @@
 <template>
   <div class="article-card__wrapper">
     <div class="article-card__img">
-
       <div
         v-lazy:background-image="{
           src: article.mainImage,
@@ -36,8 +35,16 @@
         <div>
           <eye/> {{ article.views || 0 }}
         </div>
-        <div v-if="(type === 'new-xl' || type === 'new') && article.readTime">
-          <eye-clock/> Читать {{ article.readTime }} минут
+        <div class="d-flex">
+          <div v-if="(type === 'new-xl' || type === 'new') && article.readTime" class="">
+            <eye-clock/> Читать {{ article.readTime }} минут
+          </div>
+          <flag v-if="bookmarks.indexOf(article.id) !== -1" :active="true" class-box="pl-3" title="Удалить из закладок"
+                @click.stop.prevent="removeFromBookmarks(article.id)"
+          />
+          <flag v-else :active="false" class-box="pl-3" title="Добавить в закладки"
+                @click.stop.prevent="pushInBookmarks(article.id)"
+          />
         </div>
       </div>
     </div>
@@ -45,9 +52,11 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
+    'Flag': () => import('~/components/Flag'),
     'Eye': () => import('~/components/Icons/Eye'),
     'EyeClock': () => import('~/components/Icons/EyeClock')
   },
@@ -63,6 +72,17 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    ...mapGetters({
+      bookmarks: 'auth/bookmarks'
+    })
+  },
+  methods: {
+    ...mapActions({
+      pushInBookmarks: 'auth/pushInBookmarks',
+      removeFromBookmarks: 'auth/removeFromBookmarks'
+    })
   }
 }
 </script>

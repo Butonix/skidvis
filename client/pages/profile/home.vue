@@ -14,7 +14,12 @@
           <router-link :to="{ name: 'profile.wishlist' }" :class="{'active': $route.name === 'profile.wishlist'}"
                        class="tab"
           >
-            Избранное
+            Акции
+          </router-link>
+          <router-link :to="{ name: 'profile.bookmarks' }" :class="{'active': $route.name === 'profile.bookmarks'}"
+                       class="tab"
+          >
+            Статьи
           </router-link>
         </div>
       </div>

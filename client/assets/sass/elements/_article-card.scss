@@ -5,6 +5,22 @@
   margin-bottom: 38px;
   box-shadow: 0 3px 19px rgba(#00C2FF, 0);
   text-decoration: none!important;
+  .wish-list__flag{
+    margin-top: -3px;
+    svg{
+      path{
+        stroke: white!important;
+      }
+    }
+    &.active{
+      svg{
+        path{
+          stroke: white!important;
+          fill: white!important;
+        }
+      }
+    }
+  }
   &:hover{
     box-shadow: 0 3px 19px rgba(#00C2FF, 0.7);
   }
@@ -215,6 +231,21 @@
         border-bottom: 1px solid #C7C7C7;
         border-right: 1px solid #C7C7C7;
         color: black;
+      }
+    }
+    .wish-list__flag{
+      svg{
+        path{
+          stroke: #A4A4A4!important;
+        }
+      }
+      &.active{
+        svg{
+          path{
+            stroke: $blog_liter!important;
+            fill: $blog_liter!important;
+          }
+        }
       }
     }
   }
