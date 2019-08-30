@@ -29,7 +29,15 @@ main {
   @include media-breakpoint-up(md) {
     padding: 3rem 4rem;
   }
-
+  &__desc{
+    text-align: center;
+    max-width: 639px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+    font-size: rem(18);
+    line-height: 1.6;
+  }
   &__nav {
     margin-left: -0.875rem;
     margin-right: -0.875rem;

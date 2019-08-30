@@ -1,5 +1,10 @@
 <template>
   <footer class="footer">
+    <div class="container">
+      <p class="footer__desc">
+        Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.
+      </p>
+    </div>
     <div class="footer__content">
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
