@@ -76,10 +76,10 @@
                   </div>
                 </div>
                 <div class="card-footer__wishlist">
-                  <flag v-if="wishlist.indexOf(item.id) !== -1" :active="true" class-box="ml-1" title="Удалить из избранного"
+                  <flag v-if="wishlist.indexOf(item.id) !== -1" :active="true" class-box="ml-1" title="Удалить из закладок"
                         @click="removeFromWishlist(item.id)"
                   />
-                  <flag v-else :active="false" class-box="ml-1" title="Добавить в избранное"
+                  <flag v-else :active="false" class-box="ml-1" title="Добавить в закладки"
                         @click="pushInWishlist(item.id)"
                   />
                 </div>
@@ -119,11 +119,11 @@
         <h5>
           Чтобы отложить акцию,<br> кликаем по иконке закладки
         </h5>
-        <flag :active="wishlistActive" :title="(wishlistActive)?'Удалить из избранного':'Добавить в избранное'" class-box="mb-5"
+        <flag :active="wishlistActive" :title="(wishlistActive)?'Удалить из закладок':'Добавить в закладки'" class-box="mb-5"
               @click="wishlistActive = !wishlistActive"
         />
         <p>
-          Сохраняем избранное,<br> даже если не зарегистрировались
+          Сохраняем закладки,<br> даже если не зарегистрировались
         </p>
       </div>
       <h5 v-else class="text-center py-5">

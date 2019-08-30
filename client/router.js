@@ -26,10 +26,10 @@ const PasswordRequest = () => import('~/pages/auth/password/email').then(m => m.
 const ManagementHome = () => import('~/pages/management/home').then(m => m.default || m)
 
 const ProfileHome = () => import('~/pages/profile/home').then(m => m.default || m)
+const BookmarksHome = () => import('~/pages/bookmarks/home').then(m => m.default || m)
 const ProfileShow = () => import('~/pages/profile/show').then(m => m.default || m)
-const ProfileWishlist = () => import('~/pages/profile/wishlist').then(m => m.default || m)
-const ProfileBookmarks = () => import('~/pages/profile/bookmarks').then(m => m.default || m)
-// const ManagementIndex = () => import('~/pages/management/index').then(m => m.default || m)
+const BookmarksProducts = () => import('~/pages/bookmarks/products').then(m => m.default || m)
+const BookmarksArticles = () => import('~/pages/bookmarks/articles').then(m => m.default || m)
 
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
 const ManagementOrganizationsIndex = () => import('~/pages/management/organizations/index').then(m => m.default || m)
@@ -137,24 +137,32 @@ const routes = [
           title: 'Мой профиль'
         },
         component: ProfileShow
-      },
-      { path: 'wishlist',
-        name: 'profile.wishlist',
-        meta: {
-          title: 'Избранное'
-        },
-        component: ProfileWishlist
-      },
-      { path: 'bookmarks',
-        name: 'profile.bookmarks',
-        meta: {
-          title: 'Закладки'
-        },
-        component: ProfileBookmarks
       }
     ]
   },
-
+  { path: '/bookmarks',
+    component: BookmarksHome,
+    children: [
+      { path: '',
+        name: 'bookmarks.index',
+        redirect: { name: 'bookmarks.products' }
+      },
+      { path: 'products',
+        name: 'bookmarks.products',
+        meta: {
+          title: 'Закладки акций'
+        },
+        component: BookmarksProducts
+      },
+      { path: 'articles',
+        name: 'bookmarks.articles',
+        meta: {
+          title: 'Закладки статей'
+        },
+        component: BookmarksArticles
+      }
+    ]
+  },
   { path: '/management',
     component: ManagementHome,
     meta: {

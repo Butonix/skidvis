@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'profile.wishlist' }"
+  <router-link :to="{ name: 'bookmarks.index' }"
                :class="{
                  'active':!!count
                }"
