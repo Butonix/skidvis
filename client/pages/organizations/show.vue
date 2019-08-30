@@ -1,9 +1,11 @@
 <template>
   <div v-if="organization" class="orgs-show">
-    <full-slider
-      v-if="organization.images"
-      :images="organization.images"
-    />
+    <div class="orgs-show__slider">
+      <full-slider
+        v-if="organization.images"
+        :images="organization.images"
+      />
+    </div>
     <div class="container mt-4 pt-2">
       <div class="row justify-content-center">
         <div class="col-12 col-md"/>

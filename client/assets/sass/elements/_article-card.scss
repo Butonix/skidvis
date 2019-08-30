@@ -21,6 +21,18 @@
       }
     }
   }
+  &:not(.article-card--new):not(.article-card--new-xl){
+    .article-card{
+      &__wrapper{
+        flex-direction: column;
+        display: flex;
+        height: 100%;
+      }
+      &__body{
+        flex-grow: 1;
+      }
+    }
+  }
   &:hover{
     box-shadow: 0 3px 19px rgba(#00C2FF, 0.7);
   }

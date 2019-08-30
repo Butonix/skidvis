@@ -12,7 +12,7 @@
             Акции
           </router-link>
           <router-link :to="{ name: 'bookmarks.articles' }" :class="{'active': $route.name === 'bookmarks.articles'}"
-                       class="tab"
+                       class="tab tab-blog"
           >
             Статьи
           </router-link>

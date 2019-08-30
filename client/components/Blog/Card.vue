@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="d-flex flex-column">
     <div
       v-if="disabled"
       :class="{
         [cardClass]: !!cardClass,
-        'article-card': true,
+        'article-card h-100': true,
         ['article-card--'+type]: !!type
       }"
       @click="$emit('click')"
@@ -19,7 +19,7 @@
       :to="{ name: 'blog.show', params: { articleId: article.id } }"
       :class="{
         [cardClass]: !!cardClass,
-        'article-card': true,
+        'article-card h-100': true,
         ['article-card--'+type]: !!type
       }"
       @click.native="onClickLink"
