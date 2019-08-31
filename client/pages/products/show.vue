@@ -9,8 +9,14 @@
             <full-slider
               :images="product.images"
             >
-              <div v-if="product.currency_id && product.value" class="product__slider__label">
-                {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
+              <div v-if="product.currency_id"
+                   :class="{'product__slider__label--present':product.currency_id === 3}"
+                   class="product__slider__label">
+                <present-page
+                  v-if="product.currency_id === 3"/>
+                <span v-else-if="product.value">
+                    {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
+                  </span>
               </div>
             </full-slider>
           </div>
@@ -216,6 +222,7 @@ import Form from 'vform'
 
 export default {
   components: {
+    'PresentPage': () => import('~/components/Icons/PresentPage'),
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SearchInput': () => import('~/components/SearchInput'),

@@ -2,12 +2,10 @@
   &__flag {
     cursor: pointer;
     position: relative;
-    transition: .2s;
     svg {
       path {
         stroke: #B1B1B1;
         fill: transparent;
-        transition: .2s;
         @include media-breakpoint-down(md) {
           stroke: #000000;
         }
@@ -15,12 +13,12 @@
     }
 
     &.active {
-      color: $primary;
+      color: currentColor;
 
       svg {
         path {
-          stroke: $primary;
-          fill: $primary;
+          stroke: currentColor;
+          fill: currentColor;
         }
       }
     }
@@ -56,11 +54,11 @@
           }
         }
         &.active {
-          color: $primary;
+          color: currentColor;
           svg {
             path {
-              stroke: $primary;
-              fill: $primary;
+              stroke: currentColor;
+              fill: currentColor;
             }
           }
         }

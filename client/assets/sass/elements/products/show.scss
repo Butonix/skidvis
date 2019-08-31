@@ -49,7 +49,22 @@
         padding: 0px 18px;
         border-radius: 0 0 0 22px;
       }
-
+      &--present{
+        padding: 0!important;
+        height: auto!important;
+        width: 123px;
+        @include media-breakpoint-between(lg,lg){
+          width: 80px;
+          border-radius: 0 0 0 22px;
+        }
+        @include media-breakpoint-down(md){
+          width: 100px;
+          border-radius: 0 0 0 22px;
+        }
+        @include media-breakpoint-down(sm){
+          width: 60px;
+        }
+      }
       .dynamic-input {
         font-size: 24px;
         font-weight: 700;
@@ -121,7 +136,24 @@
       }
     }
   }
-
+  &__currency-svg{
+    cursor: pointer;
+    display: inline-block;
+    color: #A90000;
+    line-height: 1;
+    font-size: 8px;
+    text-align: center;
+    transition: .2s;
+    margin-left: 10px;
+    svg{
+      font-size: 33px;
+      margin-bottom: 2px;
+      display: inline-block;
+    }
+    &.active{
+      color: white;
+    }
+  }
   &__currency {
     cursor: pointer;
     display: inline-block;

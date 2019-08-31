@@ -54,37 +54,37 @@
         //    background: $primary_; /* Firefox */
         //  }
         //}
-        .wish-list {
-          &__flag {
-            &.active {
-              color: $primary_;
-              svg {
-                path {
-                  stroke: $primary_;
-                  fill: $primary_;
-                }
-              }
-            }
-          }
-        }
-
-        .navbar-fixed{
-          .navbar{
-            .wish-list {
-              &__flag {
-                &.active {
-                  color: $primary_;
-                  svg {
-                    path {
-                      stroke: $primary_;
-                      fill: $primary_;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        //.wish-list {
+        //  &__flag {
+        //    &.active {
+        //      color: $primary_;
+        //      svg {
+        //        path {
+        //          stroke: $primary_;
+        //          fill: $primary_;
+        //        }
+        //      }
+        //    }
+        //  }
+        //}
+        //
+        //.navbar-fixed{
+        //  .navbar{
+        //    .wish-list {
+        //      &__flag {
+        //        &.active {
+        //          color: $primary_;
+        //          svg {
+        //            path {
+        //              stroke: $primary_;
+        //              fill: $primary_;
+        //            }
+        //          }
+        //        }
+        //      }
+        //    }
+        //  }
+        //}
 
 
         mark, .mark{

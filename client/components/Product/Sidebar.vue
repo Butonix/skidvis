@@ -27,7 +27,7 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="product.origin_price">
+    <list-item-icon v-if="product.origin_price && product.currency_id !== 3">
       <template slot="icon">
         <percent />
       </template>

@@ -67,6 +67,10 @@
       padding: 7px 15px;
       color: white;
       font-weight: 700;
+      &--present{
+        padding: 0;
+
+      }
     }
     &__cover, &__logo{
       position: absolute;
@@ -349,6 +353,7 @@
         align-items: center;
         position: relative;
         z-index: 12;
+        color: $primary;
       }
       &__list-address{
         padding-top: 3rem;

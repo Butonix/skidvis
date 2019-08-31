@@ -687,10 +687,14 @@ export default {
 
       let product = point.products[0]
       let saleHtml = ''
-      if (product.value) {
-        let sale = product.currency_id === 1 ? product.value + '%' : product.value + '₽'
+      if (product.currency_id === 3) {
+        saleHtml = `<div id="mp-sale-${id}" class="map-point__sale map-point__sale--present"><img class="w-100 h-auto" src="/img/products/sale-present-card.svg"></div>`
+      } else {
+        if (product.value) {
+          let sale = product.currency_id === 1 ? product.value + '%' : product.value + '₽'
 
-        saleHtml = `<div id="mp-sale-${id}" class="map-point__sale">${sale}</div>`
+          saleHtml = `<div id="mp-sale-${id}" class="map-point__sale">${sale}</div>`
+        }
       }
 
       let priceHtml = ''

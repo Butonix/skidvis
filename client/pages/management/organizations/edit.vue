@@ -2,11 +2,13 @@
   <div>
     <form v-if="form" class="orgs-edit"
           @submit.prevent @keydown="form.onKeydown($event)">
-      <full-slider
-        v-if="images"
-        :is-edit="true"
-        :images="images"
-      />
+      <div class="orgs-edit__slider">
+        <full-slider
+          v-if="images"
+          :is-edit="true"
+          :images="images"
+        />
+      </div>
       <div class="overflow-hidden">
         <div class="container">
           <thumbs-file-input

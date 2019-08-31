@@ -46,20 +46,32 @@
             >
               <div class="product__slider__label">
                 <dynamic-label-input
+                  v-if="form.currency_id !== 3"
                   v-model="form.value"
                   :type="form.currency_id === 1? 'percent' : 'number'"
                   class-input="ff-open-sans"
                 />
                 <div :class="{'active': form.currency_id === 1}"
-                     class="product__currency"
-                     @click="form.currency_id = 1"
-                     v-text="'%'"
-                />
+                     class="product__currency-svg"
+                     @click="form.currency_id = 1">
+                  <percent-btn/>
+                  <br>
+                  Скидка в %
+                </div>
                 <div :class="{'active': form.currency_id === 2}"
-                     class="product__currency"
-                     @click="form.currency_id = 2"
-                     v-text="'₽'"
-                />
+                     class="product__currency-svg"
+                     @click="form.currency_id = 2">
+                  <rub-btn/>
+                  <br>
+                  Скидка в ₽
+                </div>
+                <div :class="{'active': form.currency_id === 3}"
+                     class="product__currency-svg"
+                     @click="form.currency_id = 3">
+                  <present-btn/>
+                  <br>
+                  Подарок
+                </div>
               </div>
             </full-slider>
             <thumbs-file-input
@@ -485,6 +497,9 @@ import Form from 'vform'
 
 export default {
   components: {
+    'PercentBtn': () => import('~/components/Icons/PercentBtn'),
+    'PresentBtn': () => import('~/components/Icons/PresentBtn'),
+    'RubBtn': () => import('~/components/Icons/RubBtn'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
     'SearchInput': () => import('~/components/SearchInput'),

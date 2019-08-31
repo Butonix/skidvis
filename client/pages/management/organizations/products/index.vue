@@ -47,8 +47,14 @@
                     Не опубликован
                   </div>
                 </div>
-                <div v-if="item.currency_id && item.value" class="card-img-top__label">
-                  {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
+                <div v-if="item.currency_id"
+                     :class="{'card-img-top__label--present':item.currency_id === 3}"
+                     class="card-img-top__label">
+                  <present-card
+                    v-if="item.currency_id === 3"/>
+                  <span v-else-if="item.value">
+                    {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
+                  </span>
                 </div>
                 <div class="embed-responsive">
                   <div class="embed-responsive-item">
@@ -132,6 +138,7 @@ let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
 
 export default {
   components: {
+    'PresentCard': () => import('~/components/Icons/PresentCard'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     SearchInput,
     Paginate

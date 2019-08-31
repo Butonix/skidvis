@@ -42,7 +42,7 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon>
+    <list-item-icon v-if="form.currency_id !== 3">
       <template slot="icon">
         <percent />
       </template>
