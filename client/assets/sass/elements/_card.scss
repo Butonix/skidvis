@@ -336,6 +336,7 @@
           transition: .2s;
         }
         &__btn{
+          white-space: nowrap;
           position: absolute;
           right: -1px;
           top: 50%;

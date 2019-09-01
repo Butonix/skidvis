@@ -77,6 +77,7 @@ module.exports = {
 
   plugins: [
     { src: '~plugins/utils', ssr: false },
+    { src: '~plugins/goToQuery', ssr: false },
     '~plugins/modifiedUtils',
     '~components/global',
     '~plugins/i18n',

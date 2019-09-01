@@ -168,6 +168,8 @@ export function watchList (axios, keyApiUrl, type) {
   }
 }
 
+
+
 export function $callToast (data, toast) {
   let typeClass = 'toast-alert toast-alert--' + data.type
   let message = ''

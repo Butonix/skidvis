@@ -120,6 +120,7 @@
             <ymap-marker
               v-for="(point, key) in getPoints"
               :layout="'islands#blueDiscountIcon'"
+
               :key="point.id"
               :properties="{
                 iconCaption: point.name
@@ -446,6 +447,17 @@ export default {
     }
   },
   data: () => ({
+    markerIcon: {
+      layout: 'default#imageWithContent',
+      imageHref: '/img/map/icon2.svg',
+      imageSize: [34, 47],
+      imageOffset: [-17, -47],
+      // content: '<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="https://skidvis.s3.eu-central-1.amazonaws.com/public/images/2019/08/14/5d54529e6160c.svg">',
+      content: '<div style="border-radius: 50%; overflow: hidden; background: white; width: 32px; height: 32px;"><img style="width: 100%; height: 100%;" src="/placeholders/demo-logo-map.png"></div>',
+      contentOffset: [1, 1],
+      contentLayout: `<div>$[properties.iconContent]</div>`
+    },
+
     loadingPoints: false,
     cancelRequestPoints: null,
     balloonopening: false,
@@ -760,12 +772,11 @@ export default {
     },
     async onMapWasInitialized (payload) {
       this.map = payload
-      // this.map.events.add('boundschange', this.fetchPoints)
-      this.map.events.add('boundschange', (e) => {
-        if (!this.balloonopening) {
-          this.fetchPoints()
-        }
-      })
+      // this.map.events.add('boundschange', (e) => {
+      //   if (!this.balloonopening) {
+      //     this.fetchPoints()
+      //   }
+      // })
       await this.fetchPoints()
     },
     onOpenMap () {

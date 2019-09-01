@@ -268,7 +268,7 @@ export function createRouter () {
     scrollBehavior,
     mode: 'history',
     parseQuery (query) {
-      return parseReqObjs(qs.parse(query))
+      return parseReqObjs({ ...qs.parse(query) })
     },
     stringifyQuery (query) {
       let result = qs.stringify(query, { encode: false })

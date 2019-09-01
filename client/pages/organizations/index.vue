@@ -2,16 +2,16 @@
   <div ref="start">
     <div class="container orgs mb-5">
       <search-input
-        v-model="params.search"
+        v-model="orgs.urlQuery.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <div class="d-flex justify-content-between">
+      <div v-if="getFavCategoriesSorted.length" class="d-flex justify-content-between">
         <div class="text-muted small mb-2">
           Категории
         </div>
         <div class=" mb-2">
-          <a v-if="params.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+          <a v-if="orgs.urlQuery.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
              @click="clearSelectedCategories">
             Сбросить
           </a>
@@ -23,19 +23,22 @@
       </div>
       <categories-scroll
         :categories="getFavCategoriesSorted"
-        :categories-active-ids="params.categories"
+        :categories-active-ids="orgs.urlQuery.categories"
         @clickitem="filter('categories', $event)"
       />
     </div>
 
     <div class="container orgs__container">
       <transition
-        v-if="items.length"
+        v-if="orgsItems.length"
         name="fade" mode="out-in">
         <div
-          class="orgs__row">
+          class="orgs__row position-relative">
+          <div :class="{'active': orgsIsLoading}"
+               class="loading-list"
+          />
           <transition
-            v-for="(item, index) in items"
+            v-for="(item, index) in orgsItems"
             :key="index"
             name="fade" mode="out-in">
             <div
@@ -45,7 +48,7 @@
               <router-link
                 :to="{ name: 'organizations.show', params: { organizationId: item.id } }"
                 class="d-block text-dark"
-                @click.native="onClickLinkScrollToBody">
+                @click.native="$sTB()">
                 <div :style="{backgroundColor: (item.logo && item.logo.color)?item.logo.color:'#FFFFFF'}"
                      class="orgs__col__box mb-2"
                 >
@@ -76,18 +79,8 @@
         </h5>
       </transition>
 
-      <paginate
-        v-if="pageCount && pageCount > 1"
-        v-model="params.page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="1"
-        :hide-prev-next="true"
-        :container-class="'pagination'"
-        :page-class="'page-item'"
-        prev-class="d-none"
-        next-class="d-none"
-        @click.native="onClickLink"
+      <paginate-list
+        :params="orgsParams"
       />
 
     </div>
@@ -104,7 +97,7 @@
         <div class="position-relative">
           <div :class="{'active': loadingCategories}" class="preloader"/>
           <div class="">
-            Выбрано {{ params.categories.length }} из {{ getCategories.length }}
+            Выбрано {{ orgs.urlQuery.categories.length }} из {{ getCategories.length }}
             <div class="">
               <div class="d-flex">
                 <search-input
@@ -112,7 +105,7 @@
                   form-class="mb-4 flex-grow-1"
                   autofocus="autofocus"
                 />
-                <div v-if="params.categories.length" class="pl-3">
+                <div v-if="orgs.urlQuery.categories.length" class="pl-3">
                   <div class="btn btn-primary btn-sm"
                        @click="clearSelectedCategories">
                     Сбросить
@@ -158,12 +151,34 @@
 <script>
 import Fuse from 'fuse.js'
 import { mapGetters, mapActions } from 'vuex'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+const globalNamespace = 'orgs'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'organizations',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  allowedParams: ['city_id', 'categories'],
+  urlQuery: {
+    perPage: 50
+  },
+  buildWatchers ({ beforeTypes, getWatcher, globalNamespace }) {
+    return {
+      [`${globalNamespace}.urlQuery.categories`]: getWatcher({ type: beforeTypes.SEARCH }),
+      [`${globalNamespace}.urlQuery.city_id`]: getWatcher({ type: beforeTypes.SEARCH }),
+      'city': function (v) {
+        if (v.id) {
+          this.urlQuery.city_id = v.id
+        }
+      }
+    }
+  }
+})
 
 export default {
   components: {
@@ -174,9 +189,10 @@ export default {
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'Categories': () => import('~/components/Categories'),
     'Category': () => import('~/components/Category'),
-    Paginate
+    'PaginateList': () => import('~/components/PaginateList')
   },
   middleware: [],
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Все компании',
@@ -187,35 +203,24 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
     let favCategories = {}
     let categoriesSelected = {}
     let city = app.store.getters['auth/city']
 
-    let params_ = getQueryData({ query,
-      defaultData: {
+    if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
+      await app.store.dispatch('auth/setCity', query.city_id)
+    }
+
+    let data = await List.getStartData({
+      query,
+      defaultApiQuery: {
+
+      },
+      defaultUrlQuery: {
         categories: [],
-        city_id: city.id,
-        perPage: 50
+        city_id: city.id
       }
     })
-
-    params_.categories = params_.categories.map(v => Number(v))
-
-    if (Number(params_.city_id) !== Number(city.id)) {
-      await app.store.dispatch('auth/setCity', params_.city_id)
-    }
-
-    indexApiUrl = 'organizations'
-    try {
-      let { data } = await axios.get(indexApiUrl, {
-        params: params_
-      })
-      collection = data
-    } catch (e) {
-      error({ statusCode: e.response.status })
-    }
 
     try {
       let { data } = await axios.get('categories', {
@@ -223,23 +228,23 @@ export default {
           products: 1,
           favorites: 1,
           perPage: 100000,
-          orWhereIn: params_.categories
+          orWhereIn: query.categories || []
         }
       })
       favCategories = data
     } catch (e) {
       console.log(e)
     }
-
     return {
+      ...data,
       categoriesSelected,
-      favCategories,
-      collection,
-      params: params_,
-      indexApiUrl
+      favCategories
     }
   },
   data: () => ({
+    loadingList: false,
+    isLoadMore: false,
+    loadedMoreList: true,
     errorsImages: {},
 
     categories: {},
@@ -266,10 +271,10 @@ export default {
     getFavCategoriesSorted () {
       let active = []
       let noActive = []
-      if (this.params.categories && this.params.categories.length && this.getFavCategories.length) {
+      if (this.orgs.urlQuery.categories && this.orgs.urlQuery.categories.length && this.getFavCategories.length) {
         for (let i in this.getFavCategories) {
           let cat = this.getFavCategories[i]
-          if (this.params.categories.indexOf(cat.id) !== -1) {
+          if (this.orgs.urlQuery.categories.indexOf(cat.id) !== -1) {
             active.push(cat)
           } else {
             noActive.push(cat)
@@ -278,23 +283,6 @@ export default {
         return active.concat(noActive)
       } else {
         return this.getFavCategories
-      }
-    },
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.categories': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage,
-    'city': function (v) {
-      if (v.id) {
-        this.params.city_id = v.id
-        listWatchInstanceSearch.call(this)
       }
     }
   },
@@ -308,7 +296,7 @@ export default {
       removeFromWishlist: 'auth/removeFromWishlist'
     }),
     clearSelectedCategories () {
-      this.params.categories = []
+      this.orgs.urlQuery.categories = []
       this.categoriesSelected = {}
     },
     async handleAllCats () {
@@ -350,12 +338,12 @@ export default {
       switch (type) {
         case 'categories':
           let id = Number(item.id)
-          let index = this.params.categories.indexOf(id)
+          let index = this.orgs.urlQuery.categories.indexOf(id)
           if (index === -1) {
-            this.params.categories.push(id)
+            this.orgs.urlQuery.categories.push(id)
             this.categoriesSelected[id] = { ...item }
           } else {
-            this.$delete(this.params.categories, index)
+            this.$delete(this.orgs.urlQuery.categories, index)
             this.$delete(this.categoriesSelected, id)
           }
           break
@@ -378,9 +366,6 @@ export default {
         x: false,
         y: true
       })
-    },
-    onClickLinkScrollToBody () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }
