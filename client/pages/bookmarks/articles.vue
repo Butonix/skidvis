@@ -46,7 +46,7 @@
       <h5>
         Чтобы отложить статью,<br> кликаем по иконке закладки
       </h5>
-      <flag :active="bookmarksActive" :title="(bookmarksActive)?'Удалить из закладок':'Добавить в закладоки'" class-box="mb-5"
+      <flag :active="bookmarksActive" :title="(bookmarksActive)?'Удалить из закладок':'Добавить в закладоки'" class-box="mb-5 simple"
             @click="bookmarksActive = !bookmarksActive"
       />
       <p>
@@ -77,7 +77,7 @@ export default {
     return {
       title: this.$route.meta.title,
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-blog'
       },
       ...getFavicon()
     }

@@ -2,74 +2,40 @@
   <div>
     <div class="container mb-4">
       <search-input
-        v-model="params.search"
+        v-model="prods.urlQuery.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <div class="d-flex justify-content-between">
-        <div class="text-muted small mb-2">
-          К празднику
-        </div>
-        <div class=" mb-2">
-          <a v-if="params.holidays.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
-             @click="clearSelectedHolidays">
-            Сбросить
-          </a>
-          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
-             @click="handleAllHolidays">
-            Все
-            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
-          </a>
-        </div>
-      </div>
-      <categories-scroll
-        :categories="getFavHolidaysSorted"
-        :categories-active-ids="params.holidays"
-        type="holidays"
-        @clickitem="filter('holidays', $event)"
+      <filter-list
+        :fuse="prodsFS_holidays"
+        :url-query="prods.urlQuery"
+        :filter="prods.filters.holidays"
+        btn-type="holidays"
+        title="К празднику"
+        name="holidays"
+        @filter="prodsFilter('holidays', $event)"
+        @clearfilter="prodsClearFilter('holidays')"
+        @handleall="prodsHandleAll('holidays')"
       />
-      <div class="d-flex justify-content-between mt-3">
-        <div class="text-muted small mb-2">
-          Кому
-        </div>
-        <div class=" mb-2">
-          <a v-if="params.auditories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
-             @click="clearSelectedAuditories">
-            Сбросить
-          </a>
-          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
-             @click="handleAllAuditories">
-            Все
-            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
-          </a>
-        </div>
-      </div>
-      <categories-scroll
-        :categories="getFavAuditoriesSorted"
-        :categories-active-ids="params.auditories"
-        type="auditories"
-        @clickitem="filter('auditories', $event)"
+      <filter-list
+        :fuse="prodsFS_auditories"
+        :url-query="prods.urlQuery"
+        :filter="prods.filters.auditories"
+        btn-type="auditories"
+        title="Кому"
+        name="auditories"
+        @filter="prodsFilter('auditories', $event)"
+        @clearfilter="prodsClearFilter('auditories')"
+        @handleall="prodsHandleAll('auditories')"
       />
-      <div class="d-flex justify-content-between mt-3">
-        <div class="text-muted small mb-2">
-          Категории
-        </div>
-        <div class=" mb-2">
-          <a v-if="params.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
-             @click="clearSelectedCategories">
-            Сбросить
-          </a>
-          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
-             @click="handleAllCategories">
-            Все
-            <chevron style="transform-origin: center; transform: rotate(-90deg)" />
-          </a>
-        </div>
-      </div>
-      <categories-scroll
-        :categories="getFavCategoriesSorted"
-        :categories-active-ids="params.categories"
-        @clickitem="filter('categories', $event)"
+      <filter-list
+        :fuse="prodsFS_categories"
+        :url-query="prods.urlQuery"
+        :filter="prods.filters.categories"
+        name="categories"
+        @filter="prodsFilter('categories', $event)"
+        @clearfilter="prodsClearFilter('categories')"
+        @handleall="prodsHandleAll('categories')"
       />
       <div class="d-flex flex-column flex-xs-row justify-content-end align-items-center align-items-xs-start mt-3">
         <div class="btn btn-outline-primary btn-sm mr-xs-2 mb-3"
@@ -89,11 +55,7 @@
       </div>
     </div>
     <products
-      :loading-list="loadingList"
-      :items="items"
-      :page-count="pageCount"
-      :page="params.page"
-      @setpage="params.page = $event"
+      :params="prodsParams"
     />
     <modal name="map">
       <div class="basic-modal map-modal">
@@ -141,178 +103,131 @@
         </no-ssr>
       </div>
     </modal>
-    <modal name="modal-categories">
-      <div class="basic-modal categories-modal">
-        <div class="position-relative">
-          <div :class="{'active': loadingCategories}" class="preloader" />
-          <div class="">
-            Выбрано {{ params.categories.length }} из {{ getCategories.length }}
-            <div class="">
-              <div class="d-flex">
-                <search-input
-                  v-model="categoriesSearch"
-                  form-class="mb-4 flex-grow-1"
-                  autofocus="autofocus"
-                />
-                <div v-if="params.categories.length" class="pl-3">
-                  <div class="btn btn-primary btn-sm"
-                       @click="clearSelectedCategories">
-                    Сбросить
-                  </div>
-                </div>
-              </div>
-              <categories>
-                <category
-                  v-for="(category, key) in categoriesSelected"
-                  :active="true"
-                  :key="'categories-selected-'+key"
-                  :label="category.name"
-                  :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                  :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-                  @click="filter('categories', category)"
-                />
-                <category
-                  v-for="(category, key) in getCategoriesSearchable"
-                  v-if="!categoriesSelected[category.id]"
-                  :key="'categories-'+key"
-                  :label="category.name"
-                  :src-active="category.images.default.active || '/img/categories/entertainment/entertainment-default-active.svg'"
-                  :src="category.images.default.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
-                  @click="filter('categories', category)"
-                />
-              </categories>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-4 mt-xs-5">
-          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Готово
-          </button>
-        </div>
-      </div>
-    </modal>
-    <modal name="modal-auditories">
-      <div class="basic-modal categories-modal">
-        <div class="position-relative">
-          <div :class="{'active': loadingAuditories}" class="preloader"/>
-          <div class="">
-            Выбрано {{ params.auditories.length }} из {{ getAuditories.length }}
-            <div class="">
-              <div class="d-flex">
-                <search-input
-                  v-model="auditoriesSearch"
-                  form-class="mb-4 flex-grow-1"
-                  autofocus="autofocus"
-                />
-                <div v-if="params.auditories.length" class="pl-3">
-                  <div class="btn btn-primary btn-sm"
-                       @click="clearSelectedAuditories">
-                    Сбросить
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex justify-content-start align-items-start flex-wrap">
-                <div v-for="(auditory, key) in auditoriesSelected"
-                     :key="'auditories-selected-'+key"
-                     class="btn btn-auditories active mx-1 mb-2 text-nowrap"
-                     @click="filter('auditories', auditory)"
-                     v-text="auditory.name"
-                />
-                <div v-for="(auditory, key) in getAuditoriesSearchable"
-                     v-if="!auditoriesSelected[auditory.id]"
-                     :key="'auditories-'+key"
-                     class="btn btn-auditories mx-1 mb-2 text-nowrap"
-                     @click="filter('auditories', auditory)"
-                     v-text="auditory.name"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-4 mt-xs-5">
-          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Готово
-          </button>
-        </div>
-      </div>
-    </modal>
-    <modal name="modal-holidays">
-      <div class="basic-modal categories-modal">
-        <div class="position-relative">
-          <div :class="{'active': loadingHolidays}" class="preloader"/>
-          <div class="">
-            Выбрано {{ params.holidays.length }} из {{ getHolidays.length }}
-            <div class="">
-              <div class="d-flex">
-                <search-input
-                  v-model="holidaysSearch"
-                  form-class="mb-4 flex-grow-1"
-                  autofocus="autofocus"
-                />
-                <div v-if="params.holidays.length" class="pl-3">
-                  <div class="btn btn-primary btn-sm"
-                       @click="clearSelectedHolidays">
-                    Сбросить
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex justify-content-start align-items-start flex-wrap">
-                <div v-for="(holiday, key) in holidaysSelected"
-                     :key="'holidays-selected-'+key"
-                     class="btn btn-holidays active mx-1 mb-2 text-nowrap"
-                     @click="filter('holidays', holiday)"
-                     v-text="holiday.name"
-                />
-                <div v-for="(holiday, key) in getHolidaysSearchable"
-                     v-if="!holidaysSelected[holiday.id]"
-                     :key="'holidays-'+key"
-                     class="btn btn-holidays mx-1 mb-2 text-nowrap"
-                     @click="filter('holidays', holiday)"
-                     v-text="holiday.name"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-4 mt-xs-5">
-          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Готово
-          </button>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Fuse from 'fuse.js'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
 
 const CancelToken = axios.CancelToken
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+const globalNamespace = 'prods'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'products',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  allowedParams: ['city_id', 'ordering', 'orderingDir'],
+  filters: {
+    categories: {
+      start: {
+        url: 'categories',
+        pathResponse: 'list.data',
+        query: {
+          products: 1,
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: []
+        }
+      },
+      fetch: {
+        url: 'categories',
+        pathResponse: 'list.data',
+        query: {
+          products: 1,
+          perPage: 1000000,
+          page: 1
+        }
+      }
+    },
+    holidays: {
+      start: {
+        url: 'holidays',
+        pathResponse: 'list.data',
+        query: {
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: []
+        }
+      },
+      fetch: {
+        url: 'holidays',
+        pathResponse: 'list.data',
+        query: {
+          perPage: 1000000,
+          page: 1
+        }
+      }
+    },
+    auditories: {
+      start: {
+        url: 'auditories',
+        pathResponse: 'list.data',
+        query: {
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: []
+        }
+      },
+      fetch: {
+        url: 'auditories',
+        pathResponse: 'list.data',
+        query: {
+          perPage: 1000000,
+          page: 1
+        }
+      }
+    }
+  },
+  apiQuery: {
+    is_active: 1
+  },
+  urlQuery: {
+    ordering: 'created_at',
+    orderingDir: 'desc',
+    perPage: 12
+  },
+  buildWatchers ({ beforeTypes, getWatcher, gN }) {
+    return {
+      [`${gN}.urlQuery.ordering`]: function (v) {
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      [`${gN}.urlQuery.orderingDir`]: function (v) {
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      'ordering': function (v) {
+        this[gN].urlQuery.ordering = v.ordering
+        this[gN].urlQuery.orderingDir = v.orderingDir
+      },
+      [`${gN}.urlQuery.city_id`]: function (v) {
+        this.$store.dispatch('auth/setCity', v)
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      'city': function (v) {
+        if (v.id) {
+          this[gN].urlQuery.city_id = v.id
+        }
+      }
+    }
+  }
+})
 
 export default {
   components: {
+    'FilterList': () => import('~/components/FilterList'),
     'MapIcon': () => import('~/components/Icons/MapIcon.vue'),
-    'Category': () => import('~/components/Category'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'SearchInput': () => import('~/components/SearchInput'),
-    'CategoriesScroll': () => import('~/components/CategoriesScroll'),
-    'Categories': () => import('~/components/Categories'),
     'Dropdown': () => import('~/components/Dropdown'),
     'Products': () => import('~/components/Products')
   },
   middleware: [],
+  mixins: [List.mixin],
   head () {
     return {
       title: this.$route.meta.title,
@@ -323,128 +238,23 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
-    let favCategories = {}
-    let categoriesSelected = {}
-    let favAuditories = {}
-    let auditoriesSelected = {}
-    let favHolidays = {}
-    let holidaysSelected = {}
     let city = app.store.getters['auth/city']
 
-    let params_ = getQueryData({
+    if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
+      await app.store.dispatch('auth/setCity', query.city_id)
+    }
+
+    let data = await List.getStartData({
       query,
-      defaultData: {
-        categories: [],
-        holidays: [],
-        auditories: [],
-        city_id: city.id,
-        ordering: 'created_at',
-        orderingDir: 'desc',
-        is_active: 1,
-        perPage: 12
+      defaultApiQuery: {
+
+      },
+      defaultUrlQuery: {
+        city_id: city.id
       }
     })
 
-    if (Number(params_.city_id) !== Number(city.id)) {
-      await app.store.dispatch('auth/setCity', params_.city_id)
-    }
-
-    indexApiUrl = 'products'
-    try {
-      let { data } = await axios.get(indexApiUrl, {
-        params: params_
-      })
-      collection = data
-    } catch (e) {
-      error({ statusCode: e.response.status })
-    }
-
-    try {
-      let { data } = await axios.get('categories', {
-        params: {
-          products: 1,
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: params_.categories
-        }
-      })
-      favCategories = data
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      let { data } = await axios.get('holidays', {
-        params: {
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: params_.holidays
-        }
-      })
-      favHolidays = data
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      let { data } = await axios.get('auditories', {
-        params: {
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: params_.auditories
-        }
-      })
-      favAuditories = data
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      for (let i in favCategories.list.data) {
-        let item = favCategories.list.data[i]
-        if (params_.categories.indexOf(item.id) !== -1) {
-          categoriesSelected[item.id] = { ...item }
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      for (let i in favHolidays.list.data) {
-        let item = favHolidays.list.data[i]
-        if (params_.holidays.indexOf(item.id) !== -1) {
-          holidaysSelected[item.id] = { ...item }
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      for (let i in favAuditories.list.data) {
-        let item = favAuditories.list.data[i]
-        if (params_.auditories.indexOf(item.id) !== -1) {
-          auditoriesSelected[item.id] = { ...item }
-        }
-      }
-    } catch (e) {
-      console.log(e)
-    }
-
-    return {
-      categoriesSelected,
-      favCategories,
-      auditoriesSelected,
-      favAuditories,
-      holidaysSelected,
-      favHolidays,
-      collection,
-      params: params_,
-      indexApiUrl
-    }
+    return data
   },
   data: () => ({
     markerIcon: {
@@ -500,51 +310,13 @@ export default {
       ordering: 'created_at',
       orderingDir: 'desc',
       name: 'Новые'
-    },
-
-    categories: {},
-    fuseCategories: null,
-    categoriesSearch: '',
-    loadingCategories: true,
-    categoriesTotal: 0,
-
-    auditories: {},
-    fuseAuditories: null,
-    auditoriesSearch: '',
-    loadingAuditories: true,
-    auditoriesTotal: 0,
-
-    holidays: {},
-    fuseHolidays: null,
-    holidaysSearch: '',
-    loadingHolidays: true,
-    holidaysTotal: 0
+    }
   }),
   computed: {
     ...mapGetters({
       wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
-    getParams () {
-      let query = this.$route.query
-
-      let city = this.$store.getters['auth/city']
-
-      let params_ = getQueryData({
-        query,
-        defaultData: {
-          categories: [],
-          holidays: [],
-          auditories: [],
-          city_id: city.id,
-          ordering: 'created_at',
-          orderingDir: 'desc',
-          is_active: 1,
-          perPage: 12
-        }
-      })
-      return params_
-    },
     getPoints () {
       return this.points
     },
@@ -554,114 +326,6 @@ export default {
         res = [this.city.latitude, this.city.longitude]
       }
       return res
-    },
-    // Categories
-    getCategories () {
-      return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
-    },
-    getCategoriesSearchable () {
-      return (this.fuseCategories && this.categoriesSearch.length > 0) ? this.fuseCategories.search(this.categoriesSearch) : this.getCategories
-    },
-    getFavCategories () {
-      return (this.getCategories.length) ? this.getCategories
-        : ((this.favCategories.list && this.favCategories.list.data) ? this.favCategories.list.data : [])
-    },
-    getFavCategoriesSorted () {
-      let active = []
-      let noActive = []
-      if (this.params.categories && this.params.categories.length && this.getFavCategories.length) {
-        for (let i in this.getFavCategories) {
-          let cat = this.getFavCategories[i]
-          if (this.params.categories.indexOf(cat.id) !== -1) {
-            active.push(cat)
-          } else {
-            noActive.push(cat)
-          }
-        }
-        return active.concat(noActive)
-      } else {
-        return this.getFavCategories
-      }
-    },
-    // Auditories
-    getAuditories () {
-      return (this.auditories.list && this.auditories.list.data) ? this.auditories.list.data : []
-    },
-    getAuditoriesSearchable () {
-      return (this.fuseAuditories && this.auditoriesSearch.length > 0) ? this.fuseAuditories.search(this.auditoriesSearch) : this.getAuditories
-    },
-    getFavAuditories () {
-      return (this.getAuditories.length) ? this.getAuditories
-        : ((this.favAuditories.list && this.favAuditories.list.data) ? this.favAuditories.list.data : [])
-    },
-    getFavAuditoriesSorted () {
-      let active = []
-      let noActive = []
-      if (this.params.auditories && this.params.auditories.length && this.getFavAuditories.length) {
-        for (let i in this.getFavAuditories) {
-          let cat = this.getFavAuditories[i]
-          if (this.params.auditories.indexOf(cat.id) !== -1) {
-            active.push(cat)
-          } else {
-            noActive.push(cat)
-          }
-        }
-        return active.concat(noActive)
-      } else {
-        return this.getFavAuditories
-      }
-    },
-    // Holidays
-    getHolidays () {
-      return (this.holidays.list && this.holidays.list.data) ? this.holidays.list.data : []
-    },
-    getHolidaysSearchable () {
-      return (this.fuseHolidays && this.holidaysSearch.length > 0) ? this.fuseHolidays.search(this.holidaysSearch) : this.getHolidays
-    },
-    getFavHolidays () {
-      return (this.getHolidays.length) ? this.getHolidays
-        : ((this.favHolidays.list && this.favHolidays.list.data) ? this.favHolidays.list.data : [])
-    },
-    getFavHolidaysSorted () {
-      let active = []
-      let noActive = []
-      if (this.params.holidays && this.params.holidays.length && this.getFavHolidays.length) {
-        for (let i in this.getFavHolidays) {
-          let cat = this.getFavHolidays[i]
-          if (this.params.holidays.indexOf(cat.id) !== -1) {
-            active.push(cat)
-          } else {
-            noActive.push(cat)
-          }
-        }
-        return active.concat(noActive)
-      } else {
-        return this.getFavHolidays
-      }
-    },
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.categories': listWatchInstanceSearch,
-    'params.auditories': listWatchInstanceSearch,
-    'params.holidays': listWatchInstanceSearch,
-    'params.ordering': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage,
-    'city': function (v) {
-      if (v.id) {
-        this.params.city_id = v.id
-        listWatchInstanceSearch.call(this)
-      }
-    },
-    'ordering': function (v) {
-      this.params.ordering = v.ordering
-      this.params.orderingDir = v.orderingDir
     }
   },
   methods: {
@@ -772,169 +436,16 @@ export default {
     },
     async onMapWasInitialized (payload) {
       this.map = payload
-      // this.map.events.add('boundschange', (e) => {
-      //   if (!this.balloonopening) {
-      //     this.fetchPoints()
-      //   }
-      // })
+      this.map.events.add('boundschange', (e) => {
+        if (!this.balloonopening) {
+          this.fetchPoints()
+        }
+      })
       await this.fetchPoints()
     },
     onOpenMap () {
       this.placemark = null
       this.$modal.push('map')
-    },
-    clearSelectedCategories () {
-      this.params.categories = []
-      this.categoriesSelected = {}
-    },
-    clearSelectedAuditories () {
-      this.params.auditories = []
-      this.auditoriesSelected = {}
-    },
-    clearSelectedHolidays () {
-      this.params.holidays = []
-      this.holidaysSelected = {}
-    },
-    async handleAllCategories () {
-      this.$modal.push('modal-categories')
-      if (!this.getCategories.length) {
-        this.loadingCategories = true
-        try {
-          let { data } = await axios.get('categories', {
-            params: {
-              products: 1,
-              perPage: 1000000,
-              page: 1
-            }
-          })
-          this.categories = data
-          this.fuseCategories = new Fuse(this.getCategories, {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: [
-              'name'
-            ]
-          })
-        } catch (e) {
-          console.log(e)
-          await this.$callToast({
-            type: 'error',
-            text: 'Загрузить все категории не удалось'
-          })
-          this.$modal.pop()
-        }
-        this.loadingCategories = false
-      }
-    },
-    async handleAllAuditories () {
-      this.$modal.push('modal-auditories')
-      if (!this.getAuditories.length) {
-        this.loadingAuditories = true
-        try {
-          let { data } = await axios.get('auditories', {
-            params: {
-              perPage: 1000000,
-              page: 1
-            }
-          })
-          this.auditories = data
-          this.fuseAuditories = new Fuse(this.getAuditories, {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: [
-              'name'
-            ]
-          })
-        } catch (e) {
-          console.log(e)
-          await this.$callToast({
-            type: 'error',
-            text: 'Загрузить все аудитории не удалось'
-          })
-          this.$modal.pop()
-        }
-        this.loadingAuditories = false
-      }
-    },
-    async handleAllHolidays () {
-      this.$modal.push('modal-holidays')
-      if (!this.getHolidays.length) {
-        this.loadingHolidays = true
-        try {
-          let { data } = await axios.get('holidays', {
-            params: {
-              perPage: 1000000,
-              page: 1
-            }
-          })
-          this.holidays = data
-          this.fuseHolidays = new Fuse(this.getHolidays, {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: [
-              'name'
-            ]
-          })
-        } catch (e) {
-          console.log(e)
-          await this.$callToast({
-            type: 'error',
-            text: 'Загрузить все праздники не удалось'
-          })
-          this.$modal.pop()
-        }
-        this.loadingHolidays = false
-      }
-    },
-    filter (type, item) {
-      switch (type) {
-        case 'categories':
-          let categoriesId = Number(item.id)
-          let categoriesIndex = this.params.categories.indexOf(categoriesId)
-          if (categoriesIndex === -1) {
-            this.params.categories.push(categoriesId)
-            this.categoriesSelected[categoriesId] = { ...item }
-          } else {
-            this.$delete(this.params.categories, categoriesIndex)
-            this.$delete(this.categoriesSelected, categoriesId)
-          }
-          break
-        case 'auditories':
-          let auditoriesId = Number(item.id)
-          let auditoriesIndex = this.params.auditories.indexOf(auditoriesId)
-          if (auditoriesIndex === -1) {
-            this.params.auditories.push(auditoriesId)
-            this.auditoriesSelected[auditoriesId] = { ...item }
-          } else {
-            this.$delete(this.params.auditories, auditoriesIndex)
-            this.$delete(this.auditoriesSelected, auditoriesId)
-          }
-          break
-        case 'holidays':
-          let holidaysId = Number(item.id)
-          let holidaysIndex = this.params.holidays.indexOf(holidaysId)
-
-          if (holidaysIndex === -1) {
-            this.params.holidays.push(holidaysId)
-            this.holidaysSelected[holidaysId] = { ...item }
-          } else {
-            this.$delete(this.params.holidays, holidaysIndex)
-            this.$delete(this.holidaysSelected, holidaysId)
-          }
-          break
-      }
     }
   }
 }

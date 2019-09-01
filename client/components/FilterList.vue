@@ -2,9 +2,7 @@
   <div>
     <div v-if="filter.favorites.length">
       <div class="d-flex justify-content-between">
-        <div class="text-muted small mb-2">
-          Категории
-        </div>
+        <div class="text-muted small mb-2" v-html="title"/>
         <div class=" mb-2">
           <a v-if="urlQuery[name].length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
              @click="$emit('clearfilter')">
@@ -19,6 +17,7 @@
       <categories-scroll
         :categories="filter.favorites"
         :categories-active-ids="urlQuery[name]"
+        :type="btnType"
         @clickitem="$emit('filter', $event)"
       />
     </div>
@@ -42,7 +41,7 @@
                   </div>
                 </div>
               </div>
-              <categories>
+              <categories v-if="btnType === '' || btnType === 'categories'">
                 <category
                   v-for="(category, key) in filter.selected"
                   :active="true"
@@ -62,6 +61,25 @@
                   @click="$emit('filter', category)"
                 />
               </categories>
+              <div v-else class="d-flex justify-content-start align-items-start flex-wrap">
+                <div
+                  v-for="(category, key) in filter.selected"
+                  :key="'categories-selected-'+key"
+                  :class="{['btn-'+btnType]:true}"
+                  class="btn active mx-1 mb-2 text-nowrap"
+                  @click="$emit('filter', category)"
+                  v-text="category.name"
+                />
+                <div
+                  v-for="(category, key) in fuse"
+                  v-if="!filter.selected[category.id]"
+                  :key="'categories-'+key"
+                  :class="{['btn-'+btnType]:true}"
+                  class="btn mx-1 mb-2 text-nowrap"
+                  @click="$emit('filter', category)"
+                  v-text="category.name"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -84,9 +102,17 @@ export default {
     'Chevron': () => import('~/components/Icons/Chevron'),
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'Categories': () => import('~/components/Categories'),
-    'Category': () => import('~/components/Category'),
+    'Category': () => import('~/components/Category')
   },
   props: {
+    btnType: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: 'Категории'
+    },
     name: {
       type: String,
       required: true

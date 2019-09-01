@@ -76,7 +76,7 @@
 
     <list-item-icon class-box="mb-4">
       <template slot="icon">
-        <flag :active="wishlistActive" class-box="ml-1" @click="$emit('wishlistchange')" />
+        <flag :active="wishlistActive" class-box="ml-1 simple" @click="$emit('wishlistchange')" />
       </template>
       <template slot="text">
         <span class="cursor-pointer no-select" @click="$emit('wishlistchange')" v-text="(wishlistActive)?'В закладках':'В закладки'"/>

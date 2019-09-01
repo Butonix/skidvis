@@ -7,7 +7,7 @@
         </h5>
         <div class="tab-panel tab-panel--slim mt-3">
           <router-link :to="{ name: 'bookmarks.products' }" :class="{'active': $route.name === 'bookmarks.products'}"
-                       class="tab"
+                       class="tab tab-default"
           >
             Акции
           </router-link>

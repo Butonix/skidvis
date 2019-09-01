@@ -5,7 +5,7 @@
       name="fade" mode="out-in">
       <div
         class="row position-relative">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': params.isLoading}"
              class="loading-list"
         />
         <transition v-for="(item, index) in getItems"
@@ -125,7 +125,7 @@
         <h5>
           Чтобы отложить акцию,<br> кликаем по иконке закладки
         </h5>
-        <flag :active="wishlistActive" :title="(wishlistActive)?'Удалить из закладок':'Добавить в закладки'" class-box="mb-5"
+        <flag :active="wishlistActive" :title="(wishlistActive)?'Удалить из закладок':'Добавить в закладки'" class-box="mb-5 simple"
               @click="wishlistActive = !wishlistActive"
         />
         <p>
@@ -136,19 +136,8 @@
         Ничего не нашлось :(
       </h5>
     </transition>
-    <paginate
-      v-if="pageCount && pageCount > 1"
-      :page="page"
-      :page-count="pageCount"
-      :page-range="3"
-      :margin-pages="1"
-      :hide-prev-next="true"
-      :container-class="'pagination'"
-      :page-class="'page-item'"
-      prev-class="d-none"
-      next-class="d-none"
-      @input="$emit('setpage', $event)"
-      @click.native="onClickLink"
+    <paginate-list
+      :params="params"
     />
 
   </div>
@@ -160,31 +149,20 @@ import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 export default {
   components: {
+    'PaginateList': () => import('~/components/PaginateList'),
     'PresentCard': () => import('~/components/Icons/PresentCard'),
     'Flag': () => import('~/components/Flag'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     Paginate
   },
   props: {
+    params: {
+      type: Object,
+      required: true
+    },
     type: {
       type: String,
       default: 'default'
-    },
-    loadingList: {
-      type: Boolean,
-      default: false
-    },
-    pageCount: {
-      type: Number,
-      default: 0
-    },
-    page: {
-      type: Number,
-      default: 0
-    },
-    items: {
-      type: Array,
-      default: () => ([])
     }
   },
   data: () => ({
@@ -199,7 +177,7 @@ export default {
     }),
     getItems () {
       this.onGetItems()
-      return this.items
+      return this.params.items
     }
   },
   beforeMount () {

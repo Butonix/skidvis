@@ -14,7 +14,7 @@ export const state = () => ({
       longitude: 30.3159
     },
     wishlist: [],
-    bookmarks: [],
+    bookmarks: []
   },
   isAdministrator: false,
   isManagement: false,
@@ -207,15 +207,17 @@ export const actions = {
     let index = getters.wishlist.indexOf(id)
 
     if (index !== -1) {
-      commit('REMOVE_FROM_WISHLIST', index)
-      dispatch('postWishlist')
-
       if (getters.check) {
         try {
           await axios.delete(`products/${id}/marked`)
+          commit('REMOVE_FROM_WISHLIST', index)
+          dispatch('postWishlist')
         } catch (e) {
           console.log(e)
         }
+      } else {
+        commit('REMOVE_FROM_WISHLIST', index)
+        dispatch('postWishlist')
       }
     }
   },
@@ -223,15 +225,17 @@ export const actions = {
     let index = getters.bookmarks.indexOf(id)
 
     if (index !== -1) {
-      commit('REMOVE_FROM_BOOKMARKS', index)
-      dispatch('postBookmarks')
-
       if (getters.check) {
         try {
           await axios.delete(`articles/${id}/marked`)
+          commit('REMOVE_FROM_BOOKMARKS', index)
+          dispatch('postBookmarks')
         } catch (e) {
           console.log(e)
         }
+      } else {
+        commit('REMOVE_FROM_BOOKMARKS', index)
+        dispatch('postBookmarks')
       }
     }
   },
@@ -313,7 +317,6 @@ export const actions = {
   },
 
   async afterSaveUpdateUser ({ commit, dispatch }, { newData, data }) {
-
     let newUser = { ...newData }
 
     if (data.city.id !== newUser.city.id) {

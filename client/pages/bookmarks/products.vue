@@ -2,29 +2,77 @@
   <div>
     <div class="container mb-5">
       <search-input
-        v-model="params.search"
+        v-model="prods.urlQuery.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
     </div>
     <products
-      :loading-list="loadingList"
-      :items="items"
-      :page-count="pageCount"
-      :page="params.page"
+      :params="prodsParams"
       type="wishlist"
-      @setpage="params.page = $event"
     />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+const globalNamespace = 'prods'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'products',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  allowedParams: ['whereIn'],
+  apiQuery: {
+    ordering: 'created_at',
+    orderingDir: 'desc'
+  },
+  urlQuery: {
+    perPage: 12
+  },
+  buildWatchers ({ beforeTypes, getWatcher, gN }) {
+    return {
+      'wishlist': async function (v) {
+        if (!this.check) {
+          if (v.length === 0) {
+            this.$set(this[gN].apiQuery, 'whereIn', [0])
+          } else {
+            this.$set(this[gN].apiQuery, 'whereIn', [...v])
+          }
+        } else {
+          if (this[gN].apiQuery.whereIn) {
+            this.$delete(this[gN].apiQuery, 'whereIn')
+          }
+          console.log(v)
+        }
+        await getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      'check': async function (v) {
+        console.log(v, this.wishlist.length)
+        if (v) {
+          this[gN].apiUrl = 'user/wishlist'
+          if (this[gN].apiQuery.whereIn) {
+            this.$delete(this[gN].apiQuery, 'whereIn')
+          }
+        } else {
+          this[gN].apiUrl = 'products'
+          if (this.wishlist.length === 0) {
+            this.$set(this[gN].apiQuery, 'whereIn', [0])
+          } else {
+            this.$set(this[gN].apiQuery, 'whereIn', [...this.wishlist])
+          }
+        }
+        await getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      }
+    }
+  }
+})
 
 export default {
   components: {
@@ -32,6 +80,7 @@ export default {
     'Products': () => import('~/components/Products')
   },
   middleware: [],
+  mixins: [List.mixin],
   head () {
     return {
       title: this.$route.meta.title,
@@ -42,136 +91,81 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
-
     let check = app.store.getters['auth/check']
     let wishlist = app.store.getters['auth/wishlist']
-
-    let params_ = getQueryData({ query,
-      defaultData: {
-        perPage: 12,
-        ordering: 'created_at',
-        orderingDir: 'desc'
-      }
-    })
+    let data
 
     if (check) {
-      indexApiUrl = 'user/wishlist'
+      data = await List.getStartData({
+        query,
+        defaultData: {
+          apiUrl: 'user/wishlist'
+        }
+      })
     } else {
-      indexApiUrl = 'products'
-
-      params_.whereIn = [...wishlist]
-    }
-
-    if (!check && wishlist.length === 0) {
-      collection = {
-        current_page: 1,
-        data: [],
-        from: 1,
-        last_page: 1,
-        per_page: 12,
-        to: 1,
-        total: 0
+      if (wishlist.length === 0) {
+        wishlist = [0]
       }
-    } else {
-      try {
-        let { data } = await axios.get(indexApiUrl, {
-          params: params_
-        })
-        collection = data
-      } catch (e) {
-        error({ statusCode: e.response.status })
-      }
+      data = await List.getStartData({
+        query,
+        defaultData: {
+          apiUrl: 'products'
+        },
+        defaultApiQuery: {
+          whereIn: [...wishlist]
+        }
+      })
     }
 
-    return {
-      collection,
-      params: params_,
-      indexApiUrl
-    }
+    // if (!check && wishlist.length === 0) {
+    //   collection = {
+    //     data: [],
+    //     per_page: 12,
+    //     to: 1,
+    //     total: 0
+    //   }
+    // } else {
+    //   try {
+    //     let { data } = await axios.get(indexApiUrl, {
+    //       params: params_
+    //     })
+    //     collection = data
+    //   } catch (e) {
+    //     error({ statusCode: e.response.status })
+    //   }
+    // }
+
+    return data
   },
   data: () => ({
-    loadingList: false
   }),
   computed: {
     ...mapGetters({
       wishlist: 'auth/wishlist',
       check: 'auth/check'
-    }),
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
+    })
   },
   watch: {
-    'params.search': function () {
-      if (!(!this.check && this.wishlist.length === 0)) {
-        listWatchInstanceSearch.call(this)
-      }
-    },
-    'wishlist': async function (v) {
-      await this.clearWishlist(v)
-    },
-    'check': async function (v) {
-      await this.fetchProducts(v)
-    },
-    'params.page': function () {
-      if (!(!this.check && this.wishlist.length === 0)) {
-        listWatchInstancePage.call(this)
-      }
-    }
+    // 'wishlist': async function (v) {
+    //   await this.clearWishlist(v)
+    // },
+    // 'check': async function (v) {
+    //   await this.fetchProducts(v)
+    // }
   },
   methods: {
-    async clearWishlist (arrayIds) {
-      try {
-        this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
-        this.collection.list.total--
-
-        if (this.params.page > 1 && this.items.length === 0) {
-          this.params.page--
-          await this.fetchProducts({})
-        }
-      } catch (e) {
-      }
-    },
-    async fetchProducts () {
-      this.loadingList = true
-      if (!this.check && this.wishlist.length === 0) {
-        this.collection = {
-          current_page: 1,
-          data: [],
-          from: 1,
-          last_page: 1,
-          per_page: 12,
-          to: 1,
-          total: 0
-        }
-      } else {
-        if (this.check) {
-          this.indexApiUrl = 'user/wishlist'
-        } else {
-          this.indexApiUrl = 'products'
-
-          this.params.whereIn = [...this.wishlist]
-        }
-        try {
-          let { data } = await axios.get(this.indexApiUrl, {
-            params: { ...this.params }
-          })
-          this.$set(this, 'collection', data)
-        } catch (e) {
-          await this.$callToast({
-            type: 'error',
-            text: 'Обновить акции не удалось'
-          })
-          console.log(e)
-        }
-      }
-      this.loadingList = false
-    }
+    // async clearWishlist (arrayIds) {
+    //   try {
+    //     this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
+    //     this.collection.list.total--
+    //
+    //     if (this.params.page > 1 && this.items.length === 0) {
+    //       this.params.page--
+    //       await this.fetchProducts({})
+    //     }
+    //   } catch (e) {
+    //   }
+    // }
   }
 }
 </script>

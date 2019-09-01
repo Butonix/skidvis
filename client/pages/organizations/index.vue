@@ -82,13 +82,10 @@
       <p>Продвигаем бизнес каждый день</p>
     </div>
 
-
-
   </div>
 </template>
 
 <script>
-// import Fuse from 'fuse.js'
 import { mapGetters, mapActions } from 'vuex'
 import BuildList from '~/mixins/list'
 import { getFavicon } from '~/utils'
@@ -123,7 +120,7 @@ const List = BuildList({
           perPage: 1000000,
           page: 1
         }
-      },
+      }
     }
   },
   urlQuery: {
@@ -131,7 +128,12 @@ const List = BuildList({
   },
   buildWatchers ({ beforeTypes, getWatcher, gN }) {
     return {
-      [`${gN}.urlQuery.city_id`]: getWatcher({ type: beforeTypes.SEARCH }),
+      [`${gN}.urlQuery.city_id`]: function (v) {
+        // if (typeof v !== 'undefined' && v !== city.id) {
+        //   await app.store.dispatch('auth/setCity', query.city_id)
+        // }
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
       'city': function (v) {
         if (v.id) {
           this[gN].urlQuery.city_id = v.id
@@ -144,13 +146,8 @@ const List = BuildList({
 export default {
   components: {
     'FilterList': () => import('~/components/FilterList'),
-    'Chevron': () => import('~/components/Icons/Chevron'),
-    'Flag': () => import('~/components/Flag'),
     'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
-    'CategoriesScroll': () => import('~/components/CategoriesScroll'),
-    'Categories': () => import('~/components/Categories'),
-    'Category': () => import('~/components/Category'),
     'PaginateList': () => import('~/components/PaginateList')
   },
   middleware: [],

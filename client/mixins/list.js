@@ -194,8 +194,11 @@ export default function constructor ({
 
   return {
     getWatcher,
-    async getStartData ({ query = {}, error, defaultApiQuery = {}, defaultUrlQuery = {} }) {
+    async getStartData ({ query = {}, error, defaultApiQuery = {}, defaultUrlQuery = {}, defaultData = {} }) {
       let res = { ...data }
+
+      res[gN] = { ...res[gN], ...defaultData }
+
       res[gN].apiQuery = {
         ...apiQuery,
         ...defaultApiQuery
@@ -212,7 +215,7 @@ export default function constructor ({
       }
 
       try {
-        let { data } = await axios.get(apiUrl, {
+        let { data } = await axios.get(res[gN].apiUrl, {
           params: {
             ...res[gN].apiQuery,
             ...res[gN].urlQuery
@@ -298,10 +301,10 @@ export default function constructor ({
       computed: {
         ...computed,
         [gN + 'ShowPaginate'] () {
-          return (this[gN + 'Total'] && this[gN + 'Total'] > 1)
+          return (this[gN + 'Pages'] && this[gN + 'Pages'] > 1)
         },
         [gN + 'ShowLoadMore'] () {
-          return (this[gN + 'ShowPaginate'] && (!this[gN + 'IsLoaded'] || this[gN + 'Page'] < this[gN + 'Pages']))
+          return (this[gN + 'ShowPaginate'] && this[gN + 'Page'] < this[gN + 'Pages'])
         },
         [gN + 'IsLoading'] () {
           return this[gN].loadingList
@@ -352,7 +355,7 @@ export default function constructor ({
               this[gN].urlQuery[type].push(id)
               this.$set(this[gN].filters[type].selected, id, { ...item })
             } else {
-              this.$delete(this[gN].urlQuery.categories, index)
+              this.$delete(this[gN].urlQuery[type], index)
               this.$delete(this[gN].filters[type].selected, id)
             }
           }

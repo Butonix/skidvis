@@ -54,19 +54,21 @@
         //    background: $primary_; /* Firefox */
         //  }
         //}
-        //.wish-list {
-        //  &__flag {
-        //    &.active {
-        //      color: $primary_;
-        //      svg {
-        //        path {
-        //          stroke: $primary_;
-        //          fill: $primary_;
-        //        }
-        //      }
-        //    }
-        //  }
-        //}
+
+
+        .wish-list {
+          &__flag.simple {
+            &.active {
+              color: $primary_;
+              svg {
+                path {
+                  stroke: $primary_;
+                  fill: $primary_;
+                }
+              }
+            }
+          }
+        }
         //
         //.navbar-fixed{
         //  .navbar{
@@ -217,6 +219,7 @@
 
   @if($theme-colors_){
 
+    $primary_: map_get($theme-colors_, "primary");
     @if($btns-primary){
 
       .nav-link--#{$theme}{
@@ -235,6 +238,11 @@
         }
       }
 
+    }
+    .tab-#{$theme}{
+      &:before{
+        background: $primary_!important;
+      }
     }
   }
 }

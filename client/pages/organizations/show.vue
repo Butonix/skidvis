@@ -65,12 +65,8 @@
       </div>
     </div>
     <products
-      v-if="products.data.length"
-      :loading-list="loadingList"
-      :items="products.data"
-      :page-count="pageCountProducts"
-      :page="products.current_page"
-      @setpage="products.current_page = $event"
+      v-if="prodsParams.items.length"
+      :params="prodsParams"
     />
     <div class="container mt-5">
       <div class="row">
@@ -126,10 +122,42 @@
 </template>
 
 <script>
+import BuildList from '~/mixins/list'
 import { getFavicon } from '~/utils'
 import { mapGetters } from 'vuex'
 import Form from 'vform'
 import axios from 'axios'
+
+const globalNamespace = 'prods'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'products',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  apiQuery: {
+    ordering: 'created_at',
+    orderingDir: 'desc',
+    is_active: 1
+  },
+  urlQuery: {
+    perPage: 12
+  },
+  buildWatchers ({ beforeTypes, getWatcher, gN }) {
+    return {
+      [`${gN}.urlQuery.city_id`]: function (v) {
+        this.$store.dispatch('auth/setCity', v)
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      'city': function (v) {
+        if (v.id) {
+          this[gN].urlQuery.city_id = v.id
+        }
+      }
+    }
+  }
+})
 
 export default {
   components: {
@@ -141,6 +169,7 @@ export default {
     'Dropdown': () => import('~/components/Dropdown'),
     'SocialLinks': () => import('~/components/Edit/SocialLinks')
   },
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Организация',
@@ -150,10 +179,26 @@ export default {
       ...getFavicon()
     }
   },
-  asyncData: async ({ params, error, app }) => {
+  asyncData: async ({ params, error, app, query }) => {
     let organizationId = params.organizationId
     let city = app.store.getters['auth/city']
+
+    if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
+      await app.store.dispatch('auth/setCity', query.city_id)
+    }
+
+    let dataProd = await List.getStartData({
+      query,
+      defaultData: {
+        apiUrl: `organizations/${organizationId}/products`
+      },
+      defaultUrlQuery: {
+        city_id: city.id
+      }
+    })
+
     let res = {
+      ...dataProd,
       city,
       organizationId,
       review: {
@@ -215,17 +260,11 @@ export default {
       user: 'auth/user',
       check: 'auth/check'
     }),
-    pageCountProducts () {
-      return (this.products && this.products.total) ? Math.ceil(this.products.total / this.products.per_page) : 0
-    },
     pageCountReviews () {
       return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
     }
   },
   watch: {
-    'products.current_page': async function (v) {
-      await this.fetchProducts({ page: v })
-    },
     'reviewsOrdering': async function (v) {
       await this.fetchReviews({})
     }
@@ -268,28 +307,6 @@ export default {
         console.log(e)
       }
       this.loadingReview = false
-    },
-    async fetchProducts ({ page = 1, perPage = this.products.per_page }) {
-      try {
-        let { data } = await axios.get(`organizations/${this.organizationId}/products`, {
-          params: {
-            city_id: this.city.id,
-            ordering: 'start_at',
-            is_active: 1,
-            page,
-            perPage
-          }
-        })
-        if (data.list) {
-          this.$set(this, 'products', data.list)
-        }
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Обновить акции не удалось'
-        })
-        console.log(e)
-      }
     },
     async fetchReviews ({
       page = 1,
