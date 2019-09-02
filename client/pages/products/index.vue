@@ -210,7 +210,7 @@ const List = BuildList({
       },
       'city': function (v) {
         if (v.id) {
-          this[gN].urlQuery.city_id = v.id
+          this.$set(this[gN].urlQuery, 'city_id', v.id)
         }
       }
     }
