@@ -182,11 +182,6 @@ export default {
   },
   data: () => ({
     errorsImages: {},
-
-    categories: {},
-    fuseCategories: null,
-    categoriesSearch: '',
-    loadingCategories: true
   }),
   computed: {
     ...mapGetters({

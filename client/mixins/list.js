@@ -71,19 +71,19 @@ export default function constructor ({
         let total = getFromPath(data, this[gN].pathTotal)
 
         if (total === -1) {
-          console.error('Error #LIST_1')
+          console.error('#LIST_1')
           error = true
         }
         if (typeof total === 'undefined') {
-          console.error('Error #LIST_2')
+          console.error('#LIST_2')
           error = true
         }
         if (collection === -1) {
-          console.error('Error #LIST_3')
+          console.error('#LIST_3')
           error = true
         }
         if (typeof collection === 'undefined') {
-          console.error('Error #LIST_4')
+          console.error('#LIST_4')
           error = true
         }
         if (!error) {
@@ -193,8 +193,7 @@ export default function constructor ({
   }
 
   return {
-    getWatcher,
-    async getStartData ({ query = {}, error, defaultApiQuery = {}, defaultUrlQuery = {}, defaultData = {} }) {
+    async getStartData ({ query = {}, error, defaultApiQuery = {}, defaultUrlQuery = {}, defaultData = {}, cbResponse = null }) {
       let res = { ...data }
 
       res[gN] = { ...res[gN], ...defaultData }
@@ -225,12 +224,16 @@ export default function constructor ({
         let collection = getFromPath(data, pathResponse)
         let total = getFromPath(data, pathTotal)
 
+        if (cbResponse) {
+          res[gN] = { ...res[gN], ...cbResponse({ data, getFromPath }) }
+        }
+
         if (total === -1) {
-          console.error('Error #LIST_START_1')
+          console.error('#LIST_START_1')
           error = true
         }
         if (typeof total === 'undefined') {
-          console.error('Error #LIST_START_2')
+          console.error('#LIST_START_2')
           error = true
         }
         if (!error) {
@@ -238,11 +241,11 @@ export default function constructor ({
           res[gN].collection = collection
         }
         if (collection === -1) {
-          console.error('Error #LIST_START_3')
+          console.error('#LIST_START_3')
           error = true
         }
         if (typeof collection === 'undefined') {
-          console.error('Error #LIST_START_4')
+          console.error('#LIST_START_4')
           error = true
         }
         if (!error) {
@@ -264,11 +267,11 @@ export default function constructor ({
           let collection = getFromPath(data, filter.pathResponse)
 
           if (collection === -1) {
-            console.error('Error #LIST_START_3-' + i)
+            console.error('#LIST_START_3-' + i)
             error = true
           }
           if (typeof collection === 'undefined') {
-            console.error('Error #LIST_START_4-' + i)
+            console.error('#LIST_START_4-' + i)
             error = true
           }
 
@@ -290,9 +293,6 @@ export default function constructor ({
 
       return res
     },
-    actionTypes,
-    beforeTypes,
-    afterTypes,
     mixin: {
       watch: watchers.call(this),
       data () {
@@ -380,11 +380,11 @@ export default function constructor ({
                 let collection = getFromPath(data, this[gN].filters[type].fetch.pathResponse)
 
                 if (collection === -1) {
-                  console.error('Error #LIST_START_3-' + type)
+                  console.error('#LIST_START_3-' + type)
                   error = true
                 }
                 if (typeof collection === 'undefined') {
-                  console.error('Error #LIST_START_4-' + type)
+                  console.error('#LIST_START_4-' + type)
                   error = true
                 }
 

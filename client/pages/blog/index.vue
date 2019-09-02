@@ -2,37 +2,27 @@
   <div>
     <div class="container mb-4">
       <search-input
-        v-model="params.search"
+        v-model="artes.urlQuery.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
-      <div class="d-flex justify-content-between">
-        <div class="text-muted small mb-2">
-          Популярные категории
-        </div>
-        <div class=" mb-2">
-          <a v-if="params.categories.length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
-             @click="clearSelectedCategories">
-            Сбросить
-          </a>
-          <a href="javascript:void(0)" class="text-muted small cursor-pointer"
-             @click="handleAllCats">
-            Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
-          </a>
-        </div>
-      </div>
-      <categories-scroll
-        :categories="getFavCategoriesSorted"
-        :categories-active-ids="params.categories"
-        type="blog"
-        @clickitem="filter('categories', $event)"
+      <filter-list
+        :fuse="artesFS_categories"
+        :url-query="artes.urlQuery"
+        :filter="artes.filters.categories"
+        btn-type="blog"
+        title="Популярные категории"
+        name="categories"
+        @filter="artesFilter('categories', $event)"
+        @clearfilter="artesClearFilter('categories')"
+        @handleall="artesHandleAll('categories')"
       />
     </div>
     <div
-      v-if="simpleItems[0]">
+      v-if="artesItems[0]">
       <div
         class="container blog__container--long-offset position-relative">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': artesIsLoading}"
              class="loading-list"
         />
         <div class="row">
@@ -41,39 +31,39 @@
               Свежее
             </h5>
             <card
-              v-if="simpleItems[0]"
-              :article="simpleItems[0]"
+              v-if="artesItems[0]"
+              :article="artesItems[0]"
               type="new"
             />
             <card
-              v-if="simpleItems[1]"
-              :article="simpleItems[1]"
+              v-if="artesItems[1]"
+              :article="artesItems[1]"
               type="new"
             />
             <card
-              v-if="simpleItems[2]"
-              :article="simpleItems[2]"
+              v-if="artesItems[2]"
+              :article="artesItems[2]"
               type="new"
             />
             <div class="row d-none d-lg-flex">
               <card
-                v-if="simpleItems[3]"
-                :article="simpleItems[3]"
+                v-if="artesItems[3]"
+                :article="artesItems[3]"
                 class="col-lg-6"
               />
               <card
-                v-if="simpleItems[4]"
-                :article="simpleItems[4]"
+                v-if="artesItems[4]"
+                :article="artesItems[4]"
                 class="col-lg-6"
               />
               <card
-                v-if="simpleItems[5]"
-                :article="simpleItems[5]"
+                v-if="artesItems[5]"
+                :article="artesItems[5]"
                 class="col-lg-6"
               />
               <card
-                v-if="simpleItems[6]"
-                :article="simpleItems[6]"
+                v-if="artesItems[6]"
+                :article="artesItems[6]"
                 class="col-lg-6"
               />
             </div>
@@ -92,37 +82,37 @@
         </div>
 
         <h5
-          v-if="simpleItems[3]"
+          v-if="artesItems[3]"
           class="mb-3 d-lg-none">
           Ранее
         </h5>
         <div
-          v-if="simpleItems[3]"
+          v-if="artesItems[3]"
           class="row d-lg-none">
           <card
-            v-if="simpleItems[3]"
-            :article="simpleItems[3]"
+            v-if="artesItems[3]"
+            :article="artesItems[3]"
             class="col-md-6 col-lg-4"
           />
           <card
-            v-if="simpleItems[4]"
-            :article="simpleItems[4]"
+            v-if="artesItems[4]"
+            :article="artesItems[4]"
             class="col-md-6 col-lg-4"
           />
           <card
-            v-if="simpleItems[4]"
-            :article="simpleItems[4]"
+            v-if="artesItems[4]"
+            :article="artesItems[4]"
             class="col-md-6 col-lg-4"
           />
           <card
-            v-if="simpleItems[5]"
-            :article="simpleItems[5]"
+            v-if="artesItems[5]"
+            :article="artesItems[5]"
             class="col-md-6 col-lg-4"
           />
         </div>
-        <div v-if="simplePage > 1" class="row">
+        <div v-if="artesPage > 1" class="row">
           <card
-            v-for="(item, index) in simpleItems"
+            v-for="(item, index) in artesItems"
             v-if="index >= 6"
             :key="'article-'+index"
             :article="item"
@@ -130,14 +120,9 @@
           />
         </div>
       </div>
-      <div v-if="pageCount > 1 && pageCount > simplePage" class="pt-4 text-center container">
-        <div :class="{'btn-loading':loadingList}"
-             class="btn btn-primary px-5"
-             @click="loadMoreArticles"
-        >
-          Загрузить еще
-        </div>
-      </div>
+      <paginate-list
+        :params="artesParams"
+      />
     </div>
     <h5 v-else class="text-center py-5">
       Ничего не нашлось :(
@@ -149,71 +134,66 @@
       />
     </div>
 
-    <modal name="save-categories">
-      <div class="basic-modal categories-modal">
-        <div class="position-relative">
-          <div :class="{'active': loadingCategories}" class="preloader"/>
-          <div class="">
-            Выбрано {{ params.categories.length }} из {{ getCategories.length }}
-            <div class="">
-              <div class="d-flex">
-                <search-input
-                  v-model="categoriesSearch"
-                  form-class="mb-4 flex-grow-1"
-                  autofocus="autofocus"
-                />
-                <div v-if="params.categories.length" class="pl-3">
-                  <div class="btn btn-primary btn-sm"
-                       @click="clearSelectedCategories">
-                    Сбросить
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex justify-content-start align-items-start flex-wrap">
-                <div v-for="(category, key) in categoriesSelected"
-                     :key="'categories-selected-'+key"
-                     class="btn btn-blog active mx-1 mb-2 text-nowrap"
-                     @click="filter('categories', category)"
-                     v-text="category.name"
-                />
-                <div v-for="(category, key) in getCategoriesSearchable"
-                     v-if="!categoriesSelected[category.id]"
-                     :key="'categories-'+key"
-                     class="btn btn-blog mx-1 mb-2 text-nowrap"
-                     @click="filter('categories', category)"
-                     v-text="category.name"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center mt-4 mt-xs-5">
-          <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                  @click="$modal.pop()"
-          >
-            Готово
-          </button>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
 <script>
-import Fuse from 'fuse.js'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
 
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+const globalNamespace = 'artes'
 
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'articles',
+  pathResponse: 'articles.simple.list.data',
+  pathTotal: 'articles.simple.list.total',
+  allowedParams: ['city_id', 'ordering', 'orderingDir'],
+  filters: {
+    categories: {
+      start: {
+        url: 'categories',
+        pathResponse: 'list.data',
+        query: {
+          articles: 1,
+          favorites: 1,
+          perPage: 100000,
+          orWhereIn: []
+        }
+      },
+      fetch: {
+        url: 'categories',
+        pathResponse: 'list.data',
+        query: {
+          articles: 1,
+          perPage: 1000000,
+          page: 1
+        }
+      }
+    }
+  },
+  apiQuery: {
+    orderingDir: 'desc',
+    ordering: 'created_at',
+    is_active: 1
+  },
+  urlQuery: {
+    perPage: 12
+  }
+})
 export default {
   components: {
+    'PaginateList': () => import('~/components/PaginateList'),
+    'FilterList': () => import('~/components/FilterList'),
     'VisitedSlider': () => import('~/components/Blog/VisitedSlider'),
     'Card': () => import('~/components/Blog/Card'),
     'Chevron': () => import('~/components/Icons/Chevron'),
     'CategoriesScroll': () => import('~/components/CategoriesScroll'),
     'SearchInput': () => import('~/components/SearchInput')
   },
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Блог',
@@ -224,54 +204,27 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
-    let favCategories = {}
-    let categoriesSelected = {}
+    let data = await List.getStartData({
+      query,
+      cbResponse ({ data, getFromPath }) {
+        let r = {}
+        let error = false
+        let actual = getFromPath(data, 'articles.actual.list.data')
 
-    let params_ = getQueryData({ query,
-      defaultData: {
-        categories: [],
-        ordering: 'created_at',
-        perPage: 12
-      },
-      ignoreData: ['page']
-    })
-
-    indexApiUrl = 'articles'
-    try {
-      let { data } = await axios.get(indexApiUrl, {
-        params: params_
-      })
-      collection = data
-    } catch (e) {
-      error({ statusCode: e.response.status })
-    }
-
-    try {
-      let { data } = await axios.get('categories', {
-        params: {
-          articles: 1,
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: params_.categories
+        if (actual === -1) {
+          console.error('#LIST_START_3_ASYNC_DATA')
+          error = true
         }
-      })
-      favCategories = data
-    } catch (e) {
-      console.log(e)
-    }
-
-    try {
-      for (let i in favCategories.list.data) {
-        let item = favCategories.list.data[i]
-        if (params_.categories.indexOf(item.id) !== -1) {
-          categoriesSelected[item.id] = { ...item }
+        if (typeof actual === 'undefined') {
+          console.error('#LIST_START_4_ASYNC_DATA')
+          error = true
         }
+        if (!error) {
+          r.actual = actual
+        }
+        return r
       }
-    } catch (e) {
-      console.log(e)
-    }
+    })
 
     let visitedArticles = []
     let visitedArticlesIds = await app.store.dispatch('auth/getArticlesArray')
@@ -306,174 +259,18 @@ export default {
         error({ statusCode: 500, message: 'Упс' })
       }
     }
-
     return {
+      ...data,
       visitedArticles,
-      visitedArticlesIds,
-      categoriesSelected,
-      favCategories,
-      collection,
-      params: params_,
-      indexApiUrl
+      visitedArticlesIds
     }
   },
-  data: () => ({
-    loadingList: false,
-
-    categories: {},
-    fuseCategories: null,
-    categoriesSearch: '',
-    loadingCategories: true,
-    categoriesTotal: 0
-  }),
   computed: {
-    getCategories () {
-      return (this.categories.list && this.categories.list.data) ? this.categories.list.data : []
-    },
-    getCategoriesSearchable () {
-      return (this.fuseCategories && this.categoriesSearch.length > 0) ? this.fuseCategories.search(this.categoriesSearch) : this.getCategories
-    },
-    getFavCategories () {
-      return (this.getCategories.length) ? this.getCategories
-        : ((this.favCategories.list && this.favCategories.list.data) ? this.favCategories.list.data : [])
-    },
-    getFavCategoriesSorted () {
-      let active = []
-      let noActive = []
-      if (this.params.categories && this.params.categories.length && this.getFavCategories.length) {
-        for (let i in this.getFavCategories) {
-          let cat = this.getFavCategories[i]
-          if (this.params.categories.indexOf(cat.id) !== -1) {
-            active.push(cat)
-          } else {
-            noActive.push(cat)
-          }
-        }
-        return active.concat(noActive)
-      } else {
-        return this.getFavCategories
-      }
-    },
     actualItems () {
-      let data = []
-      try {
-        data = this.collection.articles.actual.list.data
-      } catch (e) {
-      }
-      return data
-    },
-    simpleItems () {
-      let data = []
-      try {
-        data = this.collection.articles.simple.list.data
-      } catch (e) {
-      }
-      return data
-    },
-    simplePage () {
-      let data = 0
-      try {
-        data = this.collection.articles.simple.list.current_page
-      } catch (e) {
-      }
-      return data
-    },
-    pageCount () {
-      let data = 0
-      try {
-        data = Math.ceil(this.collection.articles.simple.list.total / 12)
-      } catch (e) {
-      }
-      return data
+      return this[globalNamespace].actual || []
     },
     getVisitedArticles () {
       return this.visitedArticles
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.categories': listWatchInstanceSearch
-  },
-  methods: {
-    clearSelectedCategories () {
-      this.params.categories = []
-      this.categoriesSelected = {}
-    },
-    async handleAllCats () {
-      this.$modal.push('save-categories')
-      if (!this.getCategories.length) {
-        this.loadingCategories = true
-        try {
-          let { data } = await axios.get('categories', {
-            params: {
-              articles: 1,
-              perPage: 1000000,
-              page: 1
-            }
-          })
-          this.categories = data
-          this.fuseCategories = new Fuse(this.getCategories, {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-            keys: [
-              'name'
-            ]
-          })
-        } catch (e) {
-          console.log(e)
-          await this.$callToast({
-            type: 'error',
-            text: 'Загрузить все категории не удалось'
-          })
-          this.$modal.pop()
-        }
-        this.loadingCategories = false
-      }
-    },
-    filter (type, item) {
-      switch (type) {
-        case 'categories':
-          let id = Number(item.id)
-          let index = this.params.categories.indexOf(id)
-          if (index === -1) {
-            this.params.categories.push(id)
-            this.categoriesSelected[id] = { ...item }
-          } else {
-            this.$delete(this.params.categories, index)
-            this.$delete(this.categoriesSelected, id)
-          }
-          break
-      }
-    },
-    async loadMoreArticles () {
-      this.loadingList = true
-      try {
-        let { data } = await axios.get('articles', {
-          params: {
-            page: this.collection.articles.simple.list.current_page + 1,
-            perPage: 12,
-            categories: [],
-            ordering: 'created_at'
-          }
-        })
-        if (data.articles.simple.list.data.length) {
-          for (let i in data.articles.simple.list.data) {
-            this.collection.articles.simple.list.data.push(data.articles.simple.list.data[i])
-          }
-        }
-        this.collection.articles.simple.list.current_page++
-      } catch (e) {
-        await this.$callToast({
-          type: 'error',
-          text: 'Получить статьи не удалось'
-        })
-        console.log(e)
-      }
-      this.loadingList = false
     }
   }
 }
