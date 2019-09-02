@@ -213,13 +213,6 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
-    },
-    onClickLink () {
-      this.$scrollTo(this.$refs.start, 500, {
-        offset: -60,
-        x: false,
-        y: true
-      })
     }
   }
 }

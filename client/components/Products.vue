@@ -24,7 +24,7 @@
                              'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
                            }"
                            class="card-img-top d-block"
-                           @click.native="onClickLinkScrollToBody">
+                           @click.native="$sTB()">
                 <div v-if="item.currency_id"
                      :class="{'card-img-top__label--present':item.currency_id === 3}"
                      class="card-img-top__label">
@@ -218,16 +218,6 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
-    },
-    onClickLink () {
-      this.$scrollTo(this.$refs.start, 500, {
-        offset: -60,
-        x: false,
-        y: true
-      })
-    },
-    onClickLinkScrollToBody () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }

@@ -41,7 +41,7 @@
                              'error-cover':(errorsImages.cover)?errorsImages.cover[item.id]:false
                            }"
                            class="card-img-top d-block"
-                           @click.native="onClickLinkScrollToBody">
+                           @click.native="$sTB()">
                 <div v-if="!item.is_published" class="card-img-top__message">
                   <div>
                     Не опубликован
@@ -88,7 +88,7 @@
               <div class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.products.edit', params: { organizationId: organizationId, productId: item.id } }"
                              class="card-btn card-btn--full btn btn-outline-primary"
-                             @click.native="onClickLinkScrollToBody">
+                             @click.native="$sTB()">
                   <fa icon="pencil-alt" class="mr-2"/>Редактировать акцию
                 </router-link>
                 <div class="card-buttons__controls">
@@ -119,7 +119,7 @@
         :page-class="'page-item'"
         prev-class="d-none"
         next-class="d-none"
-        @click.native="onClickLink"
+        @click.native="$sTB()"
       />
 
     </div>
@@ -221,16 +221,6 @@ export default {
           this.$set(this.errorsImages[type], Number(id), true)
         }
       }
-    },
-    onClickLink () {
-      this.$scrollTo(this.$refs.start, 500, {
-        offset: -60,
-        x: false,
-        y: true
-      })
-    },
-    onClickLinkScrollToBody () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 }

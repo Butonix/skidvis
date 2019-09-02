@@ -35,7 +35,7 @@
           :page-class="'page-item'"
           prev-class="d-none"
           next-class="d-none"
-          @click.native="onClickLink"
+          @click.native="$sTB()"
         />
       </div>
     </div>
@@ -168,13 +168,6 @@ export default {
     }
   },
   methods: {
-    onClickLink () {
-      this.$scrollTo(this.$refs.start, 500, {
-        offset: -60,
-        x: false,
-        y: true
-      })
-    },
     async clearBookmarks (arrayIds) {
       try {
         this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)

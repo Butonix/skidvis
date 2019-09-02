@@ -23,7 +23,7 @@
             <router-link
               :to="{ name: 'organizations.show', params: { organizationId: article.organization.id } }"
               :class="(article.organization.logo)?'text-dark':null"
-              @click.native="onClickLink"
+              @click.native="$sTB()"
             >
               <div
                 v-if="article.organization.logo" class="d-inline-block mb-2">
@@ -71,7 +71,7 @@
           <router-link
             :to="{ name: 'blog.show', params: { articleId: article.nextArticle.id } }"
             class="article-next"
-            @click.native="onClickLink"
+            @click.native="$sTB()"
           >
             <div class="article-next__full" data-text="Следующая статья"/>
             <div class="article-next__one" data-text="Следующая"/>
@@ -192,10 +192,7 @@ export default {
   methods: {
     ...mapActions({
       'addArticle': 'auth/addArticle'
-    }),
-    onClickLink () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
-    }
+    })
   }
 }
 </script>

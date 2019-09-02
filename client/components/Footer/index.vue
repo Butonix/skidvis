@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="container">
-      <p class="footer__desc">
+      <p v-if="$route.name === 'welcome' || $route.name === 'products.index'" class="footer__desc">
         Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.
       </p>
     </div>
@@ -9,23 +9,23 @@
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
           <nav-item :to="{ name: 'products.index' }" class-link="nav-link--default"
-                    @click.native="onClickLink">
+                    @click.native="$sTB()">
             Все акции
           </nav-item>
           <nav-item :to="{ name: 'organizations.index' }" class-link="nav-link--default"
-                    @click.native="onClickLink">
+                    @click.native="$sTB()">
             Все компании
           </nav-item>
           <nav-item :to="{ name: 'business' }" class-link="nav-link--business"
-                    @click.native="onClickLink">
+                    @click.native="$sTB()">
             Бизнесу
           </nav-item>
           <nav-item :to="{ name: 'blog.index' }" :class-link="'nav-link--blog' + ((blog.status)?' icon-blog':'')"
-                    @click.native="onClickLink">
+                    @click.native="$sTB()">
             Блог
           </nav-item>
           <nav-item :to="{ name: 'contacts' }" class-link="nav-link--default"
-                    @click.native="onClickLink">
+                    @click.native="$sTB()">
             Контакты
           </nav-item>
         </ul>
@@ -84,7 +84,7 @@
       </div>
       <div class="text-center">
         <router-link :to="{ name: 'policy' }" class="nav-link"
-        @click.native="onClickLink">
+        @click.native="$sTB()">
           Политика конфиденциальности
         </router-link>
       </div>
@@ -109,9 +109,6 @@ export default {
     blog: 'auth/blog'
   }),
   methods: {
-    onClickLink () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
-    }
   }
 }
 </script>

@@ -109,6 +109,16 @@
               data-align="center"
               form-class="mt-5 mb-4"
             />
+
+            <p class="text-center">
+              <org-demo-map-point class="d-inline-block mb-1"/>
+              <br>
+              Размещайте логотип в точке на карте. <br class="d-none d-xs-block">
+              <router-link :to="{ name: 'contacts' }" @click.native="$sTB()">Пишите</router-link>
+              и мы откроем доступ <br class="d-none d-xs-block">
+              на загрузку логотипа.
+            </p>
+
             <social-links
               :links="form.socials"
               @change="changeSocialsLink"
@@ -207,6 +217,7 @@ import axios from 'axios'
 
 export default {
   components: {
+    'OrgDemoMapPoint': () => import('~/components/Icons/OrgDemoMapPoint'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'FullSlider': () => import('~/components/FullSlider'),
     'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),

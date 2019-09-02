@@ -22,7 +22,7 @@
         'article-card h-100': true,
         ['article-card--'+type]: !!type
       }"
-      @click.native="onClickLink"
+      @click.native="$sTB()"
     >
       <card-index
         :type="type"
@@ -60,9 +60,6 @@ export default {
     }
   },
   methods: {
-    onClickLink () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
-    }
   }
 }
 </script>

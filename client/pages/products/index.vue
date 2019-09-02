@@ -81,8 +81,7 @@
           >
             <ymap-marker
               v-for="(point, key) in getPoints"
-              :layout="'islands#blueDiscountIcon'"
-
+              :icon="getMarkerIcon(point)"
               :key="point.id"
               :properties="{
                 iconCaption: point.name
@@ -264,8 +263,8 @@ export default {
       imageHref: '/img/map/icon2.svg',
       imageSize: [34, 47],
       imageOffset: [-17, -47],
-      // content: '<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="https://skidvis.s3.eu-central-1.amazonaws.com/public/images/2019/08/14/5d54529e6160c.svg">',
-      content: '<div style="border-radius: 50%; overflow: hidden; background: white; width: 32px; height: 32px;"><img style="width: 100%; height: 100%;" src="/placeholders/demo-logo-map.png"></div>',
+      content: '<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="/img/map/kegl.svg">',
+      // content: '<div style="border-radius: 50%; overflow: hidden; background: white; width: 32px; height: 32px;"><img style="width: 100%; height: 100%;" src="/placeholders/demo-logo-map.png"></div>',
       contentOffset: [1, 1],
       contentLayout: `<div>$[properties.iconContent]</div>`
     },
@@ -331,6 +330,9 @@ export default {
     }
   },
   methods: {
+    getMarkerIcon (point) {
+      return this.markerIcon
+    },
     async clickMarker (e, point, key) {
       // console.log(e, point, key)
     },

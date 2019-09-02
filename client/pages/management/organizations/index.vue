@@ -41,7 +41,7 @@
                   'error-logo':(errorsImages.logo)?errorsImages.logo[item.id]:false,
                 }"
                 class="card-img-top d-block"
-                @click.native="onClickLinkScrollToBody"
+                @click.native="$sTB()"
               >
                 <div v-if="!item.is_published" class="card-img-top__message">
                   <div>
@@ -69,14 +69,14 @@
                     v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.points.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
-                    @click.native="onClickLinkScrollToBody">
+                    @click.native="$sTB()">
                     <span class="px-2">Адреса</span>
                   </router-link>
                   <router-link
                     v-if="isAdministrator || isManagement"
                     :to="{ name: 'management.organizations.products.index', params: { organizationId: item.id } }"
                     class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
-                    @click.native="onClickLinkScrollToBody">
+                    @click.native="$sTB()">
                     <span class="px-2">Акции</span>
                   </router-link>
                 </div>
@@ -84,7 +84,7 @@
               <div v-if="isAdministrator" class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
                              class="card-btn card-btn--left text-muted btn btn-outline-secondary"
-                             @click.native="onClickLinkScrollToBody">
+                             @click.native="$sTB()">
                   <fa icon="pencil-alt" class="mr-2" />
                   Редактировать
                 </router-link>
@@ -112,7 +112,7 @@
         :page-class="'page-item'"
         prev-class="d-none"
         next-class="d-none"
-        @click.native="onClickLink"
+        @click.native="$sTB()"
       />
 
     </div>
@@ -207,16 +207,6 @@ export default {
           listWatchInstanceDelete.call(this)
         }
       }
-    },
-    onClickLink () {
-      this.$scrollTo(this.$refs.start, 500, {
-        offset: -60,
-        x: false,
-        y: true
-      })
-    },
-    onClickLinkScrollToBody () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 

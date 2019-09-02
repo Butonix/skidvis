@@ -89,7 +89,7 @@
         :page-class="'page-item'"
         prev-class="d-none"
         next-class="d-none"
-        @click.native="onClickLink"
+        @click.native="$sTB()"
       />
 
     </div>
@@ -562,9 +562,6 @@ export default {
 
     close () {
       this.$modal.pop()
-    },
-    onClickLink () {
-      this.$scrollTo(document.documentElement.getElementsByTagName('body')[0])
     }
   }
 
