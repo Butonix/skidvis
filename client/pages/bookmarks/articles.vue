@@ -2,42 +2,30 @@
   <div>
     <div class="container mb-5">
       <search-input
-        v-model="params.search"
+        v-model="artes.urlQuery.search"
         autofocus="autofocus"
         form-class="mb-4"
       />
     </div>
     <div
-      v-if="items.length">
+      v-if="artesItems[0]">
       <div
         class="container blog__container--long-offset position-relative">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': artesIsLoading}"
              class="loading-list"
         />
         <div class="row">
           <card
-            v-for="(item, index) in items"
+            v-for="(item, index) in artesItems"
             :key="'article-'+index"
             :article="item"
             class="col-md-6 col-lg-4"
           />
         </div>
       </div>
-      <div class="container">
-        <paginate
-          v-if="pageCount && pageCount > 1"
-          v-model="params.page"
-          :page-count="pageCount"
-          :page-range="3"
-          :margin-pages="1"
-          :hide-prev-next="true"
-          :container-class="'pagination'"
-          :page-class="'page-item'"
-          prev-class="d-none"
-          next-class="d-none"
-          @click.native="$sTB()"
-        />
-      </div>
+      <paginate-list
+        :params="artesParams"
+      />
     </div>
     <div v-else class="text-center py-5">
       <h5 class="mb-4">
@@ -58,21 +46,74 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
+const globalNamespace = 'artes'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'articles',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  allowedParams: ['whereIn'],
+  apiQuery: {
+    ordering: 'created_at',
+    orderingDir: 'desc'
+  },
+  urlQuery: {
+    perPage: 12
+  },
+  buildWatchers ({ beforeTypes, getWatcher, gN }) {
+    return {
+      'bookmarks': async function (v) {
+        if (!this.check) {
+          this.$set(this[gN].apiQuery, 'responseTypeId', 2)
+          if (v.length === 0) {
+            this.$set(this[gN].apiQuery, 'whereIn', [0])
+          } else {
+            this.$set(this[gN].apiQuery, 'whereIn', [...v])
+          }
+        } else {
+          this.$set(this[gN].apiQuery, 'responseTypeId', 1)
+          if (this[gN].apiQuery.whereIn) {
+            this.$delete(this[gN].apiQuery, 'whereIn')
+          }
+        }
+        await getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      'check': async function (v) {
+        if (v) {
+          this.$set(this[gN].apiQuery, 'responseTypeId', 1)
+          this[gN].apiUrl = 'user/bookmarks'
+          if (this[gN].apiQuery.whereIn) {
+            this.$delete(this[gN].apiQuery, 'whereIn')
+          }
+        } else {
+          this.$set(this[gN].apiQuery, 'responseTypeId', 2)
+          this[gN].apiUrl = 'articles'
+          if (this.bookmarks.length === 0) {
+            this.$set(this[gN].apiQuery, 'whereIn', [0])
+          } else {
+            this.$set(this[gN].apiQuery, 'whereIn', [...this.bookmarks])
+          }
+        }
+        await getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      }
+    }
+  }
+})
 
 export default {
   components: {
+    'PaginateList': () => import('~/components/PaginateList'),
     'Flag': () => import('~/components/Flag'),
     'SearchInput': () => import('~/components/SearchInput'),
-    'Card': () => import('~/components/Blog/Card'),
-    Paginate
+    'Card': () => import('~/components/Blog/Card')
   },
-  middleware: [],
+  mixins: [List.mixin],
   head () {
     return {
       title: this.$route.meta.title,
@@ -83,141 +124,46 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
-
     let check = app.store.getters['auth/check']
     let bookmarks = app.store.getters['auth/bookmarks']
-
-    let params_ = getQueryData({ query,
-      defaultData: {
-        perPage: 12,
-        ordering: 'created_at',
-        orderingDir: 'desc'
-      }
-    })
+    let data
 
     if (check) {
-      indexApiUrl = 'user/bookmarks'
+      data = await List.getStartData({
+        query,
+        defaultData: {
+          apiUrl: 'user/bookmarks'
+        },
+        defaultApiQuery: {
+          responseTypeId: 1
+        }
+      })
     } else {
-      indexApiUrl = 'articles'
-
-      params_.responseTypeId = 2
-      params_.whereIn = [...bookmarks]
-    }
-
-    if (!check && bookmarks.length === 0) {
-      collection = {
-        current_page: 1,
-        data: [],
-        from: 1,
-        last_page: 1,
-        per_page: 12,
-        to: 1,
-        total: 0
+      if (bookmarks.length === 0) {
+        bookmarks = [0]
       }
-    } else {
-      try {
-        let { data } = await axios.get(indexApiUrl, {
-          params: params_
-        })
-        collection = data
-      } catch (e) {
-        error({ statusCode: e.response.status })
-      }
+      data = await List.getStartData({
+        query,
+        defaultData: {
+          apiUrl: 'articles'
+        },
+        defaultApiQuery: {
+          responseTypeId: 2,
+          whereIn: [...bookmarks]
+        }
+      })
     }
 
-    return {
-      collection,
-      params: params_,
-      indexApiUrl
-    }
+    return data
   },
   data: () => ({
     bookmarksActive: false,
     loadingList: false
   }),
-  computed: {
-    ...mapGetters({
-      bookmarks: 'auth/bookmarks',
-      check: 'auth/check'
-    }),
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': function () {
-      if (!(!this.check && this.bookmarks.length === 0)) {
-        listWatchInstanceSearch.call(this)
-      }
-    },
-    'bookmarks': async function (v) {
-      await this.clearBookmarks(v)
-    },
-    'check': async function (v) {
-      await this.fetchArticles(v)
-    },
-    'params.page': function () {
-      if (!(!this.check && this.bookmarks.length === 0)) {
-        listWatchInstancePage.call(this)
-      }
-    }
-  },
-  methods: {
-    async clearBookmarks (arrayIds) {
-      try {
-        this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
-        this.collection.list.total--
-
-        if (this.params.page > 1 && this.items.length === 0) {
-          this.params.page--
-          await this.fetchArticles({})
-        }
-      } catch (e) {
-      }
-    },
-    async fetchArticles () {
-      this.loadingList = true
-      if (!this.check && this.bookmarks.length === 0) {
-        this.collection = {
-          current_page: 1,
-          data: [],
-          from: 1,
-          last_page: 1,
-          per_page: 12,
-          to: 1,
-          total: 0
-        }
-      } else {
-        if (this.check) {
-          this.indexApiUrl = 'user/bookmarks'
-        } else {
-          this.indexApiUrl = 'articles'
-
-          this.params.responseTypeId = 2
-
-          this.params.whereIn = [...this.bookmarks]
-        }
-        try {
-          let { data } = await axios.get(this.indexApiUrl, {
-            params: { ...this.params }
-          })
-          this.$set(this, 'collection', data)
-        } catch (e) {
-          await this.$callToast({
-            type: 'error',
-            text: 'Обновить статьи не удалось'
-          })
-          console.log(e)
-        }
-      }
-      this.loadingList = false
-    }
-  }
+  computed: mapGetters({
+    bookmarks: 'auth/bookmarks',
+    check: 'auth/check'
+  })
 }
 </script>
 

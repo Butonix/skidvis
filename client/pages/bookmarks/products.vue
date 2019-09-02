@@ -79,7 +79,6 @@ export default {
     'SearchInput': () => import('~/components/SearchInput'),
     'Products': () => import('~/components/Products')
   },
-  middleware: [],
   mixins: [List.mixin],
   head () {
     return {
@@ -117,56 +116,12 @@ export default {
       })
     }
 
-    // if (!check && wishlist.length === 0) {
-    //   collection = {
-    //     data: [],
-    //     per_page: 12,
-    //     to: 1,
-    //     total: 0
-    //   }
-    // } else {
-    //   try {
-    //     let { data } = await axios.get(indexApiUrl, {
-    //       params: params_
-    //     })
-    //     collection = data
-    //   } catch (e) {
-    //     error({ statusCode: e.response.status })
-    //   }
-    // }
-
     return data
   },
-  data: () => ({
-  }),
-  computed: {
-    ...mapGetters({
-      wishlist: 'auth/wishlist',
-      check: 'auth/check'
-    })
-  },
-  watch: {
-    // 'wishlist': async function (v) {
-    //   await this.clearWishlist(v)
-    // },
-    // 'check': async function (v) {
-    //   await this.fetchProducts(v)
-    // }
-  },
-  methods: {
-    // async clearWishlist (arrayIds) {
-    //   try {
-    //     this.collection.list.data = this.collection.list.data.filter(v => arrayIds.indexOf(v.id) !== -1)
-    //     this.collection.list.total--
-    //
-    //     if (this.params.page > 1 && this.items.length === 0) {
-    //       this.params.page--
-    //       await this.fetchProducts({})
-    //     }
-    //   } catch (e) {
-    //   }
-    // }
-  }
+  computed: mapGetters({
+    wishlist: 'auth/wishlist',
+    check: 'auth/check'
+  })
 }
 </script>
 
