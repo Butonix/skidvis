@@ -62,7 +62,7 @@
                 </div>
               </router-link>
               <label class="card-body pb-2 pt-4"
-                     v-html="((item.short_description)?splitReplaceShort(item.short_description, 94):((item.name)?splitReplaceShort(item.name, 94):''))"
+                     v-html="(item.name)?splitReplaceShort(item.name, 94):''"
               />
               <div class="card-footer">
                 <div class="card-footer__address">

@@ -16,6 +16,7 @@
           <div class="order-2 order-lg-1 mb-2 mb-lg-0">
 
             <select-alphabet
+              :is-select="false"
               :selected="city"
               :list="cities"
               @click="onShowCities"
@@ -45,12 +46,13 @@
           </div>
           <div class="order-1 order-lg-3 ml-lg-4 mb-3 mb-lg-0">
             <div v-click-outside="closeCollapse" v-if="check" :class="{'active': openCollapse}"
-                 class="auth-collapse"
-                 @click="openCollapse = !openCollapse">
+                 class="auth-collapse">
               <button v-if="user.avatar && user.avatar.src"
                       :style="`background-image: url(${user.avatar.src});`"
-                      class="btn btn-outline-primary btn-auth btn-auth--active bg-cover"/>
-              <button v-else class="btn btn-outline-primary btn-auth btn-auth--active text-uppercase">
+                      class="btn btn-outline-primary btn-auth btn-auth--active bg-cover"
+                      @click="avatarClick"/>
+              <button v-else class="btn btn-outline-primary btn-auth btn-auth--active text-uppercase"
+                      @click="avatarClick">
                 {{ user.initials || 'АК' }}
               </button>
               <div class="auth-collapse__wrapper">
@@ -136,6 +138,19 @@ export default {
     ...mapActions({
       setCity: 'auth/setCity'
     }),
+    isTouchDevice () {
+      let el = document.createElement('div')
+      el.setAttribute('ongesturestart', 'return;')
+      el.setAttribute('ontouchstart', 'return;')
+      return typeof el.ongesturestart === 'function' || typeof el.ontouchstart === 'function'
+    },
+    avatarClick () {
+      if (this.isTouchDevice()) {
+        this.openCollapse = !this.openCollapse
+      } else if (this.check) {
+        this.$router.push({ name: 'profile.show' })
+      }
+    },
     closeCollapse () {
       this.openCollapse = false
     },

@@ -110,14 +110,68 @@
               form-class="mt-5 mb-4"
             />
 
-            <p class="text-center">
-              <org-demo-map-point class="d-inline-block mb-1"/>
-              <br>
-              Размещайте логотип в точке на карте. <br class="d-none d-xs-block">
-              <router-link :to="{ name: 'contacts' }" @click.native="$sTB()">Пишите</router-link>
-              и мы откроем доступ <br class="d-none d-xs-block">
-              на загрузку логотипа.
-            </p>
+            <div class="row">
+              <div v-if="isSuperAdministrator" class="col-12">
+                <p>Тип иконки на карте:</p>
+              </div>
+              <div v-if="isSuperAdministrator" class="col-12 col-xs-auto">
+                <div class="mb-3">
+                  <div class="mb-2">
+                    <div :class="{'active':form.type_map_point === 1}"
+                         class="orgs-edit__btn-map-point"
+                         @click="form.type_map_point = 1"
+                    >
+                      <div class="orgs-edit__map-point mr-1">
+                        <img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="/img/map/kegl.svg">
+                      </div>
+                      <div class="orgs-edit__btn-map-point__text">
+                        Иконка категории
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-2">
+                    <div :class="{'active':form.type_map_point === 2}"
+                         class="orgs-edit__btn-map-point"
+                         @click="form.type_map_point = 2"
+                    >
+                      <div class="orgs-edit__map-point mr-1">
+                        <img style="width: 32px; height: 32px;" src="/img/map/logo.svg">
+                      </div>
+                      <div class="orgs-edit__btn-map-point__text">
+                        Логотип организации
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xs">
+                <p v-if="form.type_map_point === 1" class="text-center">
+                  <org-demo-map-point class="d-inline-block mb-1"/>
+                  <br>
+                  Размещайте логотип в точке на карте. <br class="d-none d-xs-block">
+                  <router-link :to="{ name: 'contacts' }" @click.native="$sTB()">Пишите</router-link>
+                  и мы откроем доступ <br class="d-none d-xs-block">
+                  на загрузку логотипа.
+                </p>
+                <div v-else class="text-center">
+                  <div class="orgs-edit__map-point mb-1">
+                    <div class="orgs-edit__mini-logo">
+                      <logo-file-input
+                        :width="64"
+                        :height="64"
+                        :crop="true"
+                        :src="miniLogo"
+                        :loading="miniLogoLoading"
+                        @change="setMiniLogoSrc"
+                        @delete="deleteMiniLogo"
+                      />
+                    </div>
+                  </div>
+                  <div v-if="miniLogoError" class="text-danger mb-1 small" v-html="miniLogoError"/>
+                  <p v-html="miniLogo?'Мини логотип (64x64) загружен.':'Вы можете загрузить <br>мини логотип (64x64).'"/>
+                </div>
+              </div>
+            </div>
 
             <social-links
               :links="form.socials"
@@ -237,7 +291,7 @@ export default {
   },
   middleware: ['auth'],
   asyncData: async ({ params, error, app }) => {
-    let form, logo
+    let form, logo, miniLogo
     let images = []
 
     await app.store.dispatch('variables/fetchTimezones')
@@ -250,6 +304,7 @@ export default {
       try {
         let { data } = await axios.get('management/organizations/' + organizationId + '/edit')
         logo = data.organization.logo.src
+        miniLogo = data.organization.mini_logo.src
         images = cloneDeep(data.organization.images)
         if (data.organization.operationMode) {
           operationMode = data.organization.operationMode
@@ -269,6 +324,7 @@ export default {
         images: [],
         timezone,
         is_published: false,
+        type_map_point: 1,
         link: '',
         name: '',
         inn: '',
@@ -276,6 +332,9 @@ export default {
         short_description: '',
         logo: {
           color: '#FFFFFF',
+          src: ''
+        },
+        mini_logo: {
           src: ''
         },
         socials: []
@@ -287,18 +346,22 @@ export default {
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       images,
       logo,
+      miniLogo,
       form
     }
   },
 
   data: () => ({
+    miniLogoError: '',
     isActiveClassColorBox: false,
     logoLoading: false,
+    miniLogoLoading: false,
     imagesLoading: {}
   }),
 
   computed: {
     ...mapGetters({
+      isSuperAdministrator: 'auth/isSuperAdministrator',
       getTimezones: 'variables/getTimezones'
     })
   },
@@ -339,6 +402,55 @@ export default {
           type: 'error',
           text: 'Загрузить изображение не удалось'
         })
+      }
+    },
+    async setMiniLogoSrc (logo) {
+      if (logo) {
+        let vm = this
+        vm.miniLogo = logo
+        let image = new Image()
+
+        image.onload = function () {
+          setTimeout(async () => {
+            try {
+              if (this.width !== 64 || this.height !== 64) {
+                vm.miniLogoError = 'Загрузите изображение 64x64. <br>Размеры данного изображение ' + this.width + 'x' + this.height
+                vm.$set(vm, 'miniLogo', null)
+              }
+              if (this.width !== 64) {
+                return true
+              }
+              if (this.height !== 64) {
+                return true
+              }
+            } catch (e) {
+              console.log(e)
+            }
+
+            vm.miniLogoError = ''
+            vm.miniLogoLoading = true
+            try {
+              let { data } = await axios.post('management/organizations/mini-logo', {
+                image: logo
+              })
+              if (!data.image || !data.image.src || !data.image.id) {
+                throw new Error()
+              }
+              vm.form.mini_logo.src = data.image.src
+              vm.form.mini_logo.id = data.image.id
+              vm.miniLogoLoading = false
+            } catch (e) {
+              vm.$set(vm, 'miniLogo', null)
+              vm.miniLogoLoading = false
+              await this.$callToast({
+                type: 'error',
+                text: 'Загрузить изображение не удалось'
+              })
+            }
+          }, 100)
+        }
+
+        image.src = logo
       }
     },
     async setMainImage ({ image, index }) {
@@ -386,6 +498,11 @@ export default {
       this.form.logo.src = ''
       this.$delete(this.form.logo, 'id')
       this.logo = ''
+    },
+    deleteMiniLogo () {
+      this.form.mini_logo.src = ''
+      this.$delete(this.form.mini_logo, 'id')
+      this.miniLogo = ''
     },
     deleteMainImage ({ index }) {
       this.$delete(this.images, index)

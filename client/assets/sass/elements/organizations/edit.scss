@@ -22,6 +22,41 @@
       }
     }
   }
+  &__map-point{
+    padding: 1px;
+    width: 34px;
+    height: 47px;
+    display: inline-block;
+    background: url("/img/map/icon2.svg") center no-repeat;
+    background-size: cover;
+  }
+  &__mini-logo{
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    .photo-input .picture-inner:before{
+      background-size: auto 14px;
+    }
+    .photo-input .preview-container{
+      border-radius: 50% !important;
+    }
+    .photo-input .picture-preview{
+      border-radius: 50% !important;
+      border: 0!important;
+      background-color: white!important;
+    }
+    .picture-preview {
+      &:hover, &.dragging-over{
+        filter: none!important;
+        ~ {
+          .picture-inner:before{
+            background: center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNCAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMSA4LjM2NjY3TDcgMTRNNyAxNEwxMyA4LjM2NjY3TTcgMTRWMSIgc3Ryb2tlPSIjOTg5ODk4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=) !important;
+            background-size: auto 14px;
+          }
+        }
+      }
+    }
+  }
   &__logo{
     max-width: 306px;
     @include media-breakpoint-down(xs)
@@ -30,6 +65,24 @@
       padding-right: 15px;
       margin-left: auto;
       margin-right: auto;
+    }
+  }
+  &__btn-map-point{
+    display: inline-block;
+    cursor: pointer;
+    &__text{
+      display: inline-block;
+      border-bottom: 2px solid transparent;
+    }
+    &:hover{
+      .orgs-edit__btn-map-point__text{
+        border-bottom-color: rgba($primary, 0.5);
+      }
+    }
+    &.active{
+      .orgs-edit__btn-map-point__text{
+        border-bottom-color: $primary;
+      }
     }
   }
 }

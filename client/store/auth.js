@@ -6,6 +6,12 @@ import moment from 'moment'
 
 // state
 export const state = () => ({
+  city: {
+    id: 3,
+    name: 'Санкт-Петербург',
+    latitude: 59.939131,
+    longitude: 30.3159
+  },
   user: {
     city: {
       id: 3,
@@ -16,6 +22,7 @@ export const state = () => ({
     wishlist: [],
     bookmarks: []
   },
+  isSuperAdministrator: false,
   isAdministrator: false,
   isManagement: false,
   token: null,
@@ -39,6 +46,7 @@ export const getters = {
   bookmarksCount: state => (state.user.bookmarks) ? state.user.bookmarks.length : 0,
   cities: state => state.cities,
   check: state => !!state.user.id,
+  isSuperAdministrator: state => state.isSuperAdministrator,
   isAdministrator: state => state.isAdministrator,
   isManagement: state => state.isManagement
 }
@@ -52,7 +60,8 @@ export const mutations = {
     state.articles[id] = Number(moment().format('x'))
   },
   SET_CITY (state, city) {
-    state.user.city = city
+    state.user.city = { ...state.city }
+    // state.user.city = city
   },
   SET_CITIES (state, cities) {
     state.cities = cities
@@ -63,12 +72,14 @@ export const mutations = {
 
   FETCH_USER_SUCCESS (state, user) {
     state.user = user
+    state.isSuperAdministrator = false
     state.isAdministrator = false
     state.isManagement = false
     for (let i in user.roles) {
       let role = user.roles[i]
       switch (role.name) {
         case 'super_administrator':
+          state.isSuperAdministrator = true
           state.isAdministrator = true
           state.isManagement = true
           break
@@ -91,6 +102,7 @@ export const mutations = {
     state.user.bookmarks = []
     state.user.id = null
     state.token = null
+    state.isSuperAdministrator = false
     state.isAdministrator = false
     state.isManagement = false
   },

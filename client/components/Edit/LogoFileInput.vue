@@ -5,7 +5,7 @@
            @click="onDelete"
       />
       <picture-input
-        :crop="false"
+        :crop="crop"
         :prefill="src"
         :alert-on-error="false"
         :custom-strings="{
@@ -20,8 +20,8 @@
           fileType: '',
           aspect: '',
         }"
-        width="306"
-        height="117"
+        :width="width"
+        :height="height"
         button-class="d-none"
         @change="onChange"
       />
@@ -36,6 +36,10 @@ export default {
     // 'PictureInput': () => import('~/components/PictureInput').then(m => m.default || m)
   },
   props: {
+    crop: {
+      type: Boolean,
+      default: false
+    },
     loading: {
       type: Boolean,
       default: false
@@ -43,6 +47,14 @@ export default {
     src: {
       type: String,
       default: ''
+    },
+    width: {
+      type: Number,
+      default: 306
+    },
+    height: {
+      type: Number,
+      default: 117
     }
   },
   computed: {

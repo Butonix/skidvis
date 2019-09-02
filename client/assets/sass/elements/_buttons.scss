@@ -133,7 +133,7 @@
     border-radius: $btn-border-radius;
     opacity: 0;
     pointer-events: none;
-    background: radial-gradient(106.12px at 92.86% -16.67%, #3ACAFF 0%, #00A2E8 100%);
+    background: radial-gradient(179.06px at 100% 0%, #00C2FF 0%, #0096FF 100%);
     transition: 0.2s ease;
   }
   &:hover, &.hover{
@@ -180,7 +180,7 @@
     border-radius: $btn-border-radius;
     opacity: 0;
     pointer-events: none;
-    background: radial-gradient(106.12px at 92.86% -16.67%, #929292 0%, #272727 100%);
+    background: #484848;
     transition: 0.2s ease;
   }
   &:hover, &.hover{

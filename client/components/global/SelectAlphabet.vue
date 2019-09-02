@@ -7,7 +7,7 @@
          @click="clickShow"
     >
       <span class="pr-1">{{ selected.name }}</span>
-      <span class="select-ab__chevron">
+      <span v-if="isSelect" class="select-ab__chevron">
         <chevron/>
       </span>
     </div>
@@ -53,6 +53,10 @@ export default {
   },
 
   props: {
+    isSelect: {
+      type: Boolean,
+      default: false
+    },
     selected: {
       type: Object,
       default: () => ({
@@ -117,6 +121,9 @@ export default {
       }
     },
     clickShow () {
+      if (!this.isSelect) {
+        return true
+      }
       let { y } = getWindowParams()
       if (y > 700) {
         y = 591

@@ -331,6 +331,18 @@ export default {
   },
   methods: {
     getMarkerIcon (point) {
+      if (point.img) {
+        if (point.type_point_map === 1) {
+          return { ...this.markerIcon,
+            content: `<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="${point.img}">`
+          }
+        } else {
+          return {
+            ...this.markerIcon,
+            content: `<div style="border-radius: 50%; overflow: hidden; background: white; width: 32px; height: 32px;"><img style="width: 100%; height: 100%;" src="${point.img}"></div>`
+          }
+        }
+      }
       return this.markerIcon
     },
     async clickMarker (e, point, key) {

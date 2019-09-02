@@ -116,16 +116,6 @@
             </div>
           </div>
           <div class="order-3 order-lg-3 mb-4">
-            <material-textarea
-              v-model="form.short_description"
-              :form="form"
-              field="short_description"
-              placeholder="Краткое описание для карточки"
-              data-align="left"
-              form-class="mb-4 mt-0"
-              size="sm"
-              rows="1"
-            />
 
             <div class="mb-3">
               Акции по тегам
@@ -534,7 +524,6 @@ export default {
       categories: [],
       name: '',
       value: '',
-      short_description: '',
       description: '',
       start_at: '',
       end_at: '',

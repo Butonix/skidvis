@@ -16,7 +16,7 @@
                   v-if="product.currency_id === 3"/>
                 <span v-else-if="product.value">
                     {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
-                  </span>
+                </span>
               </div>
             </full-slider>
           </div>

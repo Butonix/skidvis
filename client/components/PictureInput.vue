@@ -357,6 +357,7 @@ export default {
       })
     },
     drawImage (image) {
+      if(!image){return}
       this.imageWidth = image.width
       this.imageHeight = image.height
       this.imageRatio = image.width / image.height
