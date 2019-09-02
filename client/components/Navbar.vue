@@ -16,6 +16,7 @@
           <div class="order-2 order-lg-1 mb-2 mb-lg-0">
 
             <select-alphabet
+              v-if="false"
               :is-select="false"
               :selected="city"
               :list="cities"

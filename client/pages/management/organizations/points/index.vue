@@ -6,8 +6,7 @@
         Мои организации
       </h5>
       <search-input
-        v-if="params"
-        v-model="params.search"
+        v-model="pts.urlQuery.search"
         autofocus="autofocus"
       />
     </div>
@@ -15,7 +14,7 @@
       <div class="row mb-4">
         <div class="col-12 col-md mb-2">
           <h5>
-            Все адреса организации ({{ items.length }}):
+            Все адреса организации ({{ ptsTotal }}):
           </h5>
         </div>
         <div class="col-12 col-md-auto mb-2">
@@ -27,14 +26,14 @@
     </div>
 
     <transition
-      v-if="items.length"
+      v-if="ptsItems[0]"
       name="fade" mode="out-in">
       <div class="container position-relative" style="min-height: 400px">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': ptsIsLoading}"
              class="loading-list"
         />
         <transition
-          v-for="(item, index) in items"
+          v-for="(item, index) in ptsItems"
           :key="index"
           name="fade" mode="out-in"
         >
@@ -78,18 +77,8 @@
 
     <div class="container mt-5">
 
-      <paginate
-        v-if="params && pageCount && pageCount > 1"
-        v-model="params.page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="1"
-        :hide-prev-next="true"
-        :container-class="'pagination'"
-        :page-class="'page-item'"
-        prev-class="d-none"
-        next-class="d-none"
-        @click.native="$sTB()"
+      <paginate-list
+        :params="ptsParams"
       />
 
     </div>
@@ -289,24 +278,38 @@
 </template>
 
 <script>
-import { getQueryData, watchList, fetchAddresses, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { fetchAddresses, getFavicon } from '~/utils'
 import Form from 'vform'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 let fetchAddressesInstance = fetchAddresses(axios)
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
-let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
+
+const globalNamespace = 'pts'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'management/organizations',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  urlQuery: {
+    perPage: 3
+  }
+})
+const wacherList = List.getWatcher({ type: List.beforeTypes.SEARCH })
+const wacherListDelete = List.getWatcher({ type: List.afterTypes.DELETE })
 
 export default {
   components: {
+    'PaginateList': () => import('~/components/PaginateList'),
     'SearchInput': () => import('~/components/SearchInput'),
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
-    'vSelect': () => import('vue-select'),
-    'Paginate': () => import('vuejs-paginate/src/components/Paginate.vue')
+    'vSelect': () => import('vue-select')
   },
   middleware: ['auth'],
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Мои адреса',
@@ -317,16 +320,18 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
+    let organizationId = params.organizationId
+    let data = await List.getStartData({
+      query,
+      defaultData: {
+        apiUrl: `management/organizations/${organizationId}/points`
+      }
+    })
     let dataOrg = {}
-    let params_ = getQueryData({ query })
 
     let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
-    let organizationId = params.organizationId
 
     if (organizationId) {
-      indexApiUrl = 'management/organizations/' + organizationId + '/points'
       try {
         let req = await axios.get('management/organizations/' + organizationId)
         dataOrg = req.data
@@ -335,23 +340,16 @@ export default {
         } else if (dataOrg.organization) {
           dataOrg.organization['operationMode'] = operationMode
         }
-
-        let { data } = await axios.get(indexApiUrl, {
-          params: params_
-        })
-        collection = data
       } catch (e) {
         error({ statusCode: e.response.status })
       }
     }
 
     return {
-      collection,
+      ...data,
       data: dataOrg,
-      params: params_,
       organizationId: organizationId,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
-      indexApiUrl,
       form: {
         operationMode,
         name: '',
@@ -368,29 +366,16 @@ export default {
     }
   },
   data: () => ({
-    loadingList: false,
     address: '',
     showAddresses: false,
     addresses: [],
     updateId: null
   }),
-  computed: {
-    ...mapGetters({
-      getReactData: 'variables/getReactData',
-      isAdministrator: 'auth/isAdministrator',
-      isManagement: 'auth/isManagement'
-    }),
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage
-  },
+  computed: mapGetters({
+    getReactData: 'variables/getReactData',
+    isAdministrator: 'auth/isAdministrator',
+    isManagement: 'auth/isManagement'
+  }),
   async beforeMount () {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
@@ -451,12 +436,12 @@ export default {
       let res = await this.$confirmDelete()
       if (res.value) {
         try {
-          await axios.delete(`management/organizations/${this.organizationId}/points/${this.items[key].id}`)
+          await axios.delete(`management/organizations/${this.organizationId}/points/${this.ptsItems[key].id}`)
           await this.$callToast({
             type: 'success',
             text: 'Адрес успешно удален'
           })
-          this.reloadList()
+          wacherListDelete.call(this)
         } catch (e) {
           await this.$callToast({
             type: 'error',
@@ -466,19 +451,19 @@ export default {
       }
     },
     onEdit (key) {
-      this.form.own_schedule = this.items[key].own_schedule
-      this.form.name = this.items[key].name
-      this.form.street = this.items[key].street
-      this.form.full_street = this.items[key].full_street
-      this.form.email = this.items[key].email
-      this.form.phone = this.items[key].phone
-      this.form.operationMode = this.items[key].operationMode
-      this.updateId = this.items[key].id
+      this.form.own_schedule = this.ptsItems[key].own_schedule
+      this.form.name = this.ptsItems[key].name
+      this.form.street = this.ptsItems[key].street
+      this.form.full_street = this.ptsItems[key].full_street
+      this.form.email = this.ptsItems[key].email
+      this.form.phone = this.ptsItems[key].phone
+      this.form.operationMode = this.ptsItems[key].operationMode
+      this.updateId = this.ptsItems[key].id
 
-      this.form.city_kladr_id = this.items[key].city_kladr_id
-      this.form.latitude = this.items[key].latitude
-      this.form.longitude = this.items[key].longitude
-      this.form.payload = this.items[key].payload
+      this.form.city_kladr_id = this.ptsItems[key].city_kladr_id
+      this.form.latitude = this.ptsItems[key].latitude
+      this.form.longitude = this.ptsItems[key].longitude
+      this.form.payload = this.ptsItems[key].payload
 
       this.$modal.push('save-point')
     },
@@ -507,24 +492,13 @@ export default {
       this.form.longitude = ''
       this.form.payload = null
     },
-    async deleteHandle (id) {
-      let res = await this.$confirmDelete()
-      if (res.value) {
-        try {
-          await axios.delete('management/organizations/' + this.organizationId + '/points/' + id)
-          listWatchInstanceDelete.call(this)
-        } catch (e) {
-          listWatchInstanceDelete.call(this)
-        }
-      }
-    },
     onAdd () {
       this.updateId = null
       this.setDefaultFormData()
       this.$modal.push('save-point')
     },
     reloadList () {
-      listWatchInstanceDelete.call(this)
+      wacherList.call(this)
     },
     async addPoint () {
       try {

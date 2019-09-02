@@ -193,6 +193,9 @@ export default function constructor ({
   }
 
   return {
+    afterTypes,
+    beforeTypes,
+    getWatcher,
     async getStartData ({ query = {}, error, defaultApiQuery = {}, defaultUrlQuery = {}, defaultData = {}, cbResponse = null }) {
       let res = { ...data }
 

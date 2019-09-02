@@ -70,7 +70,7 @@ const List = BuildList({
     return {
       'bookmarks': async function (v) {
         if (!this.check) {
-          this.$set(this[gN].apiQuery, 'responseTypeId', 2)
+          this.$set(this[gN].apiQuery, 'responseTypeId', 3)
           if (v.length === 0) {
             this.$set(this[gN].apiQuery, 'whereIn', [0])
           } else {
@@ -92,7 +92,7 @@ const List = BuildList({
             this.$delete(this[gN].apiQuery, 'whereIn')
           }
         } else {
-          this.$set(this[gN].apiQuery, 'responseTypeId', 2)
+          this.$set(this[gN].apiQuery, 'responseTypeId', 3)
           this[gN].apiUrl = 'articles'
           if (this.bookmarks.length === 0) {
             this.$set(this[gN].apiQuery, 'whereIn', [0])
@@ -148,7 +148,7 @@ export default {
           apiUrl: 'articles'
         },
         defaultApiQuery: {
-          responseTypeId: 2,
+          responseTypeId: 3,
           whereIn: [...bookmarks]
         }
       })

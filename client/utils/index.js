@@ -66,40 +66,6 @@ export function scrollBehavior (to, from, savedPosition) {
   return position
 }
 
-export function getQueryData ({ query, defaultData, ignoreData }) {
-  let res = {
-    page: 1,
-    perPage: 11,
-    search: '',
-    orderingDir: 'desc',
-    ordering: 'name',
-    ...defaultData,
-    ...query
-  }
-  if (query.page) {
-    res.page = Number(query.page)
-  }
-  if (query.perPage) {
-    res.perPage = Number(query.perPage)
-  }
-  if (query.search) {
-    res.search = query.search
-  }
-  if (query.ordering) {
-    res.ordering = query.ordering
-  }
-  if (query.orderingDir) {
-    res.orderingDir = query.orderingDir
-  }
-  if (ignoreData) {
-    for (let i in ignoreData) {
-      let ignoreKey = ignoreData[i]
-      delete res[ignoreKey]
-    }
-  }
-  return res
-}
-
 export function goTo (title, url) {
   if (typeof history.pushState !== 'undefined') {
     history.pushState(null, title, url)
@@ -107,68 +73,6 @@ export function goTo (title, url) {
     window.location.assign(url)
   }
 }
-import qs from 'qs'
-
-export function watchList (axios, keyApiUrl, type) {
-  const CancelToken = axios.CancelToken
-  let cancelRequest
-  return function () {
-    if (cancelRequest) {
-      cancelRequest()
-    }
-    switch (type) {
-      case 'search':
-        this.params.page = 1
-        break
-    }
-    let params = getQueryData({ query: this.params, defaultData: this.params })
-
-    let queryString = qs.stringify(params, { encode: false })
-
-    queryString = queryString ? ('?' + queryString) : ''
-    goTo(document.title, window.location.href.split('?')[0] + queryString)
-
-    // this.$router.push({ query: params })
-
-    if (!this[keyApiUrl]) {
-      this.$route.back()
-      return
-    }
-    this.loadingList = true
-    axios.get(this[keyApiUrl], {
-      params,
-      cancelToken: new CancelToken(function executor (c) {
-        // An executor function receives a cancel function as a parameter
-        cancelRequest = c
-      })
-    }).then(({ data }) => {
-      switch (type) {
-        case 'delete':
-          if (data.list.data.length === 0 && this.params.page > 1) {
-            this.params.page++
-            return
-          }
-          if (data.list.data.length === 0 && this.params.search !== '') {
-            this.params.search = ''
-            return
-          }
-          break
-        case 'page':
-          if (data.list.data.length === 0 && this.params.search !== '') {
-            this.params.search = ''
-            return
-          }
-          break
-      }
-      this.$set(this, 'collection', data)
-      this.loadingList = false
-    }).catch((e) => {
-      console.log(e)
-    })
-  }
-}
-
-
 
 export function $callToast (data, toast) {
   let typeClass = 'toast-alert toast-alert--' + data.type

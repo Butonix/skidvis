@@ -127,6 +127,7 @@ const List = BuildList({
     perPage: 11
   }
 })
+const wacherListDelete = List.getWatcher({ type: List.afterTypes.DELETE })
 
 export default {
   components: {
@@ -183,7 +184,9 @@ export default {
       if (res.value) {
         try {
           await axios.delete('management/organizations/' + id)
+          wacherListDelete.call(this)
         } catch (e) {
+          wacherListDelete.call(this)
         }
       }
     }
