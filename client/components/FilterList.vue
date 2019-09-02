@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between">
         <div class="text-muted small mb-2" v-html="title"/>
         <div class=" mb-2">
-          <a v-if="urlQuery[name].length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
+          <a v-if="urlQuery[name] && urlQuery[name].length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
              @click="$emit('clearfilter')">
             Сбросить
           </a>
@@ -26,7 +26,7 @@
         <div class="position-relative">
           <div :class="{'active': filter.loading}" class="preloader"/>
           <div class="">
-            Выбрано {{ urlQuery[name].length }} из {{ filter.collection.length }}
+            Выбрано {{ urlQuery[name]?urlQuery[name].length:0 }} из {{ filter.collection.length }}
             <div class="">
               <div class="d-flex">
                 <search-input
@@ -34,7 +34,7 @@
                   form-class="mb-4 flex-grow-1"
                   autofocus="autofocus"
                 />
-                <div v-if="urlQuery[name].length" class="pl-3">
+                <div v-if="urlQuery[name] && urlQuery[name].length" class="pl-3">
                   <div class="btn btn-primary btn-sm"
                        @click="$emit('clearfilter')">
                     Сбросить

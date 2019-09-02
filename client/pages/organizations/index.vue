@@ -129,13 +129,13 @@ const List = BuildList({
   buildWatchers ({ beforeTypes, getWatcher, gN }) {
     return {
       [`${gN}.urlQuery.city_id`]: function (v) {
-        // if (typeof v !== 'undefined' && v !== city.id) {
-        //   await app.store.dispatch('auth/setCity', query.city_id)
-        // }
-        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+        if (v) {
+          this.$store.dispatch('auth/setCity', v)
+          getWatcher({ type: beforeTypes.SEARCH }).call(this)
+        }
       },
       'city': function (v) {
-        if (v.id) {
+        if (v && v.id) {
           this.$set(this[gN].urlQuery, 'city_id', v.id)
         }
       }
