@@ -6,14 +6,14 @@
         Акции организации
       </h5>
       <search-input
-        v-model="params.search"
+        v-model="prods.urlQuery.search"
         autofocus="autofocus"
       />
     </div>
 
     <div class="container container--long-offset">
       <div class="row position-relative">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': prodsIsLoading}"
              class="loading-list"
         />
         <div
@@ -26,7 +26,7 @@
         </div>
 
         <transition
-          v-for="(item, index) in items"
+          v-for="(item, index) in prodsItems"
           :key="index"
           name="fade" mode="out-in"
         >
@@ -108,18 +108,8 @@
 
       </div>
 
-      <paginate
-        v-if="pageCount && pageCount > 1"
-        v-model="params.page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="1"
-        :hide-prev-next="true"
-        :container-class="'pagination'"
-        :page-class="'page-item'"
-        prev-class="d-none"
-        next-class="d-none"
-        @click.native="$sTB()"
+      <paginate-list
+        :params="prodsParams"
       />
 
     </div>
@@ -127,23 +117,32 @@
 </template>
 
 <script>
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
-import SearchInput from '~/components/SearchInput'
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
-let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
+const globalNamespace = 'prods'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'management/organizations',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  urlQuery: {
+    perPage: 11
+  }
+})
 
 export default {
   components: {
     'PresentCard': () => import('~/components/Icons/PresentCard'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
-    SearchInput,
-    Paginate
+    'SearchInput': () => import('~/components/SearchInput'),
+    'PaginateList': () => import('~/components/PaginateList')
   },
   middleware: ['auth'],
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Мои акции',
@@ -154,47 +153,26 @@ export default {
     }
   },
   asyncData: async ({ params, error, app, query }) => {
-    let indexApiUrl
-    let collection = {}
-    let params_ = getQueryData({ query })
-
     let organizationId = params.organizationId
-
-    if (organizationId) {
-      indexApiUrl = 'management/organizations/' + organizationId + '/products'
-      try {
-        let { data } = await axios.get(indexApiUrl, {
-          params: params_
-        })
-        collection = data
-      } catch (e) {
-        error({ statusCode: e.response.status })
+    let data = await List.getStartData({
+      query,
+      defaultData: {
+        apiUrl: `management/organizations/${organizationId}/products`
+      },
+      defaultUrlQuery: {
+        perPage: 11
       }
-    }
+    })
 
     return {
-      collection,
-      params: params_,
-      organizationId: organizationId,
-      indexApiUrl
+      ...data,
+      organizationId
     }
   },
   data: () => ({
     loadingList: false,
     errorsImages: {}
   }),
-  computed: {
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage
-  },
   beforeMount () {
     this.$Lazyload.$off('error')
     this.$Lazyload.$on('error', this.onErrorImg)
@@ -205,9 +183,7 @@ export default {
       if (res.value) {
         try {
           await axios.delete('management/organizations/' + this.organizationId + '/products/' + id)
-          listWatchInstanceDelete.call(this)
         } catch (e) {
-          listWatchInstanceDelete.call(this)
         }
       }
     },

@@ -6,14 +6,14 @@
         Мои организации
       </h5>
       <search-input
-        v-model="params.search"
+        v-model="orgs.urlQuery.search"
         autofocus="autofocus"
       />
     </div>
 
     <div class="container container--long-offset">
       <div class="row position-relative">
-        <div :class="{'active': loadingList}"
+        <div :class="{'active': orgsIsLoading}"
              class="loading-list"
         />
         <div
@@ -27,7 +27,7 @@
           <router-link :to="{ name: 'management.organizations.create' }" class="card--empty d-none d-md-flex" />
         </div>
         <transition
-          v-for="(item, index) in items"
+          v-for="(item, index) in orgsItems"
           :key="index"
           name="fade" mode="out-in"
         >
@@ -101,18 +101,8 @@
 
       </div>
 
-      <paginate
-        v-if="pageCount && pageCount > 1"
-        v-model="params.page"
-        :page-count="pageCount"
-        :page-range="3"
-        :margin-pages="1"
-        :hide-prev-next="true"
-        :container-class="'pagination'"
-        :page-class="'page-item'"
-        prev-class="d-none"
-        next-class="d-none"
-        @click.native="$sTB()"
+      <paginate-list
+        :params="orgsParams"
       />
 
     </div>
@@ -121,20 +111,31 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getQueryData, watchList, getFavicon } from '~/utils'
+import BuildList from '~/mixins/list'
+import { getFavicon } from '~/utils'
 import axios from 'axios'
 
-let listWatchInstancePage = watchList(axios, 'indexApiUrl', 'page')
-let listWatchInstanceSearch = watchList(axios, 'indexApiUrl', 'search')
-let listWatchInstanceDelete = watchList(axios, 'indexApiUrl', 'delete')
+const globalNamespace = 'orgs'
+
+const List = BuildList({
+  axios,
+  globalNamespace,
+  apiUrl: 'management/organizations',
+  pathResponse: 'list.data',
+  pathTotal: 'list.total',
+  urlQuery: {
+    perPage: 11
+  }
+})
 
 export default {
   components: {
     'SearchInput': () => import('~/components/SearchInput'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
-    'Paginate': () => import('vuejs-paginate/src/components/Paginate.vue')
+    'PaginateList': () => import('~/components/PaginateList')
   },
   middleware: ['auth'],
+  mixins: [List.mixin],
   head () {
     return {
       title: 'Мои организации',
@@ -145,42 +146,22 @@ export default {
     }
   },
   asyncData: async ({ query, error }) => {
-    let indexApiUrl = 'management/organizations'
-    let collection = {}
-    let params = getQueryData({ query })
+    let data = await List.getStartData({
+      query,
+      defaultUrlQuery: {
+        perPage: 11
+      }
+    })
 
-    try {
-      const { data } = await axios.get(indexApiUrl, { params })
-      collection = data
-    } catch (e) {
-      error({ statusCode: e.response.status })
-    }
-    return {
-      indexApiUrl,
-      params,
-      collection
-    }
+    return data
   },
   data: () => ({
-    loadingList: false,
     errorsImages: {}
   }),
-  computed: {
-    ...mapGetters({
-      isAdministrator: 'auth/isAdministrator',
-      isManagement: 'auth/isManagement'
-    }),
-    items () {
-      return (this.collection.list && this.collection.list.data) ? this.collection.list.data : []
-    },
-    pageCount () {
-      return (this.collection.list && this.collection.list.total) ? Math.ceil(this.collection.list.total / this.params.perPage) : 0
-    }
-  },
-  watch: {
-    'params.search': listWatchInstanceSearch,
-    'params.page': listWatchInstancePage
-  },
+  computed: mapGetters({
+    isAdministrator: 'auth/isAdministrator',
+    isManagement: 'auth/isManagement'
+  }),
   beforeMount () {
     this.$Lazyload.$off('error')
     this.$Lazyload.$on('error', this.onErrorImg)
@@ -202,9 +183,7 @@ export default {
       if (res.value) {
         try {
           await axios.delete('management/organizations/' + id)
-          listWatchInstanceDelete.call(this)
         } catch (e) {
-          listWatchInstanceDelete.call(this)
         }
       }
     }

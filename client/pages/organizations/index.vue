@@ -150,7 +150,6 @@ export default {
     'CardLogo': () => import('~/components/Product/CardLogo'),
     'PaginateList': () => import('~/components/PaginateList')
   },
-  middleware: [],
   mixins: [List.mixin],
   head () {
     return {
@@ -170,9 +169,6 @@ export default {
 
     let data = await List.getStartData({
       query,
-      defaultApiQuery: {
-
-      },
       defaultUrlQuery: {
         city_id: city.id
       }
@@ -181,7 +177,7 @@ export default {
     return data
   },
   data: () => ({
-    errorsImages: {},
+    errorsImages: {}
   }),
   computed: {
     ...mapGetters({
