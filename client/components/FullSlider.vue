@@ -10,7 +10,7 @@
             class="full-slider__slider"
             @slide.once="initSlider">
       <slide v-if="images.length === 0">
-        <div class="full-slider__placeholder full-slider__slide">
+        <div class="full-slider__placeholder full-slider__slide cursor-pointer" @click="$emit('clickfirstslide')">
           {{ isEdit?emptyTextEdit:emptyTextShow }}
         </div>
       </slide>

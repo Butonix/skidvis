@@ -4,10 +4,10 @@
       <div
         v-lazy:background-image="{
           src: article.mainImage,
-          loading: '/placeholders/cover.jpg'
+          loading: 'data:image/gif;base64,R0lGODlhGwALAIAAAP///wAAACH5BAEAAAEALAAAAAAbAAsAAAIPjI+py+0Po5y02ouz3rkAADs='
         }"
         v-if="article.mainImage"
-        data-loading="/placeholders/cover.jpg"
+        data-loading="data:image/gif;base64,R0lGODlhGwALAIAAAP///wAAACH5BAEAAAEALAAAAAAbAAsAAAIPjI+py+0Po5y02ouz3rkAADs="
         class="article-card__img__content bg-cover"
         role="img">
         <div v-if="(type === 'new-xl' || type === 'new' || type === 'next') && article.label && article.label.src && type !== 'small'" class="article-card__label">
@@ -17,9 +17,7 @@
       </div>
       <div
         v-else
-        style="background-image: url('/placeholders/cover.jpg');"
-        class="article-card__img__content bg-cover"
-        role="img">
+        class="article-card__img__content">
         <div v-if="(type === 'new-xl' || type === 'new' || type === 'next') && article.label && article.label.src && type !== 'small'" class="article-card__label">
           <div class="mb-1"><img :src="article.label.src" :alt="article.label.name"></div>
           {{ article.label.name }}

@@ -7,6 +7,7 @@
           v-if="images"
           :is-edit="true"
           :images="images"
+          @clickfirstslide="clickFirstSlide"
         />
       </div>
       <div class="overflow-hidden">
@@ -15,6 +16,7 @@
             v-if="images"
             :images="images"
             :images-loading="imagesLoading"
+            class="js-thumbs-file-input"
             @change="setMainImage"
             @delete="deleteMainImage"
           />
@@ -376,6 +378,15 @@ export default {
     ...mapActions({
       fetchTimezones: 'variables/fetchTimezones'
     }),
+    clickFirstSlide () {
+      try {
+        let input = document.querySelector('.js-thumbs-file-input .picture-preview')
+        if (input) {
+          input.click()
+        }
+      } catch (e) {
+      }
+    },
     addSocialsLink (link) {
       this.form.socials.push(link)
     },

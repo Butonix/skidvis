@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">
     <div>
       <div class="container">
-        <h5>
+        <h5 class="mb-4">
           Мой профиль
         </h5>
       </div>

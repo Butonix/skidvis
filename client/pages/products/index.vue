@@ -59,15 +59,58 @@
     />
     <modal name="map">
       <div class="basic-modal map-modal">
+        <div class="map-modal__filter-modal overflow-auto" :class="{'hide': !showMapFilters}">
+          <div class="container py-4">
+            <search-input
+              v-model="prods.urlQuery.search"
+              autofocus="autofocus"
+              form-class="mb-4"
+            />
+            <filter-list
+              :fuse="prodsFS_holidays"
+              :url-query="prods.urlQuery"
+              :filter="prods.filters.holidays"
+              btn-type="holidays"
+              title="К празднику"
+              name="holidays"
+              @filter="prodsFilter('holidays', $event)"
+              @clearfilter="prodsClearFilter('holidays')"
+              @handleall="prodsHandleAll('holidays')"
+            />
+            <filter-list
+              :fuse="prodsFS_auditories"
+              :url-query="prods.urlQuery"
+              :filter="prods.filters.auditories"
+              btn-type="auditories"
+              title="Кому"
+              name="auditories"
+              @filter="prodsFilter('auditories', $event)"
+              @clearfilter="prodsClearFilter('auditories')"
+              @handleall="prodsHandleAll('auditories')"
+            />
+            <filter-list
+              :fuse="prodsFS_categories"
+              :url-query="prods.urlQuery"
+              :filter="prods.filters.categories"
+              name="categories"
+              @filter="prodsFilter('categories', $event)"
+              @clearfilter="prodsClearFilter('categories')"
+              @handleall="prodsHandleAll('categories')"
+            />
+            <div class="text-center mt-4">
+              <div class="btn btn-primary" @click="setFiltersMap">
+                Применить
+              </div>
+            </div>
+          </div>
+        </div>
         <div :class="{'active': loadingPoints}"
              class="loading-list"
         />
-        <div class="close-modal" @click="$modal.pop()">
-          <div class="close-modal__arrows">
-            <chevron class="close-modal__arrows--right" />
-            <chevron class="close-modal__arrows--left" />
-          </div>
+        <div class="map-modal__filter-btn" @click="showMapFilters = !showMapFilters">
+          <filter-icon/>
         </div>
+        <div class="map-modal__close" @click="$modal.pop()"/>
         <no-ssr>
           <yandex-map
             v-if="getCoords"
@@ -220,6 +263,7 @@ const List = BuildList({
 
 export default {
   components: {
+    'FilterIcon': () => import('~/components/Icons/Filter'),
     'FilterList': () => import('~/components/FilterList'),
     'MapIcon': () => import('~/components/Icons/MapIcon.vue'),
     'Chevron': () => import('~/components/Icons/Chevron'),
@@ -269,8 +313,10 @@ export default {
       contentLayout: `<div>$[properties.iconContent]</div>`
     },
 
+    showMapFilters: false,
     loadingPoints: false,
     cancelRequestPoints: null,
+    boundschangeTimeout: null,
     balloonopening: false,
     placemark: null,
     placemarkId: null,
@@ -279,7 +325,6 @@ export default {
     zoom: 10,
     points: [],
 
-    loadingList: false,
     orderingArray: [
       {
         id: 1,
@@ -423,6 +468,9 @@ export default {
       try {
         let { data } = await axios.get('points/map', {
           params: {
+            categories: this.prods.urlQuery.categories || [],
+            holidays: this.prods.urlQuery.holidays || [],
+            auditories: this.prods.urlQuery.auditories || [],
             is_active: 1,
             latitudeMax: bounds[1][0],
             longitudeMax: bounds[1][1],
@@ -453,11 +501,18 @@ export default {
     async onMapWasInitialized (payload) {
       this.map = payload
       this.map.events.add('boundschange', (e) => {
-        if (!this.balloonopening) {
-          this.fetchPoints()
-        }
+        clearTimeout(this.boundschangeTimeout)
+        this.boundschangeTimeout = setTimeout(() => {
+          if (!this.balloonopening) {
+            this.fetchPoints()
+          }
+        }, 600)
       })
       await this.fetchPoints()
+    },
+    setFiltersMap () {
+      this.showMapFilters = !this.showMapFilters
+      this.fetchPoints()
     },
     onOpenMap () {
       this.placemark = null
