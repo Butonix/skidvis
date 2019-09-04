@@ -15,7 +15,7 @@
                 <present-page
                   v-if="product.currency_id === 3"/>
                 <span v-else-if="product.value">
-                    {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
+                  {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
                 </span>
               </div>
             </full-slider>
@@ -123,33 +123,31 @@
         />
       </div>
       <no-ssr>
-        <yandex-map
-          v-if="getCoords"
-          ref="map"
-          :coords="getCoords"
-          :zoom="zoom"
-          :scroll-zoom="false"
-          @click="onClick"
-          @map-was-initialized="onMapWasInitialized"
-        >
-          <ymap-marker
-            v-for="(point, key) in getPoints"
-            :layout="'islands#blueDiscountIcon'"
-            :key="key"
-            :properties="{
-              iconCaption: point.name
-            }"
-            :balloon-template="balloonTemplatePoint(point)"
-            :coords="[point.latitude, point.longitude]"
-            :marker-id="key"
-            :hint-content="point.name"
-            :callbacks="{
-              click: function(e) {
-                clickMarker(e, point, key)
-              }
-            }"
-          />
-        </yandex-map>
+        <div class="ymap-custom">
+          <yandex-map
+            v-if="getCoords"
+            ref="map"
+            :coords="getCoords"
+            :zoom="zoom"
+            :scroll-zoom="false"
+            @click="onClick"
+            @map-was-initialized="onMapWasInitialized"
+          >
+            <ymap-marker
+              v-for="(point, key) in getMapPoints"
+              :icon="getMarkerIcon(point)"
+              :key="point.id"
+              :balloon-template="balloonTemplatePoint(point, key)"
+              :coords="[point.latitude, point.longitude]"
+              :marker-id="point.id"
+              :callbacks="{
+                click: function(e) {
+                  clickMarker(e, point, key)
+                }
+              }"
+            />
+          </yandex-map>
+        </div>
       </no-ssr>
 
     </div>
@@ -219,6 +217,7 @@ import FullSlider from '~/components/FullSlider'
 import AddressesFrame from '~/components/AddressesFrame'
 import Sidebar from '~/components/Product/Sidebar'
 import Form from 'vform'
+import mapMixin from '~/mixins/map'
 
 export default {
   components: {
@@ -232,6 +231,7 @@ export default {
     Sidebar,
     FullSlider
   },
+  mixins: [mapMixin],
   head () {
     return {
       title: 'Акция',
@@ -245,6 +245,7 @@ export default {
     let productId = params.productId
     let city = app.store.getters['auth/city']
     let res = {
+      mapPoints: [],
       productId,
       review: {
         form: {
@@ -256,7 +257,6 @@ export default {
     }
 
     if (productId) {
-      res.productId = Number(productId)
       try {
         let { data } = await axios.get(`products/${productId}`, {
           params: {
@@ -267,6 +267,12 @@ export default {
           ...res,
           ...data
         }
+      } catch (e) {
+        error({ statusCode: e.response.status })
+      }
+      try {
+        let { data } = await axios.get(`products/${productId}/map`)
+        res.mapPoints = data.list.data
       } catch (e) {
         error({ statusCode: e.response.status })
       }
@@ -303,7 +309,7 @@ export default {
     tab: 'circs',
     search: '',
     fusePoints: null,
-    map: null
+    map: null,
   }),
   computed: {
     ...mapGetters({
@@ -324,6 +330,9 @@ export default {
     },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points
+    },
+    getMapPoints () {
+      return (this.fuseMapPoints && this.search.length > 0) ? this.fuseMapPoints.search(this.search) : this.mapPoints
     },
     pageCountReviews () {
       return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
@@ -362,11 +371,22 @@ export default {
           'name', 'full_street'
         ]
       })
+      this.fuseMapPoints = new Fuse(this.mapPoints, {
+        shouldSort: true,
+        threshold: 0.6,
+        location: 0,
+        distance: 100,
+        maxPatternLength: 32,
+        minMatchCharLength: 1,
+        keys: [
+          'name', 'full_street'
+        ]
+      })
     },
     async onClick (e) {
       this.coords = e.get('coords')
       // if (this.map) {
-        // console.log(this.map.getBounds())
+      // console.log(this.map.getBounds())
       // }
       // console.log(this.$refs.map.getBounds())
     },
@@ -376,13 +396,6 @@ export default {
     },
     async clickMarker (e, point, key) {
       // console.log(e, point, key)
-    },
-    balloonTemplatePoint (point) {
-      return `
-        <h5>${point.name}</h5>
-        <p>${point.full_street}</p>
-        <p>${point.operationModeText}</p>
-      `
     },
     wishListChange (e) {
       if (this.wishlist.indexOf(this.productId) !== -1) {
@@ -498,7 +511,7 @@ export default {
 </script>
 
 <style>
-  .ymap-container{
+  .ymap-custom{
     height: 600px;
   }
 </style>

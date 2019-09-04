@@ -16,6 +16,7 @@ const polyfills = [
 
 module.exports = {
   // mode: 'spa',
+  // analyze: true,
   srcDir: __dirname,
   server: {
     // https: {
@@ -89,8 +90,8 @@ module.exports = {
     '~plugins/vue-textarea-autosize',
     '~plugins/moment',
     '~plugins/social-sharing',
+    '~plugins/lazyload',
     { src: '~plugins/toast', ssr: false },
-    { src: '~plugins/lazyload', ssr: true },
     { src: '~plugins/color-picker', ssr: false },
     { src: '~plugins/vue-click-outside', ssr: false },
     { src: '~plugins/vue-quill-editor', ssr: false },

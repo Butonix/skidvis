@@ -1,8 +1,10 @@
 <template>
   <div class="full-slider">
-    <div v-if="!sliderReady" :style="(images.length > 0)?{backgroundImage:`url(${images[0].src})`}:''"
+    <div v-lazy:background-image="{src: images[0].src || '', loading: 'data:image/gif;base64,R0lGODlhEwAIAIAAAP///wAAACH5BAEAAAEALAAAAAATAAgAAAIKjI+py+0Po5yUFgA7'}" v-if="!sliderReady && images.length > 0"
+         class="full-slider__preloader"/>
+    <div v-if="!sliderReady && images.length === 0"
          class="full-slider__preloader">
-      <div v-if="images.length === 0" class="full-slider__placeholder full-slider__slide">
+      <div class="full-slider__placeholder full-slider__slide">
         {{ isEdit?emptyTextEdit:emptyTextShow }}
       </div>
     </div>
@@ -14,9 +16,9 @@
           {{ isEdit?emptyTextEdit:emptyTextShow }}
         </div>
       </slide>
-      <slide v-for="(image, index) in images" v-else
-             :key="index">
-        <div :style="{backgroundImage:`url(${image.src})`}" class="full-slider__slide"/>
+      <slide v-for="(image, i) in images" v-else
+             :key="i">
+        <div v-if="image.src" v-lazy:background-image="{src: images[i].src || '', loading: 'data:image/gif;base64,R0lGODlhEwAIAIAAAP///wAAACH5BAEAAAEALAAAAAATAAgAAAIKjI+py+0Po5yUFgA7'}" class="full-slider__slide"/>
       </slide>
       <hooper-navigation slot="hooper-addons"/>
       <hooper-pagination slot="hooper-addons"/>
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { isNumeric } from '~/utils'
 import { Hooper, Slide, Navigation as HooperNavigation, Pagination as HooperPagination } from 'hooper'
 
 export default {
@@ -49,18 +51,45 @@ export default {
   data: () => ({
     emptyTextEdit: 'Загрузите фотографии своей компании',
     emptyTextShow: 'Компания еще не загрузила фотографии',
-    sliderReady: false
+    sliderReady: false,
+    // imagesReady: {}
   }),
-
-  computed: mapState({
-    placeholder: state => state.variables.placeholders['1920x700'],
-    pattern: state => state.variables.placeholders.pattern
-  }),
-
+  // created () {
+  //   console.log('beforeCreate', this.images)
+  // },
+  // mounted () {
+  //   console.log(this.images)
+  // },
   methods: {
     initSlider () {
       this.sliderReady = true
-    }
+    },
+    // getImageSave (i) {
+    //   let src = this.getImage(i)
+    //   this.$set(this.imagesReady, i, src)
+    //   return src
+    // },
+    // getImage (i) {
+    //   if (false && !this.isEdit) {
+    //     try {
+    //       let image = this.images[i]
+    //       let keys = Object.keys(image)
+    //       if (keys.length) {
+    //         keys = keys.filter(isNumeric).map(Number)
+    //       }
+    //       if (keys.length) {
+    //         let key = Math.min.apply(null, keys)
+    //         if (key) {
+    //           return (this.images[i][String(key)]?this.images[i][String(key)].src:null) || (this.images[i][key]?this.images[i][key].src:null) || this.images[i].src || ''
+    //         }
+    //       }
+    //     } catch (e) {
+    //       return this.images[i].src || ''
+    //     }
+    //   }
+    //
+    //   return this.images[i].src || ''
+    // }
   }
 }
 </script>

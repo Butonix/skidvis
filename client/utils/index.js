@@ -5,6 +5,9 @@ export function isObject (v) {
 export function isString (v) {
   return typeof v === 'string' || v instanceof String
 }
+export function isNumeric (n) {
+  return (parseFloat(n) === n >>> 0)
+}
 export function parseNum (n) {
   let pF = parseFloat(n)
   return (pF === n >>> 0) ? pF : n
