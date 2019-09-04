@@ -383,6 +383,7 @@ export default {
       try {
         let { data } = await axios.get('points/map', {
           params: {
+            search: this.prods.urlQuery.search || '',
             categories: this.prods.urlQuery.categories || [],
             holidays: this.prods.urlQuery.holidays || [],
             auditories: this.prods.urlQuery.auditories || [],

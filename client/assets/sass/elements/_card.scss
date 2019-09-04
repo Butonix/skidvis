@@ -320,6 +320,21 @@
     .card-footer{
       display: flex;
       position: relative;
+      &.active{
+        .card-footer{
+          &__address{
+            z-index: 16;
+          }
+          &__wishlist{
+            z-index: 16;
+          }
+          &__list-address{
+            &__wrapper{
+              z-index: 15;
+            }
+          }
+        }
+      }
       &__address{
         flex-basis: 0;
         -webkit-box-flex: 1;

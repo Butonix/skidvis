@@ -64,7 +64,8 @@
               <label class="card-body pb-2 pt-4"
                      v-html="(item.name)?splitReplaceShort(item.name, 94):''"
               />
-              <div class="card-footer">
+              <div class="card-footer"
+                   :class="{'active': activeAddresses === item.id}">
                 <div class="card-footer__address">
                   <div :title="(item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):''"
                        class="card-footer__address__wrapper"
