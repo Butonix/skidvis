@@ -5,6 +5,7 @@
     "build": "nuxt build -c client/nuxt.config.js",
     "start": "APP_PORT=2999 APP_HOST=localhost nuxt start -c client/nuxt.config.js",
     "generate": "APP_PORT=2999 APP_HOST=localhost nuxt generate -c client/nuxt.config.js",
+    "analize": "APP_PORT=2999 APP_HOST=localhost nuxt generate -c client/nuxt.config.js --analyze",
     "prod": "APP_PORT=2999 APP_HOST=localhost nuxt generate -c client/nuxt.config.js && APP_PORT=2999 APP_HOST=localhost nuxt start -c client/nuxt.config.js",
     "lint": "vue-cli-service lint --fix client/"
   },
@@ -34,6 +35,7 @@
     "lorem-ipsum": "^2.0.3",
     "moment": "^2.24.0",
     "nuxt": "^2.8.1",
+    "particles.js": "^2.0.0",
     "popper.js": "^1.15.0",
     "qs": "^6.8.0",
     "scrollbooster": "^1.1.0",

@@ -353,13 +353,15 @@ export default function constructor ({
         [gN + 'Filter'] (type, item) {
           if (this[gN].filters[type]) {
             let id = Number(item.id)
-            let index = this[gN].urlQuery[type].indexOf(id)
-            if (index === -1) {
-              this[gN].urlQuery[type].push(id)
-              this.$set(this[gN].filters[type].selected, id, { ...item })
-            } else {
-              this.$delete(this[gN].urlQuery[type], index)
-              this.$delete(this[gN].filters[type].selected, id)
+            if (this[gN].urlQuery[type]) {
+              let index = this[gN].urlQuery[type].indexOf(id)
+              if (index === -1) {
+                this[gN].urlQuery[type].push(id)
+                this.$set(this[gN].filters[type].selected, id, { ...item })
+              } else {
+                this.$delete(this[gN].urlQuery[type], index)
+                this.$delete(this[gN].filters[type].selected, id)
+              }
             }
           }
         },

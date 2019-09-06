@@ -51,7 +51,7 @@ export default {
   data: () => ({
     emptyTextEdit: 'Загрузите фотографии своей компании',
     emptyTextShow: 'Компания еще не загрузила фотографии',
-    sliderReady: false,
+    sliderReady: false
     // imagesReady: {}
   }),
   // created () {

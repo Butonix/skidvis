@@ -12,7 +12,11 @@ Vue.use({
     Vue.prototype.$goToQuery = function (query) {
       let queryString = qs.stringify(query, { encode: false })
       queryString = queryString ? ('?' + queryString) : ''
-      goTo(document.title, window.location.href.split('?')[0] + queryString)
+      let oldUrl = window.location.href
+      let newUrl = oldUrl.split('?')[0] + queryString
+      if (oldUrl !== newUrl) {
+        goTo(document.title, newUrl)
+      }
     }
     Vue.prototype.$sTB = function (offset) {
       Vue.prototype.$scrollTo(document.documentElement.getElementsByTagName('body')[0], 500, {
