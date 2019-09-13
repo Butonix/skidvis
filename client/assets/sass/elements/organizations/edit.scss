@@ -77,11 +77,23 @@
     &:hover{
       .orgs-edit__btn-map-point__text{
         border-bottom-color: rgba($primary, 0.5);
+        &.danger{
+          border-bottom-color: rgba($danger, 0.5);
+        }
+        &.success{
+          border-bottom-color: rgba($success, 0.5);
+        }
       }
     }
     &.active{
       .orgs-edit__btn-map-point__text{
         border-bottom-color: $primary;
+        &.danger{
+          border-bottom-color: $danger;
+        }
+        &.success{
+          border-bottom-color: $success;
+        }
       }
     }
   }

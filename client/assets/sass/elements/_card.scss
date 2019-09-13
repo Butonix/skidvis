@@ -4,11 +4,23 @@
   background: #FFFFFF;
   box-shadow: 0 3px 11px rgba(216, 216, 216, 0.6);
   .card-body{
+    position: relative;
     br{
       @include media-breakpoint-down(sm){
         display: none;
       }
     }
+  }
+  .card-caption{
+    position: absolute;
+    z-index: 1;
+    top: -1.2rem;
+    right: 0;
+    border-radius: 0 0 0 15px;
+    background: #FF2E00;
+    padding: 7px 15px;
+    color: white;
+    font-weight: 400;
   }
   .card-img-top{
     overflow: hidden;

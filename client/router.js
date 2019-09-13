@@ -34,6 +34,7 @@ const BookmarksArticles = () => import('~/pages/bookmarks/articles').then(m => m
 const ManagementOrganizationsHome = () => import('~/pages/management/organizations/home').then(m => m.default || m)
 const ManagementOrganizationsIndex = () => import('~/pages/management/organizations/index').then(m => m.default || m)
 const ManagementOrganizationsEdit = () => import('~/pages/management/organizations/edit').then(m => m.default || m)
+const ManagementOrganizationsServices = () => import('~/pages/management/organizations/services').then(m => m.default || m)
 
 const ManagementOrganizationsProductsHome = () => import('~/pages/management/organizations/products/home').then(m => m.default || m)
 const ManagementOrganizationsProductsIndex = () => import('~/pages/management/organizations/products/index').then(m => m.default || m)
@@ -208,6 +209,13 @@ const routes = [
                   breadcrumb: 'Редактирование'
                 },
                 component: ManagementOrganizationsEdit
+              },
+              { path: 'services',
+                name: 'management.organizations.services',
+                meta: {
+                  breadcrumb: 'Платные услуги'
+                },
+                component: ManagementOrganizationsServices
               },
               { path: 'products',
                 component: ManagementOrganizationsProductsHome,

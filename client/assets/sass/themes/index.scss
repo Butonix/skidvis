@@ -54,7 +54,20 @@
         //    background: $primary_; /* Firefox */
         //  }
         //}
-
+        .checkbox-toggle {
+          input {
+            & + div {
+              border-color: rgba($primary_, .2);
+              svg {
+                stroke: $primary_;
+              }
+              &:before,
+              &:after {
+                background: $primary_;
+              }
+            }
+          }
+        }
 
         .wish-list {
           &__flag.simple {
@@ -244,5 +257,6 @@
         background: $primary_!important;
       }
     }
+
   }
 }

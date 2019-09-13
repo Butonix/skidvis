@@ -44,7 +44,7 @@
               :is-edit="true"
               :images="images"
             >
-              <div class="product__slider__label">
+              <div class="products-edit__label">
                 <dynamic-label-input
                   v-if="form.currency_id !== 3"
                   v-model="form.value"
@@ -52,26 +52,42 @@
                   class-input="ff-open-sans"
                 />
                 <div :class="{'active': form.currency_id === 1}"
-                     class="product__currency-svg"
+                     class="products-edit__currency-svg"
                      @click="form.currency_id = 1">
                   <percent-btn/>
                   <br>
                   Скидка в %
                 </div>
                 <div :class="{'active': form.currency_id === 2}"
-                     class="product__currency-svg"
+                     class="products-edit__currency-svg"
                      @click="form.currency_id = 2">
                   <rub-btn/>
                   <br>
                   Скидка в ₽
                 </div>
                 <div :class="{'active': form.currency_id === 3}"
-                     class="product__currency-svg"
+                     class="products-edit__currency-svg"
                      @click="form.currency_id = 3">
                   <present-btn/>
                   <br>
                   Подарок
                 </div>
+              </div>
+              <div v-if="organization.is_caption" class="products-edit__caption">
+                <div class="d-flex small justify-content-between">
+                  <div>
+                    Подпись к скидке
+                  </div>
+                  <div>{{ form.caption?form.caption.length:0 }}/30</div>
+                </div>
+                <div>
+                  <input v-model="form.caption" type="text">
+                </div>
+                <no-ssr>
+                  <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('caption') }">
+                    <has-error :form="form" field="caption"/>
+                  </div>
+                </no-ssr>
               </div>
             </full-slider>
             <thumbs-file-input
@@ -90,15 +106,15 @@
             </no-ssr>
           </div>
 
-          <div class="order-1 order-lg-2 d-xs-flex pt-2 mt-1 mb-4">
+          <div class="order-1 order-lg-2 d-xs-flex flex-wrap pt-2 mt-1 mb-4">
             <router-link
               :to="{ name: 'organizations.show', params: { organizationId } }"
-              :style="{backgroundColor: (form.organization_color)?form.organization_color:'#FFFFFF'}"
+              :style="{backgroundColor: (organization.logo.color)?organization.logo.color:'#FFFFFF'}"
               class="product__logo mr-4 mb-3">
               <img
-                v-lazy="form.organization_logo || '/placeholders/logo.svg'"
-                :alt="form.name"
-                :title="form.name"
+                v-lazy="organization.logo.src || '/placeholders/logo.svg'"
+                :alt="organization.name"
+                :title="organization.name"
                 src="/placeholders/96x35-1920x700.gif"
               >
             </router-link>
@@ -162,6 +178,7 @@
 
           <sidebar
             :form="form"
+            :organization="organization"
             :socials="form.socials"
             :value="form.value"
             :currency-id="form.currency_id"
@@ -175,6 +192,8 @@
             @onEditSelect="onEditSelect($event)"
             @onEditSocial="onEditSocial"
             @onInputDate="onInputDate"
+            @onClickCategory="form.main_category_id = $event"
+            @setIsAdvertisement="form.is_advertisement = $event"
           />
 
           <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -241,6 +260,7 @@
         </div>
         <sidebar
           :form="form"
+          :organization="organization"
           :socials="form.socials"
           :value="form.value"
           :currency-id="form.currency_id"
@@ -253,6 +273,8 @@
           @onEditSelect="onEditSelect($event)"
           @onEditSocial="onEditSocial"
           @onInputDate="onInputDate"
+          @onClickCategory="form.main_category_id = $event"
+          @setIsAdvertisement="form.is_advertisement = $event"
         />
       </div>
 
@@ -514,15 +536,19 @@ export default {
     let images = []
     let productId = params.productId
     let organizationId = params.organizationId
+    let organization = {}
     let form = {
       origin_price: 0,
       currency_id: 1,
       is_published: false,
+      is_advertisement: false,
       tags: [],
       auditories: [],
       holidays: [],
       categories: [],
       name: '',
+      caption: '',
+      main_category_id: null,
       value: '',
       description: '',
       start_at: '',
@@ -531,6 +557,14 @@ export default {
       socials: [],
       points: [],
       images: []
+    }
+    if (organizationId) {
+      try {
+        let { data } = await axios.get(`management/organizations/${organizationId}/edit`)
+        organization = data.organization
+      } catch (e) {
+        error({ statusCode: e.response.status })
+      }
     }
     if (productId) {
       try {
@@ -543,6 +577,7 @@ export default {
     }
 
     return {
+      organization,
       organizationId,
       productId,
       form,
@@ -633,6 +668,32 @@ export default {
     'form.currency_id': function (v) {
       if (v === 1 && this.form.value && Number(this.form.value) > 100) {
         this.$set(this.form, 'value', 100)
+      }
+    },
+    'form.categories': function (v) {
+      if (!v || (v && v.length === 0)) {
+        this.$set(this.form, 'main_category_id', null)
+      } else {
+        if (this.form.main_category_id) {
+          let exist = false
+          for (let i in v) {
+            let cat = v[i]
+            if (cat.id === this.form.main_category_id) {
+              exist = true
+            }
+          }
+          if (!exist) {
+            if (v[0] && v[0].id) {
+              this.$set(this.form, 'main_category_id', v[0].id)
+            } else {
+              this.$set(this.form, 'main_category_id', null)
+            }
+          }
+        } else {
+          if (v[0] && v[0].id) {
+            this.$set(this.form, 'main_category_id', v[0].id)
+          }
+        }
       }
     },
     selectSearch () {

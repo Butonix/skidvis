@@ -1,10 +1,5 @@
 <template>
   <footer class="footer">
-    <div class="container">
-      <p v-if="$route.name === 'welcome' || $route.name === 'products.index'" class="footer__desc">
-        Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.
-      </p>
-    </div>
     <div class="footer__content">
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
@@ -81,6 +76,11 @@
             />
           </div>
         </div>
+      </div>
+      <div class="container">
+        <p v-if="$route.name === 'welcome' || $route.name === 'products.index'" class="footer__desc">
+          Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.
+        </p>
       </div>
       <div class="text-center">
         <router-link :to="{ name: 'policy' }" class="nav-link"

@@ -71,6 +71,11 @@
             </network>
           </div>
         </social-sharing>
+        <p v-if="product.organization_link" class="pt-2 mb-0 small">
+          <a class="text-muted link-dashed" :href="product.organization_link" target="_blank">
+            Сайт компании
+          </a>
+        </p>
       </template>
     </list-item-icon>
 

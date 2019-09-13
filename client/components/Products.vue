@@ -74,9 +74,12 @@
                     </div>
                   </div>
                 </router-link>
-                <label class="card-body pb-2 pt-4"
-                       v-html="(item.name)?splitReplaceShort(item.name, 94):''"
-                />
+                <div class="card-body pb-2 pt-4 mb-2">
+                  <div v-if="item.caption && item.organization_is_caption" class="card-caption">
+                    {{ item.caption }}
+                  </div>
+                  <span v-html="(item.name)?splitReplaceShort(item.name, 94):''"/>
+                </div>
                 <div :class="{'active': activeAddresses === item.id}"
                      class="card-footer">
                   <div class="card-footer__address">

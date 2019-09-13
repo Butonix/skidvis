@@ -80,6 +80,14 @@
                     <span class="px-2">Акции</span>
                   </router-link>
                 </div>
+                <div v-if="isSuperAdministrator" class="d-flex justify-content-around mb-4">
+                  <router-link
+                    :to="{ name: 'management.organizations.services', params: { organizationId: item.id } }"
+                    class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
+                    @click.native="$sTB()">
+                    <span class="px-2">Платные сервисы</span>
+                  </router-link>
+                </div>
               </div>
               <div v-if="isAdministrator" class="card-buttons mt-auto text-nowrap">
                 <router-link :to="{ name: 'management.organizations.edit', params: { organizationId: item.id } }"
@@ -160,6 +168,7 @@ export default {
     errorsImages: {}
   }),
   computed: mapGetters({
+    isSuperAdministrator: 'auth/isSuperAdministrator',
     isAdministrator: 'auth/isAdministrator',
     isManagement: 'auth/isManagement'
   }),

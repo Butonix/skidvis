@@ -113,39 +113,6 @@
             />
 
             <div class="row">
-              <div v-if="isSuperAdministrator" class="col-12">
-                <p>Тип иконки на карте:</p>
-              </div>
-              <div v-if="isSuperAdministrator" class="col-12 col-xs-auto">
-                <div class="mb-3">
-                  <div class="mb-2">
-                    <div :class="{'active':form.type_map_point === 1}"
-                         class="orgs-edit__btn-map-point"
-                         @click="form.type_map_point = 1"
-                    >
-                      <div class="orgs-edit__map-point mr-1">
-                        <img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="/img/map/kegl.svg">
-                      </div>
-                      <div class="orgs-edit__btn-map-point__text">
-                        Иконка категории
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-2">
-                    <div :class="{'active':form.type_map_point === 2}"
-                         class="orgs-edit__btn-map-point"
-                         @click="form.type_map_point = 2"
-                    >
-                      <div class="orgs-edit__map-point mr-1">
-                        <img style="width: 32px; height: 32px;" src="/img/map/logo.svg">
-                      </div>
-                      <div class="orgs-edit__btn-map-point__text">
-                        Логотип организации
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="col-12 col-xs">
                 <p v-if="form.type_map_point === 1" class="text-center">
                   <org-demo-map-point class="d-inline-block mb-1"/>
@@ -251,13 +218,23 @@
       <div class="d-flex align-items-center justify-content-center h-100">
         <router-link
           :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
-          class="btn btn-gray btn-sm px-4 mr-2">
+          class="btn btn-gray btn-sm px-4 mr-2"
+          @click.native="$sTB()">
           <span class="px-2">Адреса</span>
         </router-link>
         <router-link
           :to="{ name: 'management.organizations.products.index', params: { organizationId } }"
-          class="btn btn-gray btn-sm px-4">
+          class="btn btn-gray btn-sm px-4"
+          @click.native="$sTB()">
           <span class="px-2">Акции</span>
+        </router-link>
+      </div>
+      <div v-if="isSuperAdministrator" class="d-flex justify-content-around mt-3">
+        <router-link
+          :to="{ name: 'management.organizations.services', params: { organizationId } }"
+          class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
+          @click.native="$sTB()">
+          <span class="px-2">Платные сервисы</span>
         </router-link>
       </div>
     </div>

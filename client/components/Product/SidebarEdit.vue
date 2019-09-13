@@ -29,6 +29,12 @@
             <has-error :form="form" field="start_at"/>
           </div>
         </no-ssr>
+
+        <div v-if="organization.is_advertisement" class="pt-3">
+          <v-checkbox :value="form.is_advertisement" @input="$emit('setIsAdvertisement', $event)">
+            Рекламировать
+          </v-checkbox>
+        </div>
       </template>
     </list-item-icon>
 
@@ -110,8 +116,10 @@
         v-for="(category, key) in categories"
         :key="'categories-selected-'+key"
         :label="category.name"
+        :active="(form.main_category_id && category.id === form.main_category_id)"
         :src-active="category.images.business.active || '/img/categories/entertainment/entertainment-default-active.svg'"
         :src="category.images.business.normal || '/img/categories/entertainment/entertainment-default-normal.svg'"
+        @click="$emit('onClickCategory', category.id)"
       />
     </categories>
 
@@ -119,7 +127,6 @@
       <div class="btn btn-outline-primary btn-sm px-4"
            @click="$emit('onEditSelect', 'categories')" v-text="(categories.length)?'Изменить категории':'Выбрать категории'"/>
     </div>
-
   </div>
 </template>
 
@@ -137,6 +144,7 @@ import { Russian } from 'flatpickr/dist/l10n/ru'
 
 export default {
   components: {
+    'VCheckbox': () => import('~/components/Edit/Checkboxes/v-checkbox'),
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
     flatPickr,
     Hourglass,
@@ -186,6 +194,10 @@ export default {
       default: ''
     },
     form: {
+      type: Object,
+      default: () => ({})
+    },
+    organization: {
       type: Object,
       default: () => ({})
     }

@@ -2,7 +2,7 @@ export default {
   data: () => ({
     markerIcon: {
       layout: 'default#imageWithContent',
-      imageHref: '/img/map/icon2.svg',
+      imageHref: 'https://admin.skidvis.ru/api/1/map/icon',
       imageSize: [34, 47],
       imageOffset: [-17, -47],
       content: '<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="/img/map/kegl.svg">',
@@ -16,6 +16,7 @@ export default {
       if (point.img) {
         if (point.type_point_map === 1) {
           return { ...this.markerIcon,
+            imageHref: 'https://admin.skidvis.ru/api/1/map/icon' + ((point.color) ? '/' + point.color.replace('#', '%23') : ''),
             content: `<img style="margin-left: -3px; margin-top: -3px; width: 38px; height: 38px;" src="${point.img}">`
           }
         } else {

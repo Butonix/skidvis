@@ -46,6 +46,8 @@
             />
           </div>
 
+
+
           <sidebar
             :product="product"
             :wishlist-active="wishlist.indexOf(productId) !== -1"
@@ -245,6 +247,14 @@ export default {
     let productId = params.productId
     let city = app.store.getters['auth/city']
     let res = {
+      similar: [],
+      similarParams: {
+        is_active: 1,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        perPage: 4,
+        categories: []
+      },
       mapPoints: [],
       productId,
       review: {
@@ -278,6 +288,21 @@ export default {
       }
     } else {
       error({ statusCode: 404 })
+    }
+
+    if (res.product && res.product.is_all_similar) {
+      let categories = []
+      for (let i in res.product.categories) {
+        categories.push(res.product.categories[i].id)
+      }
+      res.similarParams.categories = categories
+      try {
+        let { data } = await axios.get(`products`, {
+          params: res.similarParams
+        })
+        res.similar = data.list.data
+      } catch (e) {
+      }
     }
 
     return res

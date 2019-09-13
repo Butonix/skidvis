@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="filter.favorites.length">
-      <div class="d-flex justify-content-between">
-        <div class="text-muted small mb-2" v-html="title"/>
-        <div class=" mb-2">
+      <div class="d-flex">
+        <div class="text-muted small mb-2 d-none" v-html="title"/>
+        <div class="ml-auto mb-2">
           <a v-if="urlQuery[name] && urlQuery[name].length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
              @click="$emit('clearfilter')">
             Сбросить
