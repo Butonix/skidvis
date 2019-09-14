@@ -205,6 +205,7 @@ export default {
   },
   asyncData: async ({ params, error, app, query }) => {
     let data = await List.getStartData({
+      error,
       query,
       cbResponse ({ data, getFromPath }) {
         let r = {}

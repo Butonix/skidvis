@@ -225,6 +225,7 @@ const List = BuildList({
     }
   },
   apiQuery: {
+    with_advertisement: 1,
     is_active: 1
   },
   urlQuery: {
@@ -286,18 +287,15 @@ export default {
     if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
       await app.store.dispatch('auth/setCity', query.city_id)
     }
-
-    let data = await List.getStartData({
+    let res = await List.getStartData({
+      error,
       query,
-      defaultApiQuery: {
-
-      },
       defaultUrlQuery: {
         city_id: city.id
       }
     })
 
-    return data
+    return res
   },
   data: () => ({
 

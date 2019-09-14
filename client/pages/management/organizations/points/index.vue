@@ -322,6 +322,7 @@ export default {
   asyncData: async ({ params, error, app, query }) => {
     let organizationId = params.organizationId
     let data = await List.getStartData({
+      error,
       query,
       defaultData: {
         apiUrl: `management/organizations/${organizationId}/points`

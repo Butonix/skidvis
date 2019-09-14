@@ -190,6 +190,7 @@ export default {
     }
 
     let dataProd = await List.getStartData({
+      error,
       query,
       defaultData: {
         apiUrl: `organizations/${organizationId}/products`

@@ -130,6 +130,7 @@ export default {
 
     if (check) {
       data = await List.getStartData({
+        error,
         query,
         defaultData: {
           apiUrl: 'user/bookmarks'
@@ -143,6 +144,7 @@ export default {
         bookmarks = [0]
       }
       data = await List.getStartData({
+        error,
         query,
         defaultData: {
           apiUrl: 'articles'

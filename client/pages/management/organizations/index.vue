@@ -156,6 +156,7 @@ export default {
   },
   asyncData: async ({ query, error }) => {
     let data = await List.getStartData({
+      error,
       query,
       defaultUrlQuery: {
         perPage: 11

@@ -168,6 +168,7 @@ export default {
     }
 
     let data = await List.getStartData({
+      error,
       query,
       defaultUrlQuery: {
         city_id: city.id

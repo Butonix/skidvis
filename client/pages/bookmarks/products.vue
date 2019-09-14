@@ -96,6 +96,7 @@ export default {
 
     if (check) {
       data = await List.getStartData({
+        error,
         query,
         defaultData: {
           apiUrl: 'user/wishlist'
@@ -106,6 +107,7 @@ export default {
         wishlist = [0]
       }
       data = await List.getStartData({
+        error,
         query,
         defaultData: {
           apiUrl: 'products'
