@@ -44,9 +44,27 @@
               class="tag mx-1 mb-2"
               v-text="tag.name"
             />
+
+            <div v-if="similar.length" class="row pt-3 pt-xs-4">
+              <div class="col px-2 d-none d-xs-block pb-2">
+                <card-mini v-if="similar[0]" :item="similar[0]"/>
+              </div>
+              <div class="col px-2 d-none d-xs-block pb-2">
+                <card-mini v-if="similar[1]" :item="similar[1]"/>
+              </div>
+              <div class="col px-2 d-none d-md-block pb-2">
+                <card-mini v-if="similar[2]" :item="similar[2]"/>
+              </div>
+              <div class="col-12">
+                <router-link
+                  :to="{ name: 'products.index', query: {categories: similarParams.categories} }"
+                  class="link-dotted d-inline-block text-black-50">
+                  Все похожие <span class="d-xs-none">акции</span>
+                </router-link>
+              </div>
+            </div>
+
           </div>
-
-
 
           <sidebar
             :product="product"
@@ -223,6 +241,7 @@ import mapMixin from '~/mixins/map'
 
 export default {
   components: {
+    'CardMini': () => import('~/components/Product/CardMini'),
     'PresentPage': () => import('~/components/Icons/PresentPage'),
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
@@ -252,7 +271,7 @@ export default {
         is_active: 1,
         ordering: 'created_at',
         orderingDir: 'desc',
-        perPage: 4,
+        perPage: 3,
         categories: []
       },
       mapPoints: [],
