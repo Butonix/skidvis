@@ -127,6 +127,13 @@
       <div class="btn btn-outline-primary btn-sm px-4"
            @click="$emit('onEditSelect', 'categories')" v-text="(categories.length)?'Изменить категории':'Выбрать категории'"/>
     </div>
+
+    <no-ssr>
+      <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('categories') }">
+        <has-error :form="form" field="categories"/>
+      </div>
+    </no-ssr>
+
   </div>
 </template>
 
