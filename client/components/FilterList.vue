@@ -5,9 +5,7 @@
         <div class="text-muted small mb-2 d-none" v-html="title"/>
         <div class="ml-auto mb-2">
           <a v-if="urlQuery[name] && urlQuery[name].length" href="javascript:void(0)" class="mr-2 text-muted small cursor-pointer"
-             @click="$emit('clearfilter')">
-            Сбросить
-          </a>
+             @click="$emit('clearfilter')" v-text="'Сбросить'"/>
           <a href="javascript:void(0)" class="text-muted small cursor-pointer"
              @click="$emit('handleall')">
             Все <chevron style="transform-origin: center; transform: rotate(-90deg)"/>
@@ -36,9 +34,7 @@
                 />
                 <div v-if="urlQuery[name] && urlQuery[name].length" class="pl-3">
                   <div class="btn btn-primary btn-sm"
-                       @click="$emit('clearfilter')">
-                    Сбросить
-                  </div>
+                       @click="$emit('clearfilter')" v-text="'Сбросить'"/>
                 </div>
               </div>
               <categories v-if="btnType === '' || btnType === 'categories'">

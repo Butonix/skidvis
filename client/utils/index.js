@@ -227,11 +227,33 @@ export function mapPointSlide ({ inc = 1, id, count, key }) {
   }
 }
 
-export function getFavicon (type) {
+export function getSplitText (str, length) {
+  if (!str) {
+    return ''
+  }
+  str = str.replaceAll('\n', ' ')
+  if (str.length > length) {
+    str = str.slice(0, length - 3).trim()
+    str += '...'
+  }
+
+  return str
+}
+
+export function getTitle (title) {
+  return getSplitText(title, 70)
+}
+
+export function getDesc (desc) {
+  return { hid: 'description', name: 'description', content: ((desc) ? getSplitText(desc, 100) : 'Скидвис') }
+}
+
+export function getFavicon (type, desc) {
   switch (type) {
     case 'blog':
       return {
         meta: [
+          getDesc(desc),
           { name: 'msapplication-TileColor', content: '#ffffff' },
           { name: 'msapplication-config', content: '/favicon/blog/browserconfig.xml' },
           { name: 'theme-color', content: '#ffffff' }
@@ -248,6 +270,7 @@ export function getFavicon (type) {
     case 'business':
       return {
         meta: [
+          getDesc(desc),
           { name: 'msapplication-TileColor', content: '#ffffff' },
           { name: 'msapplication-config', content: '/favicon/business/browserconfig.xml' },
           { name: 'theme-color', content: '#ffffff' }
@@ -264,6 +287,7 @@ export function getFavicon (type) {
     default:
       return {
         meta: [
+          getDesc(desc),
           { name: 'msapplication-TileColor', content: '#ffffff' },
           { name: 'msapplication-config', content: '/favicon/default/browserconfig.xml' },
           { name: 'theme-color', content: '#ffffff' }

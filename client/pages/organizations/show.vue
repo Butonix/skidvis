@@ -123,7 +123,7 @@
 
 <script>
 import BuildList from '~/mixins/list'
-import { getFavicon } from '~/utils'
+import { getFavicon, getTitle } from '~/utils'
 import { mapGetters } from 'vuex'
 import Form from 'vform'
 import axios from 'axios'
@@ -173,8 +173,12 @@ export default {
   },
   mixins: [List.mixin],
   head () {
+    let title = 'Организация'
+    if (this.organization) {
+      title = getTitle(this.organization.name)
+    }
     return {
-      title: 'Организация',
+      title,
       bodyAttrs: {
         class: 'theme-default navbar-fixed'
       },

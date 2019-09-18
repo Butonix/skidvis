@@ -113,7 +113,7 @@ export default {
       bodyAttrs: {
         class: 'theme-business'
       },
-      ...getFavicon('business')
+      ...getFavicon('business', 'Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.')
     }
   },
   middleware: ['reactData'],

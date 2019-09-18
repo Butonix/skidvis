@@ -1,20 +1,18 @@
 <template>
   <div v-if="articles.length" class="mt-5">
     <div class="d-flex flex-column flex-xs-row justify-content-between">
-      <h5 class="mb-1 mb-xs-3">
-        Недавно смотрели
-      </h5>
-      <div class="mb-3">
+      <h5 class="mb-1 mb-xs-3" v-html="title"/>
+      <div v-if="showCount" class="mb-3">
         {{ articles.length }} за 24 часа
       </div>
     </div>
-    <div class="category-icons--scroll mx-0">
+    <div class="articles-row-line">
       <div ref="viewport"
-           class="category-icons--scroll__viewport"
+           class="articles-row-line__viewport"
            @mousedown="onMousedown">
         <div ref="content"
              :style="`transform: translateX(${scrollLeft}px)`"
-             class="category-icons--scroll__wrapper align-items-stretch">
+             class="articles-row-line__wrapper align-items-stretch">
           <card
             v-for="(item, index) in articles"
             :disabled="true"
@@ -39,6 +37,14 @@ export default {
     'Card': () => import('~/components/Blog/Card')
   },
   props: {
+    title: {
+      type: String,
+      default: 'Недавно смотрели'
+    },
+    showCount: {
+      type: Boolean,
+      default: true
+    },
     articles: {
       type: Array,
       required: true

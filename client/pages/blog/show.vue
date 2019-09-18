@@ -89,6 +89,12 @@
       </div>
 
       <visited-slider
+        :show-count="false"
+        :articles="getSimilarArticles"
+        title="Похожие статьи"
+      />
+
+      <visited-slider
         :articles="getVisitedArticles"
       />
 
@@ -97,7 +103,7 @@
 </template>
 
 <script>
-import { getFavicon } from '~/utils'
+import { getFavicon, getTitle } from '~/utils'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
@@ -108,8 +114,12 @@ export default {
     'ShareBox': () => import('~/components/ShareBox')
   },
   head () {
+    let title = 'Статья'
+    if (this.article) {
+      title = getTitle(this.article.name)
+    }
     return {
-      title: 'Статья',
+      title,
       bodyAttrs: {
         class: 'theme-blog'
       },
@@ -120,6 +130,13 @@ export default {
   asyncData: async ({ params, error, app, query }) => {
     let articleId = params.articleId
     let res = {
+      similarParams: {
+        responseTypeId: 2,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        perPage: 6,
+        categories: []
+      },
       articleId,
       visitedArticles: [],
       visitedArticlesIds: await app.store.dispatch('auth/getArticlesArray')
@@ -172,6 +189,21 @@ export default {
       }
     }
 
+    if (res.article) {
+      let categories = []
+      for (let i in res.article.categories) {
+        categories.push(res.article.categories[i].id)
+      }
+      res.similarParams.categories = categories
+      try {
+        let { data } = await axios.get(`articles`, {
+          params: res.similarParams
+        })
+        res.similar = data.list.data
+      } catch (e) {
+      }
+    }
+
     return res
   },
   data: () => ({
@@ -182,6 +214,9 @@ export default {
       check: 'auth/check',
       user: 'auth/user'
     }),
+    getSimilarArticles () {
+      return this.similar
+    },
     getVisitedArticles () {
       return this.visitedArticles
     },

@@ -47,8 +47,7 @@ module.exports = {
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Skidvis' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       // { name: 'msapplication-TileColor', content: '#ffffff' },
       // { name: 'msapplication-config', content: '/favicon/browserconfig.xml' },
       // { name: 'theme-color', content: '#ffffff' }

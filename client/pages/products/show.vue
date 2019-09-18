@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import { getFavicon } from '~/utils'
+import { getFavicon, getTitle } from '~/utils'
 import { mapGetters, mapActions } from 'vuex'
 import Fuse from 'fuse.js'
 import axios from 'axios'
@@ -254,8 +254,12 @@ export default {
   },
   mixins: [mapMixin],
   head () {
+    let title = 'Акция'
+    if (this.product) {
+      title = getTitle(this.product.name)
+    }
     return {
-      title: 'Акция',
+      title: title,
       bodyAttrs: {
         class: 'theme-default'
       },
@@ -324,6 +328,12 @@ export default {
       }
     }
 
+    if (res.product.conditions) {
+      res.tab = 'circs'
+    } else {
+      res.tab = 'desc'
+    }
+
     return res
   },
   data: () => ({
@@ -353,7 +363,7 @@ export default {
     tab: 'circs',
     search: '',
     fusePoints: null,
-    map: null,
+    map: null
   }),
   computed: {
     ...mapGetters({
