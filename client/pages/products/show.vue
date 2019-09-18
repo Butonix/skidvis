@@ -45,17 +45,14 @@
               v-text="tag.name"
             />
 
-            <div v-if="similar.length" class="row pt-3 pt-xs-4">
-              <div class="col px-2 d-none d-xs-block pb-2">
-                <card-mini v-if="similar[0]" :item="similar[0]"/>
-              </div>
-              <div class="col px-2 d-none d-xs-block pb-2">
-                <card-mini v-if="similar[1]" :item="similar[1]"/>
-              </div>
-              <div class="col px-2 d-none d-md-block pb-2">
-                <card-mini v-if="similar[2]" :item="similar[2]"/>
-              </div>
-              <div class="col-12">
+            <div v-if="similar.length">
+              <visited-slider
+                :products="similar"
+                :show-count="false"
+                class="mt-4"
+                title=""
+              />
+              <div class="pt-2">
                 <router-link
                   :to="{ name: 'products.index', query: {categories: similarParams.categories} }"
                   class="link-dotted d-inline-block text-black-50">
@@ -172,6 +169,10 @@
 
     </div>
 
+    <div class="container">
+      <visited-slider :products="visitedProducts" class="mt-5"/>
+    </div>
+
     <div id="reviews" class="container mt-5">
       <div class="row">
         <div class="col-lg-10 col-xl-8 mb-4">
@@ -241,6 +242,7 @@ import mapMixin from '~/mixins/map'
 
 export default {
   components: {
+    'VisitedSlider': () => import('~/components/Product/VisitedSlider'),
     'CardMini': () => import('~/components/Product/CardMini'),
     'PresentPage': () => import('~/components/Icons/PresentPage'),
     'Review': () => import('~/components/Review'),
@@ -253,6 +255,7 @@ export default {
     FullSlider
   },
   mixins: [mapMixin],
+  middleware: ['show'],
   head () {
     let title = 'Акция'
     if (this.product) {
@@ -280,6 +283,8 @@ export default {
       },
       mapPoints: [],
       productId,
+      visitedProducts: [],
+      visitedProductsIds: await app.store.dispatch('auth/getVisitedArray', 'products'),
       review: {
         form: {
           text: '',
@@ -332,6 +337,40 @@ export default {
       res.tab = 'circs'
     } else {
       res.tab = 'desc'
+    }
+
+    let visitedProductsTimes = await app.store.getters['auth/products']
+
+    if (res.visitedProductsIds.length) {
+      try {
+        let { data } = await axios.get('products', {
+          params: {
+            ordering: 'created_at',
+            orderingDir: 'desc',
+            perPage: 1000,
+            is_active: 1,
+            whereIn: res.visitedProductsIds
+            // responseTypeId: 2,
+          }
+        })
+        for (let i in data.list.data) {
+          let product = data.list.data[i]
+          product.visitedTime = visitedProductsTimes[product.id] || 0
+          res.visitedProducts.push(product)
+        }
+        res.visitedProducts = res.visitedProducts.sort((a, b) => {
+          if (a.visitedTime < b.visitedTime) {
+            return 1
+          }
+          if (a.visitedTime > b.visitedTime) {
+            return -1
+          }
+          return 0
+        })
+      } catch (e) {
+        console.log(e)
+        error({ statusCode: 500, message: 'Упс' })
+      }
     }
 
     return res

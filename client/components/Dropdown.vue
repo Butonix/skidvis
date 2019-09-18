@@ -4,7 +4,7 @@
        class="dropdown-group">
     <div v-if="value.name"
          :class="{[btnClass]: !!btnClass}"
-         class="dropdown-toggle"
+         class="dropdown-toggle text-nowrap"
          @click="toggleMenu"
     >
       {{ value.name }}
@@ -13,7 +13,7 @@
 
     <div v-else
          :class="{[btnClass]: !!btnClass}"
-         class="dropdown-toggle"
+         class="dropdown-toggle text-nowrap"
          @click="toggleMenu">
       {{ placeholder }}
       <chevron class="caret ml-2"/>

@@ -28,6 +28,11 @@ export const actions = {
       commit('auth/SET_ARTICLES', articles)
     }
 
+    let products = cookieFromRequest(req, 'products', true)
+    if (products) {
+      commit('auth/SET_PRODUCTS', products)
+    }
+
     const locale = cookieFromRequest(req, 'locale')
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
@@ -58,6 +63,11 @@ export const actions = {
     const articles = Cookies.getJSON('articles')
     if (articles) {
       commit('auth/SET_ARTICLES', articles)
+    }
+
+    const products = Cookies.getJSON('products')
+    if (products) {
+      commit('auth/SET_PRODUCTS', products)
     }
 
     const locale = Cookies.get('locale')

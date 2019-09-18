@@ -129,7 +129,7 @@
     </h5>
 
     <div class="container">
-      <visited-slider
+      <visited-slider class="mt-5"
         :articles="getVisitedArticles"
       />
     </div>
@@ -228,7 +228,7 @@ export default {
     })
 
     let visitedArticles = []
-    let visitedArticlesIds = await app.store.dispatch('auth/getArticlesArray')
+    let visitedArticlesIds = await app.store.dispatch('auth/getVisitedArray', 'articles')
     let visitedArticlesTimes = await app.store.getters['auth/articles']
 
     if (visitedArticlesIds.length) {

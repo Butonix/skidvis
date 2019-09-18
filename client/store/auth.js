@@ -28,6 +28,7 @@ export const state = () => ({
   token: null,
   cities: [],
   articles: {},
+  products: {},
   blog: {
     status: false
   }
@@ -37,6 +38,7 @@ export const state = () => ({
 export const getters = {
   blog: state => state.blog,
   articles: state => state.articles,
+  products: state => state.products,
   user: state => state.user,
   token: state => state.token,
   city: state => state.user.city,
@@ -56,8 +58,14 @@ export const mutations = {
   SET_ARTICLES (state, articles) {
     state.articles = articles
   },
-  ADD_ARTICLE (state, id) {
+  ADD_ARTICLES (state, id) {
     state.articles[id] = Number(moment().format('x'))
+  },
+  SET_PRODUCTS (state, products) {
+    state.products = products
+  },
+  ADD_PRODUCTS (state, id) {
+    state.products[id] = Number(moment().format('x'))
   },
   SET_CITY (state, city) {
     state.user.city = { ...state.city }
@@ -152,34 +160,34 @@ export const actions = {
       console.log(e)
     }
   },
-  getArticlesArray ({ getters, dispatch }) {
-    let articlesObj = {}
-    let articles = []
-    for (let i in getters.articles) {
+  getVisitedArray ({ getters, dispatch }, type) {
+    let obj = {}
+    let array = []
+    for (let i in getters[type]) {
       try {
-        if (getters.articles[i] >= (Number(moment().format('x')) - 86400000)) {
-          articlesObj[i] = getters.articles[i]
+        if (getters[type][i] >= (Number(moment().format('x')) - 86400000)) {
+          obj[i] = getters[type][i]
           let id = Number(i)
           if (!Number.isNaN(id)) {
-            articles.push(id)
+            array.push(id)
           }
         }
       } catch (e) {
       }
     }
-    dispatch('saveArticle', articlesObj)
-    return articles
+    dispatch('saveVisited', { type, obj })
+    return array
   },
-  addArticle ({ commit, getters, dispatch }, id) {
-    commit('ADD_ARTICLE', id)
-    dispatch('saveArticle')
-  },
-  saveArticle ({ commit, getters, dispatch }, articles) {
-    if (!articles) {
-      articles = getters.articles
+  saveVisited ({ commit, getters, dispatch }, { type, obj }) {
+    if (!obj) {
+      obj = getters[type]
     }
-    commit('SET_ARTICLES', articles)
-    Cookies.set('articles', articles, { expires: 1 })
+    commit('SET_' + type.toUpperCase(), obj)
+    Cookies.set([type], obj, { expires: 1 })
+  },
+  addVisited ({ commit, getters, dispatch }, { type, id }) {
+    commit('ADD_' + type.toUpperCase(), id)
+    dispatch('saveVisited', { type })
   },
   async postWishlist ({ getters }) {
     Cookies.set('wishlist', getters.wishlist, { expires: 365 })

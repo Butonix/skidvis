@@ -88,13 +88,13 @@
         </div>
       </div>
 
-      <visited-slider
+      <visited-slider class="mt-5"
         :show-count="false"
         :articles="getSimilarArticles"
         title="Похожие статьи"
       />
 
-      <visited-slider
+      <visited-slider class="mt-5"
         :articles="getVisitedArticles"
       />
 
@@ -126,7 +126,7 @@ export default {
       ...getFavicon('blog')
     }
   },
-  middleware: ['article'],
+  middleware: ['show'],
   asyncData: async ({ params, error, app, query }) => {
     let articleId = params.articleId
     let res = {
@@ -139,7 +139,7 @@ export default {
       },
       articleId,
       visitedArticles: [],
-      visitedArticlesIds: await app.store.dispatch('auth/getArticlesArray')
+      visitedArticlesIds: await app.store.dispatch('auth/getVisitedArray', 'articles')
     }
 
     if (articleId) {
@@ -223,11 +223,6 @@ export default {
     getArticleContent () {
       return this.article.content.replaceAll('contenteditable="true"', '')
     }
-  },
-  methods: {
-    ...mapActions({
-      'addArticle': 'auth/addArticle'
-    })
   }
 }
 </script>
