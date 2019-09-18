@@ -55,5 +55,17 @@
     top: .1rem;
     font-size: 1.4rem;
   }
+  &__close{
+    position: absolute;
+    right: 2rem;
+    top: .1rem;
+    font-size: 1.4rem;
+    color: #9299A2;
+    opacity: .7;
+    cursor: pointer;
+    &:hover{
+      opacity: 1;
+    }
+  }
 }
 

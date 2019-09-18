@@ -1,7 +1,7 @@
 <template>
   <div class="position-relative">
     <transition
-      v-if="getItems.length"
+      v-if="false"
       name="fade" mode="out-in">
       <div class="animated-circles__wrapper">
         <div v-for="n in (Math.ceil(getItems.length/12))" :key="'block-a-c-'+n" class="animated-circles">

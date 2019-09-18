@@ -19,6 +19,9 @@
       @keyup="$emit('keyup', $event)"
     >
     <div class="search-input__line"/>
+    <div v-if="value" class="search-input__close" @click="onClear">
+      <fa icon="times"/>
+    </div>
     <div class="search-input__lupe">
       <lupe/>
     </div>
@@ -67,6 +70,10 @@ export default {
     }
   },
   methods: {
+    onClear () {
+      this.$emit('input', '')
+      this.focus()
+    },
     focus () {
       setTimeout(() => {
         this.$refs.input.focus()

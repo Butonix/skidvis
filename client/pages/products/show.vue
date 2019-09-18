@@ -328,7 +328,7 @@ export default {
       }
     }
 
-    if (res.product.conditions) {
+    if (res.product && res.product.conditions) {
       res.tab = 'circs'
     } else {
       res.tab = 'desc'

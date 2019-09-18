@@ -43,7 +43,17 @@
         </div>
       </div>
       <div class="mb-5">
-        <h5 class="text-black text-center mb-5" v-text="organization.name"/>
+        <div class="mb-5 text-center">
+          <h5 class="text-black" v-text="organization.name"/>
+          <a v-if="organization.link" :href="organization.link" target="_blank" class="link-dotted d-inline-block text-black-50 mb-2" v-text="getDomain(organization.link)"/>
+          <br v-if="organization.phone || organization.email">
+          <a v-if="organization.phone"
+             :href="'tel:'+getLinkTel(organization.phone)"
+             class="link-dotted d-inline-block text-black-50"
+             v-text="organization.phone"/>
+          <span v-if="organization.phone && organization.email">&mdash;</span>
+          <a v-if="organization.email" :href="'mailto:'+organization.email.trim()" class="link-dotted d-inline-block text-black-50" v-text="organization.email"/>
+        </div>
         <div class="d-flex justify-content-center align-items-center mb-4 pb-2">
           <star-rating
             :rating="organization.rating"
@@ -123,7 +133,7 @@
 
 <script>
 import BuildList from '~/mixins/list'
-import { getFavicon, getTitle } from '~/utils'
+import { getFavicon, getTitle, getDomain, getLinkTel } from '~/utils'
 import { mapGetters } from 'vuex'
 import Form from 'vform'
 import axios from 'axios'
@@ -369,6 +379,12 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    getDomain (str) {
+      return getDomain(str)
+    },
+    getLinkTel (str) {
+      return getLinkTel(str)
     }
   }
 }

@@ -103,6 +103,27 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8 orgs-edit__editor">
+
+            <div class="row">
+              <div class="col-lg-6">
+                <material-input
+                  v-model="form.phone"
+                  :form="form"
+                  type="tel"
+                  field="phone"
+                  placeholder="Телефон"
+                />
+              </div>
+              <div class="col-lg-6">
+                <material-input
+                  v-model="form.email"
+                  :form="form"
+                  field="email"
+                  placeholder="Эл. почта"
+                />
+              </div>
+            </div>
+
             <material-textarea
               v-model="form.description"
               :form="form"
@@ -306,6 +327,8 @@ export default {
         type_map_point: 1,
         link: '',
         name: '',
+        phone: null,
+        email: null,
         inn: '',
         description: '',
         short_description: '',

@@ -1,3 +1,4 @@
+const urlParser = require('url')
 
 export function isObject (v) {
   return v && typeof v === 'object' && v.constructor === Object
@@ -302,4 +303,13 @@ export function getFavicon (type, desc) {
         ]
       }
   }
+}
+
+export function getDomain (url) {
+  // eslint-disable-next-line node/no-deprecated-api
+  return urlParser.parse(url).hostname
+}
+
+export function getLinkTel (tel) {
+  return tel.replaceAll(' ', '').replaceAll('-', '').replaceAll('\\)', '').replaceAll('\\(', '').trim()
 }
