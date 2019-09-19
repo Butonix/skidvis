@@ -495,6 +495,21 @@ export default {
     },
     async onMapWasInitialized (payload) {
       this.map = payload
+
+      // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
+      let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
+
+      // Асинхронная обработка ответа.
+      location.then(
+        (result) => {
+          // Добавление местоположения на карту.
+          this.map.geoObjects.add(result.geoObjects)
+        },
+        (err) => {
+          console.log('Error map location: ' + err)
+        }
+      )
+
       // console.log(payload._bounds)
     },
     async clickMarker (e, point, key) {
@@ -610,12 +625,11 @@ export default {
       }
     },
     pointClick (point) {
-      if (point.latitude && point.longitude) {
+      if (this.map && point.latitude && point.longitude) {
         this.pointSelect = point
         setTimeout(() => {
           // https://tech.yandex.ru/maps/archive/doc/jsapi/2.0/dg/concepts/geoquery-docpage/
           window.ymaps.geoQuery(this.map.geoObjects).each(function (el) {
-            console.log(point.id, el.properties.get('markerId'))
             if (el.properties.get('markerId') === point.id) {
               // https://tech.yandex.ru/maps/jsbox/2.1/clusterer_balloon_open
               el.balloon.open()

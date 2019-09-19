@@ -444,6 +444,20 @@ export default {
         console.log('error', e)
       }
 
+      // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
+      let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
+
+      // Асинхронная обработка ответа.
+      location.then(
+        (result) => {
+          // Добавление местоположения на карту.
+          this.map.geoObjects.add(result.geoObjects)
+        },
+        (err) => {
+          console.log('Error map location: ' + err)
+        }
+      )
+
       this.loadingPoints = false
     },
     async onClickMap (e) {
