@@ -121,7 +121,11 @@
               type-style="lite"
               placeholder="Введите адрес или метро"
             />
-            <addresses-frame :addresses="getPoints"/>
+            <addresses-frame :addresses="getPoints"
+                             :default-email="product.email"
+                             :default-phone="product.phone"
+                             @pointClick="pointClick"
+            />
           </div>
 
         </div>
@@ -169,7 +173,7 @@
 
     </div>
 
-    <div class="container">
+    <div v-if="visitedProducts.length" class="container">
       <visited-slider :products="visitedProducts" class="mt-5"/>
     </div>
 
@@ -258,15 +262,17 @@ export default {
   middleware: ['show'],
   head () {
     let title = 'Акция'
+    let desc
     if (this.product) {
       title = getTitle(this.product.name)
+      desc = this.product.short_description
     }
     return {
       title: title,
       bodyAttrs: {
         class: 'theme-default'
       },
-      ...getFavicon()
+      ...getFavicon('default', desc)
     }
   },
   asyncData: async ({ params, error, app }) => {
@@ -402,7 +408,8 @@ export default {
     tab: 'circs',
     search: '',
     fusePoints: null,
-    map: null
+    map: null,
+    pointSelect: null
   }),
   computed: {
     ...mapGetters({
@@ -413,6 +420,9 @@ export default {
     }),
     getCoords () {
       let res = null
+      if (this.pointSelect && this.pointSelect.latitude && this.pointSelect.longitude) {
+        res = [this.pointSelect.latitude, this.pointSelect.longitude]
+      } else
       if (this.city && this.city.latitude && this.city.longitude) {
         res = [this.city.latitude, this.city.longitude]
       }
@@ -597,6 +607,22 @@ export default {
           text: 'Отправить отзыв не удалось'
         })
         console.log(e)
+      }
+    },
+    pointClick (point) {
+      if (point.latitude && point.longitude) {
+        this.pointSelect = point
+        setTimeout(() => {
+          // https://tech.yandex.ru/maps/archive/doc/jsapi/2.0/dg/concepts/geoquery-docpage/
+          window.ymaps.geoQuery(this.map.geoObjects).each(function (el) {
+            console.log(point.id, el.properties.get('markerId'))
+            if (el.properties.get('markerId') === point.id) {
+              // https://tech.yandex.ru/maps/jsbox/2.1/clusterer_balloon_open
+              el.balloon.open()
+              return false
+            }
+          })
+        }, 600)
       }
     }
   }

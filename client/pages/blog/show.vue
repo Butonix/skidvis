@@ -88,14 +88,14 @@
         </div>
       </div>
 
-      <visited-slider class="mt-5"
-        :show-count="false"
-        :articles="getSimilarArticles"
-        title="Похожие статьи"
+      <visited-slider :show-count="false"
+                      :articles="getSimilarArticles"
+                      class="mt-5"
+                      title="Похожие статьи"
       />
 
-      <visited-slider class="mt-5"
-        :articles="getVisitedArticles"
+      <visited-slider :articles="getVisitedArticles"
+                      class="mt-5"
       />
 
     </div>
@@ -115,15 +115,19 @@ export default {
   },
   head () {
     let title = 'Статья'
+    let desc
     if (this.article) {
       title = getTitle(this.article.name)
+      if (this.article.short_description) {
+        desc = (((this.article.author) ? this.article.author + ': ' : '') + this.article.short_description)
+      }
     }
     return {
       title,
       bodyAttrs: {
         class: 'theme-blog'
       },
-      ...getFavicon('blog')
+      ...getFavicon('blog', desc)
     }
   },
   middleware: ['show'],

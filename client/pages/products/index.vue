@@ -57,9 +57,13 @@
     <products
       :params="prodsParams"
     />
+
+    <div v-if="visitedProducts.length" class="container">
+      <visited-slider :products="visitedProducts" class="mt-5"/>
+    </div>
     <modal name="map">
       <div class="basic-modal map-modal ymap-custom">
-        <div class="map-modal__filter-modal overflow-auto" :class="{'hide': !showMapFilters}">
+        <div :class="{'hide': !showMapFilters}" class="map-modal__filter-modal overflow-auto">
           <div class="container py-4">
             <search-input
               v-model="prods.urlQuery.search"
@@ -262,6 +266,7 @@ const List = BuildList({
 
 export default {
   components: {
+    'VisitedSlider': () => import('~/components/Product/VisitedSlider'),
     'FilterIcon': () => import('~/components/Icons/Filter'),
     'FilterList': () => import('~/components/FilterList'),
     'MapIcon': () => import('~/components/Icons/MapIcon.vue'),
@@ -278,7 +283,7 @@ export default {
       bodyAttrs: {
         class: 'theme-default'
       },
-      ...getFavicon()
+      ...getFavicon('default', 'Список акций, Скидвис')
     }
   },
   asyncData: async ({ params, error, app, query }) => {
@@ -294,6 +299,42 @@ export default {
         city_id: city.id
       }
     })
+
+    res.visitedProducts = []
+    res.visitedProductsIds = await app.store.dispatch('auth/getVisitedArray', 'products')
+
+    let visitedProductsTimes = await app.store.getters['auth/products']
+
+    if (res.visitedProductsIds.length) {
+      try {
+        let { data } = await axios.get('products', {
+          params: {
+            ordering: 'created_at',
+            orderingDir: 'desc',
+            perPage: 1000,
+            is_active: 1,
+            whereIn: res.visitedProductsIds
+          }
+        })
+        for (let i in data.list.data) {
+          let product = data.list.data[i]
+          product.visitedTime = visitedProductsTimes[product.id] || 0
+          res.visitedProducts.push(product)
+        }
+        res.visitedProducts = res.visitedProducts.sort((a, b) => {
+          if (a.visitedTime < b.visitedTime) {
+            return 1
+          }
+          if (a.visitedTime > b.visitedTime) {
+            return -1
+          }
+          return 0
+        })
+      } catch (e) {
+        console.log(e)
+        error({ statusCode: 500, message: 'Упс' })
+      }
+    }
 
     return res
   },

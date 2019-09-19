@@ -157,7 +157,7 @@ export default {
       bodyAttrs: {
         class: 'theme-default'
       },
-      ...getFavicon()
+      ...getFavicon('default', 'Список компаний, Скидвис')
     }
   },
   asyncData: async ({ params, error, app, query }) => {

@@ -200,7 +200,7 @@ export default {
       bodyAttrs: {
         class: 'theme-blog'
       },
-      ...getFavicon('blog')
+      ...getFavicon('blog', 'Список статей, Скидвис')
     }
   },
   asyncData: async ({ params, error, app, query }) => {

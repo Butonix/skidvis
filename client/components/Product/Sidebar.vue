@@ -17,13 +17,24 @@
       </template>
     </list-item-icon>
 
-    <list-item-icon v-if="operationModeText">
+    <list-item-icon v-if="operationModeText || product.organization_link || product.phone || product.email">
       <template slot="icon">
         <clock />
       </template>
       <template slot="text">
-        Режим работы
-        <div v-html="operationModeText"/>
+        <div v-if="operationModeText" class="mb-2">
+          Режим работы
+          <div v-html="operationModeText"/>
+        </div>
+        <p v-if="product.organization_link" class="mb-2">
+          <a :href="product.organization_link" class="link-dashed text-black-50" target="_blank" v-text="getDomain(product.organization_link)"/>
+        </p>
+        <p v-if="product.phone" class="mb-2">
+          <a :href="'tel:'+getLinkTel(product.phone)" class="link-dashed text-black-50" v-text="product.phone"/>
+        </p>
+        <p v-if="product.email" class="mb-0">
+          <a :href="'mailto:'+product.email" class="link-dashed text-black-50" v-text="product.email"/>
+        </p>
       </template>
     </list-item-icon>
 
@@ -71,11 +82,6 @@
             </network>
           </div>
         </social-sharing>
-        <p v-if="product.organization_link" class="pt-2 mb-0 small">
-          <a class="text-muted link-dashed" :href="product.organization_link" target="_blank">
-            Сайт компании
-          </a>
-        </p>
       </template>
     </list-item-icon>
 
@@ -102,6 +108,7 @@
 </template>
 
 <script>
+import { getDomain, getLinkTel } from '~/utils'
 import ListItemIcon from '~/components/ListItemIcon'
 import Hourglass from '~/components/Icons/Hourglass'
 import Percent from '~/components/Icons/Percent'
@@ -240,6 +247,12 @@ export default {
         let end = `по ${eArr[2]} ${mR[eArr[1]]} ${eArr[0]}`
         return start + end
       }
+    },
+    getDomain (str) {
+      return getDomain(str)
+    },
+    getLinkTel (str) {
+      return getLinkTel(str)
     }
   }
 }

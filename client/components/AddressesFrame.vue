@@ -7,8 +7,12 @@
           <fa icon="map-marker-alt" />
         </div>
         <div v-if="!selectedAddresses" class="col pl-2">
-          <div class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
+          <div>
+            <a href="javascript:void(0)" @click="$emit('pointClick', address)" class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
+          </div>
           {{ address.operationModeText }}
+          <span v-if="address.phone && defaultPhone !== address.phone">, <a class="text-black-50" :href="'tel:'+getLinkTel(address.phone)">{{ address.phone }}</a></span>
+          <span v-if="address.email && defaultEmail !== address.email">, <a class="text-black-50" :href="'mailto:'+address.email">{{ address.email }}</a></span>
         </div>
         <div v-if="selectedAddresses" class="col-12 pl-2 pr-2">
           <checkbox
@@ -28,6 +32,7 @@
 </template>
 
 <script>
+import { getLinkTel } from '~/utils'
 
 export default {
   props: {
@@ -38,6 +43,19 @@ export default {
     addresses: {
       type: Array,
       default: undefined
+    },
+    defaultEmail: {
+      type: String,
+      default: ''
+    },
+    defaultPhone: {
+      type: String,
+      default: ''
+    }
+  },
+  methods: {
+    getLinkTel (str) {
+      return getLinkTel(str)
     }
   }
 }

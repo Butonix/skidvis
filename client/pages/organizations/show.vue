@@ -184,15 +184,17 @@ export default {
   mixins: [List.mixin],
   head () {
     let title = 'Организация'
+    let desc
     if (this.organization) {
       title = getTitle(this.organization.name)
+      desc = this.organization.description
     }
     return {
       title,
       bodyAttrs: {
         class: 'theme-default navbar-fixed'
       },
-      ...getFavicon()
+      ...getFavicon('default', desc)
     }
   },
   asyncData: async ({ params, error, app, query }) => {

@@ -106,7 +106,7 @@
             </no-ssr>
           </div>
 
-          <div class="order-1 order-lg-2 d-xs-flex flex-wrap pt-2 mt-1 mb-4">
+          <div class="order-1 order-lg-2 d-xs-flex flex-wrap pt-2 mt-1 mb-2">
             <router-link
               :to="{ name: 'organizations.show', params: { organizationId } }"
               :style="{backgroundColor: (organization.logo.color)?organization.logo.color:'#FFFFFF'}"
@@ -125,14 +125,25 @@
                 field="name"
                 placeholder="Название"
                 data-align="left"
-                form-class="mb-0 mt-xs-0"
+                form-class="mb-0 mt-xl-0"
                 size="sm"
                 rows="3"
               />
             </div>
           </div>
           <div class="order-3 order-lg-3 mb-4">
-
+            <material-textarea
+              v-model="form.short_description"
+              :form="form"
+              field="short_description"
+              placeholder="Короткое описание"
+              data-align="left"
+              class="mb-3"
+              size="sm"
+              rows="3"
+            >
+              <div class="text-muted small">Используется для продвижения, до 100 символов, остальные символы будут обрезаны</div>
+            </material-textarea>
             <div class="mb-3">
               Акции по тегам
               <div
