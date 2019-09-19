@@ -98,19 +98,71 @@
                       class="mt-5"
       />
 
+      <div id="reviews" class="container mt-5">
+        <div class="row">
+          <div class="col-lg-10 col-xl-8 mb-4">
+            <div class="mb-4 d-flex justify-content-between align-items-start">
+              <h5>Отзывы</h5>
+
+              <dropdown :options="reviewsOrderingArray"
+                        v-model="reviewsOrdering"
+                        btn-class="btn btn-sm btn-gray"
+                        h-align="right"
+                        placeholder="Сортировка"
+              />
+
+            </div>
+            <review-edit
+              :check="check"
+              :form="review.form"
+              :user="user"
+              field-content="text"
+              @inputcomment="review.form.text = $event"
+              @send="sendReview"
+            />
+
+            <transition
+              v-for="(review, index) in reviews.data"
+              :key="index"
+              name="fade" mode="out-in">
+              <review
+                :review="review"
+              />
+            </transition>
+            <transition
+              v-if="pageCountReviews && pageCountReviews > 1 && pageCountReviews > reviews.current_page"
+              name="fade" mode="out-in">
+              <div class="text-center">
+                <div :class="{'btn-loading':loadingReview}"
+                     class="btn btn-outline-primary px-5"
+                     @click="loadMoreReviews"
+                >
+                  Еще
+                </div>
+              </div>
+            </transition>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
 import { getFavicon, getTitle } from '~/utils'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+import Form from 'vform'
 import axios from 'axios'
 
 export default {
   components: {
     'VisitedSlider': () => import('~/components/Blog/VisitedSlider'),
     'Card': () => import('~/components/Blog/Card'),
+    'Dropdown': () => import('~/components/Dropdown'),
+    'Review': () => import('~/components/Review'),
+    'ReviewEdit': () => import('~/components/ReviewEdit'),
     'ShareBox': () => import('~/components/ShareBox')
   },
   head () {
@@ -140,6 +192,11 @@ export default {
         orderingDir: 'desc',
         perPage: 6,
         categories: []
+      },
+      review: {
+        form: {
+          text: ''
+        }
       },
       articleId,
       visitedArticles: [],
@@ -211,6 +268,28 @@ export default {
     return res
   },
   data: () => ({
+    reviewsOrderingArray: [
+      {
+        id: 1,
+        ordering: 'created_at',
+        orderingDir: 'desc',
+        name: 'Новые'
+      },
+      {
+        id: 2,
+        ordering: 'created_at',
+        orderingDir: 'asc',
+        name: 'Старые'
+      }
+    ],
+    reviewsOrdering: {
+      id: 1,
+      ordering: 'created_at',
+      orderingDir: 'desc',
+      name: 'Новые'
+    },
+
+    loadingReview: false,
     baseUrl: process.env.baseUrl
   }),
   computed: {
@@ -226,6 +305,102 @@ export default {
     },
     getArticleContent () {
       return this.article.content.replaceAll('contenteditable="true"', '')
+    },
+    pageCountReviews () {
+      return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
+    }
+  },
+  watch: {
+    'reviewsOrdering': async function (v) {
+      await this.fetchReviews({})
+    }
+  },
+  async beforeMount () {
+    if (!(this.review.form instanceof Form)) {
+      this.review.form = new Form(this.review.form)
+    }
+  },
+  methods: {
+    async loadMoreReviews () {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`articles/${this.articleId}/reviews`, {
+          params: {
+            page: this.reviews.current_page + 1,
+            perPage: this.reviews.per_page,
+            ordering: this.reviewsOrdering.ordering,
+            orderingDir: this.reviewsOrdering.orderingDir
+          }
+        })
+
+        if (data.list.data.length) {
+          for (let i in data.list.data) {
+            this.reviews.data.push(data.list.data[i])
+          }
+        }
+        this.reviews.current_page++
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Получить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
+    async fetchReviews ({
+      page = 1,
+      perPage = this.reviews.per_page,
+      ordering = this.reviewsOrdering.ordering,
+      orderingDir = this.reviewsOrdering.orderingDir
+    }) {
+      this.loadingReview = true
+      try {
+        let { data } = await axios.get(`articles/${this.articleId}/reviews`, {
+          params: {
+            page,
+            perPage,
+            ordering,
+            orderingDir
+          }
+        })
+
+        if (data.list) {
+          this.$set(this, 'reviews', data.list)
+        }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить отзывы не удалось'
+        })
+        console.log(e)
+      }
+      this.loadingReview = false
+    },
+    setDefaultReviewForm () {
+      this.review.form = new Form({
+        text: ''
+      })
+    },
+    async sendReview () {
+      try {
+        await this.review.form.post(`articles/${this.articleId}/reviews`)
+
+        this.setDefaultReviewForm()
+
+        await this.$callToast({
+          type: 'success',
+          text: 'Отзыв успешно сохранен'
+        })
+
+        await this.fetchReviews({})
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Отправить отзыв не удалось'
+        })
+        console.log(e)
+      }
     }
   }
 }
