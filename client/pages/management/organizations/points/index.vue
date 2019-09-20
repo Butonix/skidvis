@@ -12,14 +12,19 @@
     </div>
     <div class="container">
       <div class="row mb-4">
-        <div class="col-12 col-md mb-2">
+        <div class="col-12 col-lg mb-2">
           <h5>
-            Все адреса организации ({{ ptsTotal }}):
+            Все адреса организации&nbsp;({{ ptsTotal }}):
           </h5>
         </div>
-        <div class="col-12 col-md-auto mb-2">
-          <div v-if="isAdministrator" class="btn btn-outline-primary btn-sm" @click="onAdd">
-            + Добавить адрес
+        <div class="col-12 col-lg-auto">
+          <div class="d-flex flex-column flex-sm-row justify-content-end">
+            <div v-if="isAdministrator" class="btn btn-outline-primary btn-sm mb-2" @click="onImportSimple">
+              + Импортировать
+            </div>
+            <div v-if="isAdministrator" class="btn btn-outline-primary btn-sm mb-2 ml-sm-2" @click="onAdd">
+              + Добавить адрес
+            </div>
           </div>
         </div>
       </div>
@@ -120,44 +125,10 @@
           </div>
         </div>
 
-        <div
-          v-click-outside="hideAddresses"
+        <addresses-select
           v-if="!form.full_street"
-          :class="{'show': showAddresses}"
-          class="points-index__addresses">
-
-          <material-input
-            :value="address"
-            type-input="inline"
-            placeholder="Поиск адреса"
-            form-class="mb-4"
-            @click="onInputAddress(address)"
-            @input="onInputAddress"
-          />
-
-          <div class="points-index__addresses__collapse">
-            <div
-              class="points-index__addresses__list">
-              <div v-for="(address, key) in addresses"
-                   :key="key" class="row mb-2">
-                <div class="col-auto text-primary pr-0 pt-1">
-                  <fa icon="map-marker-alt" />
-                </div>
-                <div class="col pl-2 text-primary">
-                  <div class="d-inline-block pt-1">
-                    {{ address.value }}
-                  </div>
-                  <div class="btn btn-outline-primary float-right ml-2 btn-sm"
-                       @click="onSelectAddress(address)"
-                  >
-                    Выбрать
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+          :init-value="address"
+          @select="onSelectAddress($event)"/>
 
         <material-input
           v-model="form.name"
@@ -267,13 +238,118 @@
             Добавить адрес
           </button>
           <button class="btn btn-outline-danger ml-2"
-                  @click="$modal.pop()"
+                  @click="close"
           >
             Отменить
           </button>
         </div>
       </div>
     </modal>
+
+    <modal name="import-point">
+      <div class="basic-modal">
+        <div :class="{'active': import_.simple.loading}"
+             class="loading-list"
+        />
+        <h5 class="text-center">
+          Простой импорт
+        </h5>
+        <material-textarea
+          v-model="import_.simple.text"
+          placeholder="Импорт"
+          data-align="left"
+          size="sm"
+          rows="3"
+        >
+          <div class="text-muted small">
+            <div>Перечислите адреса, каждый адрес на новой строчке. Например: </div>
+            <div>г Санкт-Петербург, ул Благодатная, д 63 к 1</div>
+            <div>г Санкт-Петербург, Загородный пр-кт, д 47</div>
+          </div>
+        </material-textarea>
+
+        <div v-if="isImportSimpleErrors" class="py-4">
+          <h5 v-if="getLengthCollectionImportSimple" class="text-center mb-4">
+            Адресов с ошибками {{ getAddressesWithErrorsImportSimple.length }} из {{ getLengthCollectionImportSimple }}
+          </h5>
+
+          <button
+            v-if="isImportSimpleErrorFoundTheRepetition"
+            class="btn btn-sm btn-outline-danger mr-2"
+            @click="addAllErrorsRepetitionToIgnoreImportSimple"
+          >
+            Разрешить все повторения
+          </button>
+          <button
+            class="btn btn-sm btn-outline-danger mr-2"
+            @click="removeAllFilledAddressesImportSimple"
+          >
+            Удалить все ошибки
+          </button>
+        </div>
+
+        <transition
+          v-if="isImportSimpleErrors"
+          name="fade" mode="out-in">
+          <div class="container py-3">
+            <transition
+              v-for="address in getAddressesWithErrorsImportSimple"
+              :key="address.addressIndex"
+              name="fade" mode="out-in"
+            >
+              <div
+                v-if="import_.simple.editIndex !== address.addressIndex"
+                class="row mb-4">
+                <div class="col-auto text-primary pr-0">
+                  <fa icon="map-marker-alt" />
+                </div>
+                <div class="col pl-2">
+                  <div class="text-primary">
+                    {{ address.full_street }}
+                    <span class="sli sli--edit" @click="onEditImportSimple(address.addressIndex)"><fa icon="pencil-alt" /></span>
+                    <span class="sli sli--delete" @click="onRemoveImportSimple(address.addressIndex)"><fa :icon="['far', 'trash-alt']"/></span>
+                  </div>
+                  <div v-for="(error, errorIndex) in getErrorsImportSimple(address.addressIndex)" :key="errorIndex">
+                    <span class="text-danger">
+                      &mdash;&nbsp;{{ importErrors[error] }}
+                    </span>
+                    <div v-if="error === 'FOUND_THE_REPETITION'" class="btn btn-sm btn-success mr-2 py-0 px-2"
+                         @click="addErrorImportSimple(address.addressIndex, error, 'ignoreErrors')">
+                      <fa icon="check"/> Разрешить повторение
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="row mb-4">
+                <div class="col pl-2">
+                  <addresses-select
+                    :init-value="address.full_street"
+                    @select="onSelectImportSimple(address.addressIndex, $event)"/>
+                </div>
+                <div class="col-auto pr-0">
+                  <span class="sli sli--edit h5" @click="onCloseEditImportSimple()"><fa icon="times" /></span>
+                </div>
+              </div>
+            </transition>
+          </div>
+        </transition>
+
+        <div class="text-center mt-5">
+          <button
+            class="btn btn-outline-primary mr-2"
+            @click="saveSimpleImport"
+          >
+            Импортировать
+          </button>
+          <button class="btn btn-outline-danger ml-2"
+                  @click="close"
+          >
+            Отменить
+          </button>
+        </div>
+      </div>
+    </modal>
+
   </div>
 </template>
 
@@ -283,6 +359,7 @@ import { fetchAddresses, getFavicon } from '~/utils'
 import Form from 'vform'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import { difference, cloneDeep, compact } from 'lodash'
 
 let fetchAddressesInstance = fetchAddresses(axios)
 
@@ -295,7 +372,7 @@ const List = BuildList({
   pathResponse: 'list.data',
   pathTotal: 'list.total',
   urlQuery: {
-    perPage: 3
+    perPage: 20
   }
 })
 const wacherList = List.getWatcher({ type: List.beforeTypes.SEARCH })
@@ -303,9 +380,11 @@ const wacherListDelete = List.getWatcher({ type: List.afterTypes.DELETE })
 
 export default {
   components: {
+    'AddressesSelect': () => import('~/components/Points/AddressesSelect'),
     'PaginateList': () => import('~/components/PaginateList'),
     'SearchInput': () => import('~/components/SearchInput'),
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
+    'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'vSelect': () => import('vue-select')
   },
   middleware: ['auth'],
@@ -346,37 +425,102 @@ export default {
       }
     }
 
+    let fields = {
+      operationMode,
+      name: '',
+      street: '',
+      full_street: '',
+      city_kladr_id: '',
+      latitude: '',
+      longitude: '',
+      payload: null,
+      own_schedule: false,
+      email: '',
+      phone: ''
+    }
+
     return {
+      fields,
       ...data,
       data: dataOrg,
       organizationId: organizationId,
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       form: {
-        operationMode,
-        name: '',
-        street: '',
-        full_street: '',
-        city_kladr_id: '',
-        latitude: '',
-        longitude: '',
-        payload: null,
-        own_schedule: false,
-        email: '',
-        phone: ''
+        ...fields
       }
     }
   },
   data: () => ({
+    import_: {
+      defaultSimple: {
+        loading: false,
+        cache: {
+          text: ''
+        },
+        text: '',
+        editIndex: null,
+        collection: [],
+        ignoreErrors: []
+      },
+      simple: {
+        loading: false,
+        cache: {
+          text: ''
+        },
+        text: '',
+        editIndex: null,
+        collection: [],
+        ignoreErrors: []
+      }
+    },
+    importErrors: {
+      FOUND_THE_REPETITION: 'Найдено повторение в списке адресов',
+      MORE_THAN_ONE_RESULT: 'Найдено больше одного результата',
+      NO_RESULTS: 'Адрес не найден'
+    },
     address: '',
-    showAddresses: false,
-    addresses: [],
     updateId: null
   }),
-  computed: mapGetters({
-    getReactData: 'variables/getReactData',
-    isAdministrator: 'auth/isAdministrator',
-    isManagement: 'auth/isManagement'
-  }),
+  computed: {
+    ...mapGetters({
+      getReactData: 'variables/getReactData',
+      isAdministrator: 'auth/isAdministrator',
+      isManagement: 'auth/isManagement'
+    }),
+    getLengthCollectionImportSimple () {
+      return this.import_.simple.collection.length
+    },
+    getAddressesWithErrorsImportSimple () {
+      return this.import_.simple.collection.filter((value, index) => {
+        let res = false
+        value.addressIndex = index
+        if (!this.isAccessImportSimple(index)) {
+          res = true
+        }
+        return res
+      })
+    },
+    isImportSimpleErrors () {
+      return !!this.getAddressesWithErrorsImportSimple.length
+    },
+    isImportSimpleErrorFoundTheRepetition () {
+      let t = 'FOUND_THE_REPETITION'
+      if (this.import_.simple.ignoreErrors.indexOf(t) !== -1) {
+        return false
+      }
+      let count = 0
+      for (let i in this.getAddressesWithErrorsImportSimple) {
+        let item = this.getAddressesWithErrorsImportSimple[i]
+        if (item.errors.indexOf(t) !== -1 && (!item.ignoreErrors || (item.ignoreErrors && item.ignoreErrors.indexOf(t) === -1))) {
+          count++
+        }
+        if (count > 1) {
+          return true
+        }
+      }
+      return false
+    }
+  },
   async beforeMount () {
     if (!(this.form instanceof Form)) {
       this.form = new Form(this.form)
@@ -384,54 +528,51 @@ export default {
   },
   methods: {
     async onEditAddress () {
-      let address = this.form.full_street
+      this.address = this.form.full_street
       this.form.full_street = ''
-      this.onInputAddress(address)
     },
-    async onSelectAddress (v) {
+
+    async getSelectAddress (v, type = 'default') {
+      let res
       let data = await fetchAddressesInstance({ query: v.unrestricted_value, count: 1 })
+      switch (type) {
+        case 'simpleImport':
+          if (data.length === 0) {
+            return { error: 'NO_RESULTS' }
+          }
+          if (data.length > 1) {
+            return { error: 'MORE_THAN_ONE_RESULT' }
+          }
+          break
+        default:
+          break
+      }
       if (data[0]) {
+        res = {}
         let address = data[0]
-        this.form.full_street = address.value
-        let street = []
-        if (address.data.area_with_type) {
-          street.push(address.data.area_with_type)
+        res.full_street = address.value
+        let street = address.value
+        if (address.data.region_with_type) {
+          street = street.replace(address.data.region_with_type + ', ', '')
         }
-        if (address.data.settlement_with_type) {
-          street.push(address.data.settlement_with_type)
+        if (address.data.city_with_type) {
+          street = street.replace(address.data.city_with_type + ', ', '')
         }
-        if (address.data.street_with_type) {
-          street.push(address.data.street_with_type)
-        }
-        if (address.data.house_type && address.data.house) {
-          street.push(address.data.house_type + ' ' + address.data.house)
-        }
-        if (address.data.flat_type && address.data.flat) {
-          street.push(address.data.flat_type + ' ' + address.data.flat)
-        }
-        this.form.street = street.join(', ')
-        this.form.city_kladr_id = address.data.city_kladr_id
-        this.form.latitude = address.data.geo_lat
-        this.form.longitude = address.data.geo_lon
-        this.form.payload = { ...address }
+        res.street = street
+        res.city_kladr_id = address.data.city_kladr_id
+        res.latitude = address.data.geo_lat
+        res.longitude = address.data.geo_lon
+        res.payload = { ...address }
       }
+      return res
     },
-    async onInputAddress (v) {
-      this.address = v
-      if (v.length) {
-        this.addresses = await fetchAddressesInstance({ query: v, count: 10 })
-        if (this.addresses.length) {
-          this.showAddresses = true
-        } else {
-          this.showAddresses = false
+    async onSelectAddress (v, th = this.form) {
+      let data = await this.getSelectAddress(v)
+      if (data && !data.error) {
+        for (let i in data) {
+          th[i] = data[i]
         }
-      } else {
-        this.showAddresses = false
-        this.addresses = []
       }
-    },
-    hideAddresses () {
-      this.showAddresses = false
     },
     async onDelete (key) {
       let res = await this.$confirmDelete()
@@ -452,23 +593,14 @@ export default {
       }
     },
     onEdit (key) {
-      this.form.own_schedule = this.ptsItems[key].own_schedule
-      this.form.name = this.ptsItems[key].name
-      this.form.street = this.ptsItems[key].street
-      this.form.full_street = this.ptsItems[key].full_street
-      this.form.email = this.ptsItems[key].email
-      this.form.phone = this.ptsItems[key].phone
-      this.form.operationMode = this.ptsItems[key].operationMode
+      for (let name in this.fields) {
+        this.form[name] = this.ptsItems[key][name]
+      }
+
       this.updateId = this.ptsItems[key].id
-
-      this.form.city_kladr_id = this.ptsItems[key].city_kladr_id
-      this.form.latitude = this.ptsItems[key].latitude
-      this.form.longitude = this.ptsItems[key].longitude
-      this.form.payload = this.ptsItems[key].payload
-
       this.$modal.push('save-point')
     },
-    setDefaultFormData () {
+    getDefaultFormData () {
       let name = ''
 
       try {
@@ -480,18 +612,16 @@ export default {
       this.showAddresses = false
       this.addresses = []
 
-      this.form.own_schedule = false
-      this.form.name = name
-      this.form.street = ''
-      this.form.full_street = ''
-      this.form.email = ''
-      this.form.phone = ''
-      this.form.operationMode = this.data.organization.operationMode
-
-      this.form.city_kladr_id = ''
-      this.form.latitude = ''
-      this.form.longitude = ''
-      this.form.payload = null
+      return { ...this.fields, name }
+    },
+    setDefaultFormData (toThis = this, toName = 'form', compact = null) {
+      let data = this.getDefaultFormData()
+      if (!compact) {
+        data = new Form(data)
+      } else {
+        data = compact(data)
+      }
+      this.$set(toThis, toName, data)
     },
     onAdd () {
       this.updateId = null
@@ -533,6 +663,153 @@ export default {
           text: 'Сохранить не удалось'
         })
       }
+    },
+    setDefaultImportSimple () {
+      this.$set(this.import_, 'simple', cloneDeep(this.import_.defaultSimple))
+    },
+    resetImportSimple () {
+      this.$set(this.import_.simple, 'collection', [])
+      this.$set(this.import_.simple, 'ignoreErrors', [])
+      this.onCloseEditImportSimple()
+    },
+    onImportSimple () {
+      this.setDefaultImportSimple()
+      this.$modal.push('import-point')
+    },
+    addErrorImportSimple (index, type, name = 'errors') {
+      if (!this.import_.simple.collection[index][name]) {
+        this.$set(this.import_.simple.collection[index], name, [type])
+      } else if (this.import_.simple.collection[index][name].indexOf(type) === -1) {
+        this.import_.simple.collection[index][name].push(type)
+      }
+    },
+    async addAllErrorsRepetitionToIgnoreImportSimple () {
+      let t = 'FOUND_THE_REPETITION'
+      if (this.import_.simple.ignoreErrors.indexOf(t) === -1) {
+        this.import_.simple.ignoreErrors.push(t)
+      }
+      await this.saveSimpleImport()
+    },
+    getErrorsImportSimple (index) {
+      let item = this.import_.simple.collection[index]
+      let errors = item.errors || []
+      if (errors.length) {
+        if (item.ignoreErrors && item.ignoreErrors.length) {
+          errors = difference(errors, item.ignoreErrors)
+        }
+        if (this.import_.simple.ignoreErrors.length) {
+          errors = difference(errors, this.import_.simple.ignoreErrors)
+        }
+      }
+      return errors
+    },
+    isAccessImportSimple (index) {
+      let errors = this.getErrorsImportSimple(index)
+      return errors.length === 0
+    },
+    async removeAllFilledAddressesImportSimple () {
+      // Удаление по индексам нужно начинать с конца
+      let keys = Object.keys(this.import_.simple.collection).reverse()
+      for (let i in keys) {
+        let index = keys[i]
+        if (!this.isAccessImportSimple(index)) {
+          this.onRemoveImportSimple(index)
+        }
+      }
+      if (this.getLengthCollectionImportSimple) {
+        await this.saveSimpleImport()
+      }
+    },
+    onRemoveImportSimple (index) {
+      this.$delete(this.import_.simple.collection, index)
+    },
+    onEditImportSimple (index) {
+      this.$set(this.import_.simple, 'editIndex', index)
+    },
+    onCloseEditImportSimple () {
+      this.$set(this.import_.simple, 'editIndex', null)
+    },
+    async onSelectImportSimple (index, value) {
+      await this.onSelectAddress(value, this.import_.simple.collection[index])
+      if (this.import_.simple.collection[index].errors) {
+        this.$delete(this.import_.simple.collection[index], 'errors')
+      }
+      this.onCloseEditImportSimple()
+      await this.saveSimpleImport()
+    },
+    async saveSimpleImport () {
+      this.import_.simple.loading = true
+
+      if (this.import_.simple.text && this.import_.simple.text.trim()) {
+        if (this.import_.simple.cache.text !== this.import_.simple.text || this.import_.simple.collection.length === 0) {
+          this.resetImportSimple()
+          this.import_.simple.cache.text = this.import_.simple.text
+          let fullStreets = this.import_.simple.text.split('\n')
+          fullStreets = compact(fullStreets)
+          for (let i in fullStreets) {
+            let data = this.getDefaultFormData()
+            let fullStreet = fullStreets[i].trim()
+            let address = await this.getSelectAddress({ unrestricted_value: fullStreet }, 'simpleImport')
+            if (address.error) {
+              data.full_street = fullStreet
+            } else {
+              data = { ...data, ...address }
+            }
+            this.import_.simple.collection.push(data)
+            let index = this.import_.simple.collection.length - 1
+
+            if (address.error) {
+              this.addErrorImportSimple(index, address.error)
+            }
+          }
+        }
+
+        if (this.import_.simple.collection.length) {
+          try {
+            let addresses = this.import_.simple.collection.map(v => v.full_street)
+            addresses = compact(addresses)
+            if (addresses.length) {
+              let { data } = await axios.post(`management/organizations/${this.organizationId}/points/check`, {
+                addresses
+              })
+              if (data.duplicates.length) {
+                for (let i in data.duplicates) {
+                  let index = data.duplicates[i]
+                  this.addErrorImportSimple(index, 'FOUND_THE_REPETITION')
+                }
+              }
+            }
+          } catch (e) {
+            console.log(e)
+            await this.$callToast({
+              type: 'error',
+              text: 'Ошибка при импортировании'
+            })
+          }
+        }
+
+        if (!this.isImportSimpleErrors) {
+          try {
+            await axios.post(`management/organizations/${this.organizationId}/points/import/simple`, {
+              addresses: this.import_.simple.collection
+            })
+            this.setDefaultImportSimple()
+            this.reloadList()
+            await this.$callToast({
+              type: 'success',
+              text: 'Адреса импортированы'
+            })
+          } catch (e) {
+            console.log(e)
+            await this.$callToast({
+              type: 'error',
+              text: 'Ошибка при импортировании'
+            })
+          }
+        }
+      }
+
+      this.import_.simple.loading = false
     },
 
     close () {

@@ -8,11 +8,11 @@
         </div>
         <div v-if="!selectedAddresses" class="col pl-2">
           <div>
-            <a href="javascript:void(0)" @click="$emit('pointClick', address)" class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
+            <a href="javascript:void(0)" class="text-primary" @click="$emit('pointClick', address)" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
           </div>
           {{ address.operationModeText }}
-          <span v-if="address.phone && defaultPhone !== address.phone">, <a class="text-black-50" :href="'tel:'+getLinkTel(address.phone)">{{ address.phone }}</a></span>
-          <span v-if="address.email && defaultEmail !== address.email">, <a class="text-black-50" :href="'mailto:'+address.email">{{ address.email }}</a></span>
+          <span v-if="address.phone && defaultPhone !== address.phone">, <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a></span>
+          <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
         </div>
         <div v-if="selectedAddresses" class="col-12 pl-2 pr-2">
           <checkbox
@@ -22,7 +22,7 @@
               value: $event,
             })"
           >
-            <div class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
+            <div class="text-primary" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
           </checkbox>
         </div>
       </div>

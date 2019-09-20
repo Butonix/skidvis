@@ -3,13 +3,18 @@
   cursor: pointer;
   color: $body-color;
   &--delete{
-    &:hover{
+    &:hover, &.active{
       color: $danger;
     }
   }
   &--edit{
-    &:hover{
+    &:hover, &.active{
       color: $primary;
+    }
+  }
+  &--success{
+    &:hover, &.active{
+      color: $success;
     }
   }
 }
