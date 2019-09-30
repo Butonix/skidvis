@@ -9,6 +9,12 @@ export default {
       // content: '<div style="border-radius: 50%; overflow: hidden; background: white; width: 32px; height: 32px;"><img style="width: 100%; height: 100%;" src="/placeholders/demo-logo-map.png"></div>',
       contentOffset: [1, 1],
       contentLayout: `<div>$[properties.iconContent]</div>`
+    },
+    markerIconLocationUser: {
+      layout: 'default#image',
+      imageHref: '/icons/location.svg',
+      imageSize: [24, 24],
+      imageOffset: [-12, -12],
     }
   }),
   methods: {

@@ -155,6 +155,13 @@
             @map-was-initialized="onMapWasInitialized"
           >
             <ymap-marker
+              v-if="userLocation"
+              :icon="markerIconLocationUser"
+              :key="'userLocation'"
+              :coords="userLocation.position"
+              :marker-id="'userLocation'"
+            />
+            <ymap-marker
               v-for="(point, key) in getMapPoints"
               :icon="getMarkerIcon(point)"
               :key="point.id"
@@ -409,6 +416,7 @@ export default {
     search: '',
     fusePoints: null,
     map: null,
+    userLocation: null,
     pointSelect: null
   }),
   computed: {
@@ -496,19 +504,22 @@ export default {
     async onMapWasInitialized (payload) {
       this.map = payload
 
-      // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
-      let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
+      if (!this.userLocation) {
+        // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
+        let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
 
-      // Асинхронная обработка ответа.
-      location.then(
-        (result) => {
-          // Добавление местоположения на карту.
-          this.map.geoObjects.add(result.geoObjects)
-        },
-        (err) => {
-          console.log('Error map location: ' + err)
-        }
-      )
+        // Асинхронная обработка ответа.
+        location.then(
+          (result) => {
+            // Добавление местоположения на карту.
+            this.userLocation = result.geoObjects
+            // this.map.geoObjects.add(result.geoObjects)
+          },
+          (err) => {
+            console.log('Error map location: ' + err)
+          }
+        )
+      }
 
       // console.log(payload._bounds)
     },
