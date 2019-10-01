@@ -182,9 +182,12 @@
         fill: white;
       }
     }
-    .nav {
-      &-link {
-        color: white;
+
+    @include media-breakpoint-up(lg){
+      .nav {
+        &-link {
+          color: white;
+        }
       }
     }
   }
