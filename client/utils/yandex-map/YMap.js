@@ -103,17 +103,49 @@ export default {
   },
   methods: {
     deleteMarkers (arrayIds) {
-      if(this.myMap.geoObjects){
-        this.myMap.geoObjects.each(function (item) {
-          if (typeof item.properties !== 'undefined') {
-            if (typeof item.properties.get('id') !== 'undefined') {
-              let id = item.properties.get('id')
-              if (arrayIds.indexOf(id) !== -1) {
-                this.myMap.geoObjects.remove(item)
-              }
-            }
+      let map = this.myMap
+
+      if (arrayIds.length) {
+        arrayIds.forEach(value => {
+          let di = this.markers.indexOf(value)
+          if (di !== -1) {
+            this.markers.splice(di, 1)
           }
         })
+
+        if (map.geoObjects) {
+          map.geoObjects.each(function (collection) {
+            if (collection) {
+              if (collection.each) {
+                let remove = []
+                collection.each(function (item) {
+                  if (item && item.properties) {
+                    let id = item.properties.get('markerId')
+                    if (id) {
+                      if (arrayIds.indexOf(id) !== -1) {
+                        remove.push(item)
+                      }
+                    }
+                  }
+                })
+                if (collection.getLength() === 0 || collection.getLength() === remove.length) {
+                  map.geoObjects.remove(collection)
+                } else if (remove.length) {
+                  for (let i in remove) {
+                    collection.remove(remove[i])
+                  }
+                }
+              } else if (collection.properties) {
+                let id = collection.properties.get('markerId')
+                if (id) {
+                  if (arrayIds.indexOf(id) !== -1) {
+                    map.geoObjects.remove(collection)
+                  }
+                }
+              }
+            }
+          })
+        }
       }
     },
     updateMarkers () {
@@ -121,10 +153,10 @@ export default {
         createMarkers,
         deleteMarkers
       } = this.getMarkers()
-
       this.deleteMarkers(deleteMarkers)
-
-      this.setMarkers(createMarkers)
+      if (createMarkers.length) {
+        this.setMarkers(createMarkers)
+      }
     },
     getMarkersFromSlots () {
       return this.$slots.default && this.$slots.default.map(m => {

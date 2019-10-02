@@ -61,7 +61,7 @@
     <div v-if="visitedProducts.length" class="container">
       <visited-slider :products="visitedProducts" class="mt-5"/>
     </div>
-    <modal name="map">
+    <modal name="map" @closed="mapClosed">
       <div class="basic-modal map-modal ymap-custom">
         <div :class="{'hide': !showMapFilters}" class="map-modal__filter-modal overflow-auto">
           <div class="container py-4">
@@ -108,10 +108,10 @@
             </div>
           </div>
         </div>
-        <div :class="{'active': loadingPoints}"
+        <div :class="{'active': loadingPoints && !isOpenMap}"
              class="loading-list"
         />
-        <div class="map-modal__filter-btn" @click="showMapFilters = !showMapFilters">
+        <div :class="{'loading':loadingPoints && isOpenMap}" class="map-modal__filter-btn" @click="showMapFilters = !showMapFilters">
           <filter-icon/>
         </div>
         <div class="map-modal__close" @click="$modal.pop()"/>
@@ -349,6 +349,7 @@ export default {
 
     showMapFilters: false,
     loadingPoints: false,
+    isOpenMap: false,
     cancelRequestPoints: null,
     boundschangeTimeout: null,
     balloonopening: false,
@@ -419,12 +420,13 @@ export default {
       }, 600)
     },
     async fetchMapPoints () {
+      this.loadingPoints = true
+
       let bounds = this.map.getBounds()
       let vm = this
       if (vm.cancelRequestPoints) {
         vm.cancelRequestPoints()
       }
-      // this.loadingPoints = true
       this.placemarkClear = false
       try {
         let { data } = await axios.get('points/map', {
@@ -451,7 +453,9 @@ export default {
         console.log('error', e)
       }
 
-      // this.loadingPoints = false
+      setTimeout(()=>{
+        this.loadingPoints = false
+      }, 1000)
     },
     async onClickMap (e) {
       // this.coords = e.get('coords')
@@ -461,6 +465,7 @@ export default {
       // console.log(this.$refs.map.getBounds())
     },
     async onMapWasInitialized (payload) {
+      this.loadingPoints = true
       this.map = payload
       this.map.events.add('boundschange', (e) => {
         clearTimeout(this.boundschangeTimeout)
@@ -488,21 +493,23 @@ export default {
         )
       }
 
-      this.loadingPoints = true
       await this.fetchMapPoints()
-      this.loadingPoints = false
+      setTimeout(() => {
+        this.isOpenMap = true
+      }, 1000)
     },
     async setFiltersMap () {
       this.showMapFilters = !this.showMapFilters
 
-      this.loadingPoints = true
       await this.fetchMapPoints()
-      this.loadingPoints = false
     },
     onOpenMap () {
       this.placemark = null
 
       this.$modal.push('map')
+    },
+    mapClosed () {
+      this.isOpenMap = false
     }
   }
 }
