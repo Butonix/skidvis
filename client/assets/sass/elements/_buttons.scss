@@ -164,10 +164,10 @@
 }
 
 .btn-auditories{
-  border: 2px dashed #929292;
+  border: 2px dashed #00cccc;
   background: transparent!important;
   position: relative;
-  color: #272727;
+  color: $body-color;
   transition: 0.2s ease;
   &:before{
     content: '';
@@ -180,18 +180,18 @@
     border-radius: $btn-border-radius;
     opacity: 0;
     pointer-events: none;
-    background: #484848;
+    background: #00cccc;
     transition: 0.2s ease;
   }
   &:hover, &.hover{
-    color: #272727;
+    color: $body-color;
     border-style: solid;
-    border-color: #929292;
+    border-color: #00cccc;
   }
 
   &:focus,
   &.focus {
-    box-shadow: 0 0 0 0.1rem rgba(#929292, 0.5);
+    box-shadow: 0 0 0 0.1rem rgba(#00cccc, 0.5);
   }
 
   &:not(:disabled):not(.disabled):active,
