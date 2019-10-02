@@ -424,7 +424,7 @@ export default {
       if (vm.cancelRequestPoints) {
         vm.cancelRequestPoints()
       }
-      this.loadingPoints = true
+      // this.loadingPoints = true
       this.placemarkClear = false
       try {
         let { data } = await axios.get('points/map', {
@@ -451,7 +451,7 @@ export default {
         console.log('error', e)
       }
 
-      this.loadingPoints = false
+      // this.loadingPoints = false
     },
     async onClickMap (e) {
       // this.coords = e.get('coords')
@@ -487,11 +487,17 @@ export default {
           }
         )
       }
+
+      this.loadingPoints = true
       await this.fetchMapPoints()
+      this.loadingPoints = false
     },
-    setFiltersMap () {
+    async setFiltersMap () {
       this.showMapFilters = !this.showMapFilters
-      this.fetchMapPoints()
+
+      this.loadingPoints = true
+      await this.fetchMapPoints()
+      this.loadingPoints = false
     },
     onOpenMap () {
       this.placemark = null

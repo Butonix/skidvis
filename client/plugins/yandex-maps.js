@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import YmapPlugin from 'vue-yandex-maps'
+import YmapPlugin from '../utils/yandex-map/index.js'
 
 Vue.use(YmapPlugin, {
   apiKey: process.env.apiMapsYandex,
