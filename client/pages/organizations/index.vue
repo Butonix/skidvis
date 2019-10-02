@@ -123,6 +123,9 @@ const List = BuildList({
       }
     }
   },
+  apiQuery: {
+    ordering: 'random'
+  },
   urlQuery: {
     perPage: 50
   },

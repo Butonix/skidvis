@@ -2,19 +2,19 @@
   <div class="list-box">
     <div class="list-box__wrapper">
 
-      <div v-for="(address, key) in addresses" :key="address.id" class="row mb-2 no-gutters pt-2">
-        <div v-if="!selectedAddresses" class="col-auto text-primary pl-1">
+      <div v-for="(address, key) in addresses" :key="address.id" class="row mb-2 no-gutters pt-2 flex-nowrap">
+        <div v-if="!selectedAddresses" class="col-auto text-primary pl-1 pr-2">
           <fa icon="map-marker-alt" />
         </div>
-        <div v-if="!selectedAddresses" class="col pl-2">
-          <div>
+        <div v-if="!selectedAddresses" class="col overflow-auto">
+          <div class="text-nowrap">
             <a href="javascript:void(0)" class="text-primary" @click="$emit('pointClick', address)" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
+            {{ address.operationModeText }}
+            <span v-if="address.phone && defaultPhone !== address.phone">, <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a></span>
+            <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
           </div>
-          {{ address.operationModeText }}
-          <span v-if="address.phone && defaultPhone !== address.phone">, <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a></span>
-          <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
         </div>
-        <div v-if="selectedAddresses" class="col-12 pl-2 pr-2">
+        <div v-if="selectedAddresses" class="col-12 px-2">
           <checkbox
             :value="selectedAddresses.indexOf(address.id) !== -1"
             @input="$emit('change', {
