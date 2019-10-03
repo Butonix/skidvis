@@ -114,17 +114,19 @@
                     }"
                     class="card-footer__list-address__wrapper"
                   >
-                    <ul class="card-footer__list-address list-unstyled text-muted">
-                      <li
-                        v-for="(point, index) in item.points"
-                        v-if="index !== 0"
-                        :key="'list-address__item-'+index"
-                        :title="(point.street)?point.street:point.full_street"
-                        class="card-footer__list-address__item"
-                      >
-                        <div class="card-footer__list-address__link" v-text="(point.street)?point.street:point.full_street"/>
-                      </li>
-                    </ul>
+                    <div class="card-footer__list-address">
+                      <ul class="card-footer__list-address__list list-unstyled text-muted">
+                        <li
+                          v-for="(point, index) in item.points"
+                          v-if="index !== 0"
+                          :key="'list-address__item-'+index"
+                          :title="(point.street)?point.street:point.full_street"
+                          class="card-footer__list-address__item"
+                        >
+                          <div class="card-footer__list-address__link" v-text="(point.street)?point.street:point.full_street"/>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>

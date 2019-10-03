@@ -388,6 +388,10 @@
         padding-bottom: .5rem;
         max-width: 100%;
         margin-bottom: 0;
+        &__list{
+          overflow: auto;
+          max-height: 180px;
+        }
         &__wrapper{
           position: absolute;
           top: 100%;
