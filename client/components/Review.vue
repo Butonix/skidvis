@@ -1,5 +1,6 @@
 <template>
   <div class="review">
+    <div v-if="isAdministrator || isSuperAdministrator" class="review__delete" @click="$emit('delete', review)"><fa icon="times"/></div>
     <div class="review-header">
       <avatar-with-name
         :user="review.user"
@@ -34,6 +35,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     'PlusBold': () => import('~/components/Icons/PlusBold'),
@@ -46,7 +49,12 @@ export default {
       type: Object,
       required: true
     }
-  }
+  },
+  computed: mapGetters({
+    isSuperAdministrator: 'auth/isSuperAdministrator',
+    isAdministrator: 'auth/isAdministrator',
+    isManagement: 'auth/isManagement'
+  }),
 }
 </script>
 

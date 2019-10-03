@@ -144,7 +144,7 @@
         />
       </div>
       <no-ssr>
-        <div class="ymap-custom">
+        <div class="ymap-custom ymap-custom--height">
           <yandex-map
             v-if="getCoords"
             ref="map"
@@ -217,6 +217,7 @@
             name="fade" mode="out-in">
             <review
               :review="review"
+              @delete="onDeleteReview"
             />
           </transition>
           <transition
@@ -649,13 +650,21 @@ export default {
           })
         }, 600)
       }
+    },
+    async onDeleteReview (review) {
+      let res = await this.$confirmDelete({ text: 'Удалить отзыв?' })
+      if (res.value) {
+        try {
+          await axios.delete('reviews/' + review.id)
+          await this.fetchReviews({})
+        } catch (e) {
+          await this.fetchReviews({})
+        }
+      }
     }
   }
 }
 </script>
 
 <style>
-  .ymap-custom{
-    height: 600px;
-  }
 </style>

@@ -127,6 +127,7 @@
               name="fade" mode="out-in">
               <review
                 :review="review"
+                @delete="onDeleteReview"
               />
             </transition>
             <transition
@@ -400,6 +401,17 @@ export default {
           text: 'Отправить отзыв не удалось'
         })
         console.log(e)
+      }
+    },
+    async onDeleteReview (review) {
+      let res = await this.$confirmDelete({ text: 'Удалить отзыв?' })
+      if (res.value) {
+        try {
+          await axios.delete('reviews/' + review.id)
+          await this.fetchReviews({})
+        } catch (e) {
+          await this.fetchReviews({})
+        }
       }
     }
   }

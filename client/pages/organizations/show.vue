@@ -109,6 +109,7 @@
             name="fade" mode="out-in">
             <review
               :review="review"
+              @delete="onDeleteReview"
             />
           </transition>
 
@@ -387,6 +388,23 @@ export default {
     },
     getLinkTel (str) {
       return getLinkTel(str)
+    },
+    async onDeleteReview (review) {
+      let res = await this.$confirmDelete({ text: 'Удалить отзыв?' })
+      if (res.value) {
+        try {
+          await axios.delete('reviews/' + review.id)
+          await this.fetchReviews({})
+        } catch (e) {
+          await this.fetchReviews({})
+        }
+        try {
+          let { data } = await axios.get('organizations/' + this.organizationId)
+          this.organization = data.organization
+        } catch (e) {
+          console.log(e)
+        }
+      }
     }
   }
 }
