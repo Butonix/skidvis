@@ -205,6 +205,7 @@
             @onInputDate="onInputDate"
             @onClickCategory="form.main_category_id = $event"
             @setIsAdvertisement="form.is_advertisement = $event"
+            @setIsPerpetual="form.is_perpetual = $event"
           />
 
           <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -286,6 +287,7 @@
           @onInputDate="onInputDate"
           @onClickCategory="form.main_category_id = $event"
           @setIsAdvertisement="form.is_advertisement = $event"
+          @setIsPerpetual="form.is_perpetual = $event"
         />
       </div>
 
@@ -553,6 +555,7 @@ export default {
       currency_id: 1,
       is_published: false,
       is_advertisement: false,
+      is_perpetual: false,
       tags: [],
       auditories: [],
       holidays: [],
@@ -645,7 +648,7 @@ export default {
   }),
   computed: {
     getOperationModeText () {
-      return (this.form.operationModeText) ? this.form.operationModeText.replace(', ', ', <br>') : ''
+      return (this.form.operationModeText) ? this.form.operationModeText.replaceAll('00:00-00:00', 'круглосуточно').replaceAll(', ', ', <br>') : ''
     },
     getTagsSelected () {
       return sortBy(this.tagsSelected, 'name')

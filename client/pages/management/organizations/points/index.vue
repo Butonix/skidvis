@@ -52,7 +52,7 @@
                 <span v-if="isAdministrator" class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
                 <span v-if="isAdministrator" class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
               </div>
-              {{ item.operationModeText }}
+              {{ item.operationModeText.replaceAll('00:00-00:00', 'круглосуточно') }}
               <div class="font-weight-bolder d-block d-md-none">
                 <div>
                   {{ item.email }}

@@ -9,7 +9,7 @@
         <div v-if="!selectedAddresses" class="col overflow-auto">
           <div class="text-nowrap">
             <a href="javascript:void(0)" class="text-primary" @click="$emit('pointClick', address)" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
-            {{ address.operationModeText }}
+            {{ address.operationModeText.replaceAll('00:00-00:00', 'круглосуточно') }}
             <span v-if="address.phone && defaultPhone !== address.phone">, <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a></span>
             <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
           </div>
@@ -22,7 +22,7 @@
               value: $event,
             })"
           >
-            <div class="text-primary" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
+            <div class="text-primary" v-html="address.full_street+((address.name)?'('+address.name+')':'')"/>
           </checkbox>
         </div>
       </div>

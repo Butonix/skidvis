@@ -438,7 +438,7 @@ export default {
       return res
     },
     getOperationModeText () {
-      return (this.product.operationModeText) ? this.product.operationModeText.replaceAll(', ', ', <br>') : ''
+      return (this.product.operationModeText) ? this.product.operationModeText.replaceAll('00:00-00:00', 'круглосуточно').replaceAll(', ', ', <br>') : ''
     },
     getPoints () {
       return (this.fusePoints && this.search.length > 0) ? this.fusePoints.search(this.search) : this.product.points

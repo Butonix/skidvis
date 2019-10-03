@@ -10,7 +10,10 @@
         <hourglass />
       </template>
       <template slot="text">
-        <template v-if="timeHuman">
+        <template v-if="product.is_perpetual">
+          Акция действует бессрочно
+        </template>
+        <template v-else-if="timeHuman">
           Акция действует
           <div v-html="timeHuman"/>
         </template>
@@ -24,7 +27,7 @@
       <template slot="text">
         <div v-if="operationModeText" class="mb-2">
           Режим работы
-          <div v-html="operationModeText"/>
+          <div v-html="operationModeText.replaceAll('00:00-00:00', 'круглосуточно')"/>
         </div>
         <p v-if="product.organization_link" class="mb-2">
           <a :href="product.organization_link" class="link-dashed text-black-50" target="_blank" v-text="getDomain(product.organization_link)"/>

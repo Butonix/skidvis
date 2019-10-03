@@ -4,37 +4,51 @@
     [boxClass]: !!boxClass,
     ['product__sidebar--'+boxMod]: !!boxMod,
   }">
+    <list-item-icon class="mb-0">
+      <template slot="text">
+        <v-checkbox :value="form.is_perpetual" @input="$emit('setIsPerpetual', $event)">
+          Без срока действия
+        </v-checkbox>
+      </template>
+    </list-item-icon>
+
+    <list-item-icon v-if="organization.is_advertisement">
+      <template slot="text">
+        <v-checkbox :value="form.is_advertisement" @input="$emit('setIsAdvertisement', $event)">
+          Рекламировать
+        </v-checkbox>
+      </template>
+    </list-item-icon>
 
     <list-item-icon>
       <template slot="icon">
         <hourglass />
       </template>
       <template slot="text">
-        <template v-if="timeHuman">
+        <template v-if="form.is_perpetual">
+          Акция действует бессрочно
+        </template>
+        <template v-else-if="timeHuman">
           Акция действует
           <div v-html="timeHuman"/>
         </template>
-        <div class="btn btn-outline-gray btn-sm btn-block btn-time-picker mb-2">
-          <span v-text="timeHuman?'+ изменить время':'+ добавить время'"/>
-          <div class="btn-time-picker__picker">
-            <flat-pickr
-              :value="getDate"
-              :config="config"
-              @input="onInputDate"
-            />
+        <template v-if="!form.is_perpetual">
+          <div class="btn btn-outline-gray btn-sm btn-block btn-time-picker mb-2">
+            <span v-text="timeHuman?'+ изменить время':'+ добавить время'"/>
+            <div class="btn-time-picker__picker">
+              <flat-pickr
+                :value="getDate"
+                :config="config"
+                @input="onInputDate"
+              />
+            </div>
           </div>
-        </div>
-        <no-ssr>
-          <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('start_at') }">
-            <has-error :form="form" field="start_at"/>
-          </div>
-        </no-ssr>
-
-        <div v-if="organization.is_advertisement" class="pt-3">
-          <v-checkbox :value="form.is_advertisement" @input="$emit('setIsAdvertisement', $event)">
-            Рекламировать
-          </v-checkbox>
-        </div>
+          <no-ssr>
+            <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('start_at') }">
+              <has-error :form="form" field="start_at"/>
+            </div>
+          </no-ssr>
+        </template>
       </template>
     </list-item-icon>
 
@@ -44,7 +58,7 @@
       </template>
       <template slot="text">
         Режим работы
-        <div v-html="operationModeText"/>
+        <div v-html="operationModeText.replaceAll('00:00-00:00', 'круглосуточно')"/>
       </template>
     </list-item-icon>
 
