@@ -8,7 +8,9 @@
         </div>
         <div v-if="!selectedAddresses" class="col overflow-auto">
           <div class="text-nowrap">
-            <a href="javascript:void(0)" class="text-primary" @click="$emit('pointClick', address)" v-html="address.street+((address.name)?'('+address.name+')':'')"/>
+            <a href="javascript:void(0)" class="text-primary" @click="$emit('pointClick', address)">
+              <span v-if="address.metro_line_color" :style="'color: #'+address.metro_line_color"><metro/></span>
+            <span v-html="address.street+((address.name)?'('+address.name+')':'')"/></a>
             {{ address.operationModeText.replaceAll('00:00-00:00', 'круглосуточно') }}
             <span v-if="address.phone && defaultPhone !== address.phone">, <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a></span>
             <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
@@ -35,6 +37,9 @@
 import { getLinkTel } from '~/utils'
 
 export default {
+  components: {
+    'Metro': () => import('~/components/Icons/Metro')
+  },
   props: {
     selectedAddresses: {
       type: Array,

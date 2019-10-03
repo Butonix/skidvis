@@ -48,7 +48,7 @@
             </div>
             <div class="col pl-2">
               <div class="text-primary">
-                {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
+                <span v-if="item.metro_line_color" :style="'color: #'+item.metro_line_color"><metro/></span> {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
                 <span v-if="isAdministrator" class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
                 <span v-if="isAdministrator" class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
               </div>
@@ -380,6 +380,7 @@ const wacherListDelete = List.getWatcher({ type: List.afterTypes.DELETE })
 
 export default {
   components: {
+    'Metro': () => import('~/components/Icons/Metro'),
     'AddressesSelect': () => import('~/components/Points/AddressesSelect'),
     'PaginateList': () => import('~/components/PaginateList'),
     'SearchInput': () => import('~/components/SearchInput'),
