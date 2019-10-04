@@ -64,11 +64,6 @@
       width: 40px;
       height: 40px;
     }
-    @include media-breakpoint-down(xs){
-      width: 30px;
-      height: 30px;
-      border-radius: 0 0 0 10px;
-    }
     &:before, &:after{
       content: '';
       position: absolute;
@@ -84,10 +79,6 @@
       @include media-breakpoint-down(sm){
         left: 20px;
         height: 36px;
-      }
-      @include media-breakpoint-down(xs){
-        left: 15px;
-        height: 26px;
       }
     }
     &:before {
@@ -132,12 +123,6 @@
       height: 40px;
       font-size: 1.4rem;
     }
-    @include media-breakpoint-down(xs){
-      width: 30px;
-      height: 30px;
-      border-radius: 0 0 10px 0;
-      font-size: 1.3rem;
-    }
     &.loading{
       pointer-events: none;
       color: transparent !important;
@@ -156,6 +141,32 @@
         left: calc(50% - (1em / 2));
         top: calc(50% - (1em / 2));
       }
+    }
+  }
+  &__show-me{
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 100px;
+    width: 62px;
+    height: 62px;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $primary;
+    border-radius: 15px 0 0 15px;
+    color: white;
+    @include media-breakpoint-down(md){
+      width: 50px;
+      height: 50px;
+      font-size: 1.8rem;
+    }
+    @include media-breakpoint-down(sm){
+      width: 40px;
+      height: 40px;
+      font-size: 1.4rem;
     }
   }
 }

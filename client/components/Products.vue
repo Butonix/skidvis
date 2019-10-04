@@ -88,7 +88,7 @@
                     >
                       <div class="card-footer__address__text"
                       >
-                        <span v-if="item.points[0] && item.points[0].metro_line_color" :style="'color: #'+item.points[0].metro_line_color"><metro/></span>
+                        <metro v-if="item.points[0]" :color="item.points[0].metro_line_color" :station="item.points[0].metro_station_name" :line="item.points[0].metro_line_name" :distance="item.points[0].metro_distance"/>
                         {{ (item.points[0])?((item.points[0].street)?item.points[0].street:item.points[0].full_street):'' }}
                       </div>
                     </div>
@@ -126,7 +126,7 @@
                           class="card-footer__list-address__item"
                         >
                           <div class="card-footer__list-address__link">
-                            <span v-if="point.metro_line_color" :style="'color: #'+point.metro_line_color"><metro/></span>
+                            <metro :color="point.metro_line_color" :station="point.metro_station_name" :line="point.metro_line_name" :distance="point.metro_distance"/>
                             {{ (point.street)?point.street:point.full_street }}
                           </div>
                         </li>
@@ -174,7 +174,7 @@ import Paginate from 'vuejs-paginate/src/components/Paginate.vue'
 
 export default {
   components: {
-    'Metro': () => import('~/components/Icons/Metro'),
+    'Metro': () => import('~/components/MetroWithTooltip'),
     'PaginateList': () => import('~/components/PaginateList'),
     'PresentCard': () => import('~/components/Icons/PresentCard'),
     'Flag': () => import('~/components/Flag'),

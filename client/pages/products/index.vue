@@ -115,6 +115,9 @@
           <filter-icon/>
         </div>
         <div class="map-modal__close" @click="$modal.pop()"/>
+        <div v-if="userLocation" class="map-modal__show-me" @click="onShowMe">
+          <fa icon="compass"/>
+        </div>
         <no-ssr>
           <yandex-map
             v-if="getCoords"
@@ -131,7 +134,7 @@
               :icon="markerIconLocationUser"
               :key="'userLocation'"
               :coords="userLocation.position"
-              :marker-id="'userLocation'"
+              :marker-id="'userLocation'+userLocation.position[0]+'-'+userLocation.position[1]"
             />
             <ymap-marker
               v-for="(point, key) in getPoints"
@@ -360,6 +363,9 @@ export default {
     zoom: 10,
     points: [],
     userLocation: null,
+    userLocationTimeout: null,
+    pointSelect: null,
+    pointSelectZoom: false,
     orderingArray: [
       {
         id: 1,
@@ -395,6 +401,8 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      user: 'auth/user',
+      check: 'auth/check',
       wishlist: 'auth/wishlist',
       city: 'auth/city'
     }),
@@ -403,6 +411,9 @@ export default {
     },
     getCoords () {
       let res = null
+      if (this.pointSelect && this.pointSelect.latitude && this.pointSelect.longitude) {
+        res = [this.pointSelect.latitude, this.pointSelect.longitude]
+      } else
       if (this.city && this.city.latitude && this.city.longitude) {
         res = [this.city.latitude, this.city.longitude]
       }
@@ -453,7 +464,7 @@ export default {
         console.log('error', e)
       }
 
-      setTimeout(()=>{
+      setTimeout(() => {
         this.loadingPoints = false
       }, 1000)
     },
@@ -473,30 +484,42 @@ export default {
           if (!this.balloonopening) {
             this.fetchMapPoints()
           }
+          if (this.pointSelectZoom) {
+            this.pointSelectZoom = false
+            this.zoom = 19
+          }
         }, 600)
       })
 
-      if (!this.userLocation) {
-        // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
-        let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
-
-        // Асинхронная обработка ответа.
-        location.then(
-          (result) => {
-            // Добавление местоположения на карту.
-            this.userLocation = result.geoObjects
-            // this.map.geoObjects.add(result.geoObjects)
-          },
-          (err) => {
-            console.log('Error map location: ' + err)
-          }
-        )
-      }
+      this.setUserLocation()
 
       await this.fetchMapPoints()
       setTimeout(() => {
         this.isOpenMap = true
       }, 1000)
+    },
+    setUserLocation () {
+      // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
+      let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
+
+      // Асинхронная обработка ответа.
+      location.then(
+        (result) => {
+          // Добавление местоположения на карту.
+          this.userLocation = result.geoObjects
+          clearTimeout(this.userLocationTimeout)
+          this.userLocationTimeout = setTimeout(() => {
+            this.setUserLocation()
+          }, 30000)
+        },
+        (err) => {
+          console.log('Error map location: ' + err)
+          clearTimeout(this.userLocationTimeout)
+          this.userLocationTimeout = setTimeout(() => {
+            this.setUserLocation()
+          }, 30000)
+        }
+      )
     },
     async setFiltersMap () {
       this.showMapFilters = !this.showMapFilters
@@ -510,6 +533,15 @@ export default {
     },
     mapClosed () {
       this.isOpenMap = false
+    },
+    onShowMe () {
+      if (this.userLocation) {
+        this.pointSelectZoom = true
+        this.pointSelect = {
+          latitude: this.userLocation.position[0],
+          longitude: this.userLocation.position[1]
+        }
+      }
     }
   }
 }
