@@ -418,6 +418,7 @@ export default {
     fusePoints: null,
     map: null,
     userLocation: null,
+    userLocationTimeout: null,
     pointSelect: null
   }),
   computed: {
@@ -505,24 +506,32 @@ export default {
     async onMapWasInitialized (payload) {
       this.map = payload
 
-      if (!this.userLocation) {
-        // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
-        let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
-
-        // Асинхронная обработка ответа.
-        location.then(
-          (result) => {
-            // Добавление местоположения на карту.
-            this.userLocation = result.geoObjects
-            // this.map.geoObjects.add(result.geoObjects)
-          },
-          (err) => {
-            console.log('Error map location: ' + err)
-          }
-        )
-      }
+      this.setUserLocation()
 
       // console.log(payload._bounds)
+    },
+    setUserLocation () {
+      // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
+      let location = window.ymaps.geolocation.get({ autoReverseGeocode: false })
+
+      // Асинхронная обработка ответа.
+      location.then(
+        (result) => {
+          // Добавление местоположения на карту.
+          this.userLocation = result.geoObjects
+          clearTimeout(this.userLocationTimeout)
+          this.userLocationTimeout = setTimeout(() => {
+            this.setUserLocation()
+          }, 30000)
+        },
+        (err) => {
+          console.log('Error map location: ' + err)
+          clearTimeout(this.userLocationTimeout)
+          this.userLocationTimeout = setTimeout(() => {
+            this.setUserLocation()
+          }, 30000)
+        }
+      )
     },
     async clickMarker (e, point, key) {
       // console.log(e, point, key)
