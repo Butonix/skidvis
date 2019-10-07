@@ -243,8 +243,8 @@ const List = BuildList({
     is_active: 1
   },
   urlQuery: {
-    ordering: 'created_at',
-    orderingDir: 'desc',
+    ordering: 'random',
+    orderingDir: 'asc',
     perPage: 12
   },
   buildWatchers ({ beforeTypes, getWatcher, gN }) {
@@ -369,24 +369,30 @@ export default {
     orderingArray: [
       {
         id: 1,
+        ordering: 'random',
+        orderingDir: 'asc',
+        name: 'Без сортировки'
+      },
+      {
+        id: 2,
         ordering: 'created_at',
         orderingDir: 'desc',
         name: 'Новые'
       },
       {
-        id: 2,
+        id: 3,
         ordering: 'popularity',
         orderingDir: 'desc',
         name: 'По популярности'
       },
       {
-        id: 3,
+        id: 4,
         ordering: 'reviews_count',
         orderingDir: 'desc',
         name: 'По отзывам'
       },
       {
-        id: 4,
+        id: 5,
         ordering: 'name',
         orderingDir: 'asc',
         name: 'По названию'
@@ -394,9 +400,9 @@ export default {
     ],
     ordering: {
       id: 1,
-      ordering: 'created_at',
-      orderingDir: 'desc',
-      name: 'Новые'
+      ordering: 'random',
+      orderingDir: 'asc',
+      name: 'Без сортировки'
     }
   }),
   computed: {
