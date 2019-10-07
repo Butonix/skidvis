@@ -290,14 +290,18 @@ export default {
       } else {
         let sArr = startAt.split('-')
         let eArr = endAt.split('-')
-        let start = `с ${sArr[2]} `
-        if (sArr[1] !== eArr[1]) {
-          start += `${mR[sArr[1]]} `
-        }
+        let start = ''
+        let end = ''
         if (sArr[0] !== eArr[0]) {
-          start += sArr[0] + '<br>'
+          start = `с ${sArr[2]} ${mR[sArr[1]]} ${sArr[0]}<br>`
+          end = `по ${eArr[2]} ${mR[eArr[1]]} ${eArr[0]}`
+        } else {
+          start = `с ${sArr[2]} `
+          if (sArr[1] !== eArr[1]) {
+            start += `${mR[sArr[1]]} `
+          }
+          end = `по ${eArr[2]} ${mR[eArr[1]]} ${eArr[0]}`
         }
-        let end = `по ${eArr[2]} ${mR[eArr[1]]} ${eArr[0]}`
         return start + end
       }
     },
