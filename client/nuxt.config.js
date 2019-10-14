@@ -107,6 +107,7 @@ module.exports = {
     //   coordorder: 'latlong',
     //   version: '2.1'
     // }],
+    '@nuxtjs/pwa',
     '@nuxtjs/router',
     'vue-scrollto/nuxt',
     'vue-sweetalert2/nuxt',
