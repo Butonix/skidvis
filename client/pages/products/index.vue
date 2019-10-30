@@ -59,7 +59,7 @@
     />
 
     <div v-if="visitedProducts.length" class="container">
-      <visited-slider :products="visitedProducts" class="mt-5"/>
+      <visited-slider :products="visitedProducts" class="mt-5" />
     </div>
     <modal name="map" @closed="mapClosed">
       <div class="basic-modal map-modal ymap-custom">
@@ -111,12 +111,13 @@
         <div :class="{'active': loadingPoints && !isOpenMap}"
              class="loading-list"
         />
-        <div :class="{'loading':loadingPoints && isOpenMap}" class="map-modal__filter-btn" @click="showMapFilters = !showMapFilters">
-          <filter-icon/>
+        <div :class="{'loading':loadingPoints && isOpenMap}" class="map-modal__filter-btn"
+             @click="showMapFilters = !showMapFilters">
+          <filter-icon />
         </div>
-        <div class="map-modal__close" @click="$modal.pop()"/>
+        <div class="map-modal__close" @click="$modal.pop()" />
         <div v-if="userLocation" class="map-modal__show-me" @click="onShowMe">
-          <fa icon="compass"/>
+          <fa icon="compass" />
         </div>
         <no-ssr>
           <yandex-map
@@ -291,7 +292,7 @@ export default {
     return {
       title: this.$route.meta.title,
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('default', 'Список акций, Скидвис')
     }
@@ -419,8 +420,7 @@ export default {
       let res = null
       if (this.pointSelect && this.pointSelect.latitude && this.pointSelect.longitude) {
         res = [this.pointSelect.latitude, this.pointSelect.longitude]
-      } else
-      if (this.city && this.city.latitude && this.city.longitude) {
+      } else if (this.city && this.city.latitude && this.city.longitude) {
         res = [this.city.latitude, this.city.longitude]
       }
       return res

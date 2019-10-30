@@ -284,7 +284,7 @@ export default {
     return {
       title: 'Редактирование организации',
       bodyAttrs: {
-        class: 'theme-business navbar-fixed'
+        class: 'theme-business navbar-fixed theme-management'
       },
       ...getFavicon('business')
     }

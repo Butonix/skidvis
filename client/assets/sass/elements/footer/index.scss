@@ -29,7 +29,8 @@ main {
   @include media-breakpoint-up(md) {
     padding: 3rem 4rem;
   }
-  &__desc{
+
+  &__desc {
     text-align: center;
     max-width: 639px;
     margin-left: auto;
@@ -38,6 +39,7 @@ main {
     font-size: rem(18);
     line-height: 1.6;
   }
+
   &__nav {
     margin-left: -0.875rem;
     margin-right: -0.875rem;
@@ -46,18 +48,18 @@ main {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    @include media-breakpoint-up(sm){
+    @include media-breakpoint-up(sm) {
       justify-content: flex-start;
     }
   }
 
   &__social {
     border: 3px solid #272727;
-    border-radius: 6px;
+    border-radius: 15px;
     padding: 1.1rem;
 
     &[data-border='vk'] {
-      border-color: $social_vk;
+      border-color: $social_vk !important;
 
       &[data-fill='1'] {
         background: $social_vk;
@@ -65,7 +67,7 @@ main {
     }
 
     &[data-border='ok'] {
-      border-color: $social_ok;
+      border-color: $social_ok !important;
 
       &[data-fill='1'] {
         background: $social_ok;
@@ -73,7 +75,7 @@ main {
     }
 
     &[data-border='facebook'] {
-      border-color: $social_facebook;
+      border-color: $social_facebook !important;
 
       &[data-fill='1'] {
         background: $social_facebook;
@@ -81,7 +83,7 @@ main {
     }
 
     &[data-border='google'] {
-      border-color: $social_google;
+      border-color: $social_google !important;
 
       &[data-fill='1'] {
         background: $social_google;
@@ -89,7 +91,7 @@ main {
     }
 
     &[data-border='instagram'] {
-      border-color: $social_instagram;
+      border-color: $social_instagram !important;
 
       &[data-fill='1'] {
         background: $social_instagram;
@@ -103,7 +105,7 @@ main {
     align-items: center;
     flex-direction: column;
     background: white;
-    border-radius: 6px;
+    border-radius: 15px;
     margin-bottom: rem(34);
     padding: 1.5rem;
     max-width: 700px;
@@ -112,6 +114,50 @@ main {
     &__box {
       text-align: center;
       padding-bottom: rem(21);
+    }
+  }
+
+  &__toggle {
+    cursor: pointer;
+    position: relative;
+    width: 69px;
+    min-width: 69px;
+    height: 33px;
+    border: 2px solid $primary;
+    border-radius: 115px;
+    margin-bottom: 32px;
+
+    &__label {
+      position: absolute;
+      left: 79px;
+      top: 2px;
+      white-space: nowrap;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      background: $primary;
+      transition: .2s ease;
+    }
+
+    &.active {
+      &:before {
+        left: 38px;
+      }
+    }
+  }
+
+  &__develop {
+    &__img {
+      width: 257px;
+      height: 55px;
+      background: url('/img/footer/logo.svg') center no-repeat;
     }
   }
 }

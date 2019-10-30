@@ -317,7 +317,7 @@ export default {
     return {
       title: 'Политика конфиденциальности',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon()
     }

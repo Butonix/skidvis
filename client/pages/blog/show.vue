@@ -178,7 +178,7 @@ export default {
     return {
       title,
       bodyAttrs: {
-        class: 'theme-blog'
+        class: 'theme-blog' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('blog', desc)
     }

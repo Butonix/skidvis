@@ -21,8 +21,6 @@ export default {
   data: () => ({
     loaded: false
   }),
-  computed: {
-  },
   // beforeMount () {
   //   window.scrollTo(0, 0)
   // },

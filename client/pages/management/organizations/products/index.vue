@@ -148,7 +148,7 @@ export default {
     return {
       title: 'Мои акции',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-business theme-management'
       },
       ...getFavicon('business')
     }

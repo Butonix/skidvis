@@ -540,7 +540,7 @@ export default {
     return {
       title: 'Акция',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-business theme-management'
       },
       ...getFavicon('business')
     }

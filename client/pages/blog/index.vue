@@ -198,7 +198,7 @@ export default {
     return {
       title: 'Блог',
       bodyAttrs: {
-        class: 'theme-blog'
+        class: 'theme-blog' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('blog', 'Список статей, Скидвис')
     }

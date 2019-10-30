@@ -278,7 +278,7 @@ export default {
     return {
       title: title,
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('default', desc)
     }

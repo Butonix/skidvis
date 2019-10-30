@@ -37,6 +37,11 @@ export const actions = {
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
     }
+
+    const black = cookieFromRequest(req, 'black')
+    if (black) {
+      commit('variables/SET_BLACK', black)
+    }
   },
 
   nuxtClientInit ({ commit }) {
@@ -73,6 +78,11 @@ export const actions = {
     const locale = Cookies.get('locale')
     if (locale) {
       commit('lang/SET_LOCALE', { locale })
+    }
+
+    const black = Cookies.get('black')
+    if (black) {
+      commit('variables/SET_BLACK', black)
     }
   }
 }

@@ -88,7 +88,7 @@ export default {
     return {
       title: 'Профиль',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon()
     }

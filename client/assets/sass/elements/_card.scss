@@ -405,7 +405,7 @@
           background: white;
           overflow: hidden;
           pointer-events: none;
-          transition: .4s;
+          transition: max-height .4s;
           &.active{
             pointer-events: auto;
             box-shadow: 0 14px 19px rgba(216, 216, 216, 0.7);

@@ -54,7 +54,6 @@ const List = BuildList({
         await getWatcher({ type: beforeTypes.SEARCH }).call(this)
       },
       'check': async function (v) {
-        console.log(v, this.wishlist.length)
         if (v) {
           this[gN].apiUrl = 'user/wishlist'
           if (this[gN].apiQuery.whereIn) {
@@ -84,7 +83,7 @@ export default {
     return {
       title: this.$route.meta.title,
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon()
     }

@@ -1,5 +1,12 @@
 <template>
   <footer class="footer">
+    <div class="d-flex justify-content-center">
+      <div :class="{'active': black}" class="footer__toggle" @click="setBlack(black?0:1)">
+        <div class="footer__toggle__label" v-html="black?'Ночная тема':'Дневная тема'">
+          Ночная тема
+        </div>
+      </div>
+    </div>
     <div class="footer__content">
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
@@ -84,21 +91,21 @@
       </div>
       <div class="text-center">
         <router-link :to="{ name: 'policy' }" class="nav-link"
-        @click.native="$sTB()">
+                     @click.native="$sTB()">
           Политика конфиденциальности
         </router-link>
       </div>
     </div>
     <div class="footer__develop">
       <a href="https://batyukovstudio.com" target="_blank">
-        <img draggable="false" class="img-fluid" src="/img/footer/logo.svg" alt="Footer logo">
+        <div class="footer__develop__img"/>
       </a>
     </div>
   </footer>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data: () => ({
@@ -106,10 +113,12 @@ export default {
     fill: '0'
   }),
   computed: mapGetters({
-    blog: 'auth/blog'
+    blog: 'auth/blog',
+    black: 'variables/black'
   }),
-  methods: {
-  }
+  methods: mapActions({
+    setBlack: 'variables/setBlack'
+  })
 }
 </script>
 

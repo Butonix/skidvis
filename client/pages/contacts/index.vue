@@ -76,7 +76,7 @@ export default {
     return {
       title: 'Контакты',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon()
     }

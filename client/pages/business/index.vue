@@ -111,7 +111,7 @@ export default {
     return {
       title: 'Праздник — отличный двигатель продаж',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-business' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('business', 'Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.')
     }

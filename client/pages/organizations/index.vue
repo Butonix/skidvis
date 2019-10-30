@@ -158,7 +158,7 @@ export default {
     return {
       title: 'Все компании',
       bodyAttrs: {
-        class: 'theme-default'
+        class: 'theme-default' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('default', 'Список компаний, Скидвис')
     }

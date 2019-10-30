@@ -118,7 +118,7 @@ export default {
     return {
       title: this.$route.meta.title,
       bodyAttrs: {
-        class: 'theme-blog'
+        class: 'theme-blog' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon()
     }

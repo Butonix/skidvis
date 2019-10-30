@@ -77,7 +77,7 @@ export default {
     return {
       title: 'Платные услуги организации',
       bodyAttrs: {
-        class: 'theme-business'
+        class: 'theme-business theme-management'
       },
       ...getFavicon('business')
     }

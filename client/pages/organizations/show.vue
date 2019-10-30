@@ -193,7 +193,7 @@ export default {
     return {
       title,
       bodyAttrs: {
-        class: 'theme-default navbar-fixed'
+        class: 'theme-default navbar-fixed' + (' ' + this.$store.getters['variables/getBlackClass'])
       },
       ...getFavicon('default', desc)
     }

@@ -1,6 +1,7 @@
 // state
 import Vue from 'vue'
 import axios from 'axios'
+import Cookies from "js-cookie";
 
 export const state = () => {
   let interval = []
@@ -86,7 +87,8 @@ export const state = () => {
       }
     },
     interval,
-    addresses: []
+    addresses: [],
+    black: 0
   }
 }
 
@@ -104,7 +106,9 @@ export const getters = {
   getDefaultTimeSelect: state => state.operationMode.default,
   getInterval: (state) => {
     return state.interval
-  }
+  },
+  black: state => state.black,
+  getBlackClass: state => state.black ? 'theme-black' : ''
 }
 // mutations
 export const mutations = {
@@ -135,6 +139,9 @@ export const mutations = {
         Vue.set(state.reactData[param], Number(id), data[param][id])
       }
     }
+  },
+  SET_BLACK (state, black) {
+    state.black = Number(black)
   }
 }
 
@@ -192,5 +199,10 @@ export const actions = {
     } catch (e) {
       console.log(e)
     }
+  },
+  setBlack ({ commit }, black) {
+    commit('SET_BLACK', black)
+
+    Cookies.set('black', black, { expires: 365 })
   }
 }
