@@ -132,6 +132,11 @@ main {
       left: 79px;
       top: 2px;
       white-space: nowrap;
+      @include media-breakpoint-down(xs){
+        left: 50%;
+        transform: translateX(-50%);
+        top: 38px;
+      }
     }
 
     &:before {

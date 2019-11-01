@@ -6,9 +6,9 @@
       path {
         stroke: #B1B1B1;
         fill: transparent;
-        @include media-breakpoint-down(md) {
-          stroke: #000000;
-        }
+        //@include media-breakpoint-down(md) {
+        //  stroke: #000000;
+        //}
       }
     }
 
@@ -47,9 +47,9 @@
         svg {
           path {
             stroke: white;
-            @include media-breakpoint-down(md) {
-              stroke: #000000;
-            }
+            //@include media-breakpoint-down(md) {
+            //  stroke: #000000;
+            //}
           }
         }
         &.active {
