@@ -89,7 +89,7 @@
           4 Зарабатывайте клиентов
         </div>
         <div class="w-100 text-center">
-          <img class="img-fluid" src="/img/business/client.svg" alt="Зарабатывайте клиентов">
+          <div class="business__client"></div>
         </div>
       </div>
     </div>

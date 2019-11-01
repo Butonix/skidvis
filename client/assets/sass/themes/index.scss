@@ -55,6 +55,12 @@
         //  }
         //}
 
+        .footer__toggle{
+          border-color: $primary_;
+          &:before{
+            background: $primary_;
+          }
+        }
 
         .checkbox-toggle {
           input {
@@ -275,24 +281,30 @@ body, .footer__content, .char{
   .fill-theme-black{
     fill: #2D2D2D;
   }
+  .contacts__form .btn{
+    background: #2D2D2D;
+  }
   .footer__content, .product-card-mini, .card, .card-footer,
   .card--product .card-footer__list-address__wrapper, .tag, .review,
   .material-input--review textarea, .material-input--review input, .dropdown-menu,
   .dropdown-menu .nav-item .nav-link, .categories-modal, .article-card--actual .article-card__body,
   .article-card--actual, .article-card--small, .share-box, .article-card--next, .auth-collapse__list,
-  .auth-collapse__list .nav-item .nav-link{
+  .auth-collapse__list .nav-item .nav-link, .card-step, .contacts__form__wrapper, .modal-content.modal--login{
     background-color: #474747;
   }
   .nav-link, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .product-card-mini__body,
   .card--product .card-body, .navbar__brand__label, .tag, .article-card--actual .article-card__body, .article-card--small,
-  .article-card--small .article-card__body{
+  .article-card--small .article-card__body, .material-input label, .btn-link{
     color: #E6E6E6;
+  }
+  .btn-link{
+    border-color: #E6E6E6;
   }
   .footer__social, .share-box{
     border-color: #535353;
   }
   .product-card-mini, .card, .product__logo, .review, .dropdown-menu, .categories-modal, .orgs-show__logo__box,
-  .auth-collapse__list{
+  .auth-collapse__list, .contacts__form__wrapper, .modal-content.modal--login{
     box-shadow: 0 3px 11px #363636;
   }
   .card-footer{
@@ -346,6 +358,9 @@ body, .footer__content, .char{
   }
   .footer__develop__img{
     background-image: url('/img/black/footer/logo.svg');
+  }
+  .business__client{
+    background: url("/img/business/client-black.svg") center no-repeat;
   }
 }
 .theme-management{
