@@ -1,11 +1,7 @@
 <template>
   <footer class="footer">
     <div class="d-flex justify-content-center">
-      <div :class="{'active': black}" class="footer__toggle" @click="setBlack(black?0:1)">
-        <div class="footer__toggle__label" v-html="black?'Ночная тема':'Дневная тема'">
-          Ночная тема
-        </div>
-      </div>
+      <theme-toggler />
     </div>
     <div class="footer__content">
       <div class="footer__content__box">
@@ -86,7 +82,8 @@
       </div>
       <div class="container">
         <p v-if="$route.name === 'welcome' || $route.name === 'products.index'" class="footer__desc">
-          Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие от экономии.
+          Скидвис предлагает акции на праздичные мероприятия. Здесь люди узнают, где отпраздновать, получая удовольствие
+          от экономии.
         </p>
       </div>
       <div class="text-center">
@@ -98,26 +95,25 @@
     </div>
     <div class="footer__develop">
       <a href="https://batyukovstudio.com" target="_blank">
-        <div class="footer__develop__img"/>
+        <div class="footer__develop__img" />
       </a>
     </div>
   </footer>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
+  components: {
+    'ThemeToggler': () => import('~/components/Footer/ThemeToggler')
+  },
   data: () => ({
     border: '',
     fill: '0'
   }),
   computed: mapGetters({
-    blog: 'auth/blog',
-    black: 'variables/black'
-  }),
-  methods: mapActions({
-    setBlack: 'variables/setBlack'
+    blog: 'auth/blog'
   })
 }
 </script>

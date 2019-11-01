@@ -41,11 +41,14 @@
               </ul>
             </div>
           </div>
-          <div class="order-3 order-lg-2 ml-lg-auto">
+          <div class="order-3 order-lg-2 ml-lg-auto d-none d-lg-block">
+            <theme-toggler :label="false" />
+          </div>
+          <div class="order-4 order-lg-3 ml-lg-4">
             <flag :count="wishCount"
                   @click.native="openMenu = false"/>
           </div>
-          <div class="order-1 order-lg-3 ml-lg-4 mb-3 mb-lg-0">
+          <div class="order-1 order-lg-4 ml-lg-4 mb-3 mb-lg-0">
             <div v-click-outside="closeCollapse" v-if="check" :class="{'active': openCollapse}"
                  class="auth-collapse">
               <button v-if="user.avatar && user.avatar.src"
@@ -89,7 +92,8 @@
           </div>
         </div>
       </div>
-      <div :class="{'active': openMenu}" class="nav-burger nav-burger--front d-inline-block d-lg-none mb-2 ml-auto" @click="openMenu = !openMenu"/>
+      <theme-toggler :label="false" class="d-lg-none ml-auto d-inline-block mb-2" />
+      <div :class="{'active': openMenu}" class="nav-burger nav-burger--front d-inline-block d-lg-none mb-2 ml-3" @click="openMenu = !openMenu"/>
     </div>
     <modal-login />
   </nav>
@@ -100,6 +104,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
+    'ThemeToggler': () => import('~/components/Footer/ThemeToggler'),
     'login': () => import('~/components/Auth/login'),
     'vSelect': () => import('vue-select'),
     'Flag': () => import('~/components/Navbar/Flag'),

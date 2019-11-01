@@ -15,19 +15,27 @@ import 'tippy.js/dist/tippy.css'
 //   }
 // })
 
-Vue.directive('title-tippy', {
-  bind: function (el, binding) {
-    if (binding.value) {
-      el.tippyInstance = tippy(el, {
-        maxWidth: 280,
-        placement: 'bottom',
-        content: binding.value
-      })
-    }
-  },
-  unbind: function (el) {
-    if (el.tippyInstance) {
-      el.tippyInstance.destroy()
-    }
+function bind (el, binding) {
+  if (binding.value) {
+    el.tippyInstance = tippy(el, {
+      maxWidth: 280,
+      placement: 'bottom',
+      content: binding.value
+    })
   }
+}
+
+function unbind (el) {
+  if (el.tippyInstance) {
+    el.tippyInstance.destroy()
+  }
+}
+
+Vue.directive('title-tippy', {
+  update (el, binding) {
+    unbind(el)
+    bind(el, binding)
+  },
+  bind,
+  unbind
 })
