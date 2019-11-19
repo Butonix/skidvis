@@ -15,7 +15,7 @@
           {{ address.operationModeText.replaceAll('00:00-00:00', 'круглосуточно') }}
           <span v-if="address.phone && defaultPhone !== address.phone">,
             <a :href="'tel:'+getLinkTel(address.phone)" class="text-black-50">{{ address.phone }}</a><template
-              v-if="address.phone && address.extension">({{ address.extension }})</template>
+              v-if="address.phone && address.extension">(доб.{{ address.extension }})</template>
           </span>
           <span v-if="address.email && defaultEmail !== address.email">, <a :href="'mailto:'+address.email" class="text-black-50">{{ address.email }}</a></span>
         </div>
