@@ -1,14 +1,27 @@
 <template>
   <div class="points-index">
-    <breadcrumbs/>
+    <breadcrumbs />
     <div class="container mb-5">
-      <h5 class="mb-2">
-        Мои организации
+      <h5 v-if="data.organization.name" class="mb-2">
+        {{ data.organization.name }}
       </h5>
-      <search-input
-        v-model="pts.urlQuery.search"
-        autofocus="autofocus"
-      />
+      <div class="row">
+        <div class="col">
+          <search-input
+            v-model="pts.urlQuery.search"
+            autofocus="autofocus"
+          />
+        </div>
+        <div class="col-auto">
+          <dropdown :options="perPageArray"
+                    v-model="perPage"
+                    class="mb-3"
+                    btn-class="btn btn-sm btn-gray"
+                    h-align="right"
+                    placeholder="Количество"
+          />
+        </div>
+      </div>
     </div>
     <div class="container">
       <div class="row mb-4">
@@ -48,9 +61,12 @@
             </div>
             <div class="col pl-2">
               <div class="text-primary">
-                <span v-if="item.metro_line_color" :style="'color: #'+item.metro_line_color"><metro/></span> {{ item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
-                <span v-if="isAdministrator" class="sli sli--edit" @click="onEdit(index)"><fa icon="pencil-alt" /></span>
-                <span v-if="isAdministrator" class="sli sli--delete" @click="onDelete(index)"><fa :icon="['far', 'trash-alt']"/></span>
+                <span v-if="item.metro_line_color" :style="'color: #'+item.metro_line_color"><metro /></span> {{
+                item.full_street }} {{ (item.name)?`(${item.name})`:'' }}
+                <span v-if="isAdministrator" class="sli sli--edit" @click="onEdit(index)"><fa
+                  icon="pencil-alt" /></span>
+                <span v-if="isAdministrator" class="sli sli--delete" @click="onDelete(index)"><fa
+                  :icon="['far', 'trash-alt']" /></span>
               </div>
               {{ item.operationModeText.replaceAll('00:00-00:00', 'круглосуточно') }}
               <div class="font-weight-bolder d-block d-md-none">
@@ -103,7 +119,7 @@
           <div class="col-12">
             <no-ssr>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
-                <has-error :form="form" field="full_street"/>
+                <has-error :form="form" field="full_street" />
               </div>
             </no-ssr>
           </div>
@@ -119,7 +135,7 @@
           <div class="col-12">
             <no-ssr>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
-                <has-error :form="form" field="full_street"/>
+                <has-error :form="form" field="full_street" />
               </div>
             </no-ssr>
           </div>
@@ -128,7 +144,7 @@
         <addresses-select
           v-if="!form.full_street"
           :init-value="address"
-          @select="onSelectAddress($event)"/>
+          @select="onSelectAddress($event)" />
 
         <material-input
           v-model="form.name"
@@ -262,7 +278,7 @@
           rows="3"
         >
           <div class="text-muted small">
-            <div>Перечислите адреса, каждый адрес на новой строчке. Например: </div>
+            <div>Перечислите адреса, каждый адрес на новой строчке. Например:</div>
             <div>г Санкт-Петербург, ул Благодатная, д 63 к 1</div>
             <div>г Санкт-Петербург, Загородный пр-кт, д 47</div>
           </div>
@@ -306,8 +322,10 @@
                 <div class="col pl-2">
                   <div class="text-primary">
                     {{ address.full_street }}
-                    <span class="sli sli--edit" @click="onEditImportSimple(address.addressIndex)"><fa icon="pencil-alt" /></span>
-                    <span class="sli sli--delete" @click="onRemoveImportSimple(address.addressIndex)"><fa :icon="['far', 'trash-alt']"/></span>
+                    <span class="sli sli--edit" @click="onEditImportSimple(address.addressIndex)"><fa
+                      icon="pencil-alt" /></span>
+                    <span class="sli sli--delete" @click="onRemoveImportSimple(address.addressIndex)"><fa
+                      :icon="['far', 'trash-alt']" /></span>
                   </div>
                   <div v-for="(error, errorIndex) in getErrorsImportSimple(address.addressIndex)" :key="errorIndex">
                     <span class="text-danger">
@@ -315,7 +333,8 @@
                     </span>
                     <div v-if="error === 'FOUND_THE_REPETITION'" class="btn btn-sm btn-success mr-2 py-0 px-2"
                          @click="addErrorImportSimple(address.addressIndex, error, 'ignoreErrors')">
-                      <fa icon="check"/> Разрешить повторение
+                      <fa icon="check" />
+                      Разрешить повторение
                     </div>
                   </div>
                 </div>
@@ -324,7 +343,7 @@
                 <div class="col pl-2">
                   <addresses-select
                     :init-value="address.full_street"
-                    @select="onSelectImportSimple(address.addressIndex, $event)"/>
+                    @select="onSelectImportSimple(address.addressIndex, $event)" />
                 </div>
                 <div class="col-auto pr-0">
                   <span class="sli sli--edit h5" @click="onCloseEditImportSimple()"><fa icon="times" /></span>
@@ -380,6 +399,7 @@ const wacherListDelete = List.getWatcher({ type: List.afterTypes.DELETE })
 
 export default {
   components: {
+    'Dropdown': () => import('~/components/Dropdown'),
     'Metro': () => import('~/components/Icons/Metro'),
     'AddressesSelect': () => import('~/components/Points/AddressesSelect'),
     'PaginateList': () => import('~/components/PaginateList'),
@@ -401,6 +421,64 @@ export default {
   },
   asyncData: async ({ params, error, app, query }) => {
     let organizationId = params.organizationId
+
+    let perPage = {
+      id: 1,
+      perPage: 20,
+      name: 20
+    }
+
+    let perPageArray = [
+      {
+        id: 1,
+        perPage: 20,
+        name: 20
+      },
+      {
+        id: 2,
+        perPage: 50,
+        name: 50
+      },
+      {
+        id: 3,
+        perPage: 100,
+        name: 100
+      },
+      {
+        id: 4,
+        perPage: 150,
+        name: 150
+      },
+      {
+        id: 5,
+        perPage: 200,
+        name: 200
+      },
+      {
+        id: 6,
+        perPage: 500,
+        name: 500
+      }
+    ]
+
+    if (query.perPage) {
+      query.perPage = Number(query.perPage)
+      if (query.perPage !== perPage.perPage) {
+        let def = true
+        for (let i in perPageArray) {
+          let pP = perPageArray[i]
+          if (pP.perPage === query.perPage) {
+            perPage = { ...pP }
+            def = false
+            break
+          }
+        }
+        if (def) {
+          query.perPage = perPage.perPage
+        }
+      }
+    }
+
     let data = await List.getStartData({
       error,
       query,
@@ -408,6 +486,7 @@ export default {
         apiUrl: `management/organizations/${organizationId}/points`
       }
     })
+
     let dataOrg = {}
 
     let operationMode = app.store.getters['variables/getDefaultOperationModeSelected']
@@ -440,7 +519,7 @@ export default {
       phone: ''
     }
 
-    return {
+    let res = {
       fields,
       ...data,
       data: dataOrg,
@@ -448,8 +527,12 @@ export default {
       operationMode: { ...app.store.getters['variables/getOperationMode'] },
       form: {
         ...fields
-      }
+      },
+      perPageArray,
+      perPage
     }
+
+    return res
   },
   data: () => ({
     import_: {
@@ -520,6 +603,14 @@ export default {
         }
       }
       return false
+    }
+  },
+  watch: {
+    perPage () {
+      this.pts.urlQuery.page = 1
+      this.pts.urlQuery.perPage = this.perPage.perPage
+      this.reloadList()
+      console.log(this.perPage)
     }
   },
   async beforeMount () {
@@ -652,7 +743,7 @@ export default {
     async savePoint () {
       try {
         await this.form.patch(`management/organizations/${this.organizationId}/points/${this.updateId}`)
-        this.reloadList()
+        // this.reloadList()
         await this.$callToast({
           type: 'success',
           text: 'Адрес успешно изменен',
@@ -662,6 +753,21 @@ export default {
         await this.$callToast({
           type: 'error',
           text: 'Сохранить не удалось'
+        })
+      }
+      try {
+        let { data } = await axios.get(`management/organizations/${this.organizationId}/points/${this.updateId}`)
+        let point = data.point
+        for (let i in this.pts.collection) {
+          if (this.pts.collection[i].id === this.updateId) {
+            this.$set(this.pts.collection, i, point)
+            break
+          }
+        }
+      } catch (e) {
+        await this.$callToast({
+          type: 'error',
+          text: 'Обновить данные точки на странице не удалось'
         })
       }
     },
