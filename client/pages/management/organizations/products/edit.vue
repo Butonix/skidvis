@@ -291,6 +291,31 @@
         />
       </div>
 
+      <div v-if="organizationId" class="container pt-5">
+        <div class="d-flex align-items-center justify-content-center h-100">
+          <router-link
+            :to="{ name: 'management.organizations.edit', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4 mr-2"
+            @click.native="$sTB()">
+            <span class="px-2">Организация</span>
+          </router-link>
+          <router-link
+            :to="{ name: 'management.organizations.points.index', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4"
+            @click.native="$sTB()">
+            <span class="px-2">Адреса</span>
+          </router-link>
+        </div>
+        <div v-if="isSuperAdministrator" class="d-flex justify-content-around mt-3">
+          <router-link
+            :to="{ name: 'management.organizations.services', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
+            @click.native="$sTB()">
+            <span class="px-2">Платные сервисы</span>
+          </router-link>
+        </div>
+      </div>
+
       <modal name="save-tags">
         <div class="basic-modal">
           <div class="position-relative">
@@ -510,6 +535,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getFavicon } from '~/utils'
 import { sortBy, remove, cloneDeep } from 'lodash'
 import Fuse from 'fuse.js'
@@ -647,6 +673,11 @@ export default {
     fuseAddresses: null
   }),
   computed: {
+    ...mapGetters({
+      isSuperAdministrator: 'auth/isSuperAdministrator',
+      isAdministrator: 'auth/isAdministrator',
+      isManagement: 'auth/isManagement'
+    }),
     getOperationModeText () {
       return (this.form.operationModeText) ? this.form.operationModeText.replaceAll('00:00-00:00', 'круглосуточно').replaceAll(', ', ', <br>') : ''
     },

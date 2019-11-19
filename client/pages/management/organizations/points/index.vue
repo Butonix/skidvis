@@ -102,6 +102,31 @@
         :params="ptsParams"
       />
 
+      <div v-if="organizationId" class="container pt-5">
+        <div class="d-flex align-items-center justify-content-center h-100">
+          <router-link
+            :to="{ name: 'management.organizations.edit', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4 mr-2"
+            @click.native="$sTB()">
+            <span class="px-2">Организация</span>
+          </router-link>
+          <router-link
+            :to="{ name: 'management.organizations.products.index', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4"
+            @click.native="$sTB()">
+            <span class="px-2">Акции</span>
+          </router-link>
+        </div>
+        <div v-if="isSuperAdministrator" class="d-flex justify-content-around mt-3">
+          <router-link
+            :to="{ name: 'management.organizations.services', params: { organizationId } }"
+            class="btn btn-gray btn-sm px-4 px-lg-3 px-xl-4"
+            @click.native="$sTB()">
+            <span class="px-2">Платные сервисы</span>
+          </router-link>
+        </div>
+      </div>
+
     </div>
     <modal name="save-point">
       <div class="basic-modal">
@@ -568,6 +593,7 @@ export default {
   computed: {
     ...mapGetters({
       getReactData: 'variables/getReactData',
+      isSuperAdministrator: 'auth/isSuperAdministrator',
       isAdministrator: 'auth/isAdministrator',
       isManagement: 'auth/isManagement'
     }),
