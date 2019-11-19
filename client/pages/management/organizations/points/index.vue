@@ -81,6 +81,9 @@
                 {{ item.email }}
               </div>
               {{ item.phone }}
+              <template v-if="item.phone && item.extension">
+                ({{ item.extension }})
+              </template>
             </div>
           </div>
         </transition>
@@ -186,20 +189,35 @@
           field="email"
           type-input="inline"
           placeholder="Эл. почта"
-          form-class="mb-4"
+          form-class="mb-0"
         />
 
-        <material-input
-          v-model="form.phone"
-          :form="form"
-          type="tel"
-          field="phone"
-          type-input="inline"
-          placeholder="Телефон"
-          form-class="mb-5"
-        />
+        <div class="row mb-5">
+          <div class="col-12 col-md">
+            <material-input
+              v-model="form.phone"
+              :form="form"
+              type="tel"
+              field="phone"
+              type-input="inline"
+              placeholder="Телефон"
+              form-class="mb-0"
+            />
+          </div>
+          <div class="col-12 col-md-auto">
+            <material-input
+              v-model="form.extension"
+              :form="form"
+              type="number"
+              field="extension"
+              type-input="inline"
+              placeholder="Добавочный номер"
+              form-class="mb-0"
+            />
+          </div>
+        </div>
 
-        <div class="d-flex mb-3">
+        <div class="d-flex flex-wrap mb-3">
           <div class="mr-3">
             Режим работы по адресу:
           </div>
@@ -541,7 +559,8 @@ export default {
       payload: null,
       own_schedule: false,
       email: '',
-      phone: ''
+      phone: '',
+      extension: ''
     }
 
     let res = {
