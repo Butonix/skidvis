@@ -81,7 +81,7 @@
                 {{ item.email }}
               </div>
               {{ item.phone }}
-              <template v-if="item.phone && item.extension">
+              <template v-if="item.extension">
                 (доб.{{ item.extension }})
               </template>
             </div>
