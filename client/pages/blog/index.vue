@@ -157,7 +157,7 @@ const List = BuildList({
         url: 'categories',
         pathResponse: 'list.data',
         query: {
-          articles: 1,
+          blog: 1,
           favorites: 1,
           perPage: 100000,
           orWhereIn: []
@@ -167,7 +167,7 @@ const List = BuildList({
         url: 'categories',
         pathResponse: 'list.data',
         query: {
-          articles: 1,
+          blog: 1,
           perPage: 1000000,
           page: 1
         }
