@@ -34,7 +34,7 @@ export default {
       }
     },
     getFullPrice () {
-      return this.product.origin_price || 0
+      return (this.product && this.product.origin_price) || (this.form && this.form.origin_price) || 0
     },
     timeHuman () {
       return this.getTimeHuman(this.startAt, this.endAt, this.monthRussian)
