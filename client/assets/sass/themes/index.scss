@@ -363,6 +363,11 @@ body, .footer__content, .char{
   .business__client{
     background: url("/img/business/client-black.svg") center no-repeat;
   }
+  .article-content .cdx-quote__text:before{
+    @include media-breakpoint-up(sm){
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDQiIGhlaWdodD0iMzMiIHZpZXdCb3g9IjAgMCA0NCAzMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNDEgMzEuNUg3LjU4NjM2QzYuNDE3MjUgMzEuNSA2LjA5NDIyIDI5LjQ4MyA3LjE2MzY0IDI5LjAxMDdDMjEuMzUxIDIyLjc0MzcgMjQgMTIuMDQ3MyAyNCA0IiBzdHJva2U9IiNGRjQ5MjEiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTQyLjUgMjkuNUwyNS42IDJMMjUuNSA3LjYyNjI5TDI1LjMgOS41TDI1IDExLjVMMjQuNCAxNEwyMy45IDE1LjVMMjMgMTcuNUwyMS41IDIwTDE3IDI5LjVINDIuNVoiIGZpbGw9IiMyRDJEMkQiIHN0cm9rZT0iIzJEMkQyRCIvPjwvc3ZnPg==);
+    }
+  }
 }
 .theme-management{
   .footer__toggle{
