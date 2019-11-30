@@ -305,7 +305,7 @@ export default {
       return this.visitedArticles
     },
     getArticleContent () {
-      return this.article.content.replaceAll('contenteditable="true"', '')
+      return this.article.content.replaceAll('contenteditable="true"', '').replaceAll('style', 'data-style')
     },
     pageCountReviews () {
       return (this.reviews && this.reviews.total) ? Math.ceil(this.reviews.total / this.reviews.per_page) : 0
