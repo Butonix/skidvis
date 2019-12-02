@@ -101,6 +101,16 @@ module.exports = {
   ],
 
   modules: [
+    [
+      '@nuxtjs/yandex-metrika',
+      {
+        id: 56484109,
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true
+      }
+    ],
     // ['vue-yandex-maps/nuxt', {
     //   apiKey: '89a7d311-e67b-4813-b088-3e94dfcb80f9',
     //   lang: 'ru_RU',

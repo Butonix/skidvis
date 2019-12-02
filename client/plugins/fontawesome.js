@@ -15,13 +15,13 @@ import {
 } from '@fortawesome/fontawesome-free-regular/shakable.es'
 
 import {
-  faGithub, faVk, faOdnoklassniki, faFacebookF, faInstagram, faGoogle
+  faGithub, faVk, faOdnoklassniki, faFacebookF, faInstagram, faGoogle, faTwitter
 } from '@fortawesome/fontawesome-free-brands/shakable.es'
 
 library.add(
   faUser, faLock, faSignOutAlt, faCog, faGithub, faPencilAlt, faSync, faMapMarkerAlt, faPlus, faVk,
   faOdnoklassniki, faFacebookF, faInstagram, faCheck, faTimes, faTrashAlt, faChevronLeft, faChevronRight, faGoogle,
-  faSignInAlt, faCompass
+  faSignInAlt, faCompass, faTwitter
 )
 
 fontawesome.config.autoAddCss = false

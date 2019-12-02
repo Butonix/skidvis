@@ -70,6 +70,7 @@ export default {
       'odnoklassniki': 'odnoklassniki',
       'facebook': 'facebook-f',
       'google': 'google',
+      'twitter': 'twitter',
       'instagram': 'instagram'
     }
   }),

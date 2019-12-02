@@ -34,6 +34,9 @@ a.social-icon, div.social-icon, span.social-icon{
   &[data-type='google']{
     background: $social_google;
   }
+  &[data-type='twitter']{
+    background: $social_twitter;
+  }
   &[data-type='instagram']{
     background: $social_instagram_grad;
   }
