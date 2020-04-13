@@ -143,7 +143,7 @@
           @wishlistchange="wishListChange"
         />
       </div>
-      <no-ssr>
+      <client-only>
         <div class="ymap-custom ymap-custom--height">
           <yandex-map
             v-if="getCoords"
@@ -176,7 +176,7 @@
             />
           </yandex-map>
         </div>
-      </no-ssr>
+      </client-only>
 
     </div>
 

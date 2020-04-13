@@ -56,14 +56,14 @@
                      @click="form.currency_id = 1">
                   <percent-btn/>
                   <br>
-                  Скидка в %
+                  Скидка&nbsp;в&nbsp;%
                 </div>
                 <div :class="{'active': form.currency_id === 2}"
                      class="products-edit__currency-svg"
                      @click="form.currency_id = 2">
                   <rub-btn/>
                   <br>
-                  Скидка в ₽
+                  Скидка&nbsp;в&nbsp;₽
                 </div>
                 <div :class="{'active': form.currency_id === 3}"
                      class="products-edit__currency-svg"
@@ -71,6 +71,20 @@
                   <present-btn/>
                   <br>
                   Подарок
+                </div>
+                <div :class="{'active': form.currency_id === 4}"
+                     class="products-edit__currency-svg"
+                     @click="form.currency_id = 4">
+                  <present-btn/>
+                  <br>
+                  Бонусы
+                </div>
+                <div :class="{'active': form.currency_id === 5}"
+                     class="products-edit__currency-svg"
+                     @click="form.currency_id = 5">
+                  <present-btn/>
+                  <br>
+                  Кешбек
                 </div>
               </div>
               <div v-if="organization.is_caption" class="products-edit__caption">
@@ -83,11 +97,11 @@
                 <div>
                   <input v-model="form.caption" type="text">
                 </div>
-                <no-ssr>
+                <client-only>
                   <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('caption') }">
                     <has-error :form="form" field="caption"/>
                   </div>
-                </no-ssr>
+                </client-only>
               </div>
             </full-slider>
             <thumbs-file-input
@@ -99,11 +113,11 @@
               @change="setMainImage"
               @delete="deleteMainImage"
             />
-            <no-ssr>
+            <client-only>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
                 <has-error :form="form" field="images"/>
               </div>
-            </no-ssr>
+            </client-only>
           </div>
 
           <div class="order-1 order-lg-2 d-xs-flex flex-wrap pt-2 mt-1 mb-2">
@@ -200,12 +214,15 @@
             box-class="order-4 order-lg-4 mb-4 mt-2"
             box-mod="center"
             @onInputOriginPrice="form.origin_price = $event"
+            @onInputBirthdayBefore="form.birthday_before = $event"
+            @onInputBirthdayAfter="form.birthday_after = $event"
             @onEditSelect="onEditSelect($event)"
             @onEditSocial="onEditSocial"
             @onInputDate="onInputDate"
             @onClickCategory="form.main_category_id = $event"
             @setIsAdvertisement="form.is_advertisement = $event"
             @setIsPerpetual="form.is_perpetual = $event"
+            @setIsBirthday="form.is_birthday = $event"
           />
 
           <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -226,16 +243,16 @@
           <div class="order-6 order-lg-6 tab-content mb-5">
             <transition name="fade" mode="out-in">
               <div v-if="tab === 'circs'" :key="'circs'" class="products-edit__editor">
-                <no-ssr>
+                <client-only>
                   <quill-editor v-model="form.conditions"
                                 :options="editorOptionCircs"/>
-                </no-ssr>
+                </client-only>
               </div>
               <div v-if="tab === 'desc'" :key="'desc'" class="products-edit__editor">
-                <no-ssr>
+                <client-only>
                   <quill-editor v-model="form.description"
                                 :options="editorOptionCircs"/>
-                </no-ssr>
+                </client-only>
               </div>
             </transition>
           </div>
@@ -249,11 +266,11 @@
               type-style="lite"
               placeholder="Найти адрес"
             />
-            <no-ssr>
+            <client-only>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('points') }">
                 <has-error :form="form" field="points"/>
               </div>
-            </no-ssr>
+            </client-only>
             <div class="py-3">
               <div class="btn btn-gray btn-sm mr-2"
                    @click="selectAllAddresses">
@@ -282,12 +299,15 @@
           :operation-mode-text="getOperationModeText"
           box-mod="right"
           @onInputOriginPrice="form.origin_price = $event"
+          @onInputBirthdayBefore="form.birthday_before = $event"
+          @onInputBirthdayAfter="form.birthday_after = $event"
           @onEditSelect="onEditSelect($event)"
           @onEditSocial="onEditSocial"
           @onInputDate="onInputDate"
           @onClickCategory="form.main_category_id = $event"
           @setIsAdvertisement="form.is_advertisement = $event"
           @setIsPerpetual="form.is_perpetual = $event"
+          @setIsBirthday="form.is_birthday = $event"
         />
       </div>
 
@@ -582,6 +602,9 @@ export default {
       is_published: false,
       is_advertisement: false,
       is_perpetual: false,
+      is_birthday: false,
+      birthday_before: '',
+      birthday_after: '',
       tags: [],
       auditories: [],
       holidays: [],

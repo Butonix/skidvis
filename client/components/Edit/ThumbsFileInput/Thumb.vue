@@ -1,6 +1,6 @@
 <template>
   <div :class="{'loading':loading}" class="thumbs-file-input__thumb photo-input">
-    <no-ssr>
+    <client-only>
       <div v-if="src" class="photo-input__remove"
            @click="onDelete"/>
       <picture-input
@@ -22,7 +22,7 @@
         :height="height"
         button-class="d-none"
         @change="onChange" />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 

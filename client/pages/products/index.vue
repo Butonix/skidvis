@@ -37,8 +37,8 @@
         @clearfilter="prodsClearFilter('categories')"
         @handleall="prodsHandleAll('categories')"
       />
-      <div class="d-flex flex-column flex-xs-row justify-content-end align-items-center align-items-xs-start mt-3">
-        <div class="btn btn-outline-primary btn-sm mr-xs-2 mb-3"
+      <div class="d-flex flex-column flex-xs-row flex-wrap justify-content-end align-items-center align-items-xs-start mt-3">
+        <div class="btn btn-outline-primary btn-sm mb-3 mr-xs-2"
              @click="onOpenMap"
         >
           <span class="d-inline-block px-3">
@@ -47,7 +47,7 @@
         </div>
         <dropdown :options="orderingArray"
                   v-model="ordering"
-                  class="mb-3"
+                  class="mb-3 mr-xs-2"
                   btn-class="btn btn-sm btn-gray"
                   h-align="right"
                   placeholder="Сортировка"
@@ -119,7 +119,7 @@
         <div v-if="userLocation" class="map-modal__show-me" @click="onShowMe">
           <fa icon="compass" />
         </div>
-        <no-ssr>
+        <client-only>
           <yandex-map
             v-if="getCoords"
             ref="map"
@@ -154,7 +154,7 @@
               }"
             />
           </yandex-map>
-        </no-ssr>
+        </client-only>
       </div>
     </modal>
   </div>

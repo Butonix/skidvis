@@ -43,11 +43,11 @@
               />
             </div>
           </div>
-          <no-ssr>
+          <client-only>
             <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('start_at') }">
               <has-error :form="form" field="start_at"/>
             </div>
-          </no-ssr>
+          </client-only>
         </template>
       </template>
     </list-item-icon>
@@ -59,6 +59,37 @@
       <template slot="text">
         Режим работы
         <div v-html="operationModeText.replaceAll('00:00-00:00', 'круглосуточно')"/>
+      </template>
+    </list-item-icon>
+
+    <list-item-icon>
+      <template slot="text">
+        <v-checkbox :value="form.is_birthday" @input="$emit('setIsBirthday', $event)">{{ form.is_birthday?'На день рождения':'Не касается для рождения' }}</v-checkbox>
+
+        <material-input
+          v-if="form.is_birthday"
+          :value="form.birthday_before"
+          :form="form"
+          type="number"
+          field="birthday_before"
+          placeholder="Дней до ДР"
+          data-align="left"
+          form-class="my-4"
+          size="sm"
+          @input="$emit('onInputBirthdayBefore', $event)"
+        />
+        <material-input
+          v-if="form.is_birthday"
+          :value="form.birthday_after"
+          :form="form"
+          type="number"
+          field="birthday_after"
+          placeholder="Дней после ДР"
+          data-align="left"
+          form-class="my-4"
+          size="sm"
+          @input="$emit('onInputBirthdayAfter', $event)"
+        />
       </template>
     </list-item-icon>
 
@@ -142,11 +173,11 @@
            @click="$emit('onEditSelect', 'categories')" v-text="(categories.length)?'Изменить категории':'Выбрать категории'"/>
     </div>
 
-    <no-ssr>
+    <client-only>
       <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('categories') }">
         <has-error :form="form" field="categories"/>
       </div>
-    </no-ssr>
+    </client-only>
 
   </div>
 </template>

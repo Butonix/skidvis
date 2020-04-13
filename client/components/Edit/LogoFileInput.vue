@@ -1,6 +1,6 @@
 <template>
   <div :class="{'loading':loading}" class="photo-input">
-    <no-ssr>
+    <client-only>
       <div v-if="src" class="photo-input__remove"
            @click="onDelete"
       />
@@ -25,7 +25,7 @@
         button-class="d-none"
         @change="onChange"
       />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 

@@ -71,7 +71,7 @@
                   </nav-item>
                   <li class="nav-item">
                     <div class="nav-link cursor-pointer" @click.prevent="logout"
-                         @click.native="openMenu = false">
+                         @click="openMenu = false">
                       Выйти
                     </div>
                   </li>

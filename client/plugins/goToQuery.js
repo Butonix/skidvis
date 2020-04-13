@@ -19,7 +19,7 @@ Vue.use({
       }
     }
     Vue.prototype.$sTB = function (offset) {
-      Vue.prototype.$scrollTo(document.documentElement.getElementsByTagName('body')[0], 500, {
+      this.$scrollTo(document.body, 500, {
         offset: offset || 0,
         x: false,
         y: true

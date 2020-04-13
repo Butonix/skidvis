@@ -10,6 +10,20 @@
       height: auto!important;
     }
   }
+  &__text{
+    .checkbox-toggle{
+      margin-left: -#{rem(46)};
+      margin-bottom: 1rem;
+    }
+    .checkbox-toggle__label{
+      padding-left: .6em;
+    }
+    .checkbox-toggle__icon, .checkbox-toggle__icon svg{
+      width: 34px;
+      min-width: 34px;
+      height: 34px;
+    }
+  }
 }
 .list-box{
   max-height: 306px;

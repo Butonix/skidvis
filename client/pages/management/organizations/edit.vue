@@ -20,11 +20,11 @@
             @change="setMainImage"
             @delete="deleteMainImage"
           />
-          <no-ssr>
+          <client-only>
             <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('images') }">
               <has-error :form="form" field="images"/>
             </div>
-          </no-ssr>
+          </client-only>
           <div class="row justify-content-center">
             <div class="col-lg-8 orgs-edit__editor">
 
@@ -61,9 +61,9 @@
                           class="color-box" @click="isActiveClassColorBox = !isActiveClassColorBox"
                         />
                         <div class="color-box__close" @click="isActiveClassColorBox = !isActiveClassColorBox"/>
-                        <no-ssr>
+                        <client-only>
                           <sketch-picker :value="form.logo.color || '#ffffff'" class="mx-auto" @input="setLogoColor" />
-                        </no-ssr>
+                        </client-only>
                       </div>
                     </div>
                   </div>
@@ -91,9 +91,9 @@
                   <div class="text-center small pb-2">
                     Цвет заливки логотипа
                   </div>
-                  <no-ssr>
+                  <client-only>
                     <sketch-picker :value="form.logo.color || '#ffffff'" @input="setLogoColor" />
-                  </no-ssr>
+                  </client-only>
                 </div>
               </div>
             </div>

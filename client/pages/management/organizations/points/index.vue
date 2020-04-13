@@ -145,11 +145,11 @@
             ><fa icon="pencil-alt" /></span>
           </div>
           <div class="col-12">
-            <no-ssr>
+            <client-only>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
                 <has-error :form="form" field="full_street" />
               </div>
-            </no-ssr>
+            </client-only>
           </div>
         </div>
 
@@ -161,11 +161,11 @@
             Адрес не добавлен, используйте поиск ниже для его добавления
           </div>
           <div class="col-12">
-            <no-ssr>
+            <client-only>
               <div v-if="form && form.errors" :class="{ 'is-invalid': form.errors.has('full_street') }">
                 <has-error :form="form" field="full_street" />
               </div>
-            </no-ssr>
+            </client-only>
           </div>
         </div>
 

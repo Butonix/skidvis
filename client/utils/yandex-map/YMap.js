@@ -135,10 +135,7 @@ export default {
                     collection.remove(remove[i])
                   }
                 }
-                // TODO - Start
               } else if (collection.properties) {
-                // TODO этот код мною не тестировался. Нужен для удаления точек, которые не находятся в коллекциях
-                // TODO @PNKBizz Удали его если считаешь, что он лишний
                 let id = collection.properties.get('markerId')
                 if (id) {
                   if (arrayIds.indexOf(id) !== -1) {
@@ -146,7 +143,6 @@ export default {
                   }
                 }
               }
-              // TODO - End
             }
           })
         }

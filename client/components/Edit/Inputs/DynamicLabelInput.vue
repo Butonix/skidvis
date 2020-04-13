@@ -3,7 +3,7 @@
     :class="classWrapper"
     class="dynamic-input"
   >
-    {{ value }}
+    <span>{{ value }}</span>
     <div
       :class="classBox"
       class="dynamic-input__box"

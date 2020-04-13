@@ -64,6 +64,9 @@
       height: 40px;
       padding: 0px 18px;
     }
+    @include media-breakpoint-down(xxs){
+      padding: 0px 6px;
+    }
     &--present{
       padding: 0!important;
       height: auto!important;
@@ -94,7 +97,11 @@
         min-width: 70px;
         padding: 5px 18px;
       }
-
+      @include media-breakpoint-down(xxs){
+        span{
+          display: none;
+        }
+      }
       &__box {
         left: 10px;
         right: 10px;
@@ -137,6 +144,9 @@
     text-align: center;
     transition: .2s;
     margin-left: 10px;
+    @include media-breakpoint-down(xxs){
+      margin-left: 5px;
+    }
     svg{
       font-size: 33px;
       margin-bottom: 2px;

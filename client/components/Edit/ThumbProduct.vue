@@ -1,6 +1,6 @@
 <template>
   <div :class="{'loading':loading}" class="photo-input--product">
-    <no-ssr>
+    <client-only>
       <picture-input
         :prefill="src"
         :alert-on-error="false"
@@ -20,7 +20,7 @@
         height="131"
         button-class="d-none"
         @change="onChange" />
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
