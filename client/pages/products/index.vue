@@ -7,28 +7,6 @@
         form-class="mb-4"
       />
       <filter-list
-        :fuse="prodsFS_holidays"
-        :url-query="prods.urlQuery"
-        :filter="prods.filters.holidays"
-        btn-type="holidays"
-        title="К празднику"
-        name="holidays"
-        @filter="prodsFilter('holidays', $event)"
-        @clearfilter="prodsClearFilter('holidays')"
-        @handleall="prodsHandleAll('holidays')"
-      />
-      <filter-list
-        :fuse="prodsFS_auditories"
-        :url-query="prods.urlQuery"
-        :filter="prods.filters.auditories"
-        btn-type="auditories"
-        title="Кому"
-        name="auditories"
-        @filter="prodsFilter('auditories', $event)"
-        @clearfilter="prodsClearFilter('auditories')"
-        @handleall="prodsHandleAll('auditories')"
-      />
-      <filter-list
         :fuse="prodsFS_categories"
         :url-query="prods.urlQuery"
         :filter="prods.filters.categories"
@@ -37,6 +15,22 @@
         @clearfilter="prodsClearFilter('categories')"
         @handleall="prodsHandleAll('categories')"
       />
+      <buttons-scroll>
+        <div :class="{'active':birthday[0]}"
+             class="btn mx-1 mb-2 text-nowrap btn-auditories"
+             @click="$modal.push('ModalBirthday')">
+          День рождения
+          <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
+        </div>
+        <div
+          v-for="(name, id) in currencies"
+          :key="'currency-'+id"
+          :class="{'active':currenciesValues.indexOf(Number(id)) !== -1}"
+          class="btn mx-1 mb-2 text-nowrap btn-auditories"
+          @click="setCurrenciesValues(id)">
+          {{ name }}
+        </div>
+      </buttons-scroll>
       <div class="d-flex flex-column flex-xs-row flex-wrap justify-content-end align-items-center align-items-xs-start mt-3">
         <div class="btn btn-outline-primary btn-sm mb-3 mr-xs-2"
              @click="onOpenMap"
@@ -61,65 +55,62 @@
     <div v-if="visitedProducts.length" class="container">
       <visited-slider :products="visitedProducts" class="mt-5" />
     </div>
-    <modal name="map" @closed="mapClosed">
-      <div class="basic-modal map-modal ymap-custom">
-        <div :class="{'hide': !showMapFilters}" class="map-modal__filter-modal overflow-auto">
-          <div class="container py-4">
-            <search-input
-              v-model="prods.urlQuery.search"
-              autofocus="autofocus"
-              form-class="mb-4"
-            />
-            <filter-list
-              :fuse="prodsFS_holidays"
-              :url-query="prods.urlQuery"
-              :filter="prods.filters.holidays"
-              btn-type="holidays"
-              title="К празднику"
-              name="holidays"
-              @filter="prodsFilter('holidays', $event)"
-              @clearfilter="prodsClearFilter('holidays')"
-              @handleall="prodsHandleAll('holidays')"
-            />
-            <filter-list
-              :fuse="prodsFS_auditories"
-              :url-query="prods.urlQuery"
-              :filter="prods.filters.auditories"
-              btn-type="auditories"
-              title="Кому"
-              name="auditories"
-              @filter="prodsFilter('auditories', $event)"
-              @clearfilter="prodsClearFilter('auditories')"
-              @handleall="prodsHandleAll('auditories')"
-            />
-            <filter-list
-              :fuse="prodsFS_categories"
-              :url-query="prods.urlQuery"
-              :filter="prods.filters.categories"
-              name="categories"
-              @filter="prodsFilter('categories', $event)"
-              @clearfilter="prodsClearFilter('categories')"
-              @handleall="prodsHandleAll('categories')"
-            />
-            <div class="text-center mt-4">
-              <div class="btn btn-primary" @click="setFiltersMap">
-                Применить
+    <client-only>
+      <modal-birthday :birthday="birthday"
+                      @birthdayData="setBirthday"
+                      @birthdayClear="clearBirthday" />
+      <div :class="{'d-none': !isOpenMap}" aria-hidden="false" class="map-modal-wrapper">
+        <div class="basic-modal map-modal ymap-custom modal-content">
+          <div v-if="showMapFilters" class="map-modal__filter-modal overflow-auto">
+            <div class="container py-4">
+              <search-input
+                v-model="prods.urlQuery.search"
+                autofocus="autofocus"
+                form-class="mb-4"
+              />
+              <filter-list
+                :fuse="prodsFS_categories"
+                :url-query="prods.urlQuery"
+                :filter="prods.filters.categories"
+                name="categories"
+                @filter="prodsFilter('categories', $event)"
+                @clearfilter="prodsClearFilter('categories')"
+                @handleall="prodsHandleAll('categories')"
+              />
+              <buttons-scroll>
+                <div :class="{'active':birthday[0]}"
+                     class="btn mx-1 mb-2 text-nowrap btn-auditories"
+                     @click="$modal.push('ModalBirthday')">
+                  День рождения
+                  <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
+                </div>
+                <div
+                  v-for="(name, id) in currencies"
+                  :key="'currency-'+id"
+                  :class="{'active':currenciesValues.indexOf(Number(id)) !== -1}"
+                  class="btn mx-1 mb-2 text-nowrap btn-auditories"
+                  @click="setCurrenciesValues(id)">
+                  {{ name }}
+                </div>
+              </buttons-scroll>
+              <div class="text-center mt-4">
+                <div class="btn btn-primary" @click="setFiltersMap">
+                  Применить
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div :class="{'active': loadingPoints && !isOpenMap}"
-             class="loading-list"
-        />
-        <div :class="{'loading':loadingPoints && isOpenMap}" class="map-modal__filter-btn"
-             @click="showMapFilters = !showMapFilters">
-          <filter-icon />
-        </div>
-        <div class="map-modal__close" @click="$modal.pop()" />
-        <div v-if="userLocation" class="map-modal__show-me" @click="onShowMe">
-          <fa icon="compass" />
-        </div>
-        <client-only>
+          <div :class="{'active': loadingPoints && !isOpenMap}"
+               class="loading-list"
+          />
+          <div :class="{'loading':loadingPoints && isOpenMap}" class="map-modal__filter-btn"
+               @click="showMapFilters = !showMapFilters">
+            <filter-icon />
+          </div>
+          <div class="map-modal__close" @click="mapClosed" />
+          <div v-if="userLocation" class="map-modal__show-me" @click="onShowMe">
+            <fa icon="compass" />
+          </div>
           <yandex-map
             v-if="getCoords"
             ref="map"
@@ -154,9 +145,9 @@
               }"
             />
           </yandex-map>
-        </client-only>
+        </div>
       </div>
-    </modal>
+    </client-only>
   </div>
 </template>
 
@@ -177,7 +168,7 @@ const List = BuildList({
   apiUrl: 'products',
   pathResponse: 'list.data',
   pathTotal: 'list.total',
-  allowedParams: ['city_id', 'ordering', 'orderingDir'],
+  allowedParams: ['city_id', 'ordering', 'orderingDir', 'birthday', 'currenciesValues'],
   filters: {
     categories: {
       start: {
@@ -195,44 +186,6 @@ const List = BuildList({
         pathResponse: 'list.data',
         query: {
           products: 1,
-          perPage: 1000000,
-          page: 1
-        }
-      }
-    },
-    holidays: {
-      start: {
-        url: 'holidays',
-        pathResponse: 'list.data',
-        query: {
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: []
-        }
-      },
-      fetch: {
-        url: 'holidays',
-        pathResponse: 'list.data',
-        query: {
-          perPage: 1000000,
-          page: 1
-        }
-      }
-    },
-    auditories: {
-      start: {
-        url: 'auditories',
-        pathResponse: 'list.data',
-        query: {
-          favorites: 1,
-          perPage: 100000,
-          orWhereIn: []
-        }
-      },
-      fetch: {
-        url: 'auditories',
-        pathResponse: 'list.data',
-        query: {
           perPage: 1000000,
           page: 1
         }
@@ -256,9 +209,18 @@ const List = BuildList({
       [`${gN}.urlQuery.orderingDir`]: function (v) {
         getWatcher({ type: beforeTypes.SEARCH }).call(this)
       },
+      [`${gN}.urlQuery.birthday`]: function (v) {
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
+      [`${gN}.urlQuery.currenciesValues`]: function (v) {
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
       'ordering': function (v) {
         this[gN].urlQuery.ordering = v.ordering
         this[gN].urlQuery.orderingDir = v.orderingDir
+      },
+      'isOpenMap': function (v) {
+        document.body.style.overflow = v ? 'hidden' : 'visible'
       },
       [`${gN}.urlQuery.city_id`]: function (v) {
         if (v) {
@@ -277,6 +239,7 @@ const List = BuildList({
 
 export default {
   components: {
+    'ModalBirthday': () => import('~/components/Modals/ModalBirthday'),
     'VisitedSlider': () => import('~/components/Product/VisitedSlider'),
     'FilterIcon': () => import('~/components/Icons/Filter'),
     'FilterList': () => import('~/components/FilterList'),
@@ -284,6 +247,7 @@ export default {
     'Chevron': () => import('~/components/Icons/Chevron'),
     'SearchInput': () => import('~/components/SearchInput'),
     'Dropdown': () => import('~/components/Dropdown'),
+    'ButtonsScroll': () => import('~/components/ButtonsScroll'),
     'Products': () => import('~/components/Products')
   },
   middleware: [],
@@ -303,14 +267,17 @@ export default {
     if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
       await app.store.dispatch('auth/setCity', query.city_id)
     }
+    let birthday = query.birthday || [null, null]
+    let currenciesValues = query.currenciesValues || []
     let res = await List.getStartData({
       error,
       query,
       defaultUrlQuery: {
-        city_id: city.id
+        city_id: city.id,
+        birthday,
+        currenciesValues
       }
     })
-
     res.visitedProducts = []
     res.visitedProductsIds = await app.store.dispatch('auth/getVisitedArray', 'products')
 
@@ -350,7 +317,12 @@ export default {
     return res
   },
   data: () => ({
-
+    currencies: {
+      1: 'Скидка',
+      3: 'Подарок',
+      4: 'Бонусы',
+      5: 'Кешбек'
+    },
     showMapFilters: false,
     loadingPoints: false,
     isOpenMap: false,
@@ -424,9 +396,18 @@ export default {
         res = [this.city.latitude, this.city.longitude]
       }
       return res
+    },
+    birthday () {
+      return this[globalNamespace].urlQuery.birthday
+    },
+    currenciesValues () {
+      return this[globalNamespace].urlQuery.currenciesValues
     }
   },
   methods: {
+    setGiftType (data) {
+      this.giftTypes[data.id] = data.value
+    },
     async clickMarker (e, point, key) {
       // console.log(e, point, key)
     },
@@ -448,10 +429,10 @@ export default {
       try {
         let { data } = await axios.get('points/map', {
           params: {
-            search: this.prods.urlQuery.search || '',
-            categories: this.prods.urlQuery.categories || [],
-            holidays: this.prods.urlQuery.holidays || [],
-            auditories: this.prods.urlQuery.auditories || [],
+            search: this[globalNamespace].urlQuery.search || '',
+            categories: this[globalNamespace].urlQuery.categories || [],
+            birthday: this[globalNamespace].urlQuery.birthday || [],
+            currenciesValues: this[globalNamespace].urlQuery.currenciesValues || [],
             is_active: 1,
             latitudeMax: bounds[1][0],
             longitudeMax: bounds[1][1],
@@ -500,9 +481,9 @@ export default {
       this.setUserLocation()
 
       await this.fetchMapPoints()
-      setTimeout(() => {
-        this.isOpenMap = true
-      }, 1000)
+      // setTimeout(() => {
+      //   this.isOpenMap = true
+      // }, 1000)
     },
     setUserLocation () {
       // https://tech.yandex.ru/maps/jsapi/doc/2.1/dg/concepts/geolocation-docpage/
@@ -534,8 +515,7 @@ export default {
     },
     onOpenMap () {
       this.placemark = null
-
-      this.$modal.push('map')
+      this.isOpenMap = true
     },
     mapClosed () {
       this.isOpenMap = false
@@ -548,6 +528,21 @@ export default {
           longitude: this.userLocation.position[1]
         }
       }
+    },
+    setCurrenciesValues (id) {
+      id = Number(id)
+      let values = this.currenciesValues
+      if (values.indexOf(id) === -1) {
+        this[globalNamespace].urlQuery.currenciesValues.push(id)
+      } else {
+        this.$delete(this[globalNamespace].urlQuery.currenciesValues, values.indexOf(id))
+      }
+    },
+    setBirthday (data) {
+      this.$set(this[globalNamespace].urlQuery.birthday, data[0], data[1])
+    },
+    clearBirthday () {
+      this[globalNamespace].urlQuery.birthday = [null, null]
     }
   }
 }

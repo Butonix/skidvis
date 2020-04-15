@@ -16,7 +16,21 @@
           <present-card
             v-if="item.currency_id === 3"/>
           <span v-else-if="item.value">
-            {{ item.value }}{{ (item.currency_id === 1)? '%' : '₽' }}
+            <template v-if="item.currency_id === 1">
+              {{ item.value }}%
+            </template>
+            <template v-else-if="item.currency_id === 2">
+              {{ item.value }}₽
+            </template>
+            <template v-else-if="item.currency_id === 4">
+              {{ item.value }} <bonus/>
+            </template>
+            <template v-else-if="item.currency_id === 5">
+              {{ item.value }} <cashback/>
+            </template>
+            <template v-else>
+              {{ item.value }}₽
+            </template>
           </span>
         </div>
       </div>
@@ -44,6 +58,8 @@
 
 export default {
   components: {
+    'Bonus': () => import('~/components/Icons/Bonus'),
+    'Cashback': () => import('~/components/Icons/Cashback'),
     'PresentCard': () => import('~/components/Icons/PresentCard')
   },
   props: {

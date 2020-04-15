@@ -63,7 +63,24 @@ export default {
         saleHtml = `<div id="mp-sale-${id}" class="map-point__sale map-point__sale--present"><img class="w-100 h-auto" src="/img/products/sale-present-card.svg"></div>`
       } else {
         if (product.value) {
-          let sale = product.currency_id === 1 ? product.value + '%' : product.value + '₽'
+          let sale
+          switch (product.currency_id) {
+            case 1:
+              sale = product.value + '%'
+              break
+            case 2:
+              sale = product.value + '₽'
+              break
+            case 4:
+              sale = product.value + ' <img height="11" src="/img/map/bonus.svg" style="position: relative; top: -1px;">'
+              break
+            case 5:
+              sale = product.value + ' <img height="11" src="/img/map/cashback.svg" style="position: relative; top: -1px;">'
+              break
+            default:
+              sale = product.value + '₽'
+              break
+          }
 
           saleHtml = `<div id="mp-sale-${id}" class="map-point__sale">${sale}</div>`
         }

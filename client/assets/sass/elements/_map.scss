@@ -38,6 +38,15 @@
     margin-right: 0;
   }
 }
+.map-modal-wrapper{
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1000;
+}
 .map-modal{
   max-width: none;
   width: 100%;

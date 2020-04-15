@@ -75,14 +75,14 @@
                 <div :class="{'active': form.currency_id === 4}"
                      class="products-edit__currency-svg"
                      @click="form.currency_id = 4">
-                  <present-btn/>
+                  <bonus-btn/>
                   <br>
                   Бонусы
                 </div>
                 <div :class="{'active': form.currency_id === 5}"
                      class="products-edit__currency-svg"
                      @click="form.currency_id = 5">
-                  <present-btn/>
+                  <cashback-btn/>
                   <br>
                   Кешбек
                 </div>
@@ -570,6 +570,8 @@ export default {
   components: {
     'PercentBtn': () => import('~/components/Icons/PercentBtn'),
     'PresentBtn': () => import('~/components/Icons/PresentBtn'),
+    'CashbackBtn': () => import('~/components/Icons/CashbackBtn'),
+    'BonusBtn': () => import('~/components/Icons/BonusBtn'),
     'RubBtn': () => import('~/components/Icons/RubBtn'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
