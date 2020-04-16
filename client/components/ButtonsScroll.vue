@@ -16,11 +16,25 @@
 import ScrollBooster from 'scrollbooster'
 
 export default {
+  props: {
+    hkey: {
+      type: String,
+      default: 'hkey'
+    }
+  },
   data: () => ({
     sb: null,
     scrollLeftCash: 0,
     scrollLeft: 0
   }),
+  watch: {
+    hkey () {
+      if (this.sb) {
+        this.sb.destroy()
+      }
+      setTimeout(this.createScrollBooster, 500)
+    }
+  },
   mounted () {
     setTimeout(this.createScrollBooster, 1000)
   },
