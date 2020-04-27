@@ -82,18 +82,18 @@
             v-if="product.conditions || product.description"
             class="order-5 order-lg-5 tab-panel mt-3">
             <div
-              v-if="product.conditions"
-              :class="{'active':(tab === 'circs')}"
-              class="tab"
-              @click="tab ='circs'">
-              Условия
-            </div>
-            <div
               v-if="product.description"
               :class="{'active':(tab === 'desc')}"
               class="tab"
               @click="tab ='desc'">
               Описание
+            </div>
+            <div
+              v-if="product.conditions"
+              :class="{'active':(tab === 'circs')}"
+              class="tab"
+              @click="tab ='circs'">
+              Условия
             </div>
             <div v-scroll-to="'#addresses'" class="tab">
               Адрес
@@ -107,8 +107,8 @@
             v-if="product.conditions || product.description"
             class="order-6 order-lg-6 tab-content product__description mb-5">
             <transition name="fade" mode="out-in">
-              <div v-if="tab === 'circs'" :key="'circs'" v-html="product.conditions"/>
               <div v-if="tab === 'desc'" :key="'desc'" v-html="product.description"/>
+              <div v-if="tab === 'circs'" :key="'circs'" v-html="product.conditions"/>
             </transition>
           </div>
 
@@ -347,12 +347,6 @@ export default {
       }
     }
 
-    if (res.product && res.product.conditions) {
-      res.tab = 'circs'
-    } else {
-      res.tab = 'desc'
-    }
-
     let visitedProductsTimes = await app.store.getters['auth/products']
 
     if (res.visitedProductsIds.length) {
@@ -413,7 +407,7 @@ export default {
 
     loadingReview: false,
     zoom: 10,
-    tab: 'circs',
+    tab: 'desc',
     search: '',
     fusePoints: null,
     map: null,

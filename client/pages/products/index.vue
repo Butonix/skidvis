@@ -16,25 +16,19 @@
         @handleall="prodsHandleAll('categories')"
       />
       <buttons-scroll :hkey="currenciesValues.length + '-' + birthday[0] + '-' + birthday[1]">
+        <div :class="{'active':currenciesValues.length}"
+             class="btn mx-1 mb-2 text-nowrap btn-auditories"
+             @click="$modal.push('ModalPromotions')">
+          Тип акции<template v-for="(currencyId, key) in currenciesValues">
+          <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
+          <template v-else>, {{ currencies[Number(currencyId)] }}</template>
+        </template>
+        </div>
         <div :class="{'active':birthday[0]}"
              class="btn mx-1 mb-2 text-nowrap btn-auditories"
              @click="$modal.push('ModalBirthday')">
           День рождения
           <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
-        </div>
-        <div :class="{'active':currenciesValues.length}"
-             class="btn mx-1 mb-2 text-nowrap btn-auditories"
-             @click="$modal.push('ModalPromotions')">
-          Тип акции<template v-for="(currencyId, key) in currenciesValues">
-            <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
-            <template v-else>, {{ currencies[Number(currencyId)] }}</template>
-          </template>
-        </div>
-        <div v-if="!currenciesValues.length || currenciesValues.indexOf(1) !== -1"
-             :class="{'active':discountsValue}"
-             class="btn mx-1 mb-2 text-nowrap btn-auditories"
-             @click="$modal.push('ModalDiscounts')">
-          Размер скидки<template v-if="discountsValue">: {{ discounts[discountsValue] }}</template>
         </div>
       </buttons-scroll>
       <div class="d-flex flex-column flex-xs-row flex-wrap justify-content-end align-items-center align-items-xs-start mt-3">
@@ -84,35 +78,6 @@
           </div>
         </div>
       </modal>
-      <modal name="ModalDiscounts">
-        <div class="basic-modal categories-modal">
-          <div class="h5 mb-3">Выберите размер скидки</div>
-          <div class="d-flex justify-content-center align-items-start flex-wrap">
-            <div
-              :key="'discounts-0'"
-              :class="{'active':!discountsValue}"
-              class="btn mx-1 mb-2 text-nowrap btn-auditories"
-              @click="setDiscountsValues(0)">
-              Не выбран
-            </div>
-            <div
-              v-for="(name, id) in discounts"
-              :key="'discounts-'+id"
-              :class="{'active':discountsValue === Number(id)}"
-              class="btn mx-1 mb-2 text-nowrap btn-auditories"
-              @click="setDiscountsValues(id)">
-              {{ name }}
-            </div>
-          </div>
-          <div class="text-center mt-4 mt-xs-5">
-            <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                    @click="$modal.pop()"
-            >
-              Готово
-            </button>
-          </div>
-        </div>
-      </modal>
       <modal-birthday :birthday="birthday"
                       @birthdayData="setBirthday"
                       @birthdayClear="clearBirthday" />
@@ -135,25 +100,19 @@
                 @handleall="prodsHandleAll('categories')"
               />
               <buttons-scroll :hkey="currenciesValues.length + '-' + birthday[0] + '-' + birthday[1]">
+                <div :class="{'active':currenciesValues.length}"
+                     class="btn mx-1 mb-2 text-nowrap btn-auditories"
+                     @click="$modal.push('ModalPromotions')">
+                  Тип акции<template v-for="(currencyId, key) in currenciesValues">
+                  <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
+                  <template v-else>, {{ currencies[Number(currencyId)] }}</template>
+                </template>
+                </div>
                 <div :class="{'active':birthday[0]}"
                      class="btn mx-1 mb-2 text-nowrap btn-auditories"
                      @click="$modal.push('ModalBirthday')">
                   День рождения
                   <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
-                </div>
-                <div :class="{'active':currenciesValues.length}"
-                     class="btn mx-1 mb-2 text-nowrap btn-auditories"
-                     @click="$modal.push('ModalPromotions')">
-                  Тип акции<template v-for="(currencyId, key) in currenciesValues">
-                    <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
-                    <template v-else>, {{ currencies[Number(currencyId)] }}</template>
-                  </template>
-                </div>
-                <div v-if="!currenciesValues.length || currenciesValues.indexOf(1) !== -1"
-                     :class="{'active':discountsValue}"
-                     class="btn mx-1 mb-2 text-nowrap btn-auditories"
-                     @click="$modal.push('ModalDiscounts')">
-                  Размер скидки<template v-if="discountsValue">: {{ discounts[discountsValue] }}</template>
                 </div>
               </buttons-scroll>
               <div class="text-center mt-4">
@@ -231,7 +190,7 @@ const List = BuildList({
   apiUrl: 'products',
   pathResponse: 'list.data',
   pathTotal: 'list.total',
-  allowedParams: ['city_id', 'ordering', 'orderingDir', 'birthday', 'currenciesValues', 'discountsValue'],
+  allowedParams: ['city_id', 'ordering', 'orderingDir', 'birthday', 'currenciesValues'],
   filters: {
     categories: {
       start: {
@@ -276,9 +235,6 @@ const List = BuildList({
         getWatcher({ type: beforeTypes.SEARCH }).call(this)
       },
       [`${gN}.urlQuery.currenciesValues`]: function (v) {
-        getWatcher({ type: beforeTypes.SEARCH }).call(this)
-      },
-      [`${gN}.urlQuery.discountsValue`]: function (v) {
         getWatcher({ type: beforeTypes.SEARCH }).call(this)
       },
       'ordering': function (v) {
@@ -335,15 +291,13 @@ export default {
     }
     let birthday = query.birthday || [null, null]
     let currenciesValues = query.currenciesValues || []
-    let discountsValue = query.discountsValue || 0
     let res = await List.getStartData({
       error,
       query,
       defaultUrlQuery: {
         city_id: city.id,
         birthday,
-        currenciesValues,
-        discountsValue
+        currenciesValues
       }
     })
     res.visitedProducts = []
@@ -386,7 +340,8 @@ export default {
   },
   data: () => ({
     currencies: {
-      1: 'Скидка',
+      1: 'Скидка в %',
+      2: 'Скидка в ₽',
       3: 'Подарок',
       4: 'Бонусы',
       5: 'Кешбек'
@@ -477,9 +432,6 @@ export default {
     },
     currenciesValues () {
       return this[globalNamespace].urlQuery.currenciesValues
-    },
-    discountsValue () {
-      return this[globalNamespace].urlQuery.discountsValue
     }
   },
   methods: {
@@ -511,7 +463,6 @@ export default {
             categories: this[globalNamespace].urlQuery.categories || [],
             birthday: this[globalNamespace].urlQuery.birthday || [],
             currenciesValues: this[globalNamespace].urlQuery.currenciesValues || [],
-            discountsValue: this[globalNamespace].urlQuery.discountsValue || 0,
             is_active: 1,
             latitudeMax: bounds[1][0],
             longitudeMax: bounds[1][1],
@@ -615,14 +566,6 @@ export default {
         this[globalNamespace].urlQuery.currenciesValues.push(id)
       } else {
         this.$delete(this[globalNamespace].urlQuery.currenciesValues, values.indexOf(id))
-      }
-    },
-    setDiscountsValues (id) {
-      id = Number(id)
-      if (this[globalNamespace].urlQuery.discountsValue === id) {
-        this[globalNamespace].urlQuery.discountsValue = 0
-      } else {
-        this[globalNamespace].urlQuery.discountsValue = id
       }
     },
     setBirthday (data) {

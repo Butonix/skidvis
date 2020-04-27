@@ -1,8 +1,5 @@
 <template>
   <footer class="footer">
-    <div class="d-flex justify-content-center">
-      <theme-toggler />
-    </div>
     <div class="footer__content">
       <div class="footer__content__box">
         <ul class="footer__nav list-unstyled">
@@ -105,9 +102,6 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  components: {
-    'ThemeToggler': () => import('~/components/Footer/ThemeToggler')
-  },
   data: () => ({
     border: '',
     fill: '0'
