@@ -1,19 +1,23 @@
 const urlParser = require('url')
 
-export function isObject (v) {
+export function isObject(v) {
   return v && typeof v === 'object' && v.constructor === Object
 }
-export function isString (v) {
+
+export function isString(v) {
   return typeof v === 'string' || v instanceof String
 }
-export function isNumeric (n) {
+
+export function isNumeric(n) {
   return (parseFloat(n) === n >>> 0)
 }
-export function parseNum (n) {
+
+export function parseNum(n) {
   let pF = parseFloat(n)
   return (pF === n >>> 0) ? pF : n
 }
-export function parseReqObjs (v) {
+
+export function parseReqObjs(v) {
   if (isObject(v) || Array.isArray(v)) {
     for (let i in v) {
       v[i] = parseReqObjs(v[i])
@@ -34,7 +38,7 @@ export function parseReqObjs (v) {
  * @return {String|undefined}
  */
 
-export function cookieFromRequest (req, key, json) {
+export function cookieFromRequest(req, key, json) {
   if (!req.headers.cookie) {
     return
   }
@@ -52,7 +56,7 @@ export function cookieFromRequest (req, key, json) {
 /**
  * https://router.vuejs.org/en/advanced/scroll-behavior.html
  */
-export function scrollBehavior (to, from, savedPosition) {
+export function scrollBehavior(to, from, savedPosition) {
   if (savedPosition) {
     return savedPosition
   }
@@ -60,17 +64,18 @@ export function scrollBehavior (to, from, savedPosition) {
   let position = {}
 
   if (to.matched.length < 2) {
-    position = { x: 0, y: 0 }
+    position = {x: 0, y: 0}
   } else if (to.matched.some(r => r.components.default.options.scrollToTop)) {
-    position = { x: 0, y: 0 }
-  } if (to.hash) {
-    position = { selector: to.hash }
+    position = {x: 0, y: 0}
+  }
+  if (to.hash) {
+    position = {selector: to.hash}
   }
 
   return position
 }
 
-export function goTo (title, url) {
+export function goTo(title, url) {
   if (typeof history.pushState !== 'undefined') {
     history.pushState(null, title, url)
   } else {
@@ -78,7 +83,7 @@ export function goTo (title, url) {
   }
 }
 
-export function $callToast (data, toast) {
+export function $callToast(data, toast) {
   let typeClass = 'toast-alert toast-alert--' + data.type
   let message = ''
   if (data.title) {
@@ -103,13 +108,13 @@ export function $callToast (data, toast) {
  * @param  {Object} options
  * @return {Window}
  */
-export function openWindow (url, title, options = {}) {
+export function openWindow(url, title, options = {}) {
   if (typeof url === 'object') {
     options = url
     url = ''
   }
 
-  options = { url, title, width: 600, height: 720, ...options }
+  options = {url, title, width: 600, height: 720, ...options}
 
   const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screen.left
   const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screen.top
@@ -133,17 +138,17 @@ export function openWindow (url, title, options = {}) {
   return newWindow
 }
 
-export function getWindowParams () {
+export function getWindowParams() {
   let w = window
   let d = document
   let e = d.documentElement
   let g = d.getElementsByTagName('body')[0]
   let x = w.innerWidth || e.clientWidth || g.clientWidth
   let y = w.innerHeight || e.clientHeight || g.clientHeight
-  return { x, y }
+  return {x, y}
 }
 
-export function fetchAddresses (axios) {
+export function fetchAddresses(axios) {
   const CancelToken = axios.CancelToken
   let cancelRequest
   return async function (params) {
@@ -151,7 +156,7 @@ export function fetchAddresses (axios) {
       cancelRequest()
     }
     try {
-      let { data } = await axios({
+      let {data} = await axios({
         method: 'POST',
         url: 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address',
         data: params,
@@ -161,7 +166,7 @@ export function fetchAddresses (axios) {
           'Accept': 'application/json',
           'Authorization': `Token ${process.env.daDataApi}`
         },
-        cancelToken: new CancelToken(function executor (c) {
+        cancelToken: new CancelToken(function executor(c) {
           // An executor function receives a cancel function as a parameter
           cancelRequest = c
         })
@@ -174,7 +179,7 @@ export function fetchAddresses (axios) {
   }
 }
 
-export function mapPointSlide ({ inc = 1, id, count, key }) {
+export function mapPointSlide({inc = 1, id, count, key}) {
   let pageE = document.getElementById('mp-slide-' + id)
   let page = 1
   if (pageE) {
@@ -228,7 +233,7 @@ export function mapPointSlide ({ inc = 1, id, count, key }) {
   }
 }
 
-export function getSplitText (str, length) {
+export function getSplitText(str, length) {
   if (!str) {
     return ''
   }
@@ -241,75 +246,75 @@ export function getSplitText (str, length) {
   return str
 }
 
-export function getTitle (title) {
+export function getTitle(title) {
   return getSplitText(title, 70)
 }
 
-export function getDesc (desc) {
-  return { hid: 'description', name: 'description', content: ((desc) ? getSplitText(desc, 100) : 'Скидвис') }
+export function getDesc(desc) {
+  return {hid: 'description', name: 'description', content: ((desc) ? getSplitText(desc, 100) : 'Скидвис')}
 }
 
-export function getFavicon (type, desc) {
+export function getFavicon(type, desc) {
   switch (type) {
     case 'blog':
       return {
         meta: [
           getDesc(desc),
-          { name: 'msapplication-TileColor', content: '#ffffff' },
-          { name: 'msapplication-config', content: '/favicon/blog/browserconfig.xml' },
-          { name: 'theme-color', content: '#ffffff' }
+          {name: 'msapplication-TileColor', content: '#ffffff'},
+          {name: 'msapplication-config', content: '/favicon/blog/browserconfig.xml'},
+          {name: 'theme-color', content: '#ffffff'}
         ],
         link: [
-          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/blog/apple-touch-icon.png' },
-          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/blog/favicon-32x32.png' },
-          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/blog/favicon-16x16.png' },
-          { rel: 'manifest', href: '/favicon/blog/site.webmanifest' },
-          { rel: 'mask-icon', href: '/favicon/blog/safari-pinned-tab.svg', color: '#00c2ff' },
-          { rel: 'shortcut icon', href: '/favicon/blog/favicon.ico' }
+          {rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/blog/apple-touch-icon.png'},
+          {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/blog/favicon-32x32.png'},
+          {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/blog/favicon-16x16.png'},
+          {rel: 'manifest', href: '/favicon/blog/site.webmanifest'},
+          {rel: 'mask-icon', href: '/favicon/blog/safari-pinned-tab.svg', color: '#00c2ff'},
+          {rel: 'shortcut icon', href: '/favicon/blog/favicon.ico'}
         ]
       }
     case 'business':
       return {
         meta: [
           getDesc(desc),
-          { name: 'msapplication-TileColor', content: '#ffffff' },
-          { name: 'msapplication-config', content: '/favicon/business/browserconfig.xml' },
-          { name: 'theme-color', content: '#ffffff' }
+          {name: 'msapplication-TileColor', content: '#ffffff'},
+          {name: 'msapplication-config', content: '/favicon/business/browserconfig.xml'},
+          {name: 'theme-color', content: '#ffffff'}
         ],
         link: [
-          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/business/apple-touch-icon.png' },
-          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/business/favicon-32x32.png' },
-          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/business/favicon-16x16.png' },
-          { rel: 'manifest', href: '/favicon/business/site.webmanifest' },
-          { rel: 'mask-icon', href: '/favicon/business/safari-pinned-tab.svg', color: '#00c2ff' },
-          { rel: 'shortcut icon', href: '/favicon/business/favicon.ico' }
+          {rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/business/apple-touch-icon.png'},
+          {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/business/favicon-32x32.png'},
+          {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/business/favicon-16x16.png'},
+          {rel: 'manifest', href: '/favicon/business/site.webmanifest'},
+          {rel: 'mask-icon', href: '/favicon/business/safari-pinned-tab.svg', color: '#00c2ff'},
+          {rel: 'shortcut icon', href: '/favicon/business/favicon.ico'}
         ]
       }
     default:
       return {
         meta: [
           getDesc(desc),
-          { name: 'msapplication-TileColor', content: '#ffffff' },
-          { name: 'msapplication-config', content: '/favicon/default/browserconfig.xml' },
-          { name: 'theme-color', content: '#ffffff' }
+          {name: 'msapplication-TileColor', content: '#ffffff'},
+          {name: 'msapplication-config', content: '/favicon/default/browserconfig.xml'},
+          {name: 'theme-color', content: '#ffffff'}
         ],
         link: [
-          { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/default/apple-touch-icon.png' },
-          { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/default/favicon-32x32.png' },
-          { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/default/favicon-16x16.png' },
-          { rel: 'manifest', href: '/favicon/default/site.webmanifest' },
-          { rel: 'mask-icon', href: '/favicon/default/safari-pinned-tab.svg', color: '#00c2ff' },
-          { rel: 'shortcut icon', href: '/favicon/default/favicon.ico' }
+          {rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/default/apple-touch-icon.png'},
+          {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon/default/favicon-32x32.png'},
+          {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/default/favicon-16x16.png'},
+          {rel: 'manifest', href: '/favicon/default/site.webmanifest'},
+          {rel: 'mask-icon', href: '/favicon/default/safari-pinned-tab.svg', color: '#00c2ff'},
+          {rel: 'shortcut icon', href: '/favicon/default/favicon.ico'}
         ]
       }
   }
 }
 
-export function getDomain (url) {
+export function getDomain(url) {
   // eslint-disable-next-line node/no-deprecated-api
   return urlParser.parse(url).hostname
 }
 
-export function getLinkTel (tel) {
+export function getLinkTel(tel) {
   return tel.replaceAll(' ', '').replaceAll('-', '').replaceAll('\\)', '').replaceAll('\\(', '').trim()
 }
