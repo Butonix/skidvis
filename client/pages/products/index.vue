@@ -346,13 +346,6 @@ export default {
       4: 'Бонусы',
       5: 'Кешбек'
     },
-    discounts: {
-      10: 'До 10%',
-      20: 'До 20%',
-      30: 'До 30%',
-      40: 'До 40%',
-      50: 'До 50%'
-    },
     showMapFilters: false,
     loadingPoints: false,
     isOpenMap: false,
@@ -381,6 +374,12 @@ export default {
         ordering: 'created_at',
         orderingDir: 'desc',
         name: 'Новые'
+      },
+      {
+        id: 6,
+        ordering: 'discount',
+        orderingDir: 'desc',
+        name: 'По размеру скидки'
       },
       {
         id: 3,
