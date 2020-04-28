@@ -38,29 +38,7 @@
                              }"
                              class="card-img-top d-block"
                              @click.native="$sTB()">
-                  <div v-if="item.currency_id"
-                       :class="{'card-img-top__label--present':item.currency_id === 3}"
-                       class="card-img-top__label">
-                    <present-card
-                      v-if="item.currency_id === 3"/>
-                    <span v-else-if="item.value">
-                      <template v-if="item.currency_id === 1">
-                        {{ item.value }}%
-                      </template>
-                      <template v-else-if="item.currency_id === 2">
-                        {{ item.value }}₽
-                      </template>
-                      <template v-else-if="item.currency_id === 4">
-                        {{ item.value }} <bonus/>
-                      </template>
-                      <template v-else-if="item.currency_id === 5">
-                        {{ item.value }} <cashback/>
-                      </template>
-                      <template v-else>
-                        {{ item.value }}₽
-                      </template>
-                    </span>
-                  </div>
+                  <value :currency_id="item.currency_id" :value="item.value" type="card"/>
                   <div class="embed-responsive">
                     <div class="embed-responsive-item">
                       <div
@@ -190,9 +168,7 @@ export default {
   components: {
     'Metro': () => import('~/components/MetroWithTooltip'),
     'PaginateList': () => import('~/components/PaginateList'),
-    'PresentCard': () => import('~/components/Icons/PresentCard'),
-    'Bonus': () => import('~/components/Icons/Bonus'),
-    'Cashback': () => import('~/components/Icons/Cashback'),
+    'Value': () => import('~/components/Value'),
     'Flag': () => import('~/components/Flag'),
     'CardLogo': () => import('~/components/Product/CardLogo'),
     Paginate

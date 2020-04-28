@@ -50,22 +50,16 @@
     align-items: center;
     background: $blog;
     overflow: hidden;
-    padding: 0 36px;
-    height: 72px;
+    padding: 0 8px;
+    height: 110px;
     line-height: 1;
     color: white;
     @include media-breakpoint-down(lg) {
       font-size: 1.2rem;
-      height: 50px;
-      padding: 0px 20px;
     }
     @include media-breakpoint-down(sm) {
       font-size: 1rem;
-      height: 40px;
-      padding: 0px 18px;
-    }
-    @include media-breakpoint-down(xxs){
-      padding: 0px 6px;
+      height: 80px;
     }
     &--present{
       padding: 0!important;
@@ -135,6 +129,20 @@
       }
     }
   }
+  &__currency{
+    &__wrapper{
+      display: flex;
+      justify-content: center;
+      width: 70px;
+      margin-left: 8px;
+      @include media-breakpoint-down(xxs){
+        margin-left: 5px;
+      }
+      @include media-breakpoint-down(sm) {
+        width: 50px;
+      }
+    }
+  }
   &__currency-svg{
     cursor: pointer;
     display: inline-block;
@@ -143,10 +151,6 @@
     font-size: 8px;
     text-align: center;
     transition: .2s;
-    margin-left: 10px;
-    @include media-breakpoint-down(xxs){
-      margin-left: 5px;
-    }
     svg{
       font-size: 33px;
       margin-bottom: 2px;

@@ -17,7 +17,7 @@
           Акция действует
           <div v-html="timeHuman"/>
         </template>
-        <div v-if="product.is_birthday && product.birthday_before && product.birthday_after">
+        <div v-if="product.is_birthday && (product.birthday_before || product.birthday_after)">
           <template v-if="product.birthday_before">{{ product.birthday_before }} {{ pluralize(product.birthday_before, pluralizeDays) }} до</template>
           <template v-if="product.birthday_before && product.birthday_after">и <br></template>
           <template v-if="product.birthday_after">{{ product.birthday_after }} {{ pluralize(product.birthday_after, pluralizeDays) }} после</template>

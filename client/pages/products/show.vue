@@ -9,15 +9,7 @@
             <full-slider
               :images="product.images"
             >
-              <div v-if="product.currency_id"
-                   :class="{'product__slider__label--present':product.currency_id === 3}"
-                   class="product__slider__label">
-                <present-page
-                  v-if="product.currency_id === 3"/>
-                <span v-else-if="product.value">
-                  {{ product.value }}{{ (product.currency_id === 1)? '%' : '₽' }}
-                </span>
-              </div>
+              <value :currency_id="product.currency_id" :value="product.value" type="product-page"/>
             </full-slider>
           </div>
 
@@ -256,10 +248,10 @@ export default {
   components: {
     'VisitedSlider': () => import('~/components/Product/VisitedSlider'),
     'CardMini': () => import('~/components/Product/CardMini'),
-    'PresentPage': () => import('~/components/Icons/PresentPage'),
     'Review': () => import('~/components/Review'),
     'ReviewEdit': () => import('~/components/ReviewEdit'),
     'SearchInput': () => import('~/components/SearchInput'),
+    'Value': () => import('~/components/Value'),
     'Dropdown': () => import('~/components/Dropdown'),
     DynamicLabelInput,
     AddressesFrame,

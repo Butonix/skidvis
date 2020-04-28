@@ -51,41 +51,67 @@
                   :type="form.currency_id === 1? 'percent' : 'number'"
                   class-input="ff-open-sans"
                 />
-                <div :class="{'active': form.currency_id === 1}"
-                     class="products-edit__currency-svg"
-                     @click="form.currency_id = 1">
-                  <percent-btn/>
-                  <br>
-                  Скидка&nbsp;в&nbsp;%
+                <div>
+                  <div class="d-flex mb-2">
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 1}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 1">
+                        <percent-btn/>
+                        <br>
+                        Скидка&nbsp;в&nbsp;%
+                      </div>
+                    </div>
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 2}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 2">
+                        <rub-btn/>
+                        <br>
+                        Скидка&nbsp;в&nbsp;₽
+                      </div>
+                    </div>
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 3}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 3">
+                        <present-btn/>
+                        <br>
+                        Подарок
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex">
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 4}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 4">
+                        <bonus-btn/>
+                        <br>
+                        Бонусы в баллах
+                      </div>
+                    </div>
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 6}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 6">
+                        <bonus-percent-btn/>
+                        <br>
+                        Бонусы в %
+                      </div>
+                    </div>
+                    <div class="products-edit__currency__wrapper">
+                      <div :class="{'active': form.currency_id === 5}"
+                           class="products-edit__currency-svg"
+                           @click="form.currency_id = 5">
+                        <cashback-btn/>
+                        <br>
+                        Кешбек
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div :class="{'active': form.currency_id === 2}"
-                     class="products-edit__currency-svg"
-                     @click="form.currency_id = 2">
-                  <rub-btn/>
-                  <br>
-                  Скидка&nbsp;в&nbsp;₽
-                </div>
-                <div :class="{'active': form.currency_id === 3}"
-                     class="products-edit__currency-svg"
-                     @click="form.currency_id = 3">
-                  <present-btn/>
-                  <br>
-                  Подарок
-                </div>
-                <div :class="{'active': form.currency_id === 4}"
-                     class="products-edit__currency-svg"
-                     @click="form.currency_id = 4">
-                  <bonus-btn/>
-                  <br>
-                  Бонусы
-                </div>
-                <div :class="{'active': form.currency_id === 5}"
-                     class="products-edit__currency-svg"
-                     @click="form.currency_id = 5">
-                  <cashback-btn/>
-                  <br>
-                  Кешбек
-                </div>
+
               </div>
               <div v-if="organization.is_caption" class="products-edit__caption">
                 <div class="d-flex small justify-content-between">
@@ -574,6 +600,7 @@ export default {
     'PresentBtn': () => import('~/components/Icons/PresentBtn'),
     'CashbackBtn': () => import('~/components/Icons/CashbackBtn'),
     'BonusBtn': () => import('~/components/Icons/BonusBtn'),
+    'BonusPercentBtn': () => import('~/components/Icons/BonusPercentBtn'),
     'RubBtn': () => import('~/components/Icons/RubBtn'),
     'MaterialTextarea': () => import('~/components/Edit/Inputs/MaterialTextarea'),
     'ThumbsFileInput': () => import('~/components/Edit/ThumbsFileInput'),
@@ -1073,9 +1100,18 @@ export default {
           text: 'Данные успешно сохранены'
         })
       } catch (e) {
+        let message = 'Сохранить не удалось'
+        if (e.response && e.response.data && e.response.data.errors) {
+          for (let key in e.response.data.errors) {
+            let error = e.response.data.errors[key]
+            if (error && error[0]) {
+              message = error[0]
+            }
+          }
+        }
         await this.$callToast({
           type: 'error',
-          text: 'Сохранить не удалось'
+          text: message
         })
       }
     },

@@ -61,12 +61,12 @@
           <div class="h5 mb-4">Выберите время действия акции</div>
           <div class="mb-2 px-1">
             <buttons-scroll :hkey="'birthday'">
-              <div class="btn mx-1 mb-2 text-nowrap btn-auditories" @click="setTypeBirthday(1)"
-                   :class="{'active':typeBirthday === 1}">
+              <div :class="{'active':typeBirthday === 1}" class="btn mx-1 mb-2 text-nowrap btn-auditories"
+                   @click="setTypeBirthday(1)">
                 Только в День Рождения
               </div>
-              <div class="btn mx-1 mb-2 text-nowrap btn-auditories" @click="setTypeBirthday(2)"
-                   :class="{'active':typeBirthday === 2}">
+              <div :class="{'active':typeBirthday === 2}" class="btn mx-1 mb-2 text-nowrap btn-auditories"
+                   @click="setTypeBirthday(2)">
                 Акция действует календарный месяц Дня Рождения
               </div>
             </buttons-scroll>
@@ -108,6 +108,7 @@
               :key="'currency-'+id"
               :class="{'active':currenciesValues.indexOf(Number(id)) !== -1}"
               class="btn mx-1 mb-2 text-nowrap btn-auditories"
+              :style="{order:currenciesOrdering[id]}"
               @click="setCurrenciesValues(id)">
               {{ name }}
             </div>
@@ -394,8 +395,17 @@ export default {
       1: 'Скидка в %',
       2: 'Скидка в ₽',
       3: 'Подарок',
-      4: 'Бонусы',
+      4: 'Бонусы в баллах',
+      6: 'Бонусы в %',
       5: 'Кешбек'
+    },
+    currenciesOrdering: {
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      6: 5,
+      5: 6
     },
     daysBeforeBirthday: [],
     daysAfterBirthday: [],
@@ -644,25 +654,25 @@ export default {
       this.clearTypeBirthday()
     },
     setTypeBirthday (type) {
-      if(this[globalNamespace].urlQuery.type_birthday === type){
+      if (this[globalNamespace].urlQuery.type_birthday === type) {
         this.clearTypeBirthday()
-      }else{
+      } else {
         this.$set(this[globalNamespace].urlQuery, 'type_birthday', type)
       }
       this.clearBirthday()
     },
     setBeforeBirthday (days) {
-      if(this[globalNamespace].urlQuery.birthday[0] === days){
+      if (this[globalNamespace].urlQuery.birthday[0] === days) {
         this.$set(this[globalNamespace].urlQuery.birthday, 0, null)
-      }else{
+      } else {
         this.$set(this[globalNamespace].urlQuery.birthday, 0, days)
       }
       this.clearTypeBirthday()
     },
     setAfterBirthday (days) {
-      if(this[globalNamespace].urlQuery.birthday[1] === days){
+      if (this[globalNamespace].urlQuery.birthday[1] === days) {
         this.$set(this[globalNamespace].urlQuery.birthday, 1, null)
-      }else{
+      } else {
         this.$set(this[globalNamespace].urlQuery.birthday, 1, days)
       }
       this.clearTypeBirthday()
