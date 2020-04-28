@@ -223,6 +223,7 @@
             @setIsAdvertisement="form.is_advertisement = $event"
             @setIsPerpetual="form.is_perpetual = $event"
             @setIsBirthday="form.is_birthday = $event"
+            @setTypeBirthday="form.type_birthday = $event"
           />
 
           <div class="order-5 order-lg-5 tab-panel mt-3">
@@ -308,6 +309,7 @@
           @setIsAdvertisement="form.is_advertisement = $event"
           @setIsPerpetual="form.is_perpetual = $event"
           @setIsBirthday="form.is_birthday = $event"
+          @setTypeBirthday="form.type_birthday = $event"
         />
       </div>
 

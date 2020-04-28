@@ -66,8 +66,18 @@
       <template slot="text">
         <v-checkbox :value="form.is_birthday" @input="$emit('setIsBirthday', $event)">{{ form.is_birthday?'На день рождения':'Не касается для рождения' }}</v-checkbox>
 
-        <material-input
+        <dropdown
           v-if="form.is_birthday"
+          :options="typeBirthdayArray"
+          :value="typeBirthdayArray.find(value => value.id === form.type_birthday)"
+          class="mb-3"
+          btn-class="btn btn-sm btn-gray"
+          h-align="right"
+          placeholder="Дни до/после ДР"
+          @input="$emit('setTypeBirthday', $event.id)"
+        />
+        <material-input
+          v-if="form.is_birthday && form.type_birthday === 0"
           :value="form.birthday_before"
           :form="form"
           type="number"
@@ -79,7 +89,7 @@
           @input="$emit('onInputBirthdayBefore', $event)"
         />
         <material-input
-          v-if="form.is_birthday"
+          v-if="form.is_birthday && form.type_birthday === 0"
           :value="form.birthday_after"
           :form="form"
           type="number"
@@ -189,6 +199,7 @@ import { Russian } from 'flatpickr/dist/l10n/ru'
 
 export default {
   components: {
+    'Dropdown': () => import('~/components/Dropdown'),
     'VCheckbox': () => import('~/components/Edit/Checkboxes/v-checkbox'),
     'MaterialInput': () => import('~/components/Edit/Inputs/MaterialInput'),
     'flatPickr': () => import('vue-flatpickr-component'),
@@ -250,6 +261,20 @@ export default {
   },
   data: () => ({
     date: null,
+    typeBirthdayArray: [
+      {
+        id: 0,
+        name: 'Дни до/после ДР'
+      },
+      {
+        id: 1,
+        name: 'Только в День Рождения'
+      },
+      {
+        id: 2,
+        name: 'В календарный месяц'
+      }
+    ],
     config: {
       mode: 'range',
       locale: Russian

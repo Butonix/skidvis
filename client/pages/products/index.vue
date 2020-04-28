@@ -20,18 +20,18 @@
              class="btn mx-1 mb-2 text-nowrap btn-auditories"
              @click="$modal.push('ModalPromotions')">
           Тип акции<template v-for="(currencyId, key) in currenciesValues">
-          <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
-          <template v-else>, {{ currencies[Number(currencyId)] }}</template>
-        </template>
+            <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
+            <template v-else>, {{ currencies[Number(currencyId)] }}</template>
+          </template>
         </div>
-        <div :class="{'active':birthday[0]}"
+        <div :class="{'active':birthday[0] || typeBirthday}"
              class="btn mx-1 mb-2 text-nowrap btn-auditories"
-             @click="$modal.push('ModalBirthday')">
-          День рождения
-          <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
+             @click="$modal.push('modalTimeOfTheAction')">
+          Время действия акции
         </div>
       </buttons-scroll>
       <div class="d-flex flex-column flex-xs-row flex-wrap justify-content-end align-items-center align-items-xs-start mt-3">
+        <div v-if="isFiltered" class="btn btn-danger btn-sm mb-3 mr-xs-2" @click="clearAll">Сбросить все</div>
         <div class="btn btn-outline-primary btn-sm mb-3 mr-xs-2"
              @click="onOpenMap"
         >
@@ -56,6 +56,49 @@
       <visited-slider :products="visitedProducts" class="mt-5" />
     </div>
     <client-only>
+      <modal name="modalTimeOfTheAction">
+        <div class="basic-modal categories-modal" style="max-width: 800px">
+          <div class="h5 mb-4">Выберите время действия акции</div>
+          <div class="mb-2 px-1">
+            <buttons-scroll :hkey="'birthday'">
+              <div class="btn mx-1 mb-2 text-nowrap btn-auditories" @click="setTypeBirthday(1)"
+                   :class="{'active':typeBirthday === 1}">
+                Только в День Рождения
+              </div>
+              <div class="btn mx-1 mb-2 text-nowrap btn-auditories" @click="setTypeBirthday(2)"
+                   :class="{'active':typeBirthday === 2}">
+                Акция действует календарный месяц Дня Рождения
+              </div>
+            </buttons-scroll>
+          </div>
+          <div class="mb-4 px-1">
+            <div class="small mb-1">Количество дней до Дня Рождения</div>
+            <buttons-scroll :hkey="'birthday'">
+              <div v-for="days in prods.filters.birthday.favorites[0]" :key="days"
+                   :class="{'active':birthday[0] === days}"
+                   class="btn btn-auditories btn-sm m-1 text-nowrap"
+                   @click="setBeforeBirthday(days)">{{ days }} {{ pluralize(days, pluralizeDays) }}</div>
+            </buttons-scroll>
+          </div>
+          <div class="mb-3 px-1">
+            <div class="small mb-1">Количество дней после Дня Рождения</div>
+            <buttons-scroll :hkey="'birthday'">
+              <div v-for="days in prods.filters.birthday.favorites[1]" :key="days"
+                   :class="{'active':birthday[1] === days}"
+                   class="btn btn-auditories btn-sm m-1 text-nowrap"
+                   @click="setAfterBirthday(days)">{{ days }} {{ pluralize(days, pluralizeDays) }}</div>
+            </buttons-scroll>
+          </div>
+          <div class="text-center mt-4 mt-xs-5">
+            <div class="btn btn-gray btn-sm--sm" @click="clearTimeOfTheAction">
+              Сбросить
+            </div>
+            <div class="btn btn-primary btn-sm--sm ml-2" @click="$modal.pop()">
+              Готово
+            </div>
+          </div>
+        </div>
+      </modal>
       <modal name="ModalPromotions">
         <div class="basic-modal categories-modal">
           <div class="h5 mb-3">Выберите тип акции</div>
@@ -70,17 +113,15 @@
             </div>
           </div>
           <div class="text-center mt-4 mt-xs-5">
-            <button class="btn btn-outline-primary ml-sm-2 mb-3 mb-sm-0 btn-sm--sm"
-                    @click="$modal.pop()"
-            >
+            <div class="btn btn-gray btn-sm--sm" @click="clearCurrencies">
+              Сбросить
+            </div>
+            <div class="btn btn-primary btn-sm--sm ml-2" @click="$modal.pop()">
               Готово
-            </button>
+            </div>
           </div>
         </div>
       </modal>
-      <modal-birthday :birthday="birthday"
-                      @birthdayData="setBirthday"
-                      @birthdayClear="clearBirthday" />
       <div :class="{'d-none': !isOpenMap}" aria-hidden="false" class="map-modal-wrapper">
         <div class="basic-modal map-modal ymap-custom modal-content">
           <div v-if="showMapFilters" class="map-modal__filter-modal overflow-auto">
@@ -104,19 +145,22 @@
                      class="btn mx-1 mb-2 text-nowrap btn-auditories"
                      @click="$modal.push('ModalPromotions')">
                   Тип акции<template v-for="(currencyId, key) in currenciesValues">
-                  <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
-                  <template v-else>, {{ currencies[Number(currencyId)] }}</template>
-                </template>
+                    <template v-if="key === 0">: {{ currencies[Number(currencyId)] }}</template>
+                    <template v-else>, {{ currencies[Number(currencyId)] }}</template>
+                  </template>
                 </div>
-                <div :class="{'active':birthday[0]}"
+                <div :class="{'active':birthday[0] || typeBirthday}"
                      class="btn mx-1 mb-2 text-nowrap btn-auditories"
-                     @click="$modal.push('ModalBirthday')">
-                  День рождения
-                  <span v-if="birthday[0]">{{ birthday[0] }}{{ birthday[1]?', праздную '+birthday[1]:'' }}</span>
+                     @click="$modal.push('modalTimeOfTheAction')">
+                  Время действия акции
                 </div>
               </buttons-scroll>
+
               <div class="text-center mt-4">
-                <div class="btn btn-primary" @click="setFiltersMap">
+                <div class="btn btn-danger btn-sm--sm px-3 px-sm-5" @click="clearAll">
+                  Сбросить все
+                </div>
+                <div class="btn btn-primary btn-sm--sm ml-2 ml-sm-4 px-sm-5" @click="setFiltersMap">
                   Применить
                 </div>
               </div>
@@ -190,7 +234,7 @@ const List = BuildList({
   apiUrl: 'products',
   pathResponse: 'list.data',
   pathTotal: 'list.total',
-  allowedParams: ['city_id', 'ordering', 'orderingDir', 'birthday', 'currenciesValues'],
+  allowedParams: ['city_id', 'ordering', 'orderingDir', 'birthday', 'currenciesValues', 'type_birthday'],
   filters: {
     categories: {
       start: {
@@ -211,6 +255,11 @@ const List = BuildList({
           perPage: 1000000,
           page: 1
         }
+      }
+    },
+    birthday: {
+      start: {
+        url: 'between-birthday-days'
       }
     }
   },
@@ -237,6 +286,9 @@ const List = BuildList({
       [`${gN}.urlQuery.currenciesValues`]: function (v) {
         getWatcher({ type: beforeTypes.SEARCH }).call(this)
       },
+      [`${gN}.urlQuery.type_birthday`]: function (v) {
+        getWatcher({ type: beforeTypes.SEARCH }).call(this)
+      },
       'ordering': function (v) {
         this[gN].urlQuery.ordering = v.ordering
         this[gN].urlQuery.orderingDir = v.orderingDir
@@ -261,7 +313,6 @@ const List = BuildList({
 
 export default {
   components: {
-    'ModalBirthday': () => import('~/components/Modals/ModalBirthday'),
     'VisitedSlider': () => import('~/components/Product/VisitedSlider'),
     'FilterIcon': () => import('~/components/Icons/Filter'),
     'FilterList': () => import('~/components/FilterList'),
@@ -289,15 +340,14 @@ export default {
     if (typeof query.city_id !== 'undefined' && query.city_id !== city.id) {
       await app.store.dispatch('auth/setCity', query.city_id)
     }
-    let birthday = query.birthday || [null, null]
-    let currenciesValues = query.currenciesValues || []
     let res = await List.getStartData({
       error,
       query,
       defaultUrlQuery: {
         city_id: city.id,
-        birthday,
-        currenciesValues
+        birthday: query.birthday || [null, null],
+        currenciesValues: query.currenciesValues || [],
+        type_birthday: query.type_birthday || null
       }
     })
     res.visitedProducts = []
@@ -339,6 +389,7 @@ export default {
     return res
   },
   data: () => ({
+    pluralizeDays: ['день', 'дня', 'дней'],
     currencies: {
       1: 'Скидка в %',
       2: 'Скидка в ₽',
@@ -346,6 +397,8 @@ export default {
       4: 'Бонусы',
       5: 'Кешбек'
     },
+    daysBeforeBirthday: [],
+    daysAfterBirthday: [],
     showMapFilters: false,
     loadingPoints: false,
     isOpenMap: false,
@@ -429,8 +482,18 @@ export default {
     birthday () {
       return this[globalNamespace].urlQuery.birthday
     },
+    typeBirthday () {
+      return this[globalNamespace].urlQuery.type_birthday
+    },
     currenciesValues () {
       return this[globalNamespace].urlQuery.currenciesValues
+    },
+    categories () {
+      return this[globalNamespace].urlQuery.categories
+    },
+    isFiltered () {
+      let birthday = this.birthday
+      return birthday[0] || birthday[1] || this.currenciesValues.length > 0 || this.categories.length > 0 || this.typeBirthday
     }
   },
   methods: {
@@ -567,11 +630,53 @@ export default {
         this.$delete(this[globalNamespace].urlQuery.currenciesValues, values.indexOf(id))
       }
     },
-    setBirthday (data) {
-      this.$set(this[globalNamespace].urlQuery.birthday, data[0], data[1])
-    },
     clearBirthday () {
       this[globalNamespace].urlQuery.birthday = [null, null]
+    },
+    clearTypeBirthday () {
+      this[globalNamespace].urlQuery.type_birthday = null
+    },
+    clearCurrencies () {
+      this[globalNamespace].urlQuery.currenciesValues = []
+    },
+    clearTimeOfTheAction () {
+      this.clearBirthday()
+      this.clearTypeBirthday()
+    },
+    setTypeBirthday (type) {
+      if(this[globalNamespace].urlQuery.type_birthday === type){
+        this.clearTypeBirthday()
+      }else{
+        this.$set(this[globalNamespace].urlQuery, 'type_birthday', type)
+      }
+      this.clearBirthday()
+    },
+    setBeforeBirthday (days) {
+      if(this[globalNamespace].urlQuery.birthday[0] === days){
+        this.$set(this[globalNamespace].urlQuery.birthday, 0, null)
+      }else{
+        this.$set(this[globalNamespace].urlQuery.birthday, 0, days)
+      }
+      this.clearTypeBirthday()
+    },
+    setAfterBirthday (days) {
+      if(this[globalNamespace].urlQuery.birthday[1] === days){
+        this.$set(this[globalNamespace].urlQuery.birthday, 1, null)
+      }else{
+        this.$set(this[globalNamespace].urlQuery.birthday, 1, days)
+      }
+      this.clearTypeBirthday()
+    },
+    clearAll () {
+      this.prodsClearFilter('categories')
+      this.clearTimeOfTheAction()
+      this.clearCurrencies()
+    },
+    pluralize (number, suffix) {
+      let keys = [2, 0, 1, 1, 1, 2]
+      let mod = number % 100
+      let suffixKey = (mod > 7 && mod < 20) ? 2 : keys[Math.min(mod % 10, 5)]
+      return suffix[suffixKey]
     }
   }
 }
